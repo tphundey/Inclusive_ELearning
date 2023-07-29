@@ -1,0 +1,92 @@
+{
+  "products": [
+    {
+      "name": "Rustic Plastic Computer",
+      "img": "http://placeimg.com/640/480/cats",
+      "price": "361.00",
+      "desc": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality",
+      "quantity": 71,
+      "id": "53"
+    },
+    {
+      "name": "Handmade Fresh Ball",
+      "img": "http://placeimg.com/640/480/cats",
+      "price": "725.00",
+      "desc": "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
+      "quantity": 4,
+      "id": "54"
+    },
+    {
+      "name": "Gorgeous Granite Shoes",
+      "img": "http://placeimg.com/640/480/nature",
+      "price": "553.00",
+      "desc": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
+      "quantity": 33,
+      "id": "55"
+    },
+    {
+      "name": "Licensed Plastic Bike",
+      "img": "http://placeimg.com/640/480/transport",
+      "price": "223.00",
+      "desc": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
+      "quantity": 57,
+      "id": "56"
+    },
+    {
+      "name": "Ergonomic Plastic Bike",
+      "img": "http://placeimg.com/640/480/transport",
+      "price": "883.00",
+      "desc": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
+      "quantity": 97,
+      "id": "57"
+    },
+    {
+      "name": "Gorgeous Soft Sausages",
+      "img": "http://placeimg.com/640/480/food",
+      "price": "17.00",
+      "desc": "The Football Is Good For Training And Recreational Purposes",
+      "quantity": 96,
+      "id": "58"
+    },
+    {
+      "name": "Sleek Granite Pizza",
+      "img": "http://placeimg.com/640/480/nightlife",
+      "price": "652.00",
+      "desc": "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Goodness of 100% Natural Ingredients",
+      "quantity": 79,
+      "id": "59"
+    },
+    {
+      "name": "Practical Metal Tuna",
+      "img": "http://placeimg.com/640/480/fashion",
+      "price": "851.00",
+      "desc": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
+      "quantity": 11,
+      "id": "60"
+    },
+    {
+      "name": "Gorgeous Soft Shirt",
+      "img": "http://placeimg.com/640/480/transport",
+      "price": "344.00",
+      "desc": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
+      "quantity": 2,
+      "id": "61"
+    },
+    {
+      "name": "Intelligent Frozen Fish",
+      "img": "http://placeimg.com/640/480/city",
+      "price": "264.00",
+      "desc": "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
+      "quantity": 57,
+      "id": "62"
+    }
+  ],
+  "users": [
+    {
+      "email": "datlt2306@gmail.com",
+      "password": "$2a$10$C4uTSEzbzwF6At3WQQrKfej3Ujlt5YKYh8sGCusmwX.n1Yeahv8ya",
+      "username": "datlt",
+      "id": 1
+    }
+  ]
+}
