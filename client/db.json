@@ -1,0 +1,20 @@
+{
+  "users": [],
+  "products": [
+    {
+      "name": "Sản phẩm 1 update 1 ",
+      "price": "100",
+      "id": 1
+    },
+    {
+      "name": "Sản phẩm 2 update",
+      "price": "200",
+      "id": 2
+    },
+    {
+      "name": "trrr",
+      "price": "2",
+      "id": 3
+    }
+  ]
+}
