@@ -1,9 +1,11 @@
-import React from "react";
+import { Outlet } from "react-router-dom"
+import HeaderUser from "../HeaderUser";
 
-type Props = {};
-
-const LayoutWebsite = (props: Props) => {
-    return <div>LayoutWebsite</div>;
+const LayoutWebsite = () => {
+    return <div>
+        <HeaderUser />
+        <Outlet />
+    </div>;
 };
 
 export default LayoutWebsite;
