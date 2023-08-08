@@ -1,0 +1,39 @@
+footer {
+    width: 1200px;
+    padding: 0px;
+    margin: 0px auto;
+    padding: 30px;
+}
+
+footer ul {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    font-weight: 500;
+    align-items: center;
+    font-size: 14px;
+}
+
+footer ul li button:hover {
+    border: 1px solid gray;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+footer ul li button {
+    border: 1px solid white;
+    padding: 10px 20px;
+}
+
+footer ul li a:hover {
+    text-decoration: underline;
+}
+
+.des-footer {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    font-size: 13px;
+}
