@@ -1,0 +1,123 @@
+body {
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.containerCss {
+    width: 1200px;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+header .flex-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box1 {
+    width: auto;
+}
+
+.box1 img {
+    width: 170px;
+}
+
+.box2 {
+    /* background-color: cadetblue; */
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left {
+    margin-left: 4%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.left form input {
+    width: 320px;
+    padding: 5px;
+    border-radius: 5px;
+    /* border: #0074B1 1px solid; */
+    background-color: aliceblue;
+}
+
+.left form input::placeholder {
+    color: #5D5D5D;
+    font-size: 14px;
+    padding: 10px;
+}
+
+
+.left form button {
+    /* background-color: #E1E8EE; */
+    position: relative;
+    left: -47px;
+    padding: 5px 15px;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.lups {
+    font-size: 20px;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.right ul {
+    display: flex;
+    gap: 40px;
+}
+
+.right ul li a {
+    list-style-type: none;
+    font-size: 12px;
+    display: grid;
+    gap: 5px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.right ul li div {
+    color: gray;
+}
+
+.freemonth a {
+    font-weight: 600;
+    color: gray;
+}
+
+nav {
+    background-color: #F3F6F8;
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+    box-shadow: 0px 1.6px 3px 1px gray;
+}
+
+nav div {
+    text-align: right;
+    display: flex;
+    justify-content: right;
+    gap: 20px;
+}
+
+nav div ul {
+    display: flex;
+    gap: 20px;
+    font-weight: 600;
+    color: gray;
+}
+
+.lups-left {
+    margin-left: 5px;
+}

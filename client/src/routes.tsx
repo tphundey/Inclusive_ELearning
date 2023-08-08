@@ -7,7 +7,14 @@ import AdminProductAdd from "./pages/admin/product/add";
 import AdminProductEdit from "./pages/admin/product/edit";
 
 export const routers = createBrowserRouter([
-    { path: "/", element: <LayoutWebsite /> },
+    {
+        path: "/",
+        element: <LayoutWebsite />,
+        children: [
+            { index: true, element: <Navigate to="dashboard" /> },
+            { path: "dashboard", element: <div>Dashboard</div> },
+        ],
+    },
     {
         path: "/admin",
         element: <LayoutAdmin />,
