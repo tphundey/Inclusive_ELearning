@@ -1,7 +1,7 @@
 import './HeaderUser.css'
 const HeaderUser = () => {
     return (
-        <div>
+        <div className='header-static'>
             <header>
                 <div className="containerCss flex-hd">
                     <div className="box1">

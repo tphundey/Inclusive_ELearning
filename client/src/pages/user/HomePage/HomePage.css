@@ -1,0 +1,160 @@
+.height-banner {
+  display: flex;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+.homepage .banner {
+  width: 80%;
+}
+
+.homepage .bannerImg img {
+  object-position: 100px -150px;
+  margin-left: 400px;
+  object-fit: cover;
+  max-width: 600px;
+  max-height: 575px;
+  border: 0;
+  overflow: hidden;
+}
+
+.bannerBosu {
+  overflow: hidden;
+  width: 900px;
+  position: absolute;
+  right: 0px;
+  top: 0;
+  height: 400px;
+}
+
+.homepage .banner h2 {
+  font-weight: 600;
+  padding: 15px 20px;
+  padding-top: 50px;
+  width: 100%;
+}
+
+.Startmyfreemonth {
+  background-color: #005387;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  font-size: 19px;
+}
+
+.Buyformyteam {
+  background: none;
+  border: 1px solid #005387;
+  color: #005387;
+  font-weight: 600;
+  padding: 10px 20px;
+  font-size: 19px;
+}
+
+.homepage .fl-button {
+  display: flex;
+  gap: 15px;
+  padding: 0px 20px;
+}
+
+
+.homepage .fl-milion img {
+  width: 25px;
+  border-radius: 100px;
+}
+
+.homepage .fl-milion {
+  padding: 0px 20px;
+  padding-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.Recommended-hp {
+  display: flex;
+  background-color: #F2F6F9;
+  border-radius: 10px;
+  padding: 20px;
+  align-items: center;
+  margin-top: 50px;
+  justify-content: space-between;
+}
+
+.rcm-3 button {
+  background-color: #005387;
+  color: white;
+  padding: 5px 20px;
+}
+
+.rcm-2 {
+  margin-right: 200px;
+}
+
+.rcm2-1 {
+  background-color: rgb(98, 98, 98);
+  width: 115px;
+  padding: 0px 0px 0px 12px;
+  color: white;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.rcm2-2 {
+  font-weight: 600;
+  font-size: 21px;
+  padding-left: 3px;
+}
+
+.rcm2-3 {
+  padding-left: 3px;
+  font-size: 15px;
+  color: rgb(111, 111, 111);
+}
+
+
+/* slider products */
+
+.product-slider {
+  width: 100%;
+  height: 100px;
+  margin-top: 30px;
+}
+
+.product-slider .product-slide {
+  height: 130px;
+}
+
+.product-slider .slick-slide {
+  min-width: 200px;
+  padding: 0 10px;
+}
+
+.slick-dots {
+  margin-top: 30px;
+}
+
+.popular {
+  background-color: rgb(113, 162, 162);
+  color: rgb(241, 229, 229);
+  height: 25px;
+  width: 65px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+/* Tùy chỉnh margin-top cho nút trái và phải */
+.product-slider .slick-prev,
+.product-slider .slick-next {
+  border-radius: 100px;
+  background-color: rgb(181, 178, 178);
+  position: absolute;
+  top: 70px;
+}
+
+.product-slider .slick-prev:hover,
+.product-slider .slick-next:hover {
+  border-radius: 100px;
+  background-color: rgb(161, 219, 204);
+  /* Điều chỉnh theo yêu cầu */
+}
