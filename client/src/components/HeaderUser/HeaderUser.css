@@ -9,6 +9,14 @@ body {
     margin: 0px auto;
 }
 
+.header-static {
+    z-index: 9999;
+    position: sticky;
+    top: 0px;
+    position: -webkit-sticky;
+    background-color: white;
+}
+
 header .flex-hd {
     display: flex;
     align-items: center;

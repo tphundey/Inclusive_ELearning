@@ -41,6 +41,9 @@ dependencies:
   react-skeleton-loading:
     specifier: ^1.0.0
     version: 1.0.0(react@18.2.0)
+  react-slick:
+    specifier: ^0.29.0
+    version: registry.npmmirror.com/react-slick@0.29.0(react-dom@18.2.0)(react@18.2.0)
   redux:
     specifier: ^4.2.1
     version: 4.2.1
@@ -50,6 +53,9 @@ dependencies:
   redux-thunk:
     specifier: ^2.4.2
     version: 2.4.2(redux@4.2.1)
+  slick-carousel:
+    specifier: ^1.8.1
+    version: registry.npmmirror.com/slick-carousel@1.8.1(jquery@3.7.0)
 
 devDependencies:
   '@types/react':
@@ -3072,6 +3078,12 @@ packages:
     version: 1.12.4
     dev: false
 
+  registry.npmmirror.com/enquire.js@2.1.6:
+    resolution: {integrity: sha512-/KujNpO+PT63F7Hlpu4h3pE3TokKRHN26JYmQpPyjkRD/N57R7bPDNojMXdi7uveAKjYB7yQnartCxZnFWr0Xw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/enquire.js/-/enquire.js-2.1.6.tgz}
+    name: enquire.js
+    version: 2.1.6
+    dev: false
+
   registry.npmmirror.com/fsevents@2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fsevents/-/fsevents-2.3.2.tgz}
     name: fsevents
@@ -3081,6 +3093,12 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmmirror.com/jquery@3.7.0:
+    resolution: {integrity: sha512-umpJ0/k8X0MvD1ds0P9SfowREz2LenHsQaxSohMZ5OMNEU2r0tf8pdeEFTHMFxWVxKNyU9rTtK3CWzUCTKJUeQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jquery/-/jquery-3.7.0.tgz}
+    name: jquery
+    version: 3.7.0
+    dev: false
 
   registry.npmmirror.com/json2mq@0.2.0:
     resolution: {integrity: sha512-SzoRg7ux5DWTII9J2qkrZrqV1gt+rTaoufMxEzXbS26Uid0NwaJd123HcoB80TgubEppxxIGdNxCx50fEoEWQA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/json2mq/-/json2mq-0.2.0.tgz}
@@ -3094,6 +3112,12 @@ packages:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz}
     name: lodash.camelcase
     version: 4.3.0
+    dev: false
+
+  registry.npmmirror.com/lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz}
+    name: lodash.debounce
+    version: 4.0.8
     dev: false
 
   registry.npmmirror.com/qrcode.react@3.1.0(react@18.2.0):
@@ -3742,6 +3766,24 @@ packages:
     version: 16.13.1
     dev: false
 
+  registry.npmmirror.com/react-slick@0.29.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-TGdOKE+ZkJHHeC4aaoH85m8RnFyWqdqRfAGkhd6dirmATXMZWAxOpTLmw2Ll/jPTQ3eEG7ercFr/sbzdeYCJXA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-slick/-/react-slick-0.29.0.tgz}
+    id: registry.npmmirror.com/react-slick/0.29.0
+    name: react-slick
+    version: 0.29.0
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      classnames: registry.npmmirror.com/classnames@2.3.2
+      enquire.js: registry.npmmirror.com/enquire.js@2.1.6
+      json2mq: registry.npmmirror.com/json2mq@0.2.0
+      lodash.debounce: registry.npmmirror.com/lodash.debounce@4.0.8
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      resize-observer-polyfill: registry.npmmirror.com/resize-observer-polyfill@1.5.1
+    dev: false
+
   registry.npmmirror.com/regenerator-runtime@0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz}
     name: regenerator-runtime
@@ -3760,6 +3802,17 @@ packages:
     version: 3.0.10
     dependencies:
       compute-scroll-into-view: registry.npmmirror.com/compute-scroll-into-view@3.0.3
+    dev: false
+
+  registry.npmmirror.com/slick-carousel@1.8.1(jquery@3.7.0):
+    resolution: {integrity: sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/slick-carousel/-/slick-carousel-1.8.1.tgz}
+    id: registry.npmmirror.com/slick-carousel/1.8.1
+    name: slick-carousel
+    version: 1.8.1
+    peerDependencies:
+      jquery: '>=1.8.0'
+    dependencies:
+      jquery: registry.npmmirror.com/jquery@3.7.0
     dev: false
 
   registry.npmmirror.com/string-convert@0.2.1:
