@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@ant-design/icons':
+    specifier: ^5.2.5
+    version: registry.npmmirror.com/@ant-design/icons@5.2.5(react-dom@18.2.0)(react@18.2.0)
   '@reduxjs/toolkit':
     specifier: ^1.9.5
     version: 1.9.5(react-redux@8.1.1)(react@18.2.0)
@@ -817,7 +820,7 @@ packages:
   /babel-plugin-macros@2.8.0:
     resolution: {integrity: sha512-SEP5kJpfGYqYKpBrj5XU3ahw5p5GOHJ0U5ssOSQ/WBVdwkD2Dzlce95exQTs3jOVWPPKLBN2rlEWkCK7dSmLvg==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': registry.npmmirror.com/@babel/runtime@7.22.6
       cosmiconfig: 6.0.0
       resolve: 1.22.2
     dev: false
@@ -1013,7 +1016,7 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': registry.npmmirror.com/@babel/runtime@7.22.6
     dev: false
 
   /debug@4.3.4:
@@ -2542,11 +2545,11 @@ packages:
     version: 4.3.0
     dev: false
 
-  registry.npmmirror.com/@ant-design/icons@5.2.4(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-WFPLMLiLaTcw7Vzwuglgm7aViI9DJ8SdrLt6r1rI1oxA1yjp02/ZRB4b+OFlFy2F91JMq3FnAQ9K6irq9QiSvw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ant-design/icons/-/icons-5.2.4.tgz}
-    id: registry.npmmirror.com/@ant-design/icons/5.2.4
+  registry.npmmirror.com/@ant-design/icons@5.2.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-9Jc59v5fl5dzmxqLWtRev3dJwU7Ya9ZheoI6XmZjZiQ7PRtk77rC+Rbt7GJzAPPg43RQ4YO53RE1u8n+Et97vQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ant-design/icons/-/icons-5.2.5.tgz}
+    id: registry.npmmirror.com/@ant-design/icons/5.2.5
     name: '@ant-design/icons'
-    version: 5.2.4
+    version: 5.2.5
     engines: {node: '>=8'}
     peerDependencies:
       react: '>=16.0.0'
@@ -2974,7 +2977,7 @@ packages:
     dependencies:
       '@ant-design/colors': registry.npmmirror.com/@ant-design/colors@7.0.0
       '@ant-design/cssinjs': registry.npmmirror.com/@ant-design/cssinjs@1.16.1(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/icons': registry.npmmirror.com/@ant-design/icons@5.2.4(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/icons': registry.npmmirror.com/@ant-design/icons@5.2.5(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/react-slick': registry.npmmirror.com/@ant-design/react-slick@1.0.2(react@18.2.0)
       '@babel/runtime': registry.npmmirror.com/@babel/runtime@7.22.6
       '@ctrl/tinycolor': registry.npmmirror.com/@ctrl/tinycolor@3.6.0
