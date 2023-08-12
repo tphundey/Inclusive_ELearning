@@ -1,0 +1,113 @@
+.flbt-1 {
+    background-color: #037542;
+    color: white;
+    padding: 5px 20px;
+    font-weight: 600;
+    border-radius: 50px;
+    font-size: 14px;
+}
+
+.filter {
+    margin-top: 20px;
+}
+
+.learning-path hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.learning-path .sp1 {
+    font-size: 14px;
+    color: gray;
+}
+
+.learning-path .sp2 {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.learning-path .sp3 {
+    font-size: 14px;
+    width: 80%;
+}
+
+.learning-path .sp4 {
+    font-size: 13px;
+    color: gray;
+}
+
+.lerning-path-children {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+}
+
+.list-lerningpath {
+    margin-top: 30px;
+    display: grid;
+}
+
+.ler-left img {
+    border-radius: 5px;
+}
+
+.ler-right-t1 {
+    font-size: 13px;
+}
+
+.ler-right-t2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.ler-right-t3 {
+    font-size: 14px;
+    color: #666666;
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.ler-right-t3 img {
+    width: 23px;
+    height: 23px;
+    border-radius: 3px;
+}
+
+.ler-right-t4 {
+    margin-top: 35px;
+    font-size: 13px;
+    color: #666666;
+}
+
+.ler-right2 button {
+    border: 1px solid #0B66C3;
+    padding: 5px 15px;
+    font-size: 13px;
+    color: #0B66C3;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.ler-right2 button:hover {
+    border: 1px solid #0B66C3;
+    box-shadow: 0px 0px 1px 1px #0B66C3;
+    transition: 0.2s;
+    padding: 5px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #D1EDFA;
+}
+
+.ler-left {
+    width: 21.8%;
+}
+
+.ler-right {
+    width: 70%;
+}
+
+.ler-right2 {
+    margin-top: 110px;
+}

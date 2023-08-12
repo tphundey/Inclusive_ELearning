@@ -11,6 +11,7 @@ import Businesspage from "./pages/user/BrowsePage/ChildrenBrowsePages/BusinessPa
 import Creativepage from "./pages/user/BrowsePage/ChildrenBrowsePages/Certifications";
 import Technologypage from "./pages/user/BrowsePage/ChildrenBrowsePages/Technology";
 import Certificationpage from "./pages/user/BrowsePage/ChildrenBrowsePages/CreativePage";
+import LearningPathpage from "./pages/user/LearningPathsPages/LearningPathPages";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -18,6 +19,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="homepage" /> },
             { path: "homepage", element: <Homepage /> },
+            { path: "learningpath", element: <LearningPathpage /> },
             {
                 path: "/browsepage",
                 element: <Browsepage />,
