@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@ant-design/icons": "^5.2.5",
+        "@material-tailwind/react": "^2.1.0",
         "@reduxjs/toolkit": "^1.9.5",
         "antd": "^5.8.2",
         "axios": "^1.4.0",
