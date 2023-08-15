@@ -1,0 +1,241 @@
+.course-overview-header {
+    width: 100%;
+    background: linear-gradient(to left, rgba(255, 255, 255, .6) 33%, #fff 60%);
+    height: 415px;
+    display: flex;
+}
+
+.courseLeft-ah1 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.courseRight button {
+    border: 1px solid white;
+    border-radius: 50px;
+    margin-top: 170px;
+    margin-left: 200px;
+    font-weight: 700;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.courseLeft {
+    width: 60%;
+    padding: 20px;
+    margin-top: 30px;
+    background-color: white;
+}
+
+.course-span-left span {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.course-span-left {
+    display: flex;
+    align-items: center;
+}
+
+.imgHid img {
+    opacity: 0.3;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    filter: blur(8px);
+    width: 750px;
+    box-shadow: 0px -40px 50px 60px rgb(207, 201, 201);
+
+}
+
+.intro-bt {
+    margin-top: 20px;
+}
+
+.intro-bt1 {
+    background-color: #0A66C2;
+    color: white;
+    padding: 10px 30px;
+    font-weight: 700;
+}
+
+.intro-bt1:hover {
+    background-color: #084d93;
+    color: white;
+    padding: 10px 30px;
+    font-weight: 700;
+}
+
+.intro-bt2 {
+    border: 1px solid #0A66C2;
+    padding: 10px 30px;
+    color: #0A66C2;
+    font-weight: 700;
+}
+
+.intro-bt2:hover {
+    box-shadow: 0px 0px 3px 2px;
+    padding: 10px 30px;
+    color: #0A66C2;
+    font-weight: 700;
+}
+
+.course-body-intro {
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.course-intro-sp1 {
+    font-size: 13px;
+    font-weight: 500;
+    color: gray;
+}
+
+.included-phone {
+    display: grid;
+    gap: 10px;
+    text-align: center;
+    justify-content: left;
+    margin-top: 20px;
+    font-weight: 600;
+
+}
+
+.included-phone div {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.included-phone i {
+    font-size: 20px;
+}
+
+.courseDescription {
+    margin-top: 40px;
+}
+
+.titleCourseDescription {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.courseDescription p {
+    margin-top: 20px;
+}
+
+.certiLeft img {
+    width: 250px;
+}
+
+.certificate {
+    display: flex;
+    gap: 20px;
+}
+
+.certiRight img {
+    width: 230px;
+}
+
+.certiRight ul li {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.instructors {
+    margin-top: 20px;
+}
+
+.instructors-children {
+    display: flex;
+    gap: 20px;
+}
+
+.instruc-left img {
+    width: 80px;
+}
+
+.instruc-right h1 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.instruc-right h3 {
+    color: #15589b;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.course-body-intro {
+    width: 70%;
+}
+
+.introducation-right {
+    width: 30%;
+}
+
+.preview {
+    width: 600px;
+}
+
+.timeforvideoIntro {
+    background-color: gray;
+    color: white;
+    font-size: 12px;
+    padding: 1px 10px;
+    position: relative;
+    top: -45px;
+    left: -80px;
+}
+
+.listReviewIntro {
+    margin-top: 20px;
+}
+
+.reviewIntroChildren {
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    gap: 30px;
+}
+
+.avatarReview img {
+    margin-top: 15px;
+    width: 50px;
+    border-radius: 50px;
+}
+
+.desrv1 {
+    font-weight: 600;
+    color: #0A66C2;
+    font-size: 18px;
+}
+
+.desrv2 {
+    font-size: 15px;
+}
+
+.desrv3 {
+    margin-top: 5px;
+    display: flex;
+    color: #FBBF24;
+}
+
+.desrv4 {
+    margin-top: 10px;
+    font-size: 13px;
+    color: gray;
+}
+
+.formReview {
+    border: 1px solid rgb(230, 229, 229);
+    padding: 20px;
+    border-radius: 10px;
+}
