@@ -1,0 +1,89 @@
+.welcomeback {
+    display: flex;
+    gap: 20px;
+    padding: 40px;
+}
+
+.welcom-logo img {
+    width: 80px;
+    height: 70px;
+    border-radius: 100%;
+}
+
+.updateinformation h2 {
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.updateinformation a {
+    color: #0964C3;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.updateinformation a:hover {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.mylearningnav a {
+    color: #0964C3;
+    font-weight: 600;
+    border-bottom: 4px solid #0964C3;
+    padding: 10px 30px;
+    margin-left: 20px;
+}
+
+.mylearningnav {
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+.nav-border {
+    border-right: 1px solid rgb(202, 202, 202);
+}
+
+.courseProgress {
+    display: flex;
+    gap: 25px;
+    padding: 20px;
+}
+
+.imgCoureProgress img {
+    width: 220px;
+}
+
+.infoCourseProgress h3 {
+    font-size: 13px;
+}
+
+.infoCourseProgress h2 {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.fl-info-progress {
+    display: flex;
+    gap: 10px;
+}
+
+.fl1-info-progress img {
+    width: 20px;
+    border-radius: 2px;
+}
+
+.fl2-info-progress {
+    font-size: 14px;
+    color: gray;
+}
+
+.option-course-progress button {
+    margin-left: 250px;
+    font-size: 27px;
+    color: gray;
+}
+
+.if-donthave-any-course {
+    width: 700px;
+    padding-left: 50px;
+}
