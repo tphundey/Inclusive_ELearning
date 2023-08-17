@@ -13,6 +13,11 @@ import Technologypage from "./pages/user/BrowsePage/ChildrenBrowsePages/Technolo
 import Certificationpage from "./pages/user/BrowsePage/ChildrenBrowsePages/CreativePage";
 import LearningPathpage from "./pages/user/LearningPathsPages/LearningPathPages";
 import IntroductionPage from "./pages/user/IntroductionPage/IntroductionPage";
+import MylearningPageLayout from "./pages/user/MyLearningPage/MylearningPage";
+import InProgress from "./pages/user/MyLearningPage/ChildrenMyLearning/InProgress/InProgress";
+import Collection from "./pages/user/MyLearningPage/ChildrenMyLearning/Collections/Collections";
+import Saved from "./pages/user/MyLearningPage/ChildrenMyLearning/Saved/Saved";
+import History from "./pages/user/MyLearningPage/ChildrenMyLearning/History/History";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -31,6 +36,17 @@ export const routers = createBrowserRouter([
                     { path: "creative", element: <Creativepage /> },
                     { path: "technology", element: <Technologypage /> },
                     { path: "certifications", element: <Certificationpage /> }
+                ]
+            },
+            {
+                path: "/mylearning",
+                element: <MylearningPageLayout />,
+                children: [
+                    { index: true, element: <Navigate to="progress" /> },
+                    { path: "progress", element: <InProgress /> },
+                    { path: "saved", element: <Saved /> },
+                    { path: "collections", element: <Collection /> },
+                    { path: "history", element: <History /> }
                 ]
             },
         ],
