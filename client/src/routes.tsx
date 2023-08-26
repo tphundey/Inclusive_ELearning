@@ -18,6 +18,9 @@ import InProgress from "./pages/user/MyLearningPage/ChildrenMyLearning/InProgres
 import Collection from "./pages/user/MyLearningPage/ChildrenMyLearning/Collections/Collections";
 import Saved from "./pages/user/MyLearningPage/ChildrenMyLearning/Saved/Saved";
 import History from "./pages/user/MyLearningPage/ChildrenMyLearning/History/History";
+import CourseContentPage from "./pages/user/CourseContentPage/CourseContentPage";
+import OverViewPage from "./pages/user/CourseContentPage/ChildrenContentPages/OverviewPage";
+import NotePage from "./pages/user/CourseContentPage/ChildrenContentPages/NotePage";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -27,6 +30,16 @@ export const routers = createBrowserRouter([
             { path: "homepage", element: <Homepage /> },
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction", element: <IntroductionPage /> },
+            { path: "content/:id", element: <CourseContentPage /> },
+            {
+                path: "content/:id",
+                element: <CourseContentPage />,
+                children: [
+                    { index: true, element: <Navigate to="overview" /> },
+                    { path: "overview", element: <OverViewPage /> },
+                    { path: "notepage", element: <NotePage /> },
+                ]
+            },
             {
                 path: "/browsepage",
                 element: <Browsepage />,
