@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "feedbacks",
+  "info": {
+    "singularName": "feedback",
+    "pluralName": "feedbacks",
+    "displayName": "feedback",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "helpfulCount": {
+      "type": "biginteger"
+    },
+    "rating": {
+      "type": "integer"
+    },
+    "date": {
+      "type": "date"
+    },
+    "users_permissions": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "feedback"
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "feedback"
+    },
+    "Feedback_content": {
+      "type": "richtext",
+      "default": "good",
+      "maxLength": 225,
+      "minLength": 20
+    }
+  }
+}

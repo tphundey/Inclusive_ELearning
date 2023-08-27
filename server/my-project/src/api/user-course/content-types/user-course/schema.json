@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_courses",
+  "info": {
+    "singularName": "user-course",
+    "pluralName": "user-courses",
+    "displayName": "user_course",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_permissions": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "user_courses"
+    },
+    "course_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "user_course"
+    },
+    "purchased_date": {
+      "type": "date"
+    },
+    "status": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "integer"
+    },
+    "viewed_at": {
+      "type": "date"
+    },
+    "saved_at": {
+      "type": "date"
+    },
+    "completed_at": {
+      "type": "date"
+    }
+  }
+}
