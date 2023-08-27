@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "courses",
+  "info": {
+    "singularName": "course",
+    "pluralName": "courses",
+    "displayName": "course",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 125
+    },
+    "instructor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 125
+    },
+    "price": {
+      "type": "biginteger"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "richtext",
+      "minLength": 20,
+      "maxLength": 225
+    },
+    "Category": {
+      "type": "string"
+    },
+    "level": {
+      "type": "string"
+    },
+    "Enrollments": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "publishedDate": {
+      "type": "date"
+    },
+    "lastUpdated": {
+      "type": "date"
+    },
+    "feedback": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::feedback.feedback",
+      "mappedBy": "course"
+    },
+    "user_course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-course.user-course",
+      "inversedBy": "course_id"
+    }
+  }
+}
