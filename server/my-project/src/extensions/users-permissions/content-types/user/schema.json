@@ -9,8 +9,7 @@
     "displayName": "User"
   },
   "options": {
-    "draftAndPublish": false,
-    "timestamps": true
+    "draftAndPublish": false
   },
   "attributes": {
     "username": {
@@ -77,6 +76,9 @@
       "relation": "oneToMany",
       "target": "api::user-course.user-course",
       "mappedBy": "user_permissions"
+    },
+    "user_id": {
+      "type": "uid"
     }
   }
 }
