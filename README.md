@@ -1,68 +1,69 @@
-## Quy ước chung cho các commit
+<p align="center">
+  <img src="https://tse3.mm.bing.net/th?id=OIP.b5oDvUVU5UVN4cefTJGq3wHaHa&pid=Api&P=0&h=180" alt="Logo" width="80" height="80">
+  <h3 align="center">Hệ Thống Khóa Học Trực Tuyến</h3>
+  <p align="center">
+    Dự án Tốt Nghiệp về Hệ Thống Giáo Dục Trực Tuyến
+    <br />
+    <a href="https://github.com/bunbonhieuhanh/LinkedIn_Learning"><strong>Khám phá dự án »</strong></a>
+    <br />
+    <br />
+    <a href="https://demo.example.com">Xem Demo</a>
+    ·
+    <a href="https://github.com/your-username/online-course-system/issues">Báo Lỗi</a>
+    ·
+    <a href="https://github.com/your-username/online-course-system/pulls">Gửi Pull Request</a>
+  </p>
+</p>
 
-1. Tiêu đề Commit (Commit Title):
+## Giới Thiệu
 
-Sử dụng ngôn ngữ bắt đầu bằng chữ viết hoa.
-Tránh viết quá dài, giữ cho tiêu đề ngắn gọn và trực quan.
-Tránh sử dụng dấu chấm (.) ở cuối tiêu đề.
+Dự án này tập trung vào việc xây dựng một Hệ Thống Khóa Học Trực Tuyến hoàn chỉnh, nhằm cung cấp một nền tảng giáo dục linh hoạt và tiện lợi cho học sinh ở mọi nơi. Chúng tôi mục tiêu tạo ra một trải nghiệm học tập tương tác và hấp dẫn thông qua việc kết hợp các tài liệu giảng dạy, bài giảng video, bài tập và các công cụ giao tiếp.
 
-2. Nội dung Commit (Commit Message):
+## Tính Năng
 
-Sử dụng ngôn ngữ lịch sự, rõ ràng, và chính xác.
-Miêu tả rõ ràng những thay đổi đã thực hiện.
+- 📚 **Tài Liệu Giảng Dạy**: Các tài liệu giảng dạy được cập nhật thường xuyên để đảm bảo tính mới mẻ và đúng bài.
 
-3. Liên kết vấn đề (Issue Linking):
+- 🎥 **Bài Giảng Video**: Video giảng dạy sẽ giúp học sinh hiểu rõ hơn về nội dung khóa học thông qua việc trực quan hóa giảng dạy.
 
-Khi commit giải quyết một vấn đề đã được mở trước đó, hãy thêm liên kết đến vấn đề đó.
-Ví dụ: "Fix #123" hoặc "Resolve issue #123".
+- ✅ **Hệ Thống Bài Tập và Kiểm Tra**: Hệ thống sẽ cung cấp các bài tập và kiểm tra đa dạng để học sinh có thể kiểm tra kiến thức của mình và nhận phản hồi.
 
-4. Nhánh (Branch):
+- 📣 **Diễn Đàn Thảo Luận**: Một diễn đàn thảo luận sẽ được tích hợp để học sinh có thể trao đổi, thảo luận và hỗ trợ lẫn nhau.
 
-Đảm bảo commit được thực hiện trên nhánh phù hợp, tránh commit trực tiếp vào nhánh chính (main/develop).
-Nếu làm việc trên tính năng cụ thể hoặc vấn đề, hãy tạo nhánh riêng và sau đó tạo pull request khi hoàn thành.
+- 📊 **Theo Dõi Tiến Độ**: Học sinh có thể theo dõi tiến độ học tập của mình thông qua giao diện dễ sử dụng.
 
-5. Tách commit (Commit Splitting):
+## Bắt Đầu
 
-Tránh kết hợp nhiều thay đổi không liên quan vào một commit duy nhất.
-Nếu một commit sửa một lỗi nhỏ và thêm một tính năng mới, hãy tách thành hai commit riêng biệt.
-Sử dụng các lệnh trong Commit Message:
-Sử dụng các từ khóa như "Fix", "Style", "Update", "Remove", "Feat",... để làm rõ mục tiêu của commit.
-Kiểm tra lại trước khi commit:
+Dưới đây là hướng dẫn để bạn có thể chạy dự án trên máy tính của mình:
 
-<br>
+1. **Clone Repository**: Sao chép repository bằng lệnh sau:
 
-- feat: Để thêm một tính năng mới vào mã nguồn.<br>
-"feat: Add user authentication feature"
+git clone https://github.com/bunbonhieuhanh/LinkedIn_Learning.git
 
-- fix: Để sửa các lỗi hoặc vấn đề trong mã nguồn.<br>
-"fix: Fix null pointer exception in user validation"
+Copy code
 
-- refactor: Để tái cấu trúc lại mã nguồn mà không thêm tính năng mới hoặc sửa lỗi.<br>
-"refactor: Extract common validation functions"
+2. **Cài Đặt Các Phụ Thuộc**: Di chuyển vào thư mục dự án và cài đặt các phụ thuộc bằng lệnh:
 
-- docs: Liên quan đến các thay đổi về tài liệu, comment, hoặc chú thích.<br>
-"docs: Update README with installation instructions"
+cd Linkedln_Learning
+npm install
 
-- chore: Liên quan đến các công việc phụ trợ, cập nhật phiên bản, xóa các file không cần thiết, v.v.<br>
-"chore: Update dependencies to latest versions"
+less
+Copy code
 
-- test: Liên quan đến việc thêm, sửa đổi hoặc xóa các test.<br>
-"test: Add unit tests for user service"
+3. **Khởi Chạy Ứng Dụng**: Chạy ứng dụng trên máy cục bộ:
 
-- perf: Để thực hiện các cải tiến về hiệu suất.<br>
-"perf: Optimize database query for faster response"
+npm run dev
 
-- revert: Để đảo ngược một commit trước đó.<br>
-"revert: Revert changes in previous commit"
+less
+Copy code
 
-Ví dụ: 
-Feat: Login with google form
-Mô tả:
-- Thực hiện chức năng đăng nhập và đăng ký người dùng với google.
+## Đóng Góp
 
-Vấn đề: #42
+Chúng tôi hoan nghênh mọi đóng góp từ cộng đồng. Nếu bạn muốn báo lỗi, đề xuất tính năng hoặc cải tiến, hãy mở một issue hoặc gửi pull request.
 
+## Tác Giả
 
-Trước khi thực hiện commit, đảm bảo xem lại các thay đổi để tránh commit lỗi hoặc chưa hoàn thành.
-Message được viết bằng tiếng Anh và chỉ viết hoa chữ đầu tiên. 
-Cảm ơn đã đọc mong chúng ta đồng hành tốt để ra trường tốt nhất !
+Dự án này được thực hiện bởi nhóm dự án tốt nghiệp của trường Fpt Polytechnic. Liên hệ: 0878517203
+
+---
+
+Cảm ơn bạn đã quan tâm đến dự án của chúng tôi! Chúng tôi hy vọng rằng Hệ Thống Khóa Học Trực Tuyến sẽ mang lại giá trị cho cộng đồng học tập trực tuyến.
