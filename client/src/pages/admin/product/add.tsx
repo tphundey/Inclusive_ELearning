@@ -1,4 +1,4 @@
-import { useAddProductMutation } from "@/api/product";
+import { useAddProductMutation } from "@/api/courses";
 import { Button, Form, Input, message } from "antd";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Navigate, useNavigate } from "react-router-dom";

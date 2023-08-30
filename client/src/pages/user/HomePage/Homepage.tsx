@@ -1,54 +1,14 @@
 import './HomePage.css'
+import { useGetProductsQuery } from "@/api/courses";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const Homepage = () => {
-
-    const products = [
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/D560DAQG9VyhnmRNFyA/learning-public-crop_144_256/0/1687374541931?e=1692212400&v=beta&t=EgzhTM4gdoTNQSxtDC1IypzFpm9BGLcT3ZBK83cVGdA'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C560DAQEayGdFL5OhhQ/learning-public-crop_144_256/0/1675884235222?e=1692212400&v=beta&t=aq5AI8conYMXXoHPhm57YtraUp6P3R0inDlsOx-O_jU'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C4E0DAQGdrDxOMG6FBg/learning-public-crop_144_256/0/1679097853060?e=1692212400&v=beta&t=h1wYf40djVUdc25wocJA4wK8uci6QCCSTKSB97KJpg4'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C4E0DAQE84AgCpYxX-Q/learning-public-crop_144_256/0/1678908578362?e=1692212400&v=beta&t=0gWnv8lmjYUq5u3Qe4p1C5fZbLYYnzA3yPsP7CTR5LA'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://f8-zpc.zdn.vn/4985019956753817370/33d1cdd5156cc6329f7d.jpg'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://f8-zpc.zdn.vn/4985019956753817370/33d1cdd5156cc6329f7d.jpg'
-        }
-
-    ];
+    const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
 
     const settings = {
         arrows: true,
-        // prevArrow: <button className="slick-prev">Previous</button>, 
-        // nextArrow: <button className="slick-next">Next</button>, 
         infinite: true,
         speed: 500,
         slidesToShow: 4, // Hiển thị 4 sản phẩm trên mỗi dòng
@@ -96,29 +56,35 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Top picks for Xế</h2>
 
                         <div className="product-slider">
-                            <Slider {...settings}>
-                                {products.map((product, index) => (
-
-                                    <div key={index} className="group relative">
-                                        <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                            <img src={product.imageSrc} alt="" />
-                                        </div>
-                                        <div className="mt-2">
-                                            <div>
-                                                <h3 className="text-xs text-gray-700">
-                                                    <a href="#">
-                                                        <span className="absolute inset-2 popular">POPULAR</span>
-                                                        {product.name}
-                                                    </a>
-                                                </h3>
-                                                <p className="mt-1 text-base">{product.color}</p>
+                            {isProductLoading ? (
+                                // Show loading state
+                                <div>Loading...</div>
+                            ) : (
+                                <Slider {...settings}>
+                                    {productsData?.map((product, index) => (
+                                        <div key={index} className="group relative">
+                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                <img src={product.imageurl} alt="" />
                                             </div>
-                                            <p className=" mt-1 text-xs text-gray">{product.price}</p>
+                                            <div className="mt-2">
+                                                <div>
+                                                    <h3 className="text-xs text-gray-700">
+                                                        <a href="#">
+                                                            <span className="absolute inset-2 popular">POPULAR</span>
+                                                            {product.category}
+                                                        </a>
+                                                    </h3>
+                                                    <p className="mt-1 text-base">{product.title}</p>
+                                                </div>
+                                                <p className=" mt-1 text-xs text-gray">{product.instructor}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </Slider>
+                                    ))}
+                                </Slider>
+                            )}
+
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -129,29 +95,33 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">This week’s top courses</h2>
 
                         <div className="product-slider">
-                            <Slider {...settings}>
-                                {products.map((product, index) => (
-
-                                    <div key={index} className="group relative">
-                                        <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                            <img src={product.imageSrc} alt="" />
-                                        </div>
-                                        <div className="mt-2">
-                                            <div>
-                                                <h3 className="text-xs text-gray-700">
-                                                    <a href="#">
-                                                        <span aria-hidden="true" className="absolute inset-0"></span>
-                                                        {product.name}
-                                                    </a>
-                                                </h3>
-                                                <p className="mt-1 text-base">{product.color}</p>
+                            {isProductLoading ? (
+                                // Show loading state
+                                <div>Loading...</div>
+                            ) : (
+                                <Slider {...settings}>
+                                    {productsData?.map((product, index) => (
+                                        <div key={index} className="group relative">
+                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                <img src={product.imageurl} alt="" />
                                             </div>
-                                            <p className=" mt-1 text-xs text-gray">{product.price}</p>
+                                            <div className="mt-2">
+                                                <div>
+                                                    <h3 className="text-xs text-gray-700">
+                                                        <a href="#">
+                                                            <span className="absolute inset-2 popular">POPULAR</span>
+                                                            {product.category}
+                                                        </a>
+                                                    </h3>
+                                                    <p className="mt-1 text-base">{product.instructor}</p>
+                                                </div>
+                                                <p className=" mt-1 text-xs text-gray">{product.price}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ))}
+                                </Slider>
+                            )}
 
-                                ))}
-                            </Slider>
                         </div>
                     </div>
                 </div>

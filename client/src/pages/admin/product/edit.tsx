@@ -2,7 +2,7 @@ import {
     useAddProductMutation,
     useGetProductByIdQuery,
     useUpdateProductMutation,
-} from "@/api/product";
+} from "@/api/courses";
 import { Button, Form, Input, Skeleton, message } from "antd";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";

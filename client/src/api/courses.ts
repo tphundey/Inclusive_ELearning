@@ -3,8 +3,8 @@ import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const productApi = createApi({
-    reducerPath: "product",
-    tagTypes: ['Product'],
+    reducerPath: "courses",
+    tagTypes: ['Courses'],
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:1337/api',
         fetchFn: async (...args) => {
@@ -14,20 +14,31 @@ const productApi = createApi({
     }),
     endpoints: (builder) => ({
         getProducts: builder.query<IProduct[], void>({
-            query: () => `/products`,
-            providesTags: ['Product'],
+            query: () => `/courses`,
+            providesTags: ['Courses'],
             transformResponse: (response: any) => {
                 return response.data.map((item: any) => ({
-                    name: item.attributes.name,
-                    price: item.attributes.price.toString(),
+                    instructor: item.attributes.instructor,
                     id: item.id,
+                    title: item.attributes.title,
+                    price: item.attributes.price,
+                    duration: item.attributes.duration,
+                    category: item.attributes.category,
+                    level: item.attributes.level,
+                    enrollments: item.attributes.enrollments,
+                    publishedDate: item.attributes.publishedDate,
+                    lastUpdated: item.attributes.lastUpdated,
+                    createdAt: item.attributes.createdAt,
+                    updatedAt: item.attributes.updatedAt,
+                    publishedAt: item.attributes.publishedAt,
+                    imageurl: item.attributes.imageurl,
                 }));
             },
         }),
 
         getProductById: builder.query<IProduct, number | string>({
             query: (id) => `/products/${id}`,
-            providesTags: ['Product'],
+            providesTags: ['Courses'],
             transformResponse: (response: any) => ({
                 name: response.data.attributes.name,
                 price: response.data.attributes.price.toString(),
@@ -40,7 +51,7 @@ const productApi = createApi({
                 url: `/products/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: ['Courses'],
         }),
 
         addProduct: builder.mutation<IProduct, Partial<IProduct>>({
@@ -51,7 +62,7 @@ const productApi = createApi({
                     data: product // Đảm bảo gửi dữ liệu trong đối tượng "data"
                 },
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: ['Courses'],
         }),
 
         updateProduct: builder.mutation<IProduct, Partial<IProduct>>({
@@ -62,7 +73,7 @@ const productApi = createApi({
                     data: product // Đảm bảo gửi dữ liệu trong đối tượng "data"
                 },
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: ['Courses'],
         }),
     })
 });

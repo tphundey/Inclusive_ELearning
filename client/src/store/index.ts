@@ -1,4 +1,4 @@
-import productApi, { productReducer } from "@/api/product";
+import productApi, { productReducer } from "@/api/courses";
 import { Action, ThunkAction, combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
     FLUSH,

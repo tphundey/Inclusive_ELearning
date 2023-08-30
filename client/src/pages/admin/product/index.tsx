@@ -1,4 +1,4 @@
-import { useGetProductsQuery, useRemoveProductMutation } from "@/api/product";
+import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
 import { IProduct } from "@/interfaces/product";
 import { Button, Table, Skeleton, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
@@ -6,7 +6,6 @@ type Props = {};
 
 const AdminProduct = (props: Props) => {
     const [messageApi, contextHolder] = message.useMessage();
-
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
     const [removeProduct, { isLoading: isRemoveLoading }] = useRemoveProductMutation();
     const dataSource = productsData?.map((item: IProduct) => ({
