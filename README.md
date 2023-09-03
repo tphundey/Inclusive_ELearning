@@ -9,9 +9,9 @@
     <br />
     <a href="https://demo.example.com">Xem Demo</a>
     ·
-    <a href="https://github.com/your-username/online-course-system/issues">Báo Lỗi</a>
+    <a href="https://taidvph20044@gmail.com/">Báo Lỗi</a>
     ·
-    <a href="https://github.com/your-username/online-course-system/pulls">Gửi Pull Request</a>
+    <a href="https://taidvph20044@gmail.com/">Gửi Pull Request</a>
   </p>
 </p>
 
@@ -25,8 +25,7 @@ Dự án này tập trung vào việc xây dựng một Hệ Thống Khóa Học
 
 - 🎥 **Bài Giảng Video**: Video giảng dạy sẽ giúp học sinh hiểu rõ hơn về nội dung khóa học thông qua việc trực quan hóa giảng dạy.
 
-- ✅ **Hệ Thống Bài Tập và Kiểm Tra**: Hệ thống sẽ cung cấp các bài tập và kiểm tra đa dạng để học sinh có thể kiểm tra kiến thức của mình và nhận phản hồi.
-
+- ✅ **Hệ Thống Bài Tập và Kiểm Tra**: Hệ thống sẽ cung cấp các bài tập và kiểm tra đa dạng để học sinh có thể kiểm tra kiến thức của mình.
 - 📣 **Diễn Đàn Thảo Luận**: Một diễn đàn thảo luận sẽ được tích hợp để học sinh có thể trao đổi, thảo luận và hỗ trợ lẫn nhau.
 
 - 📊 **Theo Dõi Tiến Độ**: Học sinh có thể theo dõi tiến độ học tập của mình thông qua giao diện dễ sử dụng.
@@ -39,22 +38,17 @@ Dưới đây là hướng dẫn để bạn có thể chạy dự án trên má
 
 git clone https://github.com/bunbonhieuhanh/LinkedIn_Learning.git
 
-Copy code
 
 2. **Cài Đặt Các Phụ Thuộc**: Di chuyển vào thư mục dự án và cài đặt các phụ thuộc bằng lệnh:
 
-cd Linkedln_Learning
+cd Linkedln_Learning <br>
 npm install
-
-less
-Copy code
 
 3. **Khởi Chạy Ứng Dụng**: Chạy ứng dụng trên máy cục bộ:
 
-npm run dev
+npm run dev | Khởi chạy client <br>
+npm run develop | Khởi chạy server
 
-less
-Copy code
 
 ## Đóng Góp
 
@@ -62,7 +56,7 @@ Chúng tôi hoan nghênh mọi đóng góp từ cộng đồng. Nếu bạn mu�
 
 ## Tác Giả
 
-Dự án này được thực hiện bởi nhóm dự án tốt nghiệp của trường Fpt Polytechnic. Liên hệ: 0878517203
+Dự án này được thực hiện bởi nhóm dự án tốt nghiệp của trường Fpt Polytechnic. Liên hệ: taidvph20044@gmail.com
 
 ---
 
