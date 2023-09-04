@@ -24,7 +24,7 @@ const Browsepage = () => {
                     </ul>
                 </div>
                 <div className="browseright">
-                    <Outlet/>
+                    <Outlet />
                 </div>
             </div>
         </div>
