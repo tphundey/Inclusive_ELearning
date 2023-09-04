@@ -54,7 +54,7 @@ const Businesspage = () => {
 
 
     return (
-        <div className="containerCss  business">
+        <div className="containerCss-browepage  business">
             <h2 className='h2-bsn'>Business</h2>
             <br />
             <h2 className='h2-bsn2'>Role Guides</h2>

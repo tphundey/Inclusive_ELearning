@@ -55,7 +55,7 @@ const Certificationpage = () => {
 
 
     return (
-        <div className="containerCss  business">
+        <div className="containerCss-browepage  business">
             <h2 className='h2-bsn'>Certification</h2>
             <br />
             <h2 className='h2-bsn2'>Role Guides</h2>
