@@ -29,7 +29,7 @@ export const routers = createBrowserRouter([
             { index: true, element: <Navigate to="homepage" /> },
             { path: "homepage", element: <Homepage /> },
             { path: "learningpath", element: <LearningPathpage /> },
-            { path: "introduction", element: <IntroductionPage /> },
+            { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
             {
                 path: "content/:id",
