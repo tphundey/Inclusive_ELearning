@@ -79,6 +79,12 @@
     },
     "user_id": {
       "type": "uid"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "instructor"
     }
   }
 }
