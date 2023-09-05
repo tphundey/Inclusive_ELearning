@@ -1,17 +1,39 @@
 import './introduction.css'
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Rating, Typography } from "@material-tailwind/react";
 import Input from 'antd/es/input/Input';
 import { Button } from 'antd';
+import { useParams } from 'react-router-dom';
 import { Form } from 'antd';
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:1337/api/courses/${id}`)
+            .then((response) => {
+                // Lưu thông tin sản phẩm vào state
+                console.log(response.data);
+                const productData = response.data.data.attributes;
+                setProduct(productData);
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+    }, [id]);
+
+    if (!product) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="containerCss">
             <div className="course-header-container">
                 <div className="course-overview-header">
                     <div className="courseLeft">
-                        <a className='courseLeft-ah1' href="">Asking Effective Questions During Requirements Elicitation</a>
+                        <a className='courseLeft-ah1' href="">{product.title}</a>
                         <div className="course-span-left mt-3">
                             <span>Beginner</span>
                             <span className='mb-1 font-bold'>.</span>
@@ -46,7 +68,7 @@ const IntroductionPage = () => {
                 </div>
             </div>
             <div className="imgHid">
-                <img src="https://media.licdn.com/dms/image/C560DAQHbbKuU4cmO4Q/learning-public-crop_675_1200/0/1643914740052?e=1692561600&v=beta&t=WlR5V1IHH_-5s8ShiJaqZ4N1yifL_Up3b0-5Bb_cAkE" alt="" />
+                <img src={product.imageurl} alt="" />
             </div>
             <hr />
             <div className="flex">
