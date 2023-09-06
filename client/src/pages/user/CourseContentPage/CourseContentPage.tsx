@@ -1,12 +1,33 @@
 import './ContentPage.css'
 import { NavLink, Outlet } from 'react-router-dom';
-
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const CourseContentPage = () => {
+
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:1337/api/courses/${id}`)
+            .then((response) => {
+                // Lưu thông tin sản phẩm vào state
+                console.log(response.data);
+                const productData = response.data.data.attributes;
+                setProduct(productData);
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+    }, [id]);
+
+    if (!product) {
+        return <div>Loading...</div>;
+    }
     const tabs = [
         { label: 'Overview', icon: 'fa-solid fa-earth-americas', path: 'overview', },
         { label: 'Notebook', icon: 'fa-solid fa-book', path: 'notepage' }
     ];
-
     return (
         <div className='container-content-page'>
             <div className="contentpage-left">
@@ -49,6 +70,7 @@ const CourseContentPage = () => {
                     <div className="content-info-fl">
                         <div>
                             <div className="content-info1">
+
                                 Microsoft Cybersecurity Architect (SC-100) Cert Prep: 2 Evaluate Governance Risk Compliance (GRC) Technical Strategies and Security</div>
                             <div className="content-info2">Module introduction</div>
                         </div>
@@ -60,7 +82,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls src="https://dms-exp3.licdn.com/playlist/vid/D4D0DAQFf25YPDSRSVQ/learning-original-video-vbr-720/0/1681425967788?e=1692994026&v=beta&t=Z_cPOli5JJvRhC36IdIWOoQW9kDjbCPoI4U3q77Age0"></video>
+                    <video controls src={product.imageurl}></video>
                 </div>
 
                 <div className="content-container-bottom">
