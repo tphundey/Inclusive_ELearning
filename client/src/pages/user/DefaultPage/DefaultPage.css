@@ -1,0 +1,50 @@
+.containerRight img {
+    width: 800px;
+}
+
+.defaltLeft {
+    width: 80%;
+}
+
+.defaltRight {
+    width: 20%;
+}
+
+.defaultContainer {
+    display: flex;
+    padding-top: 50px;
+}
+
+.keeplearning {
+    font-size: 50px;
+   color: rgb(70, 69, 69);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+.expert {
+    font-size: 20px;
+    width: 570px;
+}
+
+.defaultLogin{
+    background-color: #0B66C3;
+    color: white;
+    padding: 10px 0px;
+    margin-top: 20px;
+    border-radius: 20px;
+    text-align: center;
+    width: 200px;
+    font-weight: 700;
+}
+
+.defaultLogin:hover{
+    background-color: #0a529a;
+    color: white;
+    padding: 10px 0px;
+    margin-top: 20px;
+    border-radius: 20px;
+    text-align: center;
+    width: 200px;
+    font-weight: 700;
+}

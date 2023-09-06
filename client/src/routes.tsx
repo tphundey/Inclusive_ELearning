@@ -21,6 +21,7 @@ import History from "./pages/user/MyLearningPage/ChildrenMyLearning/History/Hist
 import CourseContentPage from "./pages/user/CourseContentPage/CourseContentPage";
 import OverViewPage from "./pages/user/CourseContentPage/ChildrenContentPages/OverviewPage";
 import NotePage from "./pages/user/CourseContentPage/ChildrenContentPages/NotePage";
+import Defaultpage from "./pages/user/DefaultPage/DefaultPage";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -28,6 +29,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="homepage" /> },
             { path: "homepage", element: <Homepage /> },
+            { path: "default", element: <Defaultpage /> },
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
