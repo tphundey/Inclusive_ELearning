@@ -1,0 +1,93 @@
+.loginpage {
+    width: 1000px;
+    padding: 0px;
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.login_bn {
+    width: 260px;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.lg-ct1 {
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.lg-ct2 {
+    color: gray;
+    width: 380px;
+    text-align: center;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.login-input input {
+    padding: 10px 0px;
+    padding-left: 10px;
+    width: 360px;
+    border-radius: 5px;
+    margin-top: 20px;
+    border: 1px solid black;
+
+}
+
+.login-input input::placeholder {
+    color: black;
+}
+
+.login-input form {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle {
+    font-weight: 600;
+    font-size: 14px;
+    color: #0A66C2;
+    width: 50px;
+    position: relative;
+    top: -35px;
+    left: 300px;
+}
+
+.login-input button {
+    background-color: #0A66C2;
+    color: white;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 45px;
+}
+
+.login-input button:hover {
+    background-color: #0957a5;
+    color: white;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 45px;
+}
+
+.login-input a {
+    color: #0A66C2;
+    font-weight: 600;
+}
+
+.login-new {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.login-footer ul {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 180px;
+    font-size: 14px;
+}

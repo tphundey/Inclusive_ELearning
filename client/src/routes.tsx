@@ -22,7 +22,15 @@ import CourseContentPage from "./pages/user/CourseContentPage/CourseContentPage"
 import OverViewPage from "./pages/user/CourseContentPage/ChildrenContentPages/OverviewPage";
 import NotePage from "./pages/user/CourseContentPage/ChildrenContentPages/NotePage";
 import Defaultpage from "./pages/user/DefaultPage/DefaultPage";
+import SigninPage from "./pages/user/SignInPage/SigninPage";
 export const routers = createBrowserRouter([
+    {
+        path: "/",
+        children: [
+            { index: true, element: <Navigate to="signin" /> },
+            { path: "signin", element: <SigninPage /> }
+        ],
+    },
     {
         path: "/",
         element: <LayoutWebsite />,
