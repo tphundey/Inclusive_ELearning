@@ -2,6 +2,7 @@ import '../BrowsePage.css'
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useGetProductsQuery } from '@/api/courses';
 
 const Certificationpage = () => {
     const products = [
@@ -41,9 +42,10 @@ const Certificationpage = () => {
             price: 'By: Luisa Winters',
             imageSrc: 'https://media.licdn.com/dms/image/C4E0DAQE84AgCpYxX-Q/learning-public-crop_144_256/0/1678908578362?e=1692212400&v=beta&t=0gWnv8lmjYUq5u3Qe4p1C5fZbLYYnzA3yPsP7CTR5LA'
         }
-       
+
 
     ];
+    const { data: courseData } = useGetProductsQuery()
 
     const settings = {
         arrows: true,
@@ -84,23 +86,24 @@ const Certificationpage = () => {
             <hr />
             <div className="product-slider2 business-slider">
                 <Slider {...settings}>
-                    {products.map((product, index) => (
+                    {courseData?.map((course, index) => (
 
                         <div key={index} className="group relative">
                             <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide2">
-                                <img src={product.imageSrc} alt="" />
+                                <img src={course.imageurl} alt="" />
                             </div>
                             <div className="mt-2">
                                 <div>
                                     <h3 className="text-xs text-gray-700">
                                         <a href="#">
                                             <span className="absolute inset-2 popular">POPULAR</span>
-                                            {product.name}
+                                            {course.title}
                                         </a>
                                     </h3>
-                                    <p className="mt-1 text-base">{product.color}</p>
+                                    <p className="mt-1 text-base">{course?.instructor}</p>
+                                    <p className="mt-1 text-base">{course?.publishedDate}</p>
                                 </div>
-                                <p className=" mt-1 text-xs text-gray">{product.price}</p>
+                                <p className=" mt-1 text-xs text-gray">{course.price}</p>
                             </div>
                         </div>
                     ))}
