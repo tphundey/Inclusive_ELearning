@@ -1,10 +1,81 @@
 import './SignupPage.css'
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import GoogleLogin, { GoogleLogout } from 'react-google-login';
+import { gapi } from 'gapi-script'
+// import axios from "axios";
+const clientId = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com"
 const SignupPage = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+
+    const onSuccess = (res: any) => {
+        // const emailToCheck = "anhnek033@gmail.com";
+        const profile = {
+            email: res.profileObj.email,
+            name: res.profileObj.name,
+            img: res.profileObj.imageUrl
+        };
+        // Chuyển đổi object profile thành chuỗi JSON
+        const profileJSON = JSON.stringify(profile);
+
+        console.log("Login Success", res.profileObj);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('profile', profileJSON);
+
+
+        // Kiểm tra email trùng trước khi gửi yêu cầu POST
+        // axios.get(`http://localhost:3000/googleAccount?email=${res.profileObj.email}`)
+        //     .then(response => {
+        //         if (response.data.length > 0) {
+        //             console.log('có tài khoản rồi');
+        //         } else {
+        //             axios.post('http://localhost:3000/googleAccount', profile)
+        //                 .then(response => {
+        //                     console.log('Post thông tin tài khoản thành công !');
+        //                 })
+        //                 .catch(error => {
+        //                     console.log(error);
+        //                 });
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
+
+
+        // if (res.profileObj.email === emailToCheck) {
+        //     setTimeout(() => {
+        //         console.log('thanh cong');
+
+        //     }, 3000);
+        // } else {
+        //     setTimeout(() => {
+        //         console.log('ko thanh cong');
+        //         location.reload();
+        //     }, 3000);
+        // }
+    }
+
+    const onFailure = (res: any) => {
+        console.log("Login Fail", res);
+        alert('Không thành công')
+    }
+
+    useEffect(() => {
+        function start() {
+            gapi.client.init({
+                clientId: clientId,
+                scope: ""
+            })
+        };
+        gapi.load('client:auth2', start)
+    })
+
+    // const responseGoogle = (response) => {
+    //     // In thông tin người dùng vào console
+    //     console.log('Thông tin người dùng:', response.profileObj);
+    // };
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -43,6 +114,16 @@ const SignupPage = () => {
                         <div className="">or</div>
                         <div className="sin-hr"></div>
                     </div>
+
+                    <GoogleLogin
+                        clientId={clientId} // Thay thế YOUR_GOOGLE_CLIENT_ID bằng Client ID của bạn
+                        buttonText="Đăng nhập bằng Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={'single_host_origin'}
+                        isSignedIn={true}
+                    />
+                    {/* <GoogleLogout>DƯA</GoogleLogout> */}
                     <br />
                     <div className="login-new">
                         <div>Already on LinkedIn? </div>
