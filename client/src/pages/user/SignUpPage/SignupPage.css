@@ -1,0 +1,22 @@
+.signup-label {
+    text-align: left;
+    position: relative;
+    top: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(91, 89, 89);
+}
+
+.signup-or {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.sin-hr {
+    height: 1px;
+    background-color: rgb(209, 208, 208);
+    width: 130px;
+}
