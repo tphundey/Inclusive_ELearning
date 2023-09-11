@@ -6,12 +6,12 @@ const HeaderUser = () => {
                 <div className="containerCss flex-hd">
                     <div className="box1">
                         <div className="logo">
-                            <img src="https://f9-zpcloud.zdn.vn/6063566139068766470/d60a9b137ea1adfff4b0.jpg" alt="logo website" />
+                            <a href="http://localhost:5173/homepage"> <img src="https://f9-zpcloud.zdn.vn/6063566139068766470/d60a9b137ea1adfff4b0.jpg" alt="logo website" /></a>
                         </div>
                     </div>
                     <div className="box2">
                         <div className="left">
-                            <i className="fa-solid fa-list lups"></i>
+                            <a href="http://localhost:5173/browsepage/business"><i className="fa-solid fa-list lups"></i></a>
                             <div className="bolder-css">
                                 <form action="">
                                     <input placeholder='What do you want to learn today?' type="text" />
@@ -22,19 +22,19 @@ const HeaderUser = () => {
                         <div className="right">
                             <ul>
                                 <li>
-                                    <a href="">
+                                    <a href="http://localhost:5173/homepage">
                                         <i className="fa-solid fa-house lups"></i>
                                         <div>Home</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="http://localhost:5173/mylearning/progress">
                                         <i className="fa-regular fa-file lups"></i>
                                         <div>My learning</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="http://localhost:5173/signin">
                                         <i className="fa-regular fa-user lups"></i>
                                         <div>Me<i className="fa-solid fa-caret-down lups-left"></i></div>
                                     </a>
