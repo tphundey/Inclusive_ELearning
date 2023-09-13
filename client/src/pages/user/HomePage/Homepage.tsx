@@ -3,7 +3,7 @@ import { useGetProductsQuery } from "@/api/courses";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
+import { Link } from 'react-router-dom';
 const Homepage = () => {
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
 
@@ -69,10 +69,12 @@ const Homepage = () => {
                                             <div className="mt-2">
                                                 <div>
                                                     <h3 className="text-xs text-gray-700">
-                                                        <a href="#">
+
+
+                                                        <Link to={`/introduction/${product.id}`}>
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {product.category}
-                                                        </a>
+                                                        </Link>
                                                     </h3>
                                                     <p className="mt-1 text-base">{product.title}</p>
                                                 </div>
@@ -108,14 +110,16 @@ const Homepage = () => {
                                             <div className="mt-2">
                                                 <div>
                                                     <h3 className="text-xs text-gray-700">
-                                                        <a href="#">
+
+
+                                                        <Link to={`/introduction/${product.id}`}>
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {product.category}
-                                                        </a>
+                                                        </Link>
                                                     </h3>
-                                                    <p className="mt-1 text-base">{product.instructor}</p>
+                                                    <p className="mt-1 text-base">{product.title}</p>
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{product.price}</p>
+                                                <p className=" mt-1 text-xs text-gray">{product.instructor}</p>
                                             </div>
                                         </div>
                                     ))}
