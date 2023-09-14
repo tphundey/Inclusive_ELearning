@@ -4,7 +4,7 @@
   "info": {
     "singularName": "author-course",
     "pluralName": "author-courses",
-    "displayName": "Author_course",
+    "displayName": "Mentor",
     "description": ""
   },
   "options": {
@@ -12,21 +12,22 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Author_id": {
-      "type": "uid"
-    },
-    "user_id": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "admin::user"
-    },
-    "Author_name": {
+    "mentor_name": {
       "type": "string"
     },
-    "Author_phone": {
+    "mentor_phone": {
       "type": "integer"
     },
-    "Author_address": {
+    "mentor_address": {
+      "type": "string"
+    },
+    "course": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::course.course",
+      "mappedBy": "mentor"
+    },
+    "mentor_img": {
       "type": "string"
     }
   }

@@ -21,7 +21,9 @@
       "type": "biginteger"
     },
     "duration": {
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "description": {
       "type": "richtext",
@@ -29,7 +31,10 @@
       "maxLength": 225
     },
     "category": {
-      "type": "string"
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category",
+      "inversedBy": "course"
     },
     "level": {
       "type": "string"
@@ -44,22 +49,16 @@
     "lastUpdated": {
       "type": "date"
     },
-    "user_course": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::user-course.user-course",
-      "inversedBy": "course_id"
-    },
     "imageurl": {
       "type": "string",
       "required": true,
       "unique": true
     },
-    "instructor": {
+    "mentor": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "courses"
+      "relation": "oneToOne",
+      "target": "api::author-course.author-course",
+      "inversedBy": "course"
     },
     "feedback": {
       "type": "relation",
