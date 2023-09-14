@@ -62,25 +62,23 @@ const Homepage = () => {
                             ) : (
                                 <Slider {...settings}>
                                     {productsData?.map((product, index) => (
-                                        <div key={index} className="group relative">
-                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                <img src={product.imageurl} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div>
-                                                    <h3 className="text-xs text-gray-700">
-
-
-                                                        <Link to={`/introduction/${product.id}`}>
+                                        <Link to={`/introduction/${product.id}`}>
+                                            <div key={index} className="group relative">
+                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                    <img src={product.imageurl} alt="" />
+                                                </div>
+                                                <div className="mt-2">
+                                                    <div>
+                                                        <h3 className="text-xs text-gray-700">
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {product.category}
-                                                        </Link>
-                                                    </h3>
-                                                    <p className="mt-1 text-base">{product.title}</p>
+                                                        </h3>
+                                                        <p className="mt-1 text-base">{product.title}</p>
+                                                    </div>
+                                                    <p className=" mt-1 text-xs text-gray">By: {product.mentorName}</p>
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{product.instructor}</p>
                                             </div>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </Slider>
                             )}
@@ -103,25 +101,23 @@ const Homepage = () => {
                             ) : (
                                 <Slider {...settings}>
                                     {productsData?.map((product, index) => (
-                                        <div key={index} className="group relative">
-                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                <img src={product.imageurl} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div>
-                                                    <h3 className="text-xs text-gray-700">
-
-
-                                                        <Link to={`/introduction/${product.id}`}>
+                                        <Link to={`/introduction/${product.id}`}>
+                                            <div key={index} className="group relative">
+                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                    <img src={product.imageurl} alt="" />
+                                                </div>
+                                                <div className="mt-2">
+                                                    <div>
+                                                        <h3 className="text-xs text-gray-700">
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {product.category}
-                                                        </Link>
-                                                    </h3>
-                                                    <p className="mt-1 text-base">{product.title}</p>
+                                                        </h3>
+                                                        <p className="mt-1 text-base">{product.title}</p>
+                                                    </div>
+                                                    <p className=" mt-1 text-xs text-gray">By: {product.mentorName}</p>
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{product.instructor}</p>
                                             </div>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </Slider>
                             )}

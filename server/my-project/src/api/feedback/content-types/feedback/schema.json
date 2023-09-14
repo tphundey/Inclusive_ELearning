@@ -27,12 +27,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "feedback"
     },
-    "course_id": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::course.course",
-      "inversedBy": "feedback"
-    },
     "Feedback_content": {
       "type": "richtext",
       "default": "good",
