@@ -7,6 +7,9 @@ const CourseContentPage = () => {
 
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [videos, setVideos] = useState([]);
+    const [filteredVideos, setFilteredVideos] = useState([])
+    const [selectedVideo, setSelectedVideo] = useState(null);
 
     useEffect(() => {
         axios.get(`http://localhost:1337/api/courses/${id}`)
@@ -21,6 +24,36 @@ const CourseContentPage = () => {
             });
     }, [id]);
 
+    useEffect(() => {
+        // Gọi API để lấy thông tin sản phẩm dựa trên 'id' từ URL
+        axios
+            .get(`http://localhost:1337/api/courses/${id}`)
+            .then((response) => {
+                const productData = response.data.data.attributes;
+                setProduct(productData);
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+
+        axios
+            .get('http://localhost:1337/api/videos')
+            .then((response) => {
+                const videoData = response.data.data; // Lấy mảng video từ response.data.data
+                if (Array.isArray(videoData)) {
+                    setVideos(videoData);
+                    const filteredVideoData = videoData.filter((videoItem) => videoItem.attributes.courseId === id);
+                    setFilteredVideos(filteredVideoData);
+                    console.log(filteredVideoData);
+                } else {
+                    console.error('Video data is not an array:', videoData);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching video data:', error);
+            });
+    }, [id]);
+
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -32,46 +65,33 @@ const CourseContentPage = () => {
         <div className='container-content-page'>
             <div className="contentpage-left">
                 <div className="content-left-title">
-                    <i className="fa-solid fa-list"></i>  <div>Contents</div>
+                    <i className="fa-solid fa-list"></i> <div>Contents</div>
                 </div>
-                <div className="content-left-title-course">
-                    <div className="checkbox-container">
-                        <i className="fa-solid fa-check"></i>
+
+                {filteredVideos && Array.isArray(filteredVideos) && filteredVideos.length > 0 ? (
+                    <div>
+                        {filteredVideos.map((videoItem) => (
+                            <div className="content-left-title-course "
+                                onClick={() => setSelectedVideo(videoItem.attributes.videoUrl)}>
+                                <div className="checkbox-container">
+                                    <i className="fa-solid fa-check"></i>
+                                </div>
+                                <div className="content-list-u">
+                                    <div className='cursor-pointer'>{videoItem.attributes.contentName}</div>
+                                    <div>  <i className="fa-regular fa-bookmark hi"></i></div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    <div>Manager relational data with PostgetSql</div><i className="fa-regular fa-bookmark"></i>
-                </div>
-                <div className="content-left-title-course">
-                    <div className="checkbox-container">
-                        <input type="checkbox" className="checkbox" />
-                    </div>
-                    <div>Manager relational data with PostgetSql</div><i className="fa-regular fa-bookmark"></i>
-                </div>
-                <div className="content-left-title-course">
-                    <div className="checkbox-container">
-                        <input type="checkbox" className="checkbox" />
-                    </div>
-                    <div>Manager relational data with PostgetSql</div><i className="fa-regular fa-bookmark"></i>
-                </div>
-                <div className="content-left-title-course">
-                    <div className="checkbox-container">
-                        <input type="checkbox" className="checkbox" />
-                    </div>
-                    <div>Manager relational data with PostgetSql</div><i className="fa-regular fa-bookmark"></i>
-                </div>
-                <div className="content-left-title-course">
-                    <div className="checkbox-container">
-                        <input type="checkbox" className="checkbox" />
-                    </div>
-                    <div>Manager relational data with PostgetSql</div><i className="fa-regular fa-bookmark"></i>
-                </div>
-            </div>
+                ) : (
+                    <div>No videos available.</div>
+                )}  </div>
+
             <div className="contentpage-right">
                 <div className="content-infocourse">
                     <div className="content-info-fl">
                         <div>
-                            <div className="content-info1">
-
-                                Microsoft Cybersecurity Architect (SC-100) Cert Prep: 2 Evaluate Governance Risk Compliance (GRC) Technical Strategies and Security</div>
+                            <div className="content-info1">{product.title}</div>
                             <div className="content-info2">Module introduction</div>
                         </div>
                         <div className='fl-content-option'>
@@ -82,7 +102,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls src={product.imageurl}></video>
+                    <video controls src={selectedVideo || product.videoUrl}></video>
                 </div>
 
                 <div className="content-container-bottom">
