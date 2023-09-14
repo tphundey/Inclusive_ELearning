@@ -58,6 +58,12 @@
     },
     "mentorId": {
       "type": "biginteger"
+    },
+    "videoUrl": {
+      "type": "string"
+    },
+    "videoId": {
+      "type": "biginteger"
     }
   }
 }

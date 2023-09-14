@@ -6,6 +6,8 @@ import Input from 'antd/es/input/Input';
 import { Button } from 'antd';
 import { useParams } from 'react-router-dom';
 import { Form } from 'antd';
+import { Link } from 'react-router-dom';
+
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
     const { id } = useParams();
@@ -79,11 +81,16 @@ const IntroductionPage = () => {
                             <span>{product.enrollments} learners</span>
                         </div>
                         <div className='flex gap-4 intro-bt'>
-                            <button className='intro-bt1'>Start my free month</button>
+                            <Link to={`/content/${id}`}>
+                                <button className='intro-bt1'>Start my free month</button>   </Link>
                             <button className='intro-bt2'>Buy for my team</button>
                         </div>
                     </div>
-                    <div className="courseRight"><button><i className="fa-solid fa-play"></i> Preview</button></div>
+
+                    <div className="courseRight">
+                        <button><i className="fa-solid fa-play"></i> Preview</button>
+                    </div>
+
                 </div>
             </div>
             <div className="imgHid">

@@ -70,7 +70,8 @@ export const {
     useAddProductMutation,
     useGetProductByIdQuery,
     useRemoveProductMutation,
-    useUpdateProductMutation
+    useUpdateProductMutation,
+    useGetVideosQuery
 } = productApi;
 
 export const productReducer = productApi.reducer;

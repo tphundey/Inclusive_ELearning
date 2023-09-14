@@ -40,12 +40,21 @@
 
 .content-left-title-course {
     color: white;
+    height: 80px;
+    width: 400px;
     font-size: 15px;
     display: flex;
     gap: 20px;
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid #7F7F7F;
+}
+
+.content-list-u {
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
+    align-items: center;
 }
 
 .content-left-title-course div {

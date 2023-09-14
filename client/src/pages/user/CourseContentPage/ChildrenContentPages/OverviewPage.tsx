@@ -1,4 +1,47 @@
+import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 const OverViewPage = () => {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+    const [mentor, setMentor] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:1337/api/courses/${id}`)
+            .then((response) => {
+                // Lưu thông tin sản phẩm vào state
+                console.log(response.data);
+                const productData = response.data.data.attributes;
+                setProduct(productData);
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+    }, [id]);
+
+    useEffect(() => {
+        // Kiểm tra xem có dữ liệu khóa học không
+        if (product) {
+            // Gọi API lấy thông tin mentor dựa trên ID sản phẩm
+            axios.get(`http://localhost:1337/api/author-courses/${product.mentorId}`)
+                .then((response) => {
+                    // Lưu thông tin mentor vào state
+                    console.log(response.data);
+                    const mentorData = response.data.data.attributes;
+                    setMentor(mentorData);
+                })
+                .catch((error) => {
+                    console.error('Error fetching mentor data:', error);
+                });
+        }
+    }, [product]);
+
+    console.log(mentor);
+    if (!product) {
+        return <div>Loading...</div>;
+    }
+
 
     return (
         <div className="flex gap-10 ">
@@ -8,12 +51,12 @@ const OverViewPage = () => {
                 </div>
                 <div className="content-structor-main">
                     <div className="content-structor-main-avatar">
-                        <img src="https://media.licdn.com/dms/image/C560DAQHA0UqUC_iaEQ/learning-author-crop_200_200/0/1576189243445?e=1693598400&v=beta&t=6dfY7F6VM6Yx0iit88jaEkRFtf0AWQJtWVIC85Rx8fw" alt="" />
+                        <img src={mentor?.mentorImg} alt="" />
                     </div>
                     <div className="content-structor-main-name">
                         <div className="children-structor-main">
                             <div className='children-structor-main-name'>
-                                Microsoft Press and Charles Pluta
+                                {mentor?.mentorName}
                             </div>
                             <div>
                                 <button>Show all course</button>
@@ -24,16 +67,15 @@ const OverViewPage = () => {
                 <div className="coursedetails">
                     <div className="text-xl font-medium mt-6">Course details</div>
                     <div className="info-details">
-                        <div className="info15">29m</div>
+                        <div className="info15">{product.duration} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">Advanced</div>
+                        <div className="info15">{product.level}</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">Released: 5/16/2023</div>
+                        <div className="info15">Released: {product.publishedDate}</div>
                     </div>
 
                     <div className="course-detail-main">
-                        The Microsoft Cybersecurity Architect SC-100 certification exam vets your ability to design and evolve cybersecurity strategies to protect your organization’s mission and business processes across all aspects of enterprise architecture. In this course from Microsoft Press, join Microsoft Certified Trainer Charles Pluta for an overview of the skills required to tackle the second domain of the exam, which focuses on evaluating governance risk compliance (GCR) and security operations strategies.
-                        <br />  <br />    Learn the basics of designing a regulatory compliance system, evaluating security posture, and recommending targeted, technical, and effective risk management strategies. By the end of this course, you'll know more about the requirements for designing and securing a zero trust architecture so you can pass the official SC-100 exam.
+                        {product.description}
                     </div>
                     <div className='font-medium text-xl mt-6'>
                         Instructors
@@ -41,10 +83,10 @@ const OverViewPage = () => {
                     <div className="instructors">
                         <div className="instructors-children">
                             <div className="instruc-left">
-                                <img src="https://media.licdn.com/dms/image/C560DAQHA0UqUC_iaEQ/learning-author-crop_200_200/0/1576189243445?e=1693598400&v=beta&t=6dfY7F6VM6Yx0iit88jaEkRFtf0AWQJtWVIC85Rx8fw" alt="" />
+                                <img src={mentor?.mentorImg} alt="" />
                             </div>
                             <div className="instruc-right">
-                                <h1>Microsoft Press</h1>
+                                <h1>{mentor?.mentorName}</h1>
                                 <h2>Microsoft</h2>
                                 <h3><a href="">Follow on LinkedIn</a></h3>
                             </div>
@@ -156,7 +198,7 @@ const OverViewPage = () => {
                             </div>
                         </div>
                     </div>
-                    <br/>
+                    <br />
                 </div>
             </div>
             <div className="content-overview-right">
