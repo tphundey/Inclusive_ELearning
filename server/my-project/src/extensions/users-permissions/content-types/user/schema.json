@@ -71,20 +71,11 @@
       "target": "api::feedback.feedback",
       "mappedBy": "users_permissions"
     },
-    "user_courses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::user-course.user-course",
-      "mappedBy": "user_permissions"
-    },
     "user_id": {
       "type": "uid"
     },
-    "courses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course.course",
-      "mappedBy": "instructor"
+    "courseSaved": {
+      "type": "string"
     }
   }
 }
