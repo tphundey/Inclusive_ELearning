@@ -10,6 +10,7 @@ const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [mentor, setMentor] = useState(null);
 
     useEffect(() => {
         axios.get(`http://localhost:1337/api/courses/${id}`)
@@ -24,6 +25,24 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
+    useEffect(() => {
+        // Kiểm tra xem có dữ liệu khóa học không
+        if (product) {
+            // Gọi API lấy thông tin mentor dựa trên ID sản phẩm
+            axios.get(`http://localhost:1337/api/author-courses/${product.mentorId}`)
+                .then((response) => {
+                    // Lưu thông tin mentor vào state
+                    console.log(response.data);
+                    const mentorData = response.data.data.attributes;
+                    setMentor(mentorData);
+                })
+                .catch((error) => {
+                    console.error('Error fetching mentor data:', error);
+                });
+        }
+    }, [product]);
+
+    console.log(mentor);
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -35,11 +54,11 @@ const IntroductionPage = () => {
                     <div className="courseLeft">
                         <a className='courseLeft-ah1' href="">{product.title}</a>
                         <div className="course-span-left mt-3">
-                            <span>Beginner</span>
+                            <span>{product.level}</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>48m 27s</span>
+                            <span>{product.duration} m</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>Released: February 7, 2022</span>
+                            <span>Released: {product.publishedDate}</span>
                         </div>
                         <div className="course-span-left">
                             <span>4.6</span>
@@ -57,7 +76,7 @@ const IntroductionPage = () => {
                                 </svg></span>
                             <span>(240)</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>11,558 learners</span>
+                            <span>{product.enrollments} learners</span>
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             <button className='intro-bt1'>Start my free month</button>
@@ -80,7 +99,7 @@ const IntroductionPage = () => {
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Course description</div>
-                        <p>The Microsoft Cybersecurity Architect SC-100 certification exam vets your ability to design and evolve cybersecurity strategies to protect your organization’s mission and business processes across all aspects of enterprise architecture. In this course from Microsoft Press, join Microsoft Certified Trainer Charles Pluta for an overview of the skills required to tackle the second domain of the exam, which focuses on evaluating governance risk compliance (GCR) and security operations strategies.</p>
+                        <p>{product.description}</p>
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Shareable certificate</div>
@@ -108,13 +127,12 @@ const IntroductionPage = () => {
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img src="https://media.licdn.com/dms/image/C4E0DAQG_9o3S-fqHfQ/learning-author-crop_200_200/0/1678470746054?e=1692658800&v=beta&t=JfEjZdjKSSpxp1PNvUZUn5Z5rEvyogR65QD5TEqEMFY" alt="" />
+                                    <img src={mentor?.mentorImg} alt="" />
                                 </div>
                                 <div className="instruc-right">
-                                    <h1>Microsoft Press</h1>
+                                    <h1>{mentor?.mentorName}</h1>
                                     <h2>Microsoft</h2>
                                     <h3><a href="">View more courses by Microsoft Press</a></h3>
-
                                 </div>
                             </div>
                         </div>

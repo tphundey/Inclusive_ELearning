@@ -30,12 +30,6 @@
       "minLength": 20,
       "maxLength": 225
     },
-    "category": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::category.category",
-      "inversedBy": "course"
-    },
     "level": {
       "type": "string"
     },
@@ -54,17 +48,16 @@
       "required": true,
       "unique": true
     },
-    "mentor": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::author-course.author-course",
-      "inversedBy": "course"
+    "mentorName": {
+      "type": "string"
     },
-    "feedback": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::feedback.feedback",
-      "mappedBy": "course_id"
+    "category": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "mentorId": {
+      "type": "biginteger"
     }
   }
 }

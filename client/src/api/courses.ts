@@ -18,20 +18,8 @@ const productApi = createApi({
             providesTags: ['Courses'],
             transformResponse: (response: any) => {
                 return response.data.map((item: any) => ({
-                    instructor: item.attributes.instructor,
-                    id: item.id,
-                    title: item.attributes.title,
-                    price: item.attributes.price,
-                    duration: item.attributes.duration,
-                    category: item.attributes.category,
-                    level: item.attributes.level,
-                    enrollments: item.attributes.enrollments,
-                    publishedDate: item.attributes.publishedDate,
-                    lastUpdated: item.attributes.lastUpdated,
-                    createdAt: item.attributes.createdAt,
-                    updatedAt: item.attributes.updatedAt,
-                    publishedAt: item.attributes.publishedAt,
-                    imageurl: item.attributes.imageurl,
+                    ...item.attributes,
+                    id: item.id
                 }));
             },
         }),
@@ -40,9 +28,8 @@ const productApi = createApi({
             query: (id) => `/products/${id}`,
             providesTags: ['Courses'],
             transformResponse: (response: any) => ({
-                name: response.data.attributes.name,
-                price: response.data.attributes.price.toString(),
-                id: response.data.id,
+                ...response.data.attributes,
+                id: response.data.id
             }),
         }),
 

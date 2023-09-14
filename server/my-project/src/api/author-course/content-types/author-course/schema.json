@@ -12,22 +12,10 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "mentor_name": {
+    "mentorName": {
       "type": "string"
     },
-    "mentor_phone": {
-      "type": "integer"
-    },
-    "mentor_address": {
-      "type": "string"
-    },
-    "course": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::course.course",
-      "mappedBy": "mentor"
-    },
-    "mentor_img": {
+    "mentorImg": {
       "type": "string"
     }
   }
