@@ -24,13 +24,15 @@ import NotePage from "./pages/user/CourseContentPage/ChildrenContentPages/NotePa
 import Defaultpage from "./pages/user/DefaultPage/DefaultPage";
 import SigninPage from "./pages/user/SignInPage/SigninPage";
 import SignupPage from "./pages/user/SignUpPage/SignupPage";
+import BecomeMentor from "./pages/mentor/BecomeMentor/BecomeMentor";
 export const routers = createBrowserRouter([
     {
         path: "/",
         children: [
             { index: true, element: <Navigate to="signin" /> },
             { path: "signin", element: <SigninPage /> },
-            { path: "signup", element: <SignupPage /> }
+            { path: "signup", element: <SignupPage /> },
+            { path: "instructors", element: <BecomeMentor /> }
         ],
     },
     {

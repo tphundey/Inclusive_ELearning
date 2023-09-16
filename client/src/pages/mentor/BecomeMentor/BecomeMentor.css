@@ -1,0 +1,100 @@
+.becomementor-container {
+    width: 1200px;
+    padding: 0px;
+    margin: 0px auto;
+    display: flex;
+}
+
+.becomementor-header {
+    border-bottom: 2px solid #037CB8;
+    margin-bottom: 30px;
+}
+
+.becomementor-header img {
+    margin-left: 13%;
+    width: 200px;
+}
+
+.becomementorleft {
+    width: 50%;
+    padding-right: 50px;
+}
+
+.becomementorleft h1 {
+    font-size: 40px;
+    width: 400px;
+    font-weight: 300;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.becomementorleft ul {
+    list-style-type: disc;
+    padding: 30px;
+}
+
+.become-span {
+    color: #037CB8;
+    font-weight: 700;
+}
+
+.becomementorright {
+    width: 50%;
+    padding: 40px;
+    background-color: rgb(245, 245, 245);
+}
+
+.becomementorright h2 {
+    font-size: 25px;
+    font-weight: 300;
+}
+
+.becomementorright form {
+    margin-top: 50px;
+}
+
+.becomementorright .becomementor-input {
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
+    width: 500px;
+    padding: 3px;
+    margin-bottom: 30px;
+}
+
+.becomementorright .becomementor-input2 {
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
+    width: 500px;
+    height: 100px;
+    padding: 3px;
+    margin-bottom: 30px;
+}
+
+.becomementorright input::placeholder {
+    padding: 10px;
+}
+
+.becomementorright p {
+    width: 450px;
+    margin-bottom: 20px;
+}
+
+.becomementor-checkbox {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(245, 245, 245);
+}
+
+.becomementorright label {
+    color: rgb(88, 88, 88);
+    font-size: 14px;
+}
+
+.becomementorright button {
+    background-color: #046ea3;
+    color: white;
+    padding: 5px 30px;
+}
