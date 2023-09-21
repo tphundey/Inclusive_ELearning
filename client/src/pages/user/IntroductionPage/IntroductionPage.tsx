@@ -13,13 +13,16 @@ const IntroductionPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [mentor, setMentor] = useState(null);
+    const [courseDetail, setCourseDetail] = useState(null);
+    const [relatedCourses, setRelatedCourses] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:1337/api/courses/${id}`)
             .then((response) => {
-                // Lưu thông tin sản phẩm vào state
-                console.log(response.data);
                 const productData = response.data.data.attributes;
+                console.log(response.data);
+                console.log('use1');
+
                 setProduct(productData);
             })
             .catch((error) => {
@@ -33,8 +36,6 @@ const IntroductionPage = () => {
             // Gọi API lấy thông tin mentor dựa trên ID sản phẩm
             axios.get(`http://localhost:1337/api/author-courses/${product.mentorId}`)
                 .then((response) => {
-                    // Lưu thông tin mentor vào state
-                    console.log(response.data);
                     const mentorData = response.data.data.attributes;
                     setMentor(mentorData);
                 })
@@ -44,7 +45,34 @@ const IntroductionPage = () => {
         }
     }, [product]);
 
-    console.log(mentor);
+    useEffect(() => {
+        // Lấy thông tin khóa học có id là 11 từ API
+        fetch('http://localhost:1337/api/courses/11')
+            .then((response) => response.json())
+            .then((data) => setCourseDetail(data))
+            .catch((error) => console.error('Lỗi khi lấy thông tin khóa học:', error));
+
+        // Lấy danh sách tất cả các khóa học từ API
+        fetch('http://localhost:1337/api/courses')
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log(responseData, 1);
+
+                // Truy cập danh sách khóa học từ responseData.data
+                const data = responseData.data;
+
+                if (Array.isArray(data)) {
+                    // Lọc ra các khóa học cùng loại với khóa học có id là 11
+                    const related = data.filter((course) => course.attributes.categoryId === 1);
+                    console.log(related, 2);
+                    setRelatedCourses(related);
+                } else {
+                    console.error('Dữ liệu không phải là mảng.');
+                }
+            })
+            .catch((error) => console.error('Lỗi khi lấy danh sách khóa học:', error));
+    }, []);
+
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -269,85 +297,22 @@ const IntroductionPage = () => {
                 </div>
                 <div className='introducation-right'>
                     <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
+
                     <ul className="divide-y divide-slate-100">
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
+                        {relatedCourses.map(course => (
+                            <li key={course.id} className="flex items-start gap-4 px-4 py-3">
+                                <div className="flex items-center shrink-0">
+                                    <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
+                                </div>
+                                <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
+                                    <h4 className='text-xs'>COURSE</h4>
+                                    <h4 className="text-base text-slate-700 font-medium"><a href="">{course.title}</a></h4>
+                                    <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
+                                    <span className='timeforvideoIntro'>1h 23m</span>
+                                </div>
+                            </li>
+                        ))}
                         <hr />
-
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQH0Lz0YLTK3DA/learning-public-crop_144_256/0/1663006019313?e=1692658800&v=beta&t=Q50EtqZjwwp8m4tj0_O10kakYsrFESxin1zmaOz5feE" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
-                        <hr />
-
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQHtdXQZyMfd1Q/learning-public-crop_144_256/0/1660846179936?e=1692658800&v=beta&t=iObJx_KFbCczDZSnAeaYdnzGxCumSq_j0vx7YSPOt3s" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
-                        <hr />
-
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
-                        <hr />
-
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
-                        <hr />
-
-                        <li className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                <span className='timeforvideoIntro'>1h 23m</span>
-                            </div>
-                        </li>
-                        <hr />
-
                     </ul>
                 </div>
             </div>
