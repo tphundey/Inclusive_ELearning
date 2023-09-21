@@ -64,6 +64,9 @@
     },
     "videoId": {
       "type": "biginteger"
+    },
+    "categoryId": {
+      "type": "biginteger"
     }
   }
 }
