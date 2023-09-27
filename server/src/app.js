@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 //singup
 // app.use('/api', authRouter)
 // app.use('/api', categoryRouter)
-mongoose.connect('mongodb://127.0.0.1:27017/inclusive_Elearning').then(
+mongoose.connect('mongodb+srv://datnsph25191:lvmSjx4T4CvRDckN@cluster0.4xubugv.mongodb.net/').then(
     console.log('Connected successfully')
 )
 export const viteNodeApp = app;
