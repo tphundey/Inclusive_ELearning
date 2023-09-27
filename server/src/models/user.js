@@ -18,8 +18,11 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "member",
+        enum: ['student', 'instructor', 'admin'],
+        default: 'student',
+        require: true,
     },
-});
+},
+{ collection: "User", timestamps: true });
 
 export default mongoose.model("User", userSchema);
