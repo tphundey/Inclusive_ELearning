@@ -1,16 +1,21 @@
 import mongoose from "mongoose";
-const categorySchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
     id: {
         type: String | Number
     },
-    user_id: {
-        type: Number
+    user : {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        required: true
     },
-    course_id: {
-        type: Number
+    course: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Course',
+        required: true
     },
     quantity: {
-        type: Number
+        type: Number,
+        required: true
     },
     total_price: {
         type: Number
@@ -18,8 +23,6 @@ const categorySchema = new mongoose.Schema({
     status : {
         type: String
     }
-}, {
-    timestamps: true,
-    versionKey: false
-})
-export default mongoose.model('cart', categorySchema)
+}, { collection: "Cart", timestamps: true },
+)
+export default mongoose.model('Cart', cartSchema)
