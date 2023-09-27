@@ -1,4 +1,3 @@
-
 import express from "express";
 import { create, getAll, get, update, remove } from "../controllers/product";
 import { checkPermission } from "../Middlewares/CheckPermission";
