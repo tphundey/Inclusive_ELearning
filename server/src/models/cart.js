@@ -3,12 +3,12 @@ const cartSchema = new mongoose.Schema({
     id: {
         type: String | Number
     },
-    user : {
+    userId : {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User',
         required: true
     },
-    course: {
+    courseId: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Course',
         required: true
@@ -17,7 +17,7 @@ const cartSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    total_price: {
+    totalPrice: {
         type: Number
     },
     status : {

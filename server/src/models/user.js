@@ -2,19 +2,35 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     id :  {
-        type: String | Number
+        type: String | Number,
+        required: true
     },
     email: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
     },
-    password: {
+    courseID :{
+        type : String,
+        required: true,
+    },
+    passWord: {
         type: String,
-        require: true,
+        required: true,
     },
     name :{
-        type: String | Number
+        type: String | Number,
+        required: true,
+    },
+    avata : {
+        type : String
+    },
+    location : {
+        type : String
+    },
+    courseSaved : {
+        type : String,
+        required: true,
     },
     role: {
         type: String,
