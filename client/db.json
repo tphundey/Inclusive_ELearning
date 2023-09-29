@@ -1,20 +1,158 @@
 {
-  "users": [],
-  "products": [
+  "Payment": [
     {
-      "name": "Sản phẩm 1 update 1 ",
-      "price": "100",
-      "id": 1
+      "_id": 1,
+      "userID": 1,
+      "courseID": 1,
+      "coupon": "COUPON123",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true
     },
     {
-      "name": "Sản phẩm 2 update",
-      "price": "200",
-      "id": 2
+      "_id": 2,
+      "userID": 2,
+      "courseID": 2,
+      "coupon": "",
+      "paymentAmount": 75,
+      "date": "2023-09-28",
+      "payment_status": true
+    }
+  ],
+  "Reviews": [
+    {
+      "_id": 1,
+      "userID": 1,
+      "courseID": 1,
+      "reviewText": "This course is amazing!",
+      "reviewRate": 5,
+      "reviewTime": "2023-09-29"
     },
     {
-      "name": "trrr",
-      "price": "2",
-      "id": 3
+      "_id": 2,
+      "userID": 2,
+      "courseID": 2,
+      "reviewText": "Good content, but could be improved.",
+      "reviewRate": 3,
+      "reviewTime": "2023-09-28"
+    }
+  ],
+  "Categories": [
+    {
+      "_id": 1,
+      "categoryName": "Programming",
+      "categoryDescription": "Learn programming languages"
+    },
+    {
+      "_id": 2,
+      "categoryName": "Design",
+      "categoryDescription": "Creative design courses"
+    }
+  ],
+  "Users": [
+    {
+      "_id": 1,
+      "username": "user123",
+      "email": "user123@example.com",
+      "password": "hashedpassword123",
+      "avatarIMG": "avatar1.jpg",
+      "address": "123 Main St",
+      "phone": "123-456-7890",
+      "roleID": 1,
+      "registeredCourseID": [1],
+      "courseSaved": [2]
+    },
+    {
+      "_id": 2,
+      "username": "user456",
+      "email": "user456@example.com",
+      "password": "hashedpassword456",
+      "avatarIMG": "avatar2.jpg",
+      "address": "456 Elm St",
+      "phone": "987-654-3210",
+      "roleID": 2,
+      "registeredCourseID": [2],
+      "courseSaved": [1]
+    }
+  ],
+  "Courses": [
+    {
+      "_id": 1,
+      "courseName": "Introduction to Programming",
+      "description": "Learn the basics of programming",
+      "price": 50,
+      "duration": "6 weeks",
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [1],
+      "categoryID": 1,
+      "courseIMG": "course1.jpg",
+      "enrollment": 100
+    },
+    {
+      "_id": 2,
+      "courseName": "Graphic Design Fundamentals",
+      "description": "Master the art of graphic design",
+      "price": 75,
+      "duration": "8 weeks",
+      "rateID": 2,
+      "date": "2023-09-26",
+      "videoID": [2],
+      "categoryID": 2,
+      "courseIMG": "course2.jpg",
+      "enrollment": 75
+    }
+  ],
+  "Notes": [
+    {
+      "_id": 1,
+      "userID": 1,
+      "videoID": 1,
+      "noteTime": "02:30",
+      "note": "Important concept explained here."
+    },
+    {
+      "_id": 2,
+      "userID": 2,
+      "videoID": 2,
+      "noteTime": "01:45",
+      "note": "Great tip for design!"
+    }
+  ],
+  "Role": [
+    {
+      "_id": 1,
+      "role": "Student"
+    },
+    {
+      "_id": 2,
+      "role": "Instructor"
+    }
+  ],
+  "UserProgress": [
+    {
+      "_id": 1,
+      "videoID": 1,
+      "userID": 1,
+      "completionStatus": true
+    },
+    {
+      "_id": 2,
+      "videoID": 2,
+      "userID": 2,
+      "completionStatus": false
+    }
+  ],
+  "Videos": [
+    {
+      "_id": 1,
+      "videoTitle": "Introduction to Programming - Part 1",
+      "videoURL": "https://example.com/video1"
+    },
+    {
+      "_id": 2,
+      "videoTitle": "Graphic Design Principles",
+      "videoURL": "https://example.com/video2"
     }
   ]
 }
