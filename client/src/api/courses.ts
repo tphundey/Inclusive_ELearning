@@ -6,19 +6,21 @@ const productApi = createApi({
     reducerPath: "courses",
     tagTypes: ['Courses'],
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:1337/api',
+        baseUrl: 'http://localhost:3000',
         fetchFn: async (...args) => {
             await pause(1000);
             return fetch(...args)
         }
     }),
     endpoints: (builder) => ({
-        getProducts: builder.query<IProduct[], void>({
-            query: () => `/courses`,
+        getProducts: builder.query<any[], void>({
+            query: () => `/Courses`,
             providesTags: ['Courses'],
             transformResponse: (response: any) => {
-                return response.data.map((item: any) => ({
-                    ...item.attributes,
+                console.log(response);
+
+                return response.map((item: any) => ({
+                    ...item,
                     id: item.id
                 }));
             },
@@ -71,7 +73,6 @@ export const {
     useGetProductByIdQuery,
     useRemoveProductMutation,
     useUpdateProductMutation,
-    useGetVideosQuery
 } = productApi;
 
 export const productReducer = productApi.reducer;

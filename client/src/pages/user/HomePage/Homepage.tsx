@@ -1,11 +1,37 @@
 import './HomePage.css'
+import { useEffect, useState } from 'react';
 import { useGetProductsQuery } from "@/api/courses";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
+
 const Homepage = () => {
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
+    const [categoryData, setCategoryData] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchCategoryData = async () => {
+            if (productsData) {
+                const categoryPromises = productsData.map(async (product: any) => {
+                    try {
+                        const response = await fetch(`http://localhost:3000/Categories/${product.categoryID}`);
+                        if (response.ok) {
+                            const category = await response.json();
+                            return category;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching category data:', error);
+                    }
+                    return null;
+                });
+
+                const categories = await Promise.all(categoryPromises);
+                setCategoryData(categories.filter(category => category !== null));
+            }
+        };
+        fetchCategoryData();
+    }, [productsData]);
 
     const settings = {
         arrows: true,
@@ -61,28 +87,30 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.map((product, index) => (
-                                        <Link to={`/introduction/${product.id}`}>
-                                            <div key={index} className="group relative">
+                                    {productsData?.map((product: any, index: any) => {
+                                        const category = categoryData[index];
+
+                                        return (
+                                            <div className="group relative">
                                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                    <img src={product.imageurl} alt="" />
+                                                    <img src={product.courseIMG} alt="" />
                                                 </div>
                                                 <div className="mt-2">
                                                     <div>
                                                         <h3 className="text-xs text-gray-700">
                                                             <span className="absolute inset-2 popular">POPULAR</span>
-                                                            {product.category}
+                                                            {category ? category.categoryName : 'No Category'}
                                                         </h3>
-                                                        <p className="mt-1 text-base">{product.title}</p>
+                                                        <Link key={index} to={`/introduction/${product._id}`}>
+                                                            <p className="mt-1 text-base">{product.courseName}</p> </Link>
                                                     </div>
-                                                    <p className=" mt-1 text-xs text-gray">By: {product.mentorName}</p>
+                                                    <p className="mt-1 text-xs text-gray">{product.price} đ</p>
                                                 </div>
                                             </div>
-                                        </Link>
-                                    ))}
+                                        );
+                                    })}
                                 </Slider>
                             )}
-
                         </div>
 
                     </div>
@@ -100,28 +128,30 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.map((product, index) => (
-                                        <Link to={`/introduction/${product.id}`}>
-                                            <div key={index} className="group relative">
+                                    {productsData?.map((product: any, index: any) => {
+                                        const category = categoryData[index];
+
+                                        return (
+                                            <div className="group relative">
                                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                    <img src={product.imageurl} alt="" />
+                                                    <img src={product.courseIMG} alt="" />
                                                 </div>
                                                 <div className="mt-2">
                                                     <div>
                                                         <h3 className="text-xs text-gray-700">
                                                             <span className="absolute inset-2 popular">POPULAR</span>
-                                                            {product.category}
+                                                            {category ? category.categoryName : 'No Category'}
                                                         </h3>
-                                                        <p className="mt-1 text-base">{product.title}</p>
+                                                        <Link key={index} to={`/introduction/${product._id}`}>
+                                                            <p className="mt-1 text-base">{product.courseName}</p> </Link>
                                                     </div>
-                                                    <p className=" mt-1 text-xs text-gray">By: {product.mentorName}</p>
+                                                    <p className="mt-1 text-xs text-gray">{product.price} đ</p>
                                                 </div>
                                             </div>
-                                        </Link>
-                                    ))}
+                                        );
+                                    })}
                                 </Slider>
                             )}
-
                         </div>
                     </div>
                 </div>

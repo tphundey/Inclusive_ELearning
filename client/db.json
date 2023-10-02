@@ -39,12 +39,12 @@
   ],
   "Categories": [
     {
-      "_id": 1,
+      "id": 1,
       "categoryName": "Programming",
       "categoryDescription": "Learn programming languages"
     },
     {
-      "_id": 2,
+      "id": 2,
       "categoryName": "Design",
       "categoryDescription": "Creative design courses"
     }
@@ -59,8 +59,12 @@
       "address": "123 Main St",
       "phone": "123-456-7890",
       "roleID": 1,
-      "registeredCourseID": [1],
-      "courseSaved": [2]
+      "registeredCourseID": [
+        1
+      ],
+      "courseSaved": [
+        2
+      ]
     },
     {
       "_id": 2,
@@ -71,36 +75,119 @@
       "address": "456 Elm St",
       "phone": "987-654-3210",
       "roleID": 2,
-      "registeredCourseID": [2],
-      "courseSaved": [1]
+      "registeredCourseID": [
+        2
+      ],
+      "courseSaved": [
+        1
+      ]
     }
   ],
   "Courses": [
     {
       "_id": 1,
-      "courseName": "Introduction to Programming",
-      "description": "Learn the basics of programming",
-      "price": 50,
-      "duration": "6 weeks",
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
       "rateID": 1,
       "date": "2023-09-25",
-      "videoID": [1],
+      "videoID": [
+        1
+      ],
       "categoryID": 1,
-      "courseIMG": "course1.jpg",
+      "courseIMG": "https://media.licdn.com/dms/image/D560DAQE4nkljsFNoNw/learning-public-crop_288_512/0/1686090015884?e=1696842000&v=beta&t=5Aut_8zhBbnGOs820xgflIvY0suxgqtQo-jsoEDHLu8",
       "enrollment": 100
     },
     {
       "_id": 2,
-      "courseName": "Graphic Design Fundamentals",
-      "description": "Master the art of graphic design",
-      "price": 75,
-      "duration": "8 weeks",
-      "rateID": 2,
-      "date": "2023-09-26",
-      "videoID": [2],
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 1,
+      "courseIMG": "https://media.licdn.com/dms/image/C560DAQFGi9NVXEqDTg/learning-public-crop_288_512/0/1632849553213?e=1696842000&v=beta&t=xLEDxgYmKMschqfB4TrwUp90uEyGzwMq1Sl8a_zcaRw",
+      "enrollment": 100
+    },
+    {
+      "_id": 3,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
       "categoryID": 2,
-      "courseIMG": "course2.jpg",
-      "enrollment": 75
+      "courseIMG": "https://media.licdn.com/dms/image/C560DAQGUYcyL7tT29g/learning-public-crop_288_512/0/1623777565291?e=1696842000&v=beta&t=qCuJz5esMV_HE4A1rXzvhsREbQ-37x8QK3VtprxLc78",
+      "enrollment": 100
+    },
+    {
+      "_id": 4,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 2,
+      "courseIMG": "https://media.licdn.com/dms/image/D4D0DAQFDc6TdaL8EZQ/learning-public-crop_288_512/0/1695234022487?e=1696842000&v=beta&t=tk5XQSbw8UURNZh6ByittrOSwcEmhNRH4aooBPYOsIY",
+      "enrollment": 100
+    },
+    {
+      "_id": 5,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 2,
+      "courseIMG": "https://media.licdn.com/dms/image/C560DAQEjHZXkECe6BQ/learning-public-crop_288_512/0/1623351257016?e=1696842000&v=beta&t=L7D9r-CaqbVCudY9ENXCHHLDet-o028_V41cuOQ4FV0",
+      "enrollment": 100
+    },
+    {
+      "_id": 6,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 1,
+      "courseIMG": "https://media.licdn.com/dms/image/D560DAQE4nkljsFNoNw/learning-public-crop_288_512/0/1686090015884?e=1696842000&v=beta&t=5Aut_8zhBbnGOs820xgflIvY0suxgqtQo-jsoEDHLu8",
+      "enrollment": 100
+    },
+    {
+      "_id": 7,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": 1,
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 1,
+      "courseIMG": "https://media.licdn.com/dms/image/D560DAQE4nkljsFNoNw/learning-public-crop_288_512/0/1686090015884?e=1696842000&v=beta&t=5Aut_8zhBbnGOs820xgflIvY0suxgqtQo-jsoEDHLu8",
+      "enrollment": 100
     }
   ],
   "Notes": [
