@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
+import { formatCurrency } from './formatCurency';
 
 const Homepage = () => {
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
@@ -27,11 +28,13 @@ const Homepage = () => {
                 });
 
                 const categories = await Promise.all(categoryPromises);
+
                 setCategoryData(categories.filter(category => category !== null));
             }
         };
         fetchCategoryData();
     }, [productsData]);
+
 
     const settings = {
         arrows: true,
@@ -89,7 +92,7 @@ const Homepage = () => {
                                 <Slider {...settings}>
                                     {productsData?.map((product: any, index: any) => {
                                         const category = categoryData[index];
-
+                                        const formattedPrice = formatCurrency(product.price);
                                         return (
                                             <div className="group relative">
                                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -104,7 +107,7 @@ const Homepage = () => {
                                                         <Link key={index} to={`/introduction/${product._id}`}>
                                                             <p className="mt-1 text-base">{product.courseName}</p> </Link>
                                                     </div>
-                                                    <p className="mt-1 text-xs text-gray">{product.price} đ</p>
+                                                    <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
                                                 </div>
                                             </div>
                                         );
@@ -128,29 +131,29 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.map((product: any, index: any) => {
-                                        const category = categoryData[index];
-
-                                        return (
-                                            <div className="group relative">
-                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                    <img src={product.courseIMG} alt="" />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <div>
-                                                        <h3 className="text-xs text-gray-700">
-                                                            <span className="absolute inset-2 popular">POPULAR</span>
-                                                            {category ? category.categoryName : 'No Category'}
-                                                        </h3>
-                                                        <Link key={index} to={`/introduction/${product._id}`}>
-                                                            <p className="mt-1 text-base">{product.courseName}</p> </Link>
-                                                    </div>
-                                                    <p className="mt-1 text-xs text-gray">{product.price} đ</p>
-                                                </div>
+                                {productsData?.map((product: any, index: any) => {
+                                    const category = categoryData[index];
+                                    const formattedPrice = formatCurrency(product.price);
+                                    return (
+                                        <div className="group relative">
+                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                <img src={product.courseIMG} alt="" />
                                             </div>
-                                        );
-                                    })}
-                                </Slider>
+                                            <div className="mt-2">
+                                                <div>
+                                                    <h3 className="text-xs text-gray-700">
+                                                        <span className="absolute inset-2 popular">POPULAR</span>
+                                                        {category ? category.categoryName : 'No Category'}
+                                                    </h3>
+                                                    <Link key={index} to={`/introduction/${product._id}`}>
+                                                        <p className="mt-1 text-base">{product.courseName}</p> </Link>
+                                                </div>
+                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </Slider>
                             )}
                         </div>
                     </div>
