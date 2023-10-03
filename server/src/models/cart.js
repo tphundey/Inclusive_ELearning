@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
 const cartSchema = new mongoose.Schema({
-    id: {
-        type: String | Number
-    },
     userId : {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User',

@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true,
-    },
     progressID :{
         type: String,
         required: true,

@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     courseId : {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Course',
