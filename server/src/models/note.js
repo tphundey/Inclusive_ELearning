@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 const noteSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     videoId : {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Video',

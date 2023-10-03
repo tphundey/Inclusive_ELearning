@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 const progressSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     progress : {
         type : String,
         required: true
