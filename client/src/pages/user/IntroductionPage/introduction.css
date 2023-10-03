@@ -208,8 +208,10 @@
 
 .avatarReview img {
     margin-top: 15px;
-    width: 50px;
-    border-radius: 50px;
+    width: 60px;
+    object-fit: cover;
+    height: 60px;
+    border-radius: 100px;
 }
 
 .desrv1 {
