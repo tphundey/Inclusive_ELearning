@@ -21,7 +21,7 @@
   ],
   "Reviews": [
     {
-      "_id": 1,
+      "id": 1,
       "userID": 1,
       "courseID": 1,
       "reviewText": "This course is amazing!",
@@ -29,7 +29,7 @@
       "reviewTime": "2023-09-29"
     },
     {
-      "_id": 2,
+      "id": 2,
       "userID": 2,
       "courseID": 2,
       "reviewText": "Good content, but could be improved.",
@@ -52,10 +52,10 @@
   "Users": [
     {
       "id": 1,
-      "username": "user123",
+      "username": "Hương Trà",
       "email": "user123@example.com",
       "password": "hashedpassword123",
-      "avatarIMG": "avatar1.jpg",
+      "avatarIMG": "https://scontent.xx.fbcdn.net/v/t1.15752-9/384427051_1110086643301663_6463764182478675672_n.jpg?stp=dst-jpg_s280x280&_nc_cat=110&ccb=1-7&_nc_sid=aee45a&_nc_ohc=lisVSqTIifYAX-kdEYC&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdTY-5HSApIE23hflMQEFRGnjkh00mN4KQhKBxcIG3rVIQ&oe=654339BB",
       "address": "123 Main St",
       "phone": "123-456-7890",
       "roleID": 1,
@@ -68,10 +68,10 @@
     },
     {
       "id": 2,
-      "username": "user456",
+      "username": "Trần Phùng",
       "email": "user456@example.com",
       "password": "hashedpassword456",
-      "avatarIMG": "avatar2.jpg",
+      "avatarIMG": "https://scontent.xx.fbcdn.net/v/t1.15752-9/384510279_858046575764787_6948924531175803538_n.jpg?stp=dst-jpg_s280x280&_nc_cat=102&ccb=1-7&_nc_sid=aee45a&_nc_ohc=uulO2zDTXFwAX-ZEx83&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdT_dd5ZKWCjA4i6MAxy4KJ2L8YqF_fz73_J2K_ePBc7Jg&oe=654358DF",
       "address": "456 Elm St",
       "phone": "987-654-3210",
       "roleID": 2,
@@ -90,7 +90,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 50000,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -105,7 +108,9 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -120,7 +125,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -135,7 +143,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -150,7 +161,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -165,7 +179,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
@@ -180,7 +197,10 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
-      "rateID": 1,
+      "rateID": [
+        1,
+        2
+      ],
       "date": "2023-09-25",
       "videoID": [
         1
