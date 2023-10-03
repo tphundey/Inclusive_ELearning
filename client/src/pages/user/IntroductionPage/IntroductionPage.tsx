@@ -10,68 +10,43 @@ import { Link } from 'react-router-dom';
 
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
+    const [product, setProduct] = useState({});
+    const [similarProducts, setSimilarProducts] = useState([]);
     const { id } = useParams();
-    const [product, setProduct] = useState(null);
-    const [mentor, setMentor] = useState(null);
-    const [courseDetail, setCourseDetail] = useState(null);
-    const [relatedCourses, setRelatedCourses] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:1337/api/courses/${id}`)
-            .then((response) => {
-                const productData = response.data.data.attributes;
-                console.log(response.data);
-                console.log('use1');
+        if (id) {
+            // Chuyển đổi _id thành chuỗi
+            const stringId = id.toString();
 
-                setProduct(productData);
-            })
-            .catch((error) => {
-                console.error('Error fetching product data:', error);
-            });
+            const apiUrl = `http://localhost:3000/Courses/${stringId}`;
+
+            axios
+                .get(apiUrl)
+                .then((response) => {
+                    setProduct(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }, [id]);
 
     useEffect(() => {
-        // Kiểm tra xem có dữ liệu khóa học không
-        if (product) {
-            // Gọi API lấy thông tin mentor dựa trên ID sản phẩm
-            axios.get(`http://localhost:1337/api/author-courses/${product.mentorId}`)
+        // Lấy tất cả sản phẩm có cùng categoryID
+        if (product.categoryID) {
+            const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
+
+            axios
+                .get(apiUrl)
                 .then((response) => {
-                    const mentorData = response.data.data.attributes;
-                    setMentor(mentorData);
+                    setSimilarProducts(response.data);
                 })
                 .catch((error) => {
-                    console.error('Error fetching mentor data:', error);
+                    console.error(error);
                 });
         }
-    }, [product]);
-
-    useEffect(() => {
-        // Lấy thông tin khóa học có id là 11 từ API
-        fetch('http://localhost:1337/api/courses/11')
-            .then((response) => response.json())
-            .then((data) => setCourseDetail(data))
-            .catch((error) => console.error('Lỗi khi lấy thông tin khóa học:', error));
-
-        // Lấy danh sách tất cả các khóa học từ API
-        fetch('http://localhost:1337/api/courses')
-            .then((response) => response.json())
-            .then((responseData) => {
-                console.log(responseData, 1);
-
-                // Truy cập danh sách khóa học từ responseData.data
-                const data = responseData.data;
-
-                if (Array.isArray(data)) {
-                    // Lọc ra các khóa học cùng loại với khóa học có id là 11
-                    const related = data.filter((course) => course.attributes.categoryId === 1);
-                    console.log(related, 2);
-                    setRelatedCourses(related);
-                } else {
-                    console.error('Dữ liệu không phải là mảng.');
-                }
-            })
-            .catch((error) => console.error('Lỗi khi lấy danh sách khóa học:', error));
-    }, []);
+    }, [product.categoryID]);
 
     if (!product) {
         return <div>Loading...</div>;
@@ -82,13 +57,13 @@ const IntroductionPage = () => {
             <div className="course-header-container">
                 <div className="course-overview-header">
                     <div className="courseLeft">
-                        <a className='courseLeft-ah1' href="">{product.title}</a>
+                        <a className='courseLeft-ah1' href="">{product.courseName}</a>
                         <div className="course-span-left mt-3">
-                            <span>{product.level}</span>
+                            <span>product.level</span>
                             <span className='mb-1 font-bold'>.</span>
                             <span>{product.duration} m</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>Released: {product.publishedDate}</span>
+                            <span>Released: {product.date}</span>
                         </div>
                         <div className="course-span-left">
                             <span>4.6</span>
@@ -106,11 +81,12 @@ const IntroductionPage = () => {
                                 </svg></span>
                             <span>(240)</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>{product.enrollments} learners</span>
+                            <span>{product.enrollment} learners</span>
                         </div>
                         <div className='flex gap-4 intro-bt'>
-                            <Link to={`/content/${id}`}>
-                                <button className='intro-bt1'>Start my free month</button>   </Link>
+                            {/* <Link to={`/content/${id}`}>
+                                <button className='intro-bt1'>Start my free month</button>
+                            </Link> */}
                             <button className='intro-bt2'>Buy for my team</button>
                         </div>
                     </div>
@@ -118,11 +94,10 @@ const IntroductionPage = () => {
                     <div className="courseRight">
                         <button><i className="fa-solid fa-play"></i> Preview</button>
                     </div>
-
                 </div>
             </div>
             <div className="imgHid">
-                <img src={product.imageurl} alt="" />
+                <img src={product.courseIMG} alt="" />
             </div>
             <hr />
             <div className="flex">
@@ -162,10 +137,10 @@ const IntroductionPage = () => {
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img src={mentor?.mentorImg} alt="" />
+                                    <img src="https://media.licdn.com/dms/image/C560DAQHOmyJ6CDbRFw/learning-author-crop_200_200/0/1576190774910?e=1696924800&v=beta&t=nBpIasQh21pm2nxUpzK48DaOhXd2YYCBljRvJT-0_OM" alt="" />
                                 </div>
                                 <div className="instruc-right">
-                                    <h1>{mentor?.mentorName}</h1>
+                                    <h1>David Rivers</h1>
                                     <h2>Microsoft</h2>
                                     <h3><a href="">View more courses by Microsoft Press</a></h3>
                                 </div>
@@ -299,16 +274,18 @@ const IntroductionPage = () => {
                     <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
 
                     <ul className="divide-y divide-slate-100">
-                        {relatedCourses.map(course => (
-                            <li key={course.id} className="flex items-start gap-4 px-4 py-3">
+                        {similarProducts.map((similarProduct) => (
+                            <li key={similarProducts.id} className="flex items-start gap-4 px-4 py-3">
                                 <div className="flex items-center shrink-0">
-                                    <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1692658800&v=beta&t=yRKv_ZP00gdyD43ST8H8USZAZHKCc3XvCtxBmGkboIU" alt="product image" className="w-32 rounded" />
+                                    <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
                                 </div>
                                 <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
                                     <h4 className='text-xs'>COURSE</h4>
-                                    <h4 className="text-base text-slate-700 font-medium"><a href="">{course.title}</a></h4>
-                                    <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                                    <span className='timeforvideoIntro'>1h 23m</span>
+                                    <h4 className="text-base text-slate-700 font-medium">
+                                        <Link to={`/introduction/${similarProduct.id}`}>
+                                            <p className="mt-1 text-base">{similarProduct.courseName}</p> </Link></h4>
+                                    <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                                    <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
                                 </div>
                             </li>
                         ))}
