@@ -41,6 +41,12 @@
     align-items: center;
 }
 
+.course-span-leftx {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .imgHid img {
     opacity: 0.3;
     position: absolute;
@@ -240,4 +246,9 @@
     border: 1px solid rgb(230, 229, 229);
     padding: 20px;
     border-radius: 10px;
+}
+
+.starrev {
+    color: #FBBF24;
+    font-size: 24px;
 }

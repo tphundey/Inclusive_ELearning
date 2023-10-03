@@ -98,9 +98,7 @@ const IntroductionPage = () => {
         if (id) {
             // Chuyển đổi _id thành chuỗi
             const stringId = id.toString();
-
             const apiUrl = `http://localhost:3000/Courses/${stringId}`;
-
             axios
                 .get(apiUrl)
                 .then((response) => {
@@ -116,9 +114,7 @@ const IntroductionPage = () => {
         // Lấy tất cả sản phẩm có cùng categoryID
         if (product.categoryID) {
             const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
-
-            axios
-                .get(apiUrl)
+            axios.get(apiUrl)
                 .then((response) => {
                     setSimilarProducts(response.data);
                 })
@@ -130,8 +126,7 @@ const IntroductionPage = () => {
 
     useEffect(() => {
         // Lấy tất cả đánh giá từ API
-        axios
-            .get('http://localhost:3000/Reviews')
+        axios.get('http://localhost:3000/Reviews')
             .then((response) => {
                 setReviews(response.data);
             })
@@ -149,17 +144,46 @@ const IntroductionPage = () => {
             });
     }, []);
 
-    // Tìm các đánh giá có courseID tương ứng với rateID của sản phẩm
-    const relatedReviews = reviews.filter(
-        (review) => review.courseID === product.rateID
-    );
-
     function findUserById(userID) {
         return users.find((user) => user.id === userID);
     }
 
-    // Kiểm tra và hiển thị thông tin đánh giá cho từng rateID trong mảng
+
+    function calculateAverageRating(reviews) {
+        if (reviews && reviews.length > 0) {
+            const totalRating = reviews.reduce(
+                (accumulator, review) => accumulator + review.reviewRate,
+                0
+            );
+            const averageRating = totalRating / reviews.length;
+            return averageRating.toFixed(1); // Giới hạn số thập phân
+        }
+        return 0;
+    }
+
+    function convertToStarRating(averageRating: string) {
+        const maxStars = 5;
+        const fullStars = Math.floor(parseFloat(averageRating));
+        const halfStar = parseFloat(averageRating) % 1 !== 0;
+        const emptyStars = maxStars - fullStars - (halfStar ? 1 : 0);
+
+        const starRating = [];
+        for (let i = 0; i < fullStars; i++) {
+            starRating.push('★'); // Ký tự sao đầy
+        }
+        if (halfStar) {
+            starRating.push('☆'); // Ký tự sao trống nếu có nửa sao
+        }
+        for (let i = 0; i < emptyStars; i++) {
+            starRating.push('☆'); // Ký tự sao trống
+        }
+
+        return starRating.join(' '); // Chuyển mảng thành chuỗi
+    }
+
     const rateIDArray = Array.isArray(product.rateID) ? product.rateID : [];
+    const averageRating = calculateAverageRating(reviews);
+    const starRating = convertToStarRating(averageRating);
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -177,23 +201,11 @@ const IntroductionPage = () => {
                             <span className='mb-1 font-bold'>.</span>
                             <span>Released: {product.date}</span>
                         </div>
-                        <div className="course-span-left">
-                            <span>4.6</span>
-                            <span className=' flex text-yellow-400'>  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                            </svg>  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                </svg>  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                </svg>  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                                </svg></span>
-                            <span>(240)</span>
-                            <span className='mb-1 font-bold'>.</span>
-                            <span>{product.enrollment} learners</span>
+                        <div className="course-span-leftx">
+                            <div className='mt-1'>{averageRating}</div>
+                            <div className='starrev' id="starRating">{starRating}</div>
+                            <div className='mt-1'>(240)</div>
+                            <div className='mt-1'><span>{product.enrollment} learners</span></div>
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             {/* <Link to={`/content/${id}`}>
@@ -267,37 +279,12 @@ const IntroductionPage = () => {
                                     <div className="flex items-center gap-2">
 
                                         <div className='preview'>
-
-                                            <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>4.1</span> out 5</span></div>
+                                            <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>{calculateAverageRating(reviews)}</span> out 5</span></div>
                                             <div className="flex items-center gap-2">
                                                 <div className="mt-3">
                                                     <span className="text-sm rounded text-slate-500 ">
                                                         <span className="flex gap-1 text-amber-400" role="img" aria-label="Rating: 4 out of 5 stars">
-                                                            <span aria-hidden="true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                                                </svg>
-                                                            </span>
-                                                            <span aria-hidden="true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                                                </svg>
-                                                            </span>
-                                                            <span aria-hidden="true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                                                </svg>
-                                                            </span>
-                                                            <span aria-hidden="true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                                                </svg>
-                                                            </span>
-                                                            <span aria-hidden="true">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                                                                </svg>
-                                                            </span>
+                                                            <div className='starrev' id="starRating">{starRating}</div>
                                                         </span>
                                                     </span>
                                                 </div>
@@ -374,7 +361,7 @@ const IntroductionPage = () => {
                                             </div>
                                         </div>
                                     </div>
-                              ));
+                                ));
                             })}
                         </div>
                     </div>
