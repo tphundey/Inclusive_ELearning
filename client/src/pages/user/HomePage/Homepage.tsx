@@ -104,7 +104,7 @@ const Homepage = () => {
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {category ? category.categoryName : 'No Category'}
                                                         </h3>
-                                                        <Link key={index} to={`/introduction/${product._id}`}>
+                                                        <Link key={index} to={`/introduction/${product.id}`}>
                                                             <p className="mt-1 text-base">{product.courseName}</p> </Link>
                                                     </div>
                                                     <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
@@ -131,29 +131,29 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                {productsData?.map((product: any, index: any) => {
-                                    const category = categoryData[index];
-                                    const formattedPrice = formatCurrency(product.price);
-                                    return (
-                                        <div className="group relative">
-                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                <img src={product.courseIMG} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div>
-                                                    <h3 className="text-xs text-gray-700">
-                                                        <span className="absolute inset-2 popular">POPULAR</span>
-                                                        {category ? category.categoryName : 'No Category'}
-                                                    </h3>
-                                                    <Link key={index} to={`/introduction/${product._id}`}>
-                                                        <p className="mt-1 text-base">{product.courseName}</p> </Link>
+                                    {productsData?.map((product: any, index: any) => {
+                                        const category = categoryData[index];
+                                        const formattedPrice = formatCurrency(product.price);
+                                        return (
+                                            <div className="group relative">
+                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                    <img src={product.courseIMG} alt="" />
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                <div className="mt-2">
+                                                    <div>
+                                                        <h3 className="text-xs text-gray-700">
+                                                            <span className="absolute inset-2 popular">POPULAR</span>
+                                                            {category ? category.categoryName : 'No Category'}
+                                                        </h3>
+                                                        <Link key={index} to={`/introduction/${product._id}`}>
+                                                            <p className="mt-1 text-base">{product.courseName}</p> </Link>
+                                                    </div>
+                                                    <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                                        );
+                                    })}
+                                </Slider>
                             )}
                         </div>
                     </div>

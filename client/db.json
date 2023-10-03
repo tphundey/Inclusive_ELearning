@@ -51,7 +51,7 @@
   ],
   "Users": [
     {
-      "_id": 1,
+      "id": 1,
       "username": "user123",
       "email": "user123@example.com",
       "password": "hashedpassword123",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "_id": 2,
+      "id": 2,
       "username": "user456",
       "email": "user456@example.com",
       "password": "hashedpassword456",
@@ -85,7 +85,7 @@
   ],
   "Courses": [
     {
-      "_id": 1,
+      "id": 1,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 50000,
@@ -100,8 +100,8 @@
       "enrollment": 100
     },
     {
-      "_id": 2,
-      "courseName": "Learning Word Online (Microsoft 365)",
+      "id": 2,
+      "courseName": "Learning Word Online (Microsoft 3655)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,
@@ -115,7 +115,7 @@
       "enrollment": 100
     },
     {
-      "_id": 3,
+      "id": 3,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
@@ -125,12 +125,12 @@
       "videoID": [
         1
       ],
-      "categoryID": 2,
+      "categoryID": 1,
       "courseIMG": "https://media.licdn.com/dms/image/C560DAQGUYcyL7tT29g/learning-public-crop_288_512/0/1623777565291?e=1696842000&v=beta&t=qCuJz5esMV_HE4A1rXzvhsREbQ-37x8QK3VtprxLc78",
       "enrollment": 100
     },
     {
-      "_id": 4,
+      "id": 4,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
@@ -145,7 +145,7 @@
       "enrollment": 100
     },
     {
-      "_id": 5,
+      "id": 5,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
@@ -160,7 +160,7 @@
       "enrollment": 100
     },
     {
-      "_id": 6,
+      "id": 6,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
@@ -175,7 +175,7 @@
       "enrollment": 100
     },
     {
-      "_id": 7,
+      "id": 7,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
