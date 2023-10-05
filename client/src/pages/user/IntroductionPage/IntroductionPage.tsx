@@ -208,9 +208,9 @@ const IntroductionPage = () => {
                             <div className='mt-1'><span>{product.enrollment} learners</span></div>
                         </div>
                         <div className='flex gap-4 intro-bt'>
-                            {/* <Link to={`/content/${id}`}>
+                            <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start my free month</button>
-                            </Link> */}
+                            </Link>
                             <button className='intro-bt2'>Buy for my team</button>
                         </div>
                     </div>
