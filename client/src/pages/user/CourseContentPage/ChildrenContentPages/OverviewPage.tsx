@@ -1,11 +1,93 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
+function renderReviewRateIcon(reviewRate: number) {
+    switch (reviewRate) {
+        case 1:
+            return (
+                <div className="desrv3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            );
+        case 2:
+            return (
+                <div className="desrv3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+
+            );
+        case 3:
+            return (
+                <div className="desrv3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            );
+        case 4:
+            return (
+                <div className="desrv3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            );
+        case 5:
+            return (
+                <div className="desrv3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            );
+        default:
+            return null;
+    }
+}
 
 const OverViewPage = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState(null);
-  
+    const [product, setProduct] = useState({});
+    const [similarProducts, setSimilarProducts] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [users, setUsers] = useState([]);
+
     useEffect(() => {
         axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
@@ -19,6 +101,80 @@ const OverViewPage = () => {
             });
     }, [id]);
 
+    useEffect(() => {
+        // Lấy tất cả sản phẩm có cùng categoryID
+        if (product.categoryID) {
+            const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
+            axios.get(apiUrl)
+                .then((response) => {
+                    setSimilarProducts(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [product.categoryID]);
+
+    useEffect(() => {
+        // Lấy tất cả đánh giá từ API
+        axios.get('http://localhost:3000/Reviews')
+            .then((response) => {
+                setReviews(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        // Lấy tất cả người dùng từ API
+        axios
+            .get('http://localhost:3000/users')
+            .then((response) => {
+                setUsers(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
+    function findUserById(userID) {
+        return users.find((user) => user.id === userID);
+    }
+
+
+    function calculateAverageRating(reviews) {
+        if (reviews && reviews.length > 0) {
+            const totalRating = reviews.reduce(
+                (accumulator, review) => accumulator + review.reviewRate,
+                0
+            );
+            const averageRating = totalRating / reviews.length;
+            return averageRating.toFixed(1); // Giới hạn số thập phân
+        }
+        return 0;
+    }
+
+    function convertToStarRating(averageRating: string) {
+        const maxStars = 5;
+        const fullStars = Math.floor(parseFloat(averageRating));
+        const halfStar = parseFloat(averageRating) % 1 !== 0;
+        const emptyStars = maxStars - fullStars - (halfStar ? 1 : 0);
+
+        const starRating = [];
+        for (let i = 0; i < fullStars; i++) {
+            starRating.push('★'); // Ký tự sao đầy
+        }
+        if (halfStar) {
+            starRating.push('☆'); // Ký tự sao trống nếu có nửa sao
+        }
+        for (let i = 0; i < emptyStars; i++) {
+            starRating.push('☆'); // Ký tự sao trống
+        }
+
+        return starRating.join(' '); // Chuyển mảng thành chuỗi
+    }
+
+    const rateIDArray = Array.isArray(product.rateID) ? product.rateID : [];
+    const averageRating = calculateAverageRating(reviews);
+    const starRating = convertToStarRating(averageRating);
 
     if (!product) {
         return <div>Loading...</div>;
@@ -31,12 +187,12 @@ const OverViewPage = () => {
                 </div>
                 <div className="content-structor-main">
                     <div className="content-structor-main-avatar">
-                        {/* <img src={mentor?.mentorImg} alt="" /> */}
+                        <img src="https://scontent.fhan2-4.fna.fbcdn.net/v/t39.30808-6/386508760_279874624965111_8360920880500341994_n.jpg?stp=dst-jpg_p843x403&_nc_cat=105&ccb=1-7&_nc_sid=4c1e7d&_nc_ohc=Q3uEob4BmaEAX_me2wR&_nc_ht=scontent.fhan2-4.fna&_nc_e2o=s&oh=00_AfCd3GfjFVr-wZ-ZUlarvqOzRIYvEzkdeUAezu6ySPSF9Q&oe=6523B643" alt="" />
                     </div>
                     <div className="content-structor-main-name">
                         <div className="children-structor-main">
                             <div className='children-structor-main-name'>
-                               Name mentor
+                                Trần Phùng
                             </div>
                             <div>
                                 <button>Show all course</button>
@@ -49,9 +205,9 @@ const OverViewPage = () => {
                     <div className="info-details">
                         <div className="info15">{product.duration} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">{product.level}</div>
+                        <div className="info15">Newbie</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">Released: {product.publishedDate}</div>
+                        <div className="info15">Released: {product.date}</div>
                     </div>
 
                     <div className="course-detail-main">
@@ -63,12 +219,12 @@ const OverViewPage = () => {
                     <div className="instructors">
                         <div className="instructors-children">
                             <div className="instruc-left">
-                                {/* <img src={mentor?.mentorImg} alt="" /> */}
+                                <img src='https://scontent.fhan2-4.fna.fbcdn.net/v/t39.30808-6/386508760_279874624965111_8360920880500341994_n.jpg?stp=dst-jpg_p843x403&_nc_cat=105&ccb=1-7&_nc_sid=4c1e7d&_nc_ohc=Q3uEob4BmaEAX_me2wR&_nc_ht=scontent.fhan2-4.fna&_nc_e2o=s&oh=00_AfCd3GfjFVr-wZ-ZUlarvqOzRIYvEzkdeUAezu6ySPSF9Q&oe=6523B643' alt="" />
                             </div>
                             <div className="instruc-right">
-                                <h1>mentorName</h1>
-                                <h2>Microsoft</h2>
-                                <h3><a href="">Follow on LinkedIn</a></h3>
+                                <h1>Trần Phùng</h1>
+                                <h2>Fpoly</h2>
+                                <h3><a href="https://github.com/tphun999">Follow on Github</a></h3>
                             </div>
                         </div>
                     </div>
@@ -80,7 +236,7 @@ const OverViewPage = () => {
                             <div className="p-6">
                                 <div className="flex items-center gap-2">
                                     <div className='preview'>
-                                        <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>4.1</span> out 5</span></div>
+                                        <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>{calculateAverageRating(reviews)}</span> out 5</span></div>
                                         <div className="flex items-center gap-2">
                                             <div className="mt-3">
                                                 <span className="text-sm rounded text-slate-500 ">
@@ -153,113 +309,52 @@ const OverViewPage = () => {
                     </div>
 
                     <div className="listReviewIntro">
-                        <div className="reviewIntroChildren">
-                            <div className="avatarReview">
-                                <img src="https://media.licdn.com/dms/image/D4D03AQFHdKhigXDCTw/profile-displayphoto-shrink_100_100/0/1676469208362?e=1697673600&v=beta&t=IM0tzv7FT7C1yMw2YRUO0ex4My7bFhG5GPvM8ubez-0" alt="" />
-                            </div>
-                            <div className="desReview">
-                                <div className="desrv1">Amanda</div>
-                                <div className="desrv2">Engaging and Well-taught.</div>
-                                <div className="flex items-center gap-10">
-                                    <div className="desrv3"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                    </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                        </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                        </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                        </svg></div>
-                                    <div className="desrv4">August 2, 2023</div>
+                        {rateIDArray.map((rateID) => {
+                            // Lọc danh sách đánh giá có courseID trùng với rateID trong mảng
+                            const relatedReviews = reviews.filter(
+                                (review) => review.courseID === rateID
+                            );
+
+                            return relatedReviews.map((review) => (
+                                <div key={review.id} className="reviewIntroChildren">
+                                    <div className="avatarReview">
+                                        <img src={findUserById(review.userID)?.avatarIMG} alt="" />
+                                    </div>
+                                    <div className="desReview">
+                                        <div className="desrv1">{findUserById(review.userID)?.username}</div>
+                                        <div className="desrv2">{review.reviewText}</div>
+                                        <div className="flex items-center gap-10">
+                                            <div>{renderReviewRateIcon(review.reviewRate)}</div>
+
+                                            <div className="desrv4">{review.reviewTime}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            ));
+                        })}
                     </div>
                     <br />
                 </div>
             </div>
             <div className="content-overview-right">
                 <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
+
                 <ul className="divide-y divide-slate-100">
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C560DAQH0Lz0YLTK3DA/learning-public-crop_144_256/0/1663006019313?e=1693645200&v=beta&t=-0KxqZCRCizP0UW2pWEO1EOjlNVmmLkeg1YXI2BQEBs" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
-                    <hr />
-
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C560DAQFO4OcRJ7bllQ/learning-public-crop_144_256/0/1645639710937?e=1693645200&v=beta&t=SrVrZ_1DHB9QjU3Vw7WC0btggG_arfPSOl6yuutJXiQ" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
-                    <hr />
-
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C4D0DAQH8V_1fJ51xLA/learning-public-crop_144_256/0/1663880162126?e=1693645200&v=beta&t=0J3wEwZ9kyqTGwj4fN0cXBInoLWZK8A0HPgXBTW9Kx4" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
-                    <hr />
-
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C4D0DAQH8V_1fJ51xLA/learning-public-crop_144_256/0/1663880162126?e=1693645200&v=beta&t=0J3wEwZ9kyqTGwj4fN0cXBInoLWZK8A0HPgXBTW9Kx4" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
-                    <hr />
-
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C4D0DAQH8V_1fJ51xLA/learning-public-crop_144_256/0/1663880162126?e=1693645200&v=beta&t=0J3wEwZ9kyqTGwj4fN0cXBInoLWZK8A0HPgXBTW9Kx4" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
-                    <hr />
-
-                    <li className="flex items-start gap-4 px-4 py-3">
-                        <div className="flex items-center shrink-0">
-                            <img src="https://media.licdn.com/dms/image/C4D0DAQH8V_1fJ51xLA/learning-public-crop_144_256/0/1663880162126?e=1693645200&v=beta&t=0J3wEwZ9kyqTGwj4fN0cXBInoLWZK8A0HPgXBTW9Kx4" alt="product image" className="w-32 rounded" />
-                        </div>
-                        <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                            <h4 className='text-xs'>COURSE</h4>
-                            <h4 className="text-base text-slate-700 font-medium"><a href="">Cybersecurity Awareness: Phishing Attacks</a></h4>
-                            <p className="w-full text-xs text-slate-500 mt-3">45,750 learners</p>
-                            <span className='timeforvideoIntro'>1h 23m</span>
-                        </div>
-                    </li>
+                    {similarProducts.map((similarProduct) => (
+                        <li key={similarProducts.id} className="flex items-start gap-4 px-4 py-3">
+                            <div className="flex items-center shrink-0">
+                                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
+                            </div>
+                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
+                                <h4 className='text-xs'>COURSE</h4>
+                                <h4 className="text-base text-slate-700 font-medium">
+                                    <Link to={`/introduction/${similarProduct.id}`}>
+                                        <p className="mt-1 text-base">{similarProduct.courseName}</p> </Link></h4>
+                                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
+                            </div>
+                        </li>
+                    ))}
                     <hr />
                 </ul>
             </div>
