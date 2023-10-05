@@ -8,15 +8,14 @@ const CourseContentPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [videos, setVideos] = useState([]);
-    const [filteredVideos, setFilteredVideos] = useState([])
-    const [selectedVideo, setSelectedVideo] = useState(null);
+    const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:1337/api/courses/${id}`)
+        axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
                 // Lưu thông tin sản phẩm vào state
                 console.log(response.data);
-                const productData = response.data.data.attributes;
+                const productData = response.data;
                 setProduct(productData);
             })
             .catch((error) => {
@@ -25,35 +24,44 @@ const CourseContentPage = () => {
     }, [id]);
 
     useEffect(() => {
-        // Gọi API để lấy thông tin sản phẩm dựa trên 'id' từ URL
-        axios
-            .get(`http://localhost:1337/api/courses/${id}`)
+        axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
-                const productData = response.data.data.attributes;
+                const productData = response.data;
                 setProduct(productData);
+
+                // Assuming you have an API endpoint to fetch all videos
+                axios.get(`http://localhost:3000/Videos`)
+                    .then((videoResponse) => {
+                        const allVideos = videoResponse.data;
+                        const videoIdsInCourse = productData.videoID;
+
+                        // Filter videos based on video IDs in the course
+                        const filteredVideos = allVideos.filter((video) =>
+                            videoIdsInCourse.includes(video.id)
+                        );
+
+                        setVideos(filteredVideos);
+
+                        // Set the default video URL as the first video in the course
+                        if (filteredVideos.length > 0) {
+                            setSelectedVideoUrl(filteredVideos[0].videoURL);
+                        }
+                    })
+                    .catch((videoError) => {
+                        console.error('Error fetching video data:', videoError);
+                    });
             })
             .catch((error) => {
                 console.error('Error fetching product data:', error);
             });
-
-        axios
-            .get('http://localhost:1337/api/videos')
-            .then((response) => {
-                const videoData = response.data.data; // Lấy mảng video từ response.data.data
-                if (Array.isArray(videoData)) {
-                    setVideos(videoData);
-                    const filteredVideoData = videoData.filter((videoItem) => videoItem.attributes.courseId === id);
-                    setFilteredVideos(filteredVideoData);
-                    console.log(filteredVideoData);
-                } else {
-                    console.error('Video data is not an array:', videoData);
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching video data:', error);
-            });
     }, [id]);
 
+    const handleVideoTitleClick = (videoURL) => {
+        setSelectedVideoUrl(videoURL);
+    };
+
+
+    // Không sửa dưới đây
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -61,6 +69,7 @@ const CourseContentPage = () => {
         { label: 'Overview', icon: 'fa-solid fa-earth-americas', path: 'overview', },
         { label: 'Notebook', icon: 'fa-solid fa-book', path: 'notepage' }
     ];
+
     return (
         <div className='container-content-page'>
             <div className="contentpage-left">
@@ -68,30 +77,26 @@ const CourseContentPage = () => {
                     <i className="fa-solid fa-list"></i> <div>Contents</div>
                 </div>
 
-                {filteredVideos && Array.isArray(filteredVideos) && filteredVideos.length > 0 ? (
-                    <div>
-                        {filteredVideos.map((videoItem) => (
-                            <div className="content-left-title-course "
-                                onClick={() => setSelectedVideo(videoItem.attributes.videoUrl)}>
-                                <div className="checkbox-container">
-                                    <i className="fa-solid fa-check"></i>
-                                </div>
-                                <div className="content-list-u">
-                                    <div className='cursor-pointer'>{videoItem.attributes.contentName}</div>
-                                    <div>  <i className="fa-regular fa-bookmark hi"></i></div>
-                                </div>
+                <div>
+                    {videos.map((video) => (
+                        <div className="content-left-title-course ">
+                            <div className="checkbox-container">
+                                <i className="fa-solid fa-check"></i>
                             </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div>No videos available.</div>
-                )}  </div>
+                            <div className="content-list-u">
+                                <div className='cursor-pointer'  onClick={() => handleVideoTitleClick(video.videoURL)} key={video.id}>{video.videoTitle}</div>
+                                <div>  <i className="fa-regular fa-bookmark hi"></i></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <div className="contentpage-right">
                 <div className="content-infocourse">
                     <div className="content-info-fl">
                         <div>
-                            <div className="content-info1">{product.title}</div>
+                            <div className="content-info1">{product.courseName}</div>
                             <div className="content-info2">Module introduction</div>
                         </div>
                         <div className='fl-content-option'>
@@ -102,7 +107,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls src={selectedVideo || product.videoUrl}></video>
+                <video controls src={selectedVideoUrl}></video>
                 </div>
 
                 <div className="content-container-bottom">

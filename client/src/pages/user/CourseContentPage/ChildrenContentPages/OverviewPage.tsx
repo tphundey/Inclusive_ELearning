@@ -5,14 +5,13 @@ import axios from 'axios';
 const OverViewPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
-    const [mentor, setMentor] = useState(null);
-
+  
     useEffect(() => {
-        axios.get(`http://localhost:1337/api/courses/${id}`)
+        axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
                 // Lưu thông tin sản phẩm vào state
                 console.log(response.data);
-                const productData = response.data.data.attributes;
+                const productData = response.data;
                 setProduct(productData);
             })
             .catch((error) => {
@@ -20,29 +19,10 @@ const OverViewPage = () => {
             });
     }, [id]);
 
-    useEffect(() => {
-        // Kiểm tra xem có dữ liệu khóa học không
-        if (product) {
-            // Gọi API lấy thông tin mentor dựa trên ID sản phẩm
-            axios.get(`http://localhost:1337/api/author-courses/${product.mentorId}`)
-                .then((response) => {
-                    // Lưu thông tin mentor vào state
-                    console.log(response.data);
-                    const mentorData = response.data.data.attributes;
-                    setMentor(mentorData);
-                })
-                .catch((error) => {
-                    console.error('Error fetching mentor data:', error);
-                });
-        }
-    }, [product]);
 
-    console.log(mentor);
     if (!product) {
         return <div>Loading...</div>;
     }
-
-
     return (
         <div className="flex gap-10 ">
             <div className="content-overview-left">
@@ -51,12 +31,12 @@ const OverViewPage = () => {
                 </div>
                 <div className="content-structor-main">
                     <div className="content-structor-main-avatar">
-                        <img src={mentor?.mentorImg} alt="" />
+                        {/* <img src={mentor?.mentorImg} alt="" /> */}
                     </div>
                     <div className="content-structor-main-name">
                         <div className="children-structor-main">
                             <div className='children-structor-main-name'>
-                                {mentor?.mentorName}
+                               Name mentor
                             </div>
                             <div>
                                 <button>Show all course</button>
@@ -83,10 +63,10 @@ const OverViewPage = () => {
                     <div className="instructors">
                         <div className="instructors-children">
                             <div className="instruc-left">
-                                <img src={mentor?.mentorImg} alt="" />
+                                {/* <img src={mentor?.mentorImg} alt="" /> */}
                             </div>
                             <div className="instruc-right">
-                                <h1>{mentor?.mentorName}</h1>
+                                <h1>mentorName</h1>
                                 <h2>Microsoft</h2>
                                 <h3><a href="">Follow on LinkedIn</a></h3>
                             </div>
