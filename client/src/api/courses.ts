@@ -44,12 +44,10 @@ const productApi = createApi({
         }),
 
         addProduct: builder.mutation<IProduct, Partial<IProduct>>({
-            query: (product) => ({
-                url: '/products',
+            query: (Courses) => ({
+                url: '/Courses',
                 method: 'POST',
-                body: {
-                    data: product // Đảm bảo gửi dữ liệu trong đối tượng "data"
-                },
+                body: Courses
             }),
             invalidatesTags: ['Courses'],
         }),

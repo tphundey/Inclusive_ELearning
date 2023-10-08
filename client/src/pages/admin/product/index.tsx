@@ -10,8 +10,10 @@ const AdminProduct = (props: Props) => {
     const [removeProduct, { isLoading: isRemoveLoading }] = useRemoveProductMutation();
     const dataSource = productsData?.map((item: IProduct) => ({
         key: item.id,
-        name: item.name,
+        name: item.courseName,
         price: item.price,
+        desc : item.description,
+        date: item.date
     }));
 
     const confirm = (id: number | string) => {
@@ -36,6 +38,17 @@ const AdminProduct = (props: Props) => {
             key: "price",
         },
         {
+            title: "mô tả",
+            dataIndex: "desc",
+            key: "desc",
+        },
+        {
+            title: "date",
+            dataIndex: "date",
+            key: "date",
+        },
+        {
+            title : "actions",
             render: ({ key: id }: { key: number | string }) => (
                 <div className="flex space-x-2">
                     <Popconfirm
