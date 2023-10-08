@@ -1,81 +1,118 @@
-import './SignupPage.css'
+import './SignupPage.css';
 import { useState, useEffect } from 'react';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
-import { gapi } from 'gapi-script'
-// import axios from "axios";
-const clientId = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com"
+import { gapi } from 'gapi-script';
+import axios from 'axios';
+
+const clientId = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
+
+// Hàm mã hóa dữ liệu sử dụng AES-GCM
+async function encryptData(data: any, key: any) {
+    const textEncoder = new TextEncoder();
+    const encodedData = textEncoder.encode(data);
+
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const encryptedData = await window.crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv: iv },
+        key,
+        encodedData
+    );
+
+    const encryptedArray = Array.from(new Uint8Array(encryptedData));
+    const ivArray = Array.from(iv);
+    return { data: encryptedArray, iv: ivArray };
+}
+
+// Hàm giải mã dữ liệu sử dụng AES-GCM
+async function decryptData(encryptedData: any, iv: any, key: any) {
+    const decryptedData = await window.crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: new Uint8Array(iv) },
+        key,
+        new Uint8Array(encryptedData)
+    );
+
+    const textDecoder = new TextDecoder();
+    return textDecoder.decode(decryptedData);
+}
+
 const SignupPage = () => {
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState<any>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [encryptionKey, setEncryptionKey] = useState<any>(null);
+    const [profileName, setProfileName] = useState<any>(null);
 
-
-    const onSuccess = (res: any) => {
-        // const emailToCheck = "anhnek033@gmail.com";
+    const onSuccess = async (res: any) => {
         const profile = {
             email: res.profileObj.email,
             name: res.profileObj.name,
             img: res.profileObj.imageUrl
         };
-        // Chuyển đổi object profile thành chuỗi JSON
         const profileJSON = JSON.stringify(profile);
 
         console.log("Login Success", res.profileObj);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('profile', profileJSON);
 
+        // Mã hóa thông tin trước khi lưu vào localStorage
+        if (encryptionKey) {
+            const encryptedData = await encryptData(profileJSON, encryptionKey);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('profile', JSON.stringify(encryptedData));
+            console.log('Thông tin đã được mã hóa và lưu vào localStorage.');
+        }
 
         // Kiểm tra email trùng trước khi gửi yêu cầu POST
-        // axios.get(`http://localhost:3000/googleAccount?email=${res.profileObj.email}`)
-        //     .then(response => {
-        //         if (response.data.length > 0) {
-        //             console.log('có tài khoản rồi');
-        //         } else {
-        //             axios.post('http://localhost:3000/googleAccount', profile)
-        //                 .then(response => {
-        //                     console.log('Post thông tin tài khoản thành công !');
-        //                 })
-        //                 .catch(error => {
-        //                     console.log(error);
-        //                 });
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
-
-
-        // if (res.profileObj.email === emailToCheck) {
-        //     setTimeout(() => {
-        //         console.log('thanh cong');
-
-        //     }, 3000);
-        // } else {
-        //     setTimeout(() => {
-        //         console.log('ko thanh cong');
-        //         location.reload();
-        //     }, 3000);
-        // }
+        axios.get(`http://localhost:3000/googleAccount?email=${res.profileObj.email}`)
+            .then((response: any) => {
+                if (response.data.length > 0) {
+                    console.log('Đã có Email trùng rồi rồi');
+                } else {
+                    axios.post('http://localhost:3000/googleAccount', profile)
+                        .then((response: any) => {
+                            console.log('Post thông tin tài khoản thành công !');
+                        })
+                        .catch((error: any) => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
     }
 
     const onFailure = (res: any) => {
         console.log("Login Fail", res);
-        alert('Không thành công')
+        alert('Không thành công');
     }
 
     useEffect(() => {
-        function start() {
+        async function start() {
             gapi.client.init({
                 clientId: clientId,
                 scope: ""
-            })
-        };
-        gapi.load('client:auth2', start)
-    })
+            });
 
-    // const responseGoogle = (response) => {
-    //     // In thông tin người dùng vào console
-    //     console.log('Thông tin người dùng:', response.profileObj);
-    // };
+            // Tạo hoặc lấy khóa mã hóa từ sessionStorage
+            const key = await window.crypto.subtle.generateKey(
+                { name: 'AES-GCM', length: 256 },
+                true,
+                ['encrypt', 'decrypt']
+            );
+            setEncryptionKey(key);
+
+            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
+            const encryptedData = localStorage.getItem('profile');
+            if (encryptedData && key) {
+                const { data, iv } = JSON.parse(encryptedData);
+                const decryptedData = await decryptData(data, iv, key);
+                const decryptedProfile = JSON.parse(decryptedData);
+                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
+                setProfileName(decryptedProfile.name); // Set tên vào state
+            }
+        }
+
+        gapi.load('client:auth2', start);
+    }, []);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -126,6 +163,7 @@ const SignupPage = () => {
                     {/* <GoogleLogout>DƯA</GoogleLogout> */}
                     <br />
                     <div className="login-new">
+
                         <div>Already on LinkedIn? </div>
                         <div><a href="">Sign in</a></div>
                     </div>
