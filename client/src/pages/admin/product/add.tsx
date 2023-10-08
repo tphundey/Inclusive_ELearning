@@ -1,11 +1,17 @@
 import { useAddProductMutation } from "@/api/courses";
-import { Button, Form, Input, message } from "antd";
+import { Button, DatePicker, Form, Input, Select, message } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Navigate, useNavigate } from "react-router-dom";
+const { Option } = Select;
 
 type FieldType = {
-    name?: string;
+    courseName?: string;
     price?: number;
+    description? : string;
+    date : string;
+    videoID : string;
+    categoryID : string;
 };
 
 const AdminProductAdd = () => {
@@ -50,7 +56,7 @@ const AdminProductAdd = () => {
             >
                 <Form.Item<FieldType>
                     label="Tên sản phẩm"
-                    name="name"
+                    name="courseName"
                     rules={[
                         { required: true, message: "Tên sản phẩm không được để trống!" },
                         { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
@@ -65,6 +71,40 @@ const AdminProductAdd = () => {
                     rules={[{ required: true, message: "Phải nhập giá tiền" }]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item<FieldType>
+                    label="ID video"
+                    name="videoID"
+                    rules={[{ required: true, message: "Phải nhập url video" }]}
+                >
+                    <Select
+                        placeholder="pick a category"
+                        allowClear
+                        >
+                        <Option value="1"> 1</Option>
+                        <Option value="2"> 2</Option>
+                        <Option value="3"> 3</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                name="date"
+                label="DatePicker">
+                    <DatePicker  />
+                </Form.Item>
+                <Form.Item name="category" label="Category" rules={[{ required: true }]}>
+                    <Select
+                        placeholder="pick a category"
+                        allowClear
+                        >
+                        <Option value="1">cate 1</Option>
+                        <Option value="2">cate 2</Option>
+                        <Option value="3">cate 3</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Mô tả sản phẩm"
+                name="description"
+                >
+                    <TextArea  rows={4} />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

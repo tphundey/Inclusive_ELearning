@@ -1,5 +1,9 @@
 export interface IProduct {
     id?: number | string,
-    name: string,
-    price: number
+    courseName: string,
+    price: number,
+    description : string,
+    date : string,
+    videoID : string,
+    categoryID  : string,
 }
