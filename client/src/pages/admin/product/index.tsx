@@ -22,7 +22,7 @@ const AdminProduct = (props: Props) => {
             .then(() => {
                 messageApi.open({
                     type: "success",
-                    content: "Xóa thành công!",
+                    content: "Deleted successfully!",
                 });
             });
     };
@@ -53,8 +53,8 @@ const AdminProduct = (props: Props) => {
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"
-                        title={"Xóa sản phẩm"}
-                        description={"Mày có chắc cmn chắn muốn xóa không???"}
+                        title={"Remove course"}
+                        description={"Are you sure you want to remove this???"}
                         onConfirm={() => confirm(id)}
                         okText="Yes"
                         cancelText="No"
