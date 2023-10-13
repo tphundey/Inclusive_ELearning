@@ -19,7 +19,7 @@ export const getAllVideo = async (req, res) => {
     },
   };
   try {
-    // Tìm kiếm dữ liệu
+    // Tìm kiếm dữ liệu video
     const searchVideoData = (videos) => {
       return videos?.docs?.filter((item) =>
         item?.videoTitle?.toLowerCase().includes(_keywords)
@@ -115,9 +115,6 @@ export const create = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   try {
     const videoId = req.params.id;
-    // Xóa tất cả video thuộc danh mục
-    // await video.deleteOne({ videoId });
-
     // Xóa danh mục
     const video = await Video.findByIdAndDelete(videoId);
 
