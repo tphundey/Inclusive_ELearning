@@ -20,7 +20,7 @@ export const getAllcategory = async (req, res) => {
     },
   };
   try {
-    // Tìm kiếm dữ liệu
+    // Tìm kiếm dữ liệu danh muc
     const searchData = (categories) => {
       return categories?.docs?.filter((item) =>
         item?.category_name?.toLowerCase().includes(_keywords)
