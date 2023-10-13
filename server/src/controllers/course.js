@@ -22,6 +22,7 @@ export const getAllCourse = async (req, res) => {
     },
   };
   try {
+    //seach
     const searchData = (courseData) => {
       return courseData?.docs?.filter((item) =>
         item?.name?.toLowerCase().includes(_keyword)
