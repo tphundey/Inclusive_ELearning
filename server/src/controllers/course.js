@@ -22,7 +22,7 @@ export const getAllCourse = async (req, res) => {
     },
   };
   try {
-    //seach
+    //seach du lieu
     const searchData = (courseData) => {
       return courseData?.docs?.filter((item) =>
         item?.name?.toLowerCase().includes(_keyword)
