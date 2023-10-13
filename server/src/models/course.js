@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
+import slug from "mongoose-slug-generator"
+
 const courseSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -35,4 +38,10 @@ const courseSchema = new mongoose.Schema({
         required: true
     }
 }, { collection: "Course", timestamps: true })
-export default mongoose.model('Course', courseSchema)
+
+mongoose.plugin(slug)
+courseSchema.plugin(mongoosePaginate)
+
+const Course = mongoose.model('Course', courseSchema);
+
+export default Course;
