@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema({
-    progressID :{
+    videoTitle :{
         type: String,
         required: true,
     },
-    time : {
+    videoUrl: {
         type: String,
         required: true,
     },

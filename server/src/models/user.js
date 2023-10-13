@@ -6,16 +6,16 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    courseID :{
+    courseId :{
         type : String,
-        required: true,
+        // required: true,
     },
     passWord: {
         type: String,
         required: true,
     },
     name :{
-        type: String | Number,
+        type: String,
         required: true,
     },
     avata : {
@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema({
     },
     courseSaved : {
         type : String,
-        required: true,
+        // required: true,
     },
     role: {
         type: String,
-        enum: ['student', 'instructor', 'admin'],
+        enum: ['student','admin'],
         default: 'student',
         require: true,
     },

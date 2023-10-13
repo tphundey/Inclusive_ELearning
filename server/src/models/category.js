@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
+import slug from "mongoose-slug-generator"
+
 const categorySchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     course : [
         {
@@ -10,5 +13,12 @@ const categorySchema = new mongoose.Schema({
             ref: "Course",
         },
     ],
-}, { collection: "Category", timestamps: true })
-export default mongoose.model('Category', categorySchema)
+}, 
+    { collection: "Category", timestamps: true }
+)
+mongoose.plugin(slug)
+categorySchema.plugin(mongoosePaginate)
+
+const Category = mongoose.model('Category', categorySchema);
+
+export default Category;
