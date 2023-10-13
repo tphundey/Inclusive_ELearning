@@ -1,24 +1,27 @@
 import mongoose from "mongoose";
 import express from "express";
-import routerApp from "./router";
-// import productRouter from "./routers/product";
-// import authRouter from "./routers/auth";
-// import categoryRouter from "./routers/category";
-
-import cors from 'cors'
+// import routerApp from "./router";
+import CourseRouter from "./routers/Course";
+import authRouter from "./Routers/auth";
+import categoryRouter from "./Routers/Categorys";
+import videoRouter from './Routers/video';
+import userRouter from './Routers/user'
+import cors from 'cors';
 
 const app = express();
-app.use(express.json())
-app.use(cors())
-routerApp(app);
+app.use(express.json());
+app.use(cors());
+// routerApp(app);
 
 app.get("/", (req, res) => {
     res.send("Hello word");
 });
-// app.use('/api', productRouter)
-//singup
-// app.use('/api', authRouter)
-// app.use('/api', categoryRouter)
+app.use('/api', CourseRouter);
+app.use('/api',videoRouter);
+app.use('/auth', authRouter)
+app.use('/api', categoryRouter)
+app.use('/api',userRouter)
+
 mongoose.connect('mongodb+srv://datnsph25191:lvmSjx4T4CvRDckN@cluster0.4xubugv.mongodb.net/').then(
     console.log('Connected successfully')
 )
