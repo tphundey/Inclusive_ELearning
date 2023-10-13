@@ -8,7 +8,7 @@ dotenv.config();
 
 export const login = async (req, res) => {
   try {
-    // VALIDATE
+    //
     const { error } = signinSchema.validate(req.body, { abortEarly: false });
     if (error) {
       const errors = error.details.map((err) => err.message);
