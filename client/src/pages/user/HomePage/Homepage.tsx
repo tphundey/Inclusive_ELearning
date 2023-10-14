@@ -104,8 +104,9 @@ const Homepage = () => {
                                                             <span className="absolute inset-2 popular">POPULAR</span>
                                                             {category ? category.categoryName : 'No Category'}
                                                         </h3>
-                                                        <Link key={index} to={`/introduction/${product.id}`}>
-                                                            <p className="mt-1 text-base">{product.courseName}</p> </Link>
+                                                        <a href={`/introduction/${product.id}`} key={index}>
+                                                            <p className="mt-1 text-base">{product.courseName}</p>
+                                                        </a>
                                                     </div>
                                                     <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
                                                 </div>
