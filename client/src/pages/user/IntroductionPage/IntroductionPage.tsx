@@ -7,93 +7,23 @@ import { Button } from 'antd';
 import { useParams } from 'react-router-dom';
 import { Form } from 'antd';
 import { Link } from 'react-router-dom';
-
-function renderReviewRateIcon(reviewRate: number) {
-    switch (reviewRate) {
-        case 1:
-            return (
-                <div className="desrv3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            );
-        case 2:
-            return (
-                <div className="desrv3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-
-            );
-        case 3:
-            return (
-                <div className="desrv3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            );
-        case 4:
-            return (
-                <div className="desrv3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            );
-        case 5:
-            return (
-                <div className="desrv3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            );
-        default:
-            return null;
-    }
-}
+import { renderReviewRateIcon } from './ratingIcons';
 
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
     const [product, setProduct] = useState({});
     const [similarProducts, setSimilarProducts] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [review, setReview] = useState({ rating: 4, comment: '' });
     const [users, setUsers] = useState([]);
     const { id } = useParams();
+    const handleRatingChange = (value) => {
+        // Cập nhật rating trong state
+        setReview({ ...review, rating: value });
 
+        // Cập nhật rated để hiển thị số tương ứng
+        setRated(value);
+    };
     useEffect(() => {
         if (id) {
             // Chuyển đổi _id thành chuỗi
@@ -125,14 +55,17 @@ const IntroductionPage = () => {
     }, [product.categoryID]);
 
     useEffect(() => {
-        // Lấy tất cả đánh giá từ API
-        axios.get('http://localhost:3000/Reviews')
+        // Lấy tất cả đánh giá từ API có courseID trùng với id trên URL
+        axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
             .then((response) => {
                 setReviews(response.data);
+                console.log(response.data);
+
             })
             .catch((error) => {
                 console.error(error);
             });
+
         // Lấy tất cả người dùng từ API
         axios
             .get('http://localhost:3000/users')
@@ -142,17 +75,20 @@ const IntroductionPage = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, []);
+    }, [id]);
+
+
+
+
 
     function findUserById(userID) {
         return users.find((user) => user.id === userID);
     }
 
-
     function calculateAverageRating(reviews) {
         if (reviews && reviews.length > 0) {
             const totalRating = reviews.reduce(
-                (accumulator, review) => accumulator + review.reviewRate,
+                (accumulator, review) => accumulator + review.rating,
                 0
             );
             const averageRating = totalRating / reviews.length;
@@ -184,6 +120,35 @@ const IntroductionPage = () => {
     const rateIDArray = Array.isArray(product.rateID) ? product.rateID : [];
     const averageRating = calculateAverageRating(reviews);
     const starRating = convertToStarRating(averageRating);
+
+    //Post review
+
+    const postReview = () => {
+        const currentDate = new Date();
+        const dataToPost = {
+            rating: review.rating,
+            comment: review.comment,
+            userID: 1,
+            courseID: product.id, // Bạn cần đảm bảo product được định nghĩa ở đây
+            date: currentDate.toISOString(),
+        };
+
+        axios.post('http://localhost:3000/Reviews', dataToPost)
+            .then((response) => {
+                // Xử lý kết quả ở đây nếu cần
+                console.log('Đánh giá đã được đăng thành công', response.data);
+
+                // Cập nhật danh sách đánh giá sau khi gửi thành công
+                setReviews([...reviews, dataToPost]);
+
+                // Đặt lại giá trị mặc định cho form đánh giá
+                setReview({ rating: 0, comment: '' });
+            })
+            .catch((error) => {
+                // Xử lý lỗi ở đây nếu có
+                console.error('Lỗi khi đăng đánh giá', error);
+            });
+    };
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -329,40 +294,38 @@ const IntroductionPage = () => {
                         <Form className='mt-7 formReview' action="" method="post" >
                             <div className="gap-2">
                                 <div className='flex items-center gap-2'>
-                                    <Rating className='flex text-yellow-400' value={4} onChange={(value) => setRated(value)} />
+                                    <Rating className='flex text-yellow-400'
+                                        value={review.rating}
+                                        onChange={handleRatingChange}
+                                    />
                                     <Typography className="font-medium mb-4 text-yellow-400">
                                         {rated}.0
                                     </Typography>
                                 </div>
-                                <Input></Input>
-                                <Button className='mt-4' type='dashed'>Post</Button>
+                                <Input
+                                    value={review.comment}
+                                    onChange={(e) => setReview({ ...review, comment: e.target.value })}
+                                />
+                                <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
                             </div>
                         </Form>
 
                         <div className="listReviewIntro">
-                            {rateIDArray.map((rateID) => {
-                                // Lọc danh sách đánh giá có courseID trùng với rateID trong mảng
-                                const relatedReviews = reviews.filter(
-                                    (review) => review.courseID === rateID
-                                );
-
-                                return relatedReviews.map((review) => (
-                                    <div key={review.id} className="reviewIntroChildren">
-                                        <div className="avatarReview">
-                                            <img src={findUserById(review.userID)?.avatarIMG} alt="" />
-                                        </div>
-                                        <div className="desReview">
-                                            <div className="desrv1">{findUserById(review.userID)?.username}</div>
-                                            <div className="desrv2">{review.reviewText}</div>
-                                            <div className="flex items-center gap-10">
-                                                <div>{renderReviewRateIcon(review.reviewRate)}</div>
-
-                                                <div className="desrv4">{review.reviewTime}</div>
-                                            </div>
+                            {reviews.map((review) => (
+                                <div key={review.id} className="reviewIntroChildren">
+                                    <div className="avatarReview">
+                                        <img src={findUserById(review.userID)?.avatarIMG} alt="" />
+                                    </div>
+                                    <div className="desReview">
+                                        <div className="desrv1">{findUserById(review.userID)?.username}</div>
+                                        <div className="desrv2">{review.comment}</div>
+                                        <div className="flex items-center gap-10">
+                                            <div>{renderReviewRateIcon(review.rating)}</div>
+                                            <div className="desrv4">{review.date}</div>
                                         </div>
                                     </div>
-                                ));
-                            })}
+                                </div>
+                            ))}
                         </div>
                     </div>
 

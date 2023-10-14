@@ -21,20 +21,12 @@
   ],
   "Reviews": [
     {
-      "id": 1,
+      "rating": 5,
+      "comment": "biết best cap không ?",
       "userID": 1,
-      "courseID": 1,
-      "reviewText": "This course is amazing!",
-      "reviewRate": 4,
-      "reviewTime": "2023-09-29"
-    },
-    {
-      "id": 2,
-      "userID": 2,
       "courseID": 2,
-      "reviewText": "Good content, but could be improved.",
-      "reviewRate": 2,
-      "reviewTime": "2023-09-28"
+      "date": "2023-10-14T20:09:51.261Z",
+      "id": 1
     }
   ],
   "Categories": [
