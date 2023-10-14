@@ -252,3 +252,9 @@
     color: #FBBF24;
     font-size: 24px;
 }
+
+.instruc-left img{
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}

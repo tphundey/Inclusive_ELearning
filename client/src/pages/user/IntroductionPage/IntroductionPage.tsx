@@ -261,12 +261,12 @@ const IntroductionPage = () => {
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img src="https://media.licdn.com/dms/image/C560DAQHOmyJ6CDbRFw/learning-author-crop_200_200/0/1576190774910?e=1696924800&v=beta&t=nBpIasQh21pm2nxUpzK48DaOhXd2YYCBljRvJT-0_OM" alt="" />
+                                    <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
                                 </div>
                                 <div className="instruc-right">
-                                    <h1>David Rivers</h1>
+                                    <h1>Trần Thị Hương Trà</h1>
                                     <h2>Microsoft</h2>
-                                    <h3><a href="">View more courses by Microsoft Press</a></h3>
+                                    <h3><a href="">View more courses by Hương Trà</a></h3>
                                 </div>
                             </div>
                         </div>

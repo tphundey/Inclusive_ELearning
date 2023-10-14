@@ -100,10 +100,11 @@
       ],
       "date": "2023-09-25",
       "videoID": [
-        1
+        1,
+        2
       ],
       "categoryID": 1,
-      "courseIMG": "https://media.licdn.com/dms/image/C560DAQFGi9NVXEqDTg/learning-public-crop_288_512/0/1632849553213?e=1696842000&v=beta&t=xLEDxgYmKMschqfB4TrwUp90uEyGzwMq1Sl8a_zcaRw",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100
     },
     {
@@ -121,7 +122,7 @@
         1
       ],
       "categoryID": 1,
-      "courseIMG": "https://media.licdn.com/dms/image/C560DAQGUYcyL7tT29g/learning-public-crop_288_512/0/1623777565291?e=1696842000&v=beta&t=qCuJz5esMV_HE4A1rXzvhsREbQ-37x8QK3VtprxLc78",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
       "enrollment": 100
     },
     {
@@ -139,7 +140,7 @@
         1
       ],
       "categoryID": 2,
-      "courseIMG": "https://media.licdn.com/dms/image/D4D0DAQFDc6TdaL8EZQ/learning-public-crop_288_512/0/1695234022487?e=1696842000&v=beta&t=tk5XQSbw8UURNZh6ByittrOSwcEmhNRH4aooBPYOsIY",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
       "enrollment": 100
     },
     {
@@ -157,7 +158,7 @@
         1
       ],
       "categoryID": 2,
-      "courseIMG": "https://media.licdn.com/dms/image/C560DAQEjHZXkECe6BQ/learning-public-crop_288_512/0/1623351257016?e=1696842000&v=beta&t=L7D9r-CaqbVCudY9ENXCHHLDet-o028_V41cuOQ4FV0",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
       "enrollment": 100
     },
     {
@@ -175,7 +176,7 @@
         1
       ],
       "categoryID": 1,
-      "courseIMG": "https://media.licdn.com/dms/image/D560DAQE4nkljsFNoNw/learning-public-crop_288_512/0/1686090015884?e=1696842000&v=beta&t=5Aut_8zhBbnGOs820xgflIvY0suxgqtQo-jsoEDHLu8",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/3192365049190229066/58e628e534b4e3eabaa5.jpg",
       "enrollment": 100
     },
     {
@@ -193,7 +194,7 @@
         1
       ],
       "categoryID": 1,
-      "courseIMG": "https://media.licdn.com/dms/image/D560DAQE4nkljsFNoNw/learning-public-crop_288_512/0/1686090015884?e=1696842000&v=beta&t=5Aut_8zhBbnGOs820xgflIvY0suxgqtQo-jsoEDHLu8",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/157773873615069288/e7a89dab81fa56a40feb.jpg",
       "enrollment": 100
     }
   ],
@@ -241,12 +242,12 @@
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHXaBxs_X5Hhw/learning-original-video-vbr-720/0/1679338376995?e=1696544259&v=beta&t=-geKj9DFvuj4XGA44XqwZAPUbSzmZpciiXbtXXMIYNU"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQEwTx3ue79FbA/learning-original-video-vbr-720/0/1658272575588?e=1697289816&v=beta&t=KsMDjh9Dg_i2xk_-khb5IQCBBOMhF5IyUZkevUIH56g"
     },
     {
       "id": 2,
       "videoTitle": "Graphic Design Principles",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQG4bxWwp6Vj5Q/learning-original-video-vbr-720/0/1598707184340?e=1696515080&v=beta&t=wjsLVOLoS7kx1GNAgyiPH6voz-rNCtkFULlu3YBoSpc"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQGLO7KQuN66DA/learning-original-video-vbr-720/0/1598805657315?e=1697289856&v=beta&t=KHxokcNj_XSrFvJzd0vrx3fKM0ZF932nRGtXXr0PXII"
     }
   ],
   "googleAccount": []
