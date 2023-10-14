@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
-import User from "../models/user";
-
+import User from '../models/user';
 dotenv.config();
 
 export const searchUser = async (req, res) => {
@@ -20,19 +19,17 @@ export const searchUser = async (req, res) => {
     },
   };
   try {
+    const searchData = (users) => {
+      return users?.docs?.filter((item) =>
+        item?.name?.toLowerCase().includes(_keywords)
+      );
+    };
     const users = await User.paginate({}, option);
-    if (!users.docs || users.docs.length === 0) {
+    if (!users.docs || users.docs.length == 0) {
       return res.status(400).json({
         message: "không tìm thấy tài khoản",
       });
     }
-
-    const searchData = (users) => {
-      return users?.docs?.filter((item) =>
-        item?.user_fullName?.toLowerCase().includes(_keywords)
-      );
-    };
-
     const searchDataUser = await searchData(users);
     const userResponse = await { ...users, docs: searchDataUser };
 

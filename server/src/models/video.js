@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
+
 const videoSchema = new mongoose.Schema({
-    progressID :{
+    videoTitle :{
         type: String,
         required: true,
     },
-    time : {
+    videoUrl: {
         type: String,
         required: true,
     },
@@ -14,4 +16,6 @@ const videoSchema = new mongoose.Schema({
         required: true,
     },
 }, { collection: "Video", timestamps: true })
-export default mongoose.model('Video', videoSchema)
+videoSchema.plugin(mongoosePaginate)
+const Video = mongoose.model('Video', videoSchema);
+export default Video

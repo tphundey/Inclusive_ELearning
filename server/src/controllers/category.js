@@ -23,7 +23,7 @@ export const getAllcategory = async (req, res) => {
     // Tìm kiếm dữ liệu
     const searchData = (categories) => {
       return categories?.docs?.filter((item) =>
-        item?.category_name?.toLowerCase().includes(_keywords)
+        item?.name?.toLowerCase().includes(_keywords)
       );
     };
     const categories = await Category.paginate({}, option);

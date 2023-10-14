@@ -7,7 +7,7 @@ const router = express.Router();
 
 // router.get("/users", searchUser);
 router.get("/users", getAllUser);
-// router.get("/users/:id", getUserById);
+router.get("/users/:id", getUserById);
 router.put("/users/:id", authenticate, authorization, updateUser);
 router.delete("/users/:id", authenticate, authorization, removeUser);
 

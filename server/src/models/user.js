@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import mongoosePaginate from "mongoose-paginate-v2";
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -36,5 +36,6 @@ const userSchema = new mongoose.Schema({
     },
 },
 { collection: "User", timestamps: true });
-
-export default mongoose.model("User", userSchema);
+userSchema.plugin(mongoosePaginate)
+const User =  mongoose.model("User", userSchema);
+export default User
