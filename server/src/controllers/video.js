@@ -1,8 +1,8 @@
 import Video from "../models/video";
-
+import dotenv from 'dotenv'
 import { videoSchema, videoUpdateSchema } from '../schemas/video';
 import slugify from "slugify";
-
+dotenv.config
 export const getAllVideo = async (req, res) => {
   const {
     _page = 1,
@@ -26,17 +26,17 @@ export const getAllVideo = async (req, res) => {
       );
     };
     const videos = await Video.paginate({}, option);
-    if (!videos.docs || videos.docs.length === 0) {
+    if (!videos.docs || videos.docs.length == 0) {
       return res.status(400).json({
-        message: "không tìm thấy danh mục",
+        message: "không tìm thấy video",
       });
     }
-    const searchDatavideo = await searchData(videos);
+    const searchDatavideo = await searchVideoData(videos);
     const videoResponse = await { ...videos, docs: searchDatavideo };
 
     res.status(200).json({
       message: "Lấy danh mục thành công ",
-      CategoryResponse,
+      videoResponse,
       pagination: {
         currentPage: videos.page,
         totalPages: videos.totalPages,
