@@ -27,6 +27,7 @@ import SignupPage from "./pages/user/SignUpPage/SignupPage";
 import BecomeMentor from "./pages/mentor/BecomeMentor/BecomeMentor";
 import AdminCategory from "./pages/admin/categorys";
 import AdminCategoryAdd from "./pages/admin/categorys/add";
+import AdminCategoryEdit from "./pages/admin/categorys/edit";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -87,10 +88,11 @@ export const routers = createBrowserRouter([
             { index: true, element: <Navigate to="dashboard" /> },
             { path: "dashboard", element: <div>Dashboard</div> },
             { path: "product", element: <AdminProduct /> },
-            { path: "category", element: <AdminCategory /> },
+            { path: "categorys", element: <AdminCategory /> },
             { path: "product/add", element: <AdminProductAdd /> },
             { path: "category/add", element: <AdminCategoryAdd /> },
             { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
+            { path: "category/:idCategory/edit", element: <AdminCategoryEdit /> },
 
         ],
         
