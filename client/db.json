@@ -242,5 +242,12 @@
       "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQGLO7KQuN66DA/learning-original-video-vbr-720/0/1598805657315?e=1697289856&v=beta&t=KHxokcNj_XSrFvJzd0vrx3fKM0ZF932nRGtXXr0PXII"
     }
   ],
-  "googleAccount": []
+  "googleAccount": [
+    {
+      "email": "maitranthi651@gmail.com",
+      "name": "Mai Tranthi",
+      "img": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
+      "id": 1
+    }
+  ]
 }
