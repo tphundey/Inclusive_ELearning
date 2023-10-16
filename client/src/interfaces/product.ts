@@ -4,6 +4,7 @@ export interface IProduct {
     price: number,
     description : string,
     date : string,
-    videoID : string,
-    categoryID  : string,
+    videoID : Number,
+    categoryID  : Number,
+    courseIMG : string,
 }

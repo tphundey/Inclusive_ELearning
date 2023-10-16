@@ -1,3 +1,4 @@
+import { useGetCategorytByIdQuery } from "@/api/category";
 import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
 import { IProduct } from "@/interfaces/product";
 import { Button, Table, Skeleton, Popconfirm, message } from "antd";
@@ -13,8 +14,11 @@ const AdminProduct = (props: Props) => {
         name: item.courseName,
         price: item.price,
         desc : item.description,
-        date: item.date
+        date: item.date,
+        courseIMG : <img src={item.courseIMG} className="w-full" />,
+        categoryID : item.categoryID,
     }));
+    
 
     const confirm = (id: number | string) => {
         removeProduct(id)
@@ -46,6 +50,11 @@ const AdminProduct = (props: Props) => {
             title: "date",
             dataIndex: "date",
             key: "date",
+        },
+        {
+            title: "courseIMG ",
+            dataIndex: "courseIMG",
+            key: "courseIMG",
         },
         {
             title : "actions",

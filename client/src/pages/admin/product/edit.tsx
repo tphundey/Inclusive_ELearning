@@ -1,19 +1,29 @@
+import { useGetCategorysQuery } from "@/api/category";
 import {
     useAddProductMutation,
     useGetProductByIdQuery,
     useUpdateProductMutation,
 } from "@/api/courses";
-import { Button, Form, Input, Skeleton, message } from "antd";
+import { Icategory } from "@/interfaces/category";
+import { Button, DatePicker, Form, Input, Select, Skeleton, message } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
+const { Option } = Select;
 
 type FieldType = {
-    name?: string;
+    courseName?: string;
     price?: number;
+    description? : string;
+    date : string;
+    videoID : Number;
+    categoryID : Number;
+    courseIMG : Number;
 };
 
 const AdminProductEdit = () => {
+    
     const { idProduct } = useParams<{ idProduct: string }>();
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -44,6 +54,12 @@ const AdminProductEdit = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
     };
+    const { data: cateData } = useGetCategorysQuery();
+    const dataSource = cateData?.map((item: Icategory) => ({
+        key: item.id,
+        categoryName: item.categoryName,
+        categoryDescription : item.categoryDescription
+    }));
 
     return (
         <>
@@ -66,7 +82,7 @@ const AdminProductEdit = () => {
                 >
                     <Form.Item<FieldType>
                         label="Tên sản phẩm"
-                        name="name"
+                        name="courseName"
                         rules={[
                             { required: true, message: "Tên sản phẩm không được để trống!" },
                             { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
@@ -82,7 +98,37 @@ const AdminProductEdit = () => {
                     >
                         <Input />
                     </Form.Item>
-
+                    
+                <Form.Item<FieldType>
+                    label="courseIMG"
+                    name="courseIMG"
+                >
+                    <Input />
+                </Form.Item>
+                {/* <Form.Item
+                name="date"
+                label="DatePicker">
+                    <DatePicker  />
+                </Form.Item> */}
+                <Form.Item name="categoryID" label="Category" rules={[{ required: true }]}>
+                    <Select
+                        placeholder="pick a category"
+                        allowClear
+                        >
+                        {
+                            dataSource?.map((item: any) => {
+                                return (
+                                    <Option value={item.key}>{item.categoryName}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Mô tả sản phẩm"
+                name="description"
+                >
+                    <TextArea  rows={4} />
+                </Form.Item>
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" danger htmlType="submit">
                             {isUpdateLoading ? (
