@@ -4,60 +4,39 @@ import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import axios from 'axios';
 
-const clientId = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
+const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
 
-// Hàm mã hóa dữ liệu sử dụng AES-GCM
-async function encryptData(data: any, key: any) {
-    const textEncoder = new TextEncoder();
-    const encodedData = textEncoder.encode(data);
-
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
-    const encryptedData = await window.crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv: iv },
-        key,
-        encodedData
-    );
-
-    const encryptedArray = Array.from(new Uint8Array(encryptedData));
-    const ivArray = Array.from(iv);
-    return { data: encryptedArray, iv: ivArray };
+// Hàm mã hóa dữ liệu sử dụng encodeURIComponent
+function encodeData(data: any): any {
+    return encodeURIComponent(data);
 }
 
-// Hàm giải mã dữ liệu sử dụng AES-GCM
-async function decryptData(encryptedData: any, iv: any, key: any) {
-    const decryptedData = await window.crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv: new Uint8Array(iv) },
-        key,
-        new Uint8Array(encryptedData)
-    );
-
-    const textDecoder = new TextDecoder();
-    return textDecoder.decode(decryptedData);
+// Hàm giải mã dữ liệu sử dụng decodeURIComponent
+function decodeData(encryptedData: any): any {
+    return decodeURIComponent(encryptedData);
 }
 
 const SignupPage = () => {
     const [password, setPassword] = useState<any>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [encryptionKey, setEncryptionKey] = useState<any>(null);
+    const [encryptedData, setEncryptedData] = useState<any>(null);
     const [profileName, setProfileName] = useState<any>(null);
 
     const onSuccess = async (res: any) => {
-        const profile = {
+        const profile: any = {
             email: res.profileObj.email,
             name: res.profileObj.name,
             img: res.profileObj.imageUrl
         };
-        const profileJSON = JSON.stringify(profile);
+        const profileJSON: any = JSON.stringify(profile);
 
         console.log("Login Success", res.profileObj);
 
         // Mã hóa thông tin trước khi lưu vào localStorage
-        if (encryptionKey) {
-            const encryptedData = await encryptData(profileJSON, encryptionKey);
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('profile', JSON.stringify(encryptedData));
-            console.log('Thông tin đã được mã hóa và lưu vào localStorage.');
-        }
+        const encryptedProfile: any = encodeData(profileJSON);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('profile', encryptedProfile);
+        console.log('Thông tin đã được mã hóa và lưu vào localStorage.');
 
         // Kiểm tra email trùng trước khi gửi yêu cầu POST
         axios.get(`http://localhost:3000/googleAccount?email=${res.profileObj.email}`)
@@ -91,22 +70,16 @@ const SignupPage = () => {
                 scope: ""
             });
 
-            // Tạo hoặc lấy khóa mã hóa từ sessionStorage
-            const key = await window.crypto.subtle.generateKey(
-                { name: 'AES-GCM', length: 256 },
-                true,
-                ['encrypt', 'decrypt']
-            );
-            setEncryptionKey(key);
-
             // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-            const encryptedData = localStorage.getItem('profile');
-            if (encryptedData && key) {
-                const { data, iv } = JSON.parse(encryptedData);
-                const decryptedData = await decryptData(data, iv, key);
-                const decryptedProfile = JSON.parse(decryptedData);
+            const encryptedProfile: any = localStorage.getItem('profile');
+            if (encryptedProfile) {
+                const decryptedProfile: any = decodeData(encryptedProfile);
                 console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setProfileName(decryptedProfile.name); // Set tên vào state
+                setEncryptedData(decryptedProfile);
+            }
+            else {
+                console.log('Ko chạy');
+
             }
         }
 
@@ -138,7 +111,7 @@ const SignupPage = () => {
                             id="password"
                             name="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e: any) => setPassword(e.target.value)}
                         />
                         <div className="password-toggle" onClick={togglePasswordVisibility}>
                             {showPassword ? 'Hide' : 'Show'}
@@ -153,7 +126,7 @@ const SignupPage = () => {
                     </div>
 
                     <GoogleLogin
-                        clientId={clientId} // Thay thế YOUR_GOOGLE_CLIENT_ID bằng Client ID của bạn
+                        clientId={clientId}
                         buttonText="Đăng nhập bằng Google"
                         onSuccess={onSuccess}
                         onFailure={onFailure}
@@ -163,7 +136,6 @@ const SignupPage = () => {
                     {/* <GoogleLogout>DƯA</GoogleLogout> */}
                     <br />
                     <div className="login-new">
-
                         <div>Already on LinkedIn? </div>
                         <div><a href="">Sign in</a></div>
                     </div>
@@ -180,7 +152,6 @@ const SignupPage = () => {
             </div>
         </div>
     )
-
 };
 
 export default SignupPage;
