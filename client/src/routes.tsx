@@ -30,15 +30,6 @@ import AdminCategoryAdd from "./pages/admin/categorys/add";
 export const routers = createBrowserRouter([
     {
         path: "/",
-        children: [
-            { index: true, element: <Navigate to="signin" /> },
-            { path: "signin", element: <SigninPage /> },
-            { path: "signup", element: <SignupPage /> },
-            { path: "instructors", element: <BecomeMentor /> }
-        ],
-    },
-    {
-        path: "/",
         element: <LayoutWebsite />,
         children: [
             { index: true, element: <Navigate to="homepage" /> },
@@ -81,6 +72,25 @@ export const routers = createBrowserRouter([
         ],
     },
     {
+        path: "/",
+        children: [
+            { index: true, element: <Navigate to="signin" /> },
+            { path: "signin", element: <SigninPage /> },
+            {
+                path: "signup",
+                element: (
+                    // Thực hiện kiểm tra giá trị biến "isLoggedIn" trong Local Storage
+                    localStorage.getItem('isLoggedIn') === 'true' ? (
+                        <Navigate to="404" /> // Điều hướng tới trang chính (hoặc trang bạn muốn)
+                    ) : (
+                        <SignupPage /> // Nội dung trang đăng ký
+                    )
+                ),
+            },
+            { path: "instructors", element: <BecomeMentor /> }
+        ],
+    },
+    {
         path: "/admin",
         element: <LayoutAdmin />,
         children: [
@@ -93,6 +103,6 @@ export const routers = createBrowserRouter([
             { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
 
         ],
-        
+
     },
 ]);
