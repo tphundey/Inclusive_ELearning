@@ -27,6 +27,7 @@ import SignupPage from "./pages/user/SignUpPage/SignupPage";
 import BecomeMentor from "./pages/mentor/BecomeMentor/BecomeMentor";
 import AdminCategory from "./pages/admin/categorys";
 import AdminCategoryAdd from "./pages/admin/categorys/add";
+import ErrorPage from "./pages/404/404page";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -76,6 +77,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="signin" /> },
             { path: "signin", element: <SigninPage /> },
+            { path: "signup/404", element: <ErrorPage /> },
             {
                 path: "signup",
                 element: (
