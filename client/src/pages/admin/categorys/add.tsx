@@ -26,7 +26,7 @@ const AdminCategoryAdd = () => {
                 });
                 form.resetFields();
                 setTimeout(() => {
-                    navigate("/admin/category");
+                    navigate("/admin/categorys");
                 }, 3000);
             });
     };

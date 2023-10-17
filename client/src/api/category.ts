@@ -1,3 +1,4 @@
+import { Icategory } from '@/interfaces/category';
 import { IProduct } from '@/interfaces/product';
 import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
@@ -26,13 +27,13 @@ const categoryApi = createApi({
             },
         }),
 
-        getProductById: builder.query<IProduct, number | string>({
+        getCategorytById: builder.query<Icategory, number | string>({
             query: (id) => `/Categories/${id}`,
             providesTags: ['Categories'],
-            transformResponse: (response: any) => ({
-                ...response.data.attributes,
-                id: response.data.id
-            }),
+            // transformResponse: (response: any) => ({
+            //     ...response.data.attributes,
+            //     id: response.data.id
+            // }),
         }),
 
         removeCategory: builder.mutation<void, number | string>({
@@ -43,7 +44,7 @@ const categoryApi = createApi({
             invalidatesTags: ['Categories'],
         }),
 
-        addCategory: builder.mutation<IProduct, Partial<IProduct>>({
+        addCategory: builder.mutation<Icategory, Partial<Icategory>>({
             query: (Courses) => ({
                 url: '/Categories',
                 method: 'POST',
@@ -52,13 +53,11 @@ const categoryApi = createApi({
             invalidatesTags: ['Categories'],
         }),
 
-        updateProduct: builder.mutation<IProduct, Partial<IProduct>>({
-            query: (product) => ({
-                url: `/Categories/${product.id}`,
-                method: 'PUT',
-                body: {
-                    data: product // Đảm bảo gửi dữ liệu trong đối tượng "data"
-                },
+        updateCategory: builder.mutation<Icategory, Partial<Icategory>>({
+            query: (category) => ({
+                url: `/Categories/${category.id}`,
+                method: "PATCH",
+                body: category
             }),
             invalidatesTags: ['Categories'],
         }),
@@ -68,9 +67,9 @@ const categoryApi = createApi({
 export const {
     useGetCategorysQuery,
     useAddCategoryMutation,
-    useGetProductByIdQuery,
+    useGetCategorytByIdQuery,
     useRemoveCategoryMutation,
-    useUpdateProductMutation,
+    useUpdateCategoryMutation,
 } = categoryApi;
 
 export const categoryReducer = categoryApi.reducer;
