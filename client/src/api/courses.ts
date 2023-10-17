@@ -27,12 +27,12 @@ const productApi = createApi({
         }),
 
         getProductById: builder.query<IProduct, number | string>({
-            query: (id) => `/products/${id}`,
+            query: (id) => `/Courses/${id}`,
             providesTags: ['Courses'],
-            transformResponse: (response: any) => ({
-                ...response.data.attributes,
-                id: response.data.id
-            }),
+            // transformResponse: (response: any) => ({
+            //     ...response.data.attributes,
+            //     id: response.data.id
+            // }),
         }),
 
         removeProduct: builder.mutation<void, number | string>({
@@ -53,12 +53,10 @@ const productApi = createApi({
         }),
 
         updateProduct: builder.mutation<IProduct, Partial<IProduct>>({
-            query: (product) => ({
-                url: `/products/${product.id}`,
-                method: 'PUT',
-                body: {
-                    data: product // Đảm bảo gửi dữ liệu trong đối tượng "data"
-                },
+            query: (courses) => ({
+                url: `/Courses/${courses.id}`,
+                method: 'PATCH',
+                body: courses // Đảm bảo gửi dữ liệu trong đối tượng "data"
             }),
             invalidatesTags: ['Courses'],
         }),

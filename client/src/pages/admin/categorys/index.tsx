@@ -9,17 +9,17 @@ type Props = {};
 const AdminCategory = (props: Props) => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
-    const [removeProduct, { isLoading: isRemoveLoading }] = useRemoveCategoryMutation();
+    const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveCategoryMutation();
     const dataSource = productsData?.map((item: Icategory) => ({
         key: item.id,
-        name: item.categoryName,
-        desc : item.categoryDescription
+        categoryName: item.categoryName,
+        categoryDescription : item.categoryDescription
     }));
     console.log(dataSource);
     
 
     const confirm = (id: number | string) => {
-        removeProduct(id)
+        removeCategory(id)
             .unwrap()
             .then(() => {
                 messageApi.open({
@@ -36,12 +36,12 @@ const AdminCategory = (props: Props) => {
         },
         {
             title: "Tên danh mục",
-            dataIndex: "name",
+            dataIndex: "categoryName",
             key: "categoryName",
         },
         {
             title: "mô tả danh mục",
-            dataIndex: "desc",
+            dataIndex: "categoryDescription",
             key: "categoryDescription",
         },
         {
@@ -61,7 +61,7 @@ const AdminCategory = (props: Props) => {
                         </Button>
                     </Popconfirm>
                     <Button>
-                        <Link to={`/admin/product/${id}/edit`}>Sửa</Link>
+                        <Link to={`/admin/category/${id}/edit`}>Sửa</Link>
                     </Button>
                 </div>
             ),

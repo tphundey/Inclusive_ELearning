@@ -1,4 +1,6 @@
+import { useGetCategorysQuery } from "@/api/category";
 import { useAddProductMutation } from "@/api/courses";
+import { Icategory } from "@/interfaces/category";
 import { Button, DatePicker, Form, Input, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -10,15 +12,24 @@ type FieldType = {
     price?: number;
     description? : string;
     date : string;
-    videoID : string;
-    categoryID : string;
+    videoID : Number;
+    categoryID : Number;
+    courseIMG : Number;
 };
+
 
 const AdminProductAdd = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
     const [messageApi, contextHolder] = message.useMessage();
     const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
+    const dataSource = productsData?.map((item: Icategory) => ({
+        key: item.id,
+        categoryName: item.categoryName,
+        categoryDescription : item.categoryDescription
+    }));
+    console.log(dataSource);
     const onFinish = (values: any) => {
         addProduct(values)
             .unwrap()
@@ -86,19 +97,29 @@ const AdminProductAdd = () => {
                         <Option value="3"> 3</Option>
                     </Select>
                 </Form.Item>
+                <Form.Item<FieldType>
+                    label="courseIMG"
+                    name="courseIMG"
+                >
+                    <Input />
+                </Form.Item>
                 <Form.Item
                 name="date"
                 label="DatePicker">
                     <DatePicker  />
                 </Form.Item>
-                <Form.Item name="category" label="Category" rules={[{ required: true }]}>
+                <Form.Item name="categoryID" label="Category" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
                         allowClear
                         >
-                        <Option value="1">cate 1</Option>
-                        <Option value="2">cate 2</Option>
-                        <Option value="3">cate 3</Option>
+                        {
+                            dataSource?.map((item: any) => {
+                                return (
+                                    <Option value={item.key}>{item.categoryName}</Option>
+                                )
+                            })
+                        }
                     </Select>
                 </Form.Item>
                 <Form.Item label="Mô tả sản phẩm"

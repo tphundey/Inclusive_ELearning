@@ -35,6 +35,11 @@ const LayoutAdmin = () => {
                             icon: <AiOutlineVideoCamera />,
                             label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
                         },
+                        {
+                            key: "3",
+                            icon: <AiOutlineVideoCamera />,
+                            label: <Link to="/admin/categorys">Quản lý danh mục</Link>,
+                        },
                     ]}
                 />
             </Sider>
