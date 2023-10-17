@@ -41,11 +41,6 @@
       "categoryDescription": "Creative design courses"
     },
     {
-      "categoryName": "danh muc 1",
-      "categoryDescription": "danh muc aaa",
-      "id": 3
-    },
-    {
       "categoryName": "danh muc 2",
       "categoryDescription": "danh muc xam xi",
       "id": 4
@@ -193,26 +188,6 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/157773873615069288/e7a89dab81fa56a40feb.jpg",
       "enrollment": 100
-    },
-    {
-      "courseName": "san pham3",
-      "price": "100",
-      "videoID": "2",
-      "courseIMG": "aaaaa",
-      "date": "2023-10-14T12:30:24.251Z",
-      "categoryID": 4,
-      "description": "bbbbb",
-      "id": 8
-    },
-    {
-      "courseName": "san pham A",
-      "price": "200",
-      "videoID": "1",
-      "courseIMG": "aasdadasdasdasdadasd",
-      "date": "2023-10-06T13:48:43.717Z",
-      "categoryID": 2,
-      "description": "san pham tot",
-      "id": 9
     }
   ],
   "Notes": [
@@ -265,6 +240,11 @@
       "id": 2,
       "videoTitle": "Graphic Design Principles",
       "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQGLO7KQuN66DA/learning-original-video-vbr-720/0/1598805657315?e=1697289856&v=beta&t=KHxokcNj_XSrFvJzd0vrx3fKM0ZF932nRGtXXr0PXII"
+    },
+    {
+      "videoTitle": "video 1",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQGLO7KQuN66DA/learning-original-video-vbr-720/0/1598805657315?e=1697289856&v=beta&t=KHxokcNj_XSrFvJzd0vrx3fKM0ZF932nRGtXXr0PXII",
+      "id": 3
     }
   ],
   "googleAccount": [

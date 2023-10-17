@@ -1,6 +1,8 @@
 import { useGetCategorysQuery } from "@/api/category";
 import { useAddProductMutation } from "@/api/courses";
+import { useGetVideosQuery } from "@/api/video";
 import { Icategory } from "@/interfaces/category";
+import { Ivideo } from "@/interfaces/video";
 import { Button, DatePicker, Form, Input, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -21,15 +23,21 @@ type FieldType = {
 const AdminProductAdd = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
+    const { data: categorysData, isLoading: isProductLoading } = useGetCategorysQuery();
     const [messageApi, contextHolder] = message.useMessage();
     const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
-    const dataSource = productsData?.map((item: Icategory) => ({
+    const cateSource = categorysData?.map((item: Icategory) => ({
         key: item.id,
         categoryName: item.categoryName,
         categoryDescription : item.categoryDescription
     }));
-    console.log(dataSource);
+    const { data: videosData} = useGetVideosQuery();
+    const videoSource = videosData?.map((item: Ivideo) => ({
+        key: item.id,
+        videoTitle: item.videoTitle,
+        videoURL : item.videoURL
+    }));
+    console.log(cateSource);
     const onFinish = (values: any) => {
         addProduct(values)
             .unwrap()
@@ -83,20 +91,7 @@ const AdminProductAdd = () => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item<FieldType>
-                    label="ID video"
-                    name="videoID"
-                    rules={[{ required: true, message: "Phải nhập url video" }]}
-                >
-                    <Select
-                        placeholder="pick a category"
-                        allowClear
-                        >
-                        <Option value="1"> 1</Option>
-                        <Option value="2"> 2</Option>
-                        <Option value="3"> 3</Option>
-                    </Select>
-                </Form.Item>
+
                 <Form.Item<FieldType>
                     label="courseIMG"
                     name="courseIMG"
@@ -108,13 +103,27 @@ const AdminProductAdd = () => {
                 label="DatePicker">
                     <DatePicker  />
                 </Form.Item>
+                <Form.Item name="videoID" label="video" rules={[{ required: true }]}>
+                    <Select
+                        placeholder="pick a videoID"
+                        allowClear
+                        >
+                        {
+                            videoSource?.map((item: any) => {
+                                return (
+                                    <Option value={item.key}>{item.videoTitle}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                </Form.Item>
                 <Form.Item name="categoryID" label="Category" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
                         allowClear
                         >
                         {
-                            dataSource?.map((item: any) => {
+                            cateSource?.map((item: any) => {
                                 return (
                                     <Option value={item.key}>{item.categoryName}</Option>
                                 )
