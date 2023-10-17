@@ -4,38 +4,39 @@ import {
     useGetProductByIdQuery,
     useUpdateProductMutation,
 } from "@/api/courses";
+import { useGetVideoByIdQuery, useUpdateVideoMutation } from "@/api/video";
 import { Button, Form, Input, Skeleton, message } from "antd";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 
 type FieldType = {
-    categoryName: string,
-    categoryDescription : string,
+    videoTitle: string,
+    videoURL : string,
 };
 
-const AdminCategoryEdit = () => {
-    const { idCategory } = useParams<{ idCategory: string }>();
+const AdminVideoEdit = () => {
+    const { idVideo } = useParams<{ idVideo: string }>();
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
-    const { data: productData, isLoading: isProductLoading } = useGetCategoryByIdQuery(
-        idCategory || ""
+    const { data: productData, isLoading: isProductLoading } = useGetVideoByIdQuery(
+        idVideo || ""
     );
-    const [updateCategory, { isLoading: isUpdateLoading }] = useUpdateCategoryMutation();
+    const [updateVideo, { isLoading: isUpdateLoading }] = useUpdateVideoMutation();
     useEffect(() => {
         form.setFieldsValue(productData);
     }, [productData]);
     const onFinish = (values: any) => {
-        updateCategory({ ...values, id: idCategory })
+        updateVideo({ ...values, id: idVideo })
             .unwrap()
             .then(() => {
                 messageApi.open({
                     type: "success",
-                    content: "Bạn đã cập nhật danh mục thành công. Chờ 3s để quay về quản trị",
+                    content: "Bạn đã cập nhật video thành công. Chờ 3s để quay về quản trị",
                 });
                 setTimeout(() => {
-                    navigate("/admin/categorys");
+                    navigate("/admin/videos");
                 }, 3000);
             });
     };
@@ -48,7 +49,7 @@ const AdminCategoryEdit = () => {
         <>
             {contextHolder}
             <header className="mb-4">
-                <h2 className="text-2xl">Cập nhật danh mục</h2>
+                <h2 className="text-2xl">Cập nhật Video</h2>
             </header>
             {isProductLoading ? (
                 <Skeleton />
@@ -64,20 +65,20 @@ const AdminCategoryEdit = () => {
                     autoComplete="off"
                 >
                     <Form.Item<FieldType>
-                        label="Tên danh mục"
-                        name="categoryName"
+                        label="Title video"
+                        name="videoTitle"
                         rules={[
-                            { required: true, message: "Tên sản phẩm không được để trống!" },
-                            { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
+                            { required: true, message: "Mô tả không được để trống!" },
+                            { min: 3, message: "Mô tả ít nhất phải 3 ký tự" },
                         ]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item<FieldType>
-                        label="Mô tả danh mục"
-                        name="categoryDescription"
-                        rules={[{ required: true, message: "Phải nhập giá tiền" }]}
+                        label="URL video"
+                        name="videoURL"
+                        rules={[{ required: true, message: "Phải nhập URL video" }]}
                     >
                         <Input />
                     </Form.Item>
@@ -97,4 +98,4 @@ const AdminCategoryEdit = () => {
     );
 };
 
-export default AdminCategoryEdit;
+export default AdminVideoEdit;

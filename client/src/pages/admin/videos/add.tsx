@@ -1,0 +1,88 @@
+import { useAddCategoryMutation } from "@/api/category";
+import { useAddProductMutation } from "@/api/courses";
+import { useAddVideoMutation } from "@/api/video";
+import { Button, DatePicker, Form, Input, Select, message } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { AiOutlineLoading } from "react-icons/ai";
+import { Navigate, useNavigate } from "react-router-dom";
+const { Option } = Select;
+
+type FieldType = {
+    videoTitle: string,
+    videoURL : string,
+};
+
+const AdminVideoAdd = () => {
+    const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const [addVideo, { isLoading: isAddProductLoading }] = useAddVideoMutation();
+    const onFinish = (values: any) => {
+        addVideo(values)
+            .unwrap()
+            .then(() => {
+                messageApi.open({
+                    type: "success",
+                    content: "Bạn đã thêm sản phẩm thành công. Chờ 3s để quay về quản trị",
+                });
+                form.resetFields();
+                setTimeout(() => {
+                    navigate("/admin/videos");
+                }, 3000);
+            });
+    };
+
+    const onFinishFailed = (errorInfo: any) => {
+        console.log("Failed:", errorInfo);
+    };
+
+    return (
+        <>
+            {contextHolder}
+            <header className="mb-4">
+                <h2 className="text-2xl">Thêm Videos</h2>
+            </header>
+            <Form
+                form={form}
+                name="basic"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                style={{ maxWidth: 600 }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+            >
+                <Form.Item<FieldType>
+                    label="Title Video"
+                    name="videoTitle"
+                    rules={[
+                        { required: true, message: "Mô tả không được để trống!" },
+                        { min: 3, message: "Mô tả ít nhất phải 3 ký tự" },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                    label="URL Video"
+                    name="videoURL"
+                    rules={[{ required: true, message: "Phải nhập URL Video" }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" danger htmlType="submit">
+                        {isAddProductLoading ? (
+                            <AiOutlineLoading className="animate-spin" />
+                        ) : (
+                            "Thêm"
+                        )}
+                    </Button>
+                </Form.Item>
+            </Form>
+        </>
+    );
+};
+
+export default AdminVideoAdd;

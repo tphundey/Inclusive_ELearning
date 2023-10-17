@@ -1,5 +1,6 @@
 import categoryApi, { categoryReducer } from "@/api/category";
 import productApi, { productReducer } from "@/api/courses";
+import videoApi, { videoReducer } from "@/api/video";
 import { Action, ThunkAction, combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
     FLUSH,
@@ -20,6 +21,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     [productApi.reducerPath]: productReducer,
     [categoryApi.reducerPath]: categoryReducer,
+    [videoApi.reducerPath]: videoReducer
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -30,7 +32,7 @@ export const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }).concat(productApi.middleware,categoryApi.middleware)
+        }).concat(productApi.middleware,categoryApi.middleware, videoApi.middleware)
 })
 
 export type AppDispatch = typeof store.dispatch
