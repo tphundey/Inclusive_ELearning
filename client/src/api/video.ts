@@ -1,11 +1,12 @@
 import { Icategory } from '@/interfaces/category';
 import { IProduct } from '@/interfaces/product';
+import { Ivideo } from '@/interfaces/video';
 import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const categoryApi = createApi({
-    reducerPath: "Categories",
-    tagTypes: ['Categories'],
+const videoApi = createApi({
+    reducerPath: "Videos",
+    tagTypes: ['Videos'],
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
         fetchFn: async (...args) => {
@@ -14,9 +15,9 @@ const categoryApi = createApi({
         }
     }),
     endpoints: (builder) => ({
-        getCategorys: builder.query<any[], void>({
-            query: () => `/Categories`,
-            providesTags: ['Categories'],
+        getVideos: builder.query<any[], void>({
+            query: () => `/Videos`,
+            providesTags: ['Videos'],
             transformResponse: (response: any) => {
                 console.log(response);
 
@@ -27,50 +28,50 @@ const categoryApi = createApi({
             },
         }),
 
-        getCategoryById: builder.query<Icategory, number | string>({
-            query: (id) => `/Categories/${id}`,
-            providesTags: ['Categories'],
+        getVideoById: builder.query<Ivideo, number | string>({
+            query: (id) => `/Videos/${id}`,
+            providesTags: ['Videos'],
             // transformResponse: (response: any) => ({
             //     ...response.data.attributes,
             //     id: response.data.id
             // }),
         }),
 
-        removeCategory: builder.mutation<void, number | string>({
+        removeVideo: builder.mutation<void, number | string>({
             query: (id) => ({
-                url: `/Categories/${id}`,
+                url: `/Videos/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Categories'],
+            invalidatesTags: ['Videos'],
         }),
 
-        addCategory: builder.mutation<Icategory, Partial<Icategory>>({
+        addVideo: builder.mutation<Ivideo, Partial<Ivideo>>({
             query: (Courses) => ({
-                url: '/Categories',
+                url: '/Videos',
                 method: 'POST',
                 body: Courses
             }),
-            invalidatesTags: ['Categories'],
+            invalidatesTags: ['Videos'],
         }),
 
-        updateCategory: builder.mutation<Icategory, Partial<Icategory>>({
+        updateVideo: builder.mutation<Ivideo, Partial<Ivideo>>({
             query: (category) => ({
-                url: `/Categories/${category.id}`,
+                url: `/Videos/${category.id}`,
                 method: "PATCH",
                 body: category
             }),
-            invalidatesTags: ['Categories'],
+            invalidatesTags: ['Videos'],
         }),
     })
 });
 
 export const {
-    useGetCategorysQuery,
-    useAddCategoryMutation,
-    useGetCategoryByIdQuery,
-    useRemoveCategoryMutation,
-    useUpdateCategoryMutation,
-} = categoryApi;
+    useGetVideosQuery,
+    useAddVideoMutation,
+    useGetVideoByIdQuery,
+    useRemoveVideoMutation,
+    useUpdateVideoMutation,
+} = videoApi;
 
-export const categoryReducer = categoryApi.reducer;
-export default categoryApi;
+export const videoReducer = videoApi.reducer;
+export default videoApi;

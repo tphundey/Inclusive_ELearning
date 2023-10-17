@@ -1,26 +1,27 @@
+import { useGetCategorysQuery, useRemoveCategoryMutation } from "@/api/category";
 import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
+import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
+import { Icategory } from "@/interfaces/category";
 import { IProduct } from "@/interfaces/product";
+import { Ivideo } from "@/interfaces/video";
 import { Button, Table, Skeleton, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
 type Props = {};
 
-const AdminProduct = (props: Props) => {
+const AdminVideo = (props: Props) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
-    const [removeProduct, { isLoading: isRemoveLoading }] = useRemoveProductMutation();
-    const dataSource = productsData?.map((item: IProduct) => ({
+    const { data: productsData, isLoading: isProductLoading } = useGetVideosQuery();
+    const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveVideoMutation();
+    const dataSource = productsData?.map((item: Ivideo) => ({
         key: item.id,
-        name: item.courseName,
-        price: item.price,
-        desc : item.description,
-        date: item.date,
-        courseIMG : <img src={item.courseIMG} className="w-full" />,
-        categoryID : item.categoryID,
+        videoTitle: item.videoTitle,
+        videoURL : item.videoURL
     }));
+    console.log(dataSource);
     
 
     const confirm = (id: number | string) => {
-        removeProduct(id)
+        removeCategory(id)
             .unwrap()
             .then(() => {
                 messageApi.open({
@@ -31,29 +32,19 @@ const AdminProduct = (props: Props) => {
     };
     const columns = [
         {
-            title: "Tên sản phẩm",
-            dataIndex: "name",
-            key: "name",
+            title: "id Video",
+            dataIndex: "key",
+            key: "id",
         },
         {
-            title: "Giá sản phẩm",
-            dataIndex: "price",
-            key: "price",
+            title: "Mô tả video",
+            dataIndex: "videoTitle",
+            key: "videoTitle",
         },
         {
-            title: "mô tả",
-            dataIndex: "desc",
-            key: "desc",
-        },
-        {
-            title: "date",
-            dataIndex: "date",
-            key: "date",
-        },
-        {
-            title: "courseIMG ",
-            dataIndex: "courseIMG",
-            key: "courseIMG",
+            title: "Link",
+            dataIndex: "videoURL",
+            key: "videoURL",
         },
         {
             title : "actions",
@@ -72,7 +63,7 @@ const AdminProduct = (props: Props) => {
                         </Button>
                     </Popconfirm>
                     <Button>
-                        <Link to={`/admin/product/${id}/edit`}>Sửa</Link>
+                        <Link to={`/admin/video/${id}/edit`}>Sửa</Link>
                     </Button>
                 </div>
             ),
@@ -82,9 +73,9 @@ const AdminProduct = (props: Props) => {
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl">Quản lý sản phẩm</h2>
+                <h2 className="text-2xl">Quản lý Videos</h2>
                 <Button type="primary" danger>
-                    <Link to="/admin/product/add">Thêm sản phẩm</Link>
+                    <Link to="/admin/video/add">Thêm video</Link>
                 </Button>
             </header>
             {contextHolder}
@@ -93,4 +84,4 @@ const AdminProduct = (props: Props) => {
     );
 };
 
-export default AdminProduct;
+export default AdminVideo;

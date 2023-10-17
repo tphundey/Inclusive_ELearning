@@ -29,6 +29,9 @@ import AdminCategory from "./pages/admin/categorys";
 import AdminCategoryAdd from "./pages/admin/categorys/add";
 import ErrorPage from "./pages/404/404page";
 import AdminCategoryEdit from "./pages/admin/categorys/edit";
+import AdminVideo from "./pages/admin/videos";
+import AdminVideoAdd from "./pages/admin/videos/add";
+import AdminVideoEdit from "./pages/admin/videos/edit";
 
 export const routers = createBrowserRouter([
     {
@@ -101,11 +104,14 @@ export const routers = createBrowserRouter([
             { index: true, element: <Navigate to="dashboard" /> },
             { path: "dashboard", element: <div>Dashboard</div> },
             { path: "product", element: <AdminProduct /> },
-            { path: "categorys", element: <AdminCategory /> },
-            { path: "product/add", element: <AdminProductAdd /> },
-            { path: "category/add", element: <AdminCategoryAdd /> },
             { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
+            { path: "product/add", element: <AdminProductAdd /> },
+            { path: "categorys", element: <AdminCategory /> },
+            { path: "category/add", element: <AdminCategoryAdd /> },
             { path: "category/:idCategory/edit", element: <AdminCategoryEdit /> },
+            { path: "videos", element: <AdminVideo /> },
+            { path: "video/add", element: <AdminVideoAdd /> },
+            { path: "video/:idVideo/edit", element: <AdminVideoEdit /> },
 
         ],
 
