@@ -87,3 +87,10 @@
     width: 700px;
     padding-left: 50px;
 }
+
+.login-message {
+    text-align: center;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
