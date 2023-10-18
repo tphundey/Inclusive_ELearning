@@ -9,17 +9,113 @@ import { Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { renderReviewRateIcon } from './ratingIcons';
 
+// Hàm giải mã dữ liệu sử dụng decodeURIComponent
+function decodeData(encryptedData: any): any {
+    return decodeURIComponent(encryptedData);
+}
+
+
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
-    const [product, setProduct] = useState({});
-    const [similarProducts, setSimilarProducts] = useState([]);
-    const [reviews, setReviews] = useState([]);
+    const [product, setProduct] = useState<any>({});
+    const [similarProducts, setSimilarProducts] = useState<any[]>([]);
+    const [reviews, setReviews] = useState<any[]>([]);
     const [review, setReview] = useState({ rating: 4, comment: '' });
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<any[]>([]);
     const { id } = useParams();
-    const handleRatingChange = (value) => {
+    const [, setEncryptedData] = useState<any>(null);
+    const courseID = parseInt(id, 10);
+
+    // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
+    const encryptedProfile = localStorage.getItem('profile');
+    if (encryptedProfile) {
+        const decryptedProfile = decodeData(encryptedProfile);
+
+        // Bước 2: Chuyển thông tin đã giải mã thành đối tượng JSON
+        const profile = JSON.parse(decryptedProfile);
+
+        // Bước 3: Lấy email từ đối tượng profile
+        var userEmail = profile.email;
+
+        console.log('Email của người dùng:', userEmail);
+
+        // Bước 4: Sử dụng email trong truy vấn hoặc hiển thị
+    } else {
+        console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
+    }
+    useEffect(() => {
+        async function start() {
+            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
+            const encryptedProfile: any = localStorage.getItem('profile');
+            if (encryptedProfile) {
+                const decryptedProfile: any = decodeData(encryptedProfile);
+                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
+                setEncryptedData(decryptedProfile);
+            }
+            else {
+                console.log('Ko chạy');
+            }
+        }
+        start();
+    }, []);
+
+
+    const handleBuyButtonClick = () => {
+
+        const { price } = product; // Lấy giá sản phẩm từ trường price của object product
+        const paymentAmount = parseFloat(price);
+        // Thực hiện GET request để lấy ID từ API
+        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to retrieve user ID from the API.');
+                }
+            })
+            .then((data) => {
+                const user = data.find((item:any) => item.email === userEmail);
+                // Bước 3: Lấy ID từ dữ liệu API
+                const userID = user.id;
+                console.log(user.id,);
+
+                // Bước 4: Thực hiện POST request để tạo payment
+                const paymentData = {
+                    userID: userID, // Sử dụng userID lấy được từ API
+                    courseID: courseID, // Chọn courseID tùy theo logic của bạn
+                    coupon: "null",
+                    paymentAmount: paymentAmount,
+                    date: "2023-09-29",
+                    payment_status: true
+                };
+
+                return fetch('http://localhost:3000/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(paymentData),
+                });
+            })
+            .then((response) => {
+                if (response.ok) {
+                    console.log('Payment successful');
+                    // Xử lý khi payment thành công
+                } else {
+                    throw new Error('Payment failed.');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                // Xử lý lỗi nếu có
+            });
+
+    };
+    // end thanh toán/////////////////////////////////////////////////////////////
+    const handleRatingChange = (value: any) => {
         // Cập nhật rating trong state
         setReview({ ...review, rating: value });
+
 
         // Cập nhật rated để hiển thị số tương ứng
         setRated(value);
@@ -77,18 +173,14 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
-
-
-
-
-    function findUserById(userID) {
+    function findUserById(userID:any) {
         return users.find((user) => user.id === userID);
     }
 
-    function calculateAverageRating(reviews) {
+    function calculateAverageRating(reviews:any) {
         if (reviews && reviews.length > 0) {
             const totalRating = reviews.reduce(
-                (accumulator, review) => accumulator + review.rating,
+                (accumulator:any, review:any) => accumulator + review.rating,
                 0
             );
             const averageRating = totalRating / reviews.length;
@@ -176,7 +268,7 @@ const IntroductionPage = () => {
                             <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start my free month</button>
                             </Link>
-                            <button className='intro-bt2'>Buy for my team</button>
+                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy for my team</button>
                         </div>
                     </div>
 
