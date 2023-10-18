@@ -1,7 +1,7 @@
 {
   "Payment": [
     {
-      "_id": 1,
+      "id": 1,
       "userID": 1,
       "courseID": 1,
       "coupon": "COUPON123",
@@ -10,13 +10,76 @@
       "payment_status": true
     },
     {
-      "_id": 2,
-      "userID": 2,
+      "userID": 1,
+      "courseID": 1,
+      "coupon": "COUPON123",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 2
+    },
+    {
+      "userID": 1,
+      "courseID": "2",
+      "coupon": "COUPON123",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 3
+    },
+    {
+      "userID": 1,
+      "courseID": "2",
+      "coupon": "COUPON123",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 4
+    },
+    {
+      "userID": 1,
       "courseID": 2,
-      "coupon": "",
-      "paymentAmount": 75,
-      "date": "2023-09-28",
-      "payment_status": true
+      "coupon": "COUPON123",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 5
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 50,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 6
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 7
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 8
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 9
     }
   ],
   "Reviews": [
@@ -27,6 +90,14 @@
       "courseID": 2,
       "date": "2023-10-14T20:09:51.261Z",
       "id": 1
+    },
+    {
+      "rating": 4,
+      "comment": "=))  best ad",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-10-18T09:32:28.239Z",
+      "id": 2
     }
   ],
   "Categories": [
@@ -90,7 +161,7 @@
       "id": 2,
       "courseName": "Learning Word Online (Microsoft 3655)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
-      "price": 500,
+      "price": 22500,
       "duration": 120,
       "rateID": [
         1
