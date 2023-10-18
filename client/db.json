@@ -98,6 +98,14 @@
       "courseID": 2,
       "date": "2023-10-18T09:32:28.239Z",
       "id": 2
+    },
+    {
+      "rating": 5,
+      "comment": "test",
+      "userID": 1,
+      "courseID": 3,
+      "date": "2023-10-18T09:52:10.694Z",
+      "id": 3
     }
   ],
   "Categories": [
@@ -244,7 +252,7 @@
     },
     {
       "id": 7,
-      "courseName": "Learning Word Online (Microsoft 365)",
+      "courseName": "Hearning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 500,
       "duration": 120,

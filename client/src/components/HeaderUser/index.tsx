@@ -1,5 +1,19 @@
 import './HeaderUser.css'
+import { useState } from 'react';
+import { GoogleLogout } from 'react-google-login';
+const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
+
 const HeaderUser = () => {
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const handleLogout = () => {
+        localStorage.clear();
+        console.log('User logged out');
+    }
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
     return (
         <div className='header-static'>
             <header>
@@ -22,25 +36,48 @@ const HeaderUser = () => {
                         <div className="right">
                             <ul>
                                 <li>
-                                    <a href="http://localhost:5173/homepage">
+                                    <a className='thea' href="http://localhost:5173/homepage">
                                         <i className="fa-solid fa-house lups"></i>
                                         <div>Home</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="http://localhost:5173/mylearning/progress">
+                                    <a className='thea' href="http://localhost:5173/mylearning/progress">
                                         <i className="fa-regular fa-file lups"></i>
                                         <div>My learning</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="http://localhost:5173/signin">
+
+                                    <div className='thea'>
                                         <i className="fa-regular fa-user lups"></i>
-                                        <div>Me<i className="fa-solid fa-caret-down lups-left"></i></div>
-                                    </a>
+                                        <div className="relative">
+                                            <div
+                                                onClick={toggleDropdown}
+                                                className="cursor-pointer"
+                                            >
+                                                Me <i className={`fa-solid fa-caret-${isDropdownOpen ? 'up' : 'down'} lups-left`}></i>
+                                            </div>
+                                            {isDropdownOpen && (
+                                                <div className="absolute mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                                    {/* Nội dung của dropdown ở đây */}
+                                                    <ul>
+                                                        <li>
+                                                            <GoogleLogout
+                                                                clientId={clientId}
+                                                                buttonText="Đăng Xuất" // Văn bản trên nút đăng xuất
+                                                                onLogoutSuccess={handleLogout} // Callback khi người dùng đăng xuất thành công
+                                                            >
+                                                            </GoogleLogout>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a className='thea' href="">
                                         <i className="fa-solid fa-earth-europe lups"></i>
                                         <div>EN<i className="fa-solid fa-caret-down lups-left"></i></div>
                                     </a>

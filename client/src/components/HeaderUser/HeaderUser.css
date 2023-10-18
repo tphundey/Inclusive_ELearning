@@ -85,7 +85,7 @@ header .flex-hd {
     gap: 40px;
 }
 
-.right ul li a {
+.thea {
     list-style-type: none;
     font-size: 12px;
     display: grid;
