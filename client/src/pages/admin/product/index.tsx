@@ -1,6 +1,7 @@
 import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
 import { IProduct } from "@/interfaces/product";
-import { Button, Table, Skeleton, Popconfirm, message } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 type Props = {};
 
@@ -79,6 +80,14 @@ const AdminProduct = (props: Props) => {
         },
     ];
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 3; // Số bản ghi hiển thị trên mỗi trang
+    const startItem = (currentPage - 1) * pageSize;
+    const endItem = currentPage * pageSize;
+    const currentData = dataSource?.slice(startItem, endItem);
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+      };
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
@@ -88,7 +97,16 @@ const AdminProduct = (props: Props) => {
                 </Button>
             </header>
             {contextHolder}
-            {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />}
+            {isProductLoading ? <Skeleton /> : <><Table 
+                                                    pagination={false} 
+                                                    dataSource={currentData} 
+                                                    columns={columns}
+                                                     /><Pagination
+                                                     current={currentPage}
+                                                     total={dataSource?.length}
+                                                     pageSize={pageSize}
+                                                     onChange={handlePageChange}
+                                                   /> </> }
         </div>
     );
 };
