@@ -267,6 +267,60 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/157773873615069288/e7a89dab81fa56a40feb.jpg",
       "enrollment": 100
+    },
+    {
+      "id": 8,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": [
+        1,
+        2
+      ],
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 2,
+      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "enrollment": 100
+    },
+    {
+      "id": 9,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": [
+        1,
+        2
+      ],
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 2,
+      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "enrollment": 100
+    },
+    {
+      "id": 10,
+      "courseName": "Learning Word Online (Microsoft 365)",
+      "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
+      "price": 500,
+      "duration": 120,
+      "rateID": [
+        1,
+        2
+      ],
+      "date": "2023-09-25",
+      "videoID": [
+        1
+      ],
+      "categoryID": 2,
+      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "enrollment": 100
     }
   ],
   "Notes": [
