@@ -10,11 +10,16 @@ body {
 }
 
 .header-static {
-    z-index: 9999;
+    z-index: 999;
     position: sticky;
     top: 0px;
     position: -webkit-sticky;
     background-color: white;
+}
+
+.ant-message-error {
+    z-index: 1000;
+    /* Đảm bảo rằng z-index của thông báo cao hơn z-index của header */
 }
 
 header .flex-hd {

@@ -84,28 +84,12 @@
   ],
   "Reviews": [
     {
-      "rating": 5,
-      "comment": "biết best cap không ?",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-14T20:09:51.261Z",
-      "id": 1
-    },
-    {
       "rating": 4,
-      "comment": "=))  best ad",
+      "comment": "biết best cap không =))",
       "userID": 1,
       "courseID": 2,
-      "date": "2023-10-18T09:32:28.239Z",
-      "id": 2
-    },
-    {
-      "rating": 5,
-      "comment": "test",
-      "userID": 1,
-      "courseID": 3,
-      "date": "2023-10-18T09:52:10.694Z",
-      "id": 3
+      "date": "2023-10-22",
+      "id": 1
     }
   ],
   "Categories": [

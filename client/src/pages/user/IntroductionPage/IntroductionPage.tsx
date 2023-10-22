@@ -8,12 +8,15 @@ import { useParams } from 'react-router-dom';
 import { Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { renderReviewRateIcon } from './ratingIcons';
+import moment from 'moment';
+import { Alert } from 'antd';
+import { message } from 'antd';
+import { notification } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
     return decodeURIComponent(encryptedData);
 }
-
 
 const IntroductionPage = () => {
     const [rated, setRated] = React.useState(4);
@@ -74,7 +77,7 @@ const IntroductionPage = () => {
                 }
             })
             .then((data) => {
-                const user = data.find((item:any) => item.email === userEmail);
+                const user = data.find((item: any) => item.email === userEmail);
                 // Bước 3: Lấy ID từ dữ liệu API
                 const userID = user.id;
                 console.log(user.id,);
@@ -173,14 +176,14 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
-    function findUserById(userID:any) {
+    function findUserById(userID: any) {
         return users.find((user) => user.id === userID);
     }
 
-    function calculateAverageRating(reviews:any) {
+    function calculateAverageRating(reviews: any) {
         if (reviews && reviews.length > 0) {
             const totalRating = reviews.reduce(
-                (accumulator:any, review:any) => accumulator + review.rating,
+                (accumulator: any, review: any) => accumulator + review.rating,
                 0
             );
             const averageRating = totalRating / reviews.length;
@@ -216,13 +219,33 @@ const IntroductionPage = () => {
     //Post review
 
     const postReview = () => {
-        const currentDate = new Date();
+        if (!review.rating || review.rating === 0) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Bạn chưa lựa chọn số rate.',
+                placement: 'topRight', // Chọn vị trí bạn muốn
+            });
+            return;
+        }
+
+        if (!review.comment) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Bạn chưa nhập comment.',
+                placement: 'topRight', // Chọn vị trí bạn muốn
+            });
+            return;
+        }
+
+        const currentDate = moment().tz('Asia/Ho_Chi_Minh'); // Lấy thời gian theo múi giờ Việt Nam
+        const formattedDate = currentDate.format('YYYY-MM-DD'); // Định dạng lại ngày
+
         const dataToPost = {
             rating: review.rating,
             comment: review.comment,
             userID: 1,
             courseID: product.id, // Bạn cần đảm bảo product được định nghĩa ở đây
-            date: currentDate.toISOString(),
+            date: formattedDate,
         };
 
         axios.post('http://localhost:3000/Reviews', dataToPost)
@@ -241,6 +264,7 @@ const IntroductionPage = () => {
                 console.error('Lỗi khi đăng đánh giá', error);
             });
     };
+
     if (!product) {
         return <div>Loading...</div>;
     }
