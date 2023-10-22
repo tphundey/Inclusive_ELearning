@@ -9,8 +9,6 @@ import { Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { renderReviewRateIcon } from './ratingIcons';
 import moment from 'moment';
-import { Alert } from 'antd';
-import { message } from 'antd';
 import { notification } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
@@ -23,12 +21,12 @@ const IntroductionPage = () => {
     const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[]>([]);
     const [reviews, setReviews] = useState<any[]>([]);
-    const [review, setReview] = useState({ rating: 4, comment: '' });
+    const [review, setReview] = useState({ rating: 4, comment: '' });;
     const [users, setUsers] = useState<any[]>([]);
     const { id } = useParams();
     const [, setEncryptedData] = useState<any>(null);
     const courseID = parseInt(id, 10);
-
+    const [ratingCounts, setRatingCounts] = useState<{ [key: number]: number }>({});
     // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
     const encryptedProfile = localStorage.getItem('profile');
     if (encryptedProfile) {
@@ -46,6 +44,27 @@ const IntroductionPage = () => {
     } else {
         console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
     }
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
+            .then((response) => {
+                console.log(response.data); // Ghi lại dữ liệu từ API
+                setReviews(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [id]);;
+    useEffect(() => {
+        const counts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    
+        reviews.forEach((review) => {
+            counts[review.rating] += 1;
+        });
+    
+        setRatingCounts(counts);
+    }, [reviews]);
+
     useEffect(() => {
         async function start() {
             // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
@@ -265,10 +284,12 @@ const IntroductionPage = () => {
             });
     };
 
+
+
+
     if (!product) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className="containerCss">
             <div className="course-header-container">
@@ -377,31 +398,16 @@ const IntroductionPage = () => {
                                         </div>
 
                                         <span className="flex flex-col w-full gap-4 pt-6">
-                                            <span className="flex items-center w-full gap-2">
-                                                <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 5 star</label>
-                                                <progress aria-labelledby="p03e-label" id="p03e" max="100" value="75" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                                <span className="text-xs font-bold w-9 text-slate-700">112 </span>
-                                            </span>
-                                            <span className="flex items-center w-full gap-2">
-                                                <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 4 star</label>
-                                                <progress aria-labelledby="p03e-label" id="p03e" max="100" value="28" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                                <span className="text-xs font-bold w-9 text-slate-700">17 </span>
-                                            </span>
-                                            <span className="flex items-center w-full gap-2">
-                                                <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 3 star</label>
-                                                <progress aria-labelledby="p03e-label" id="p03e" max="100" value="18" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                                <span className="text-xs font-bold w-9 text-slate-700">12 </span>
-                                            </span>
-                                            <span className="flex items-center w-full gap-2">
-                                                <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 2 star</label>
-                                                <progress aria-labelledby="p03e-label" id="p03e" max="100" value="8" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                                <span className="text-xs font-bold w-9 text-slate-700">2 </span>
-                                            </span>
-                                            <span className="flex items-center w-full gap-2">
-                                                <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 1 star</label>
-                                                <progress aria-labelledby="p03e-label" id="p03e" max="100" value="10" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                                <span className="text-xs font-bold w-9 text-slate-700">4 </span>
-                                            </span>
+
+                                            {/* Hiển thị biểu đồ thống kê ở đây */}
+                                            {Object.keys(ratingCounts).map((rating) => (
+                                                <span key={rating} className="flex items-center w-full gap-2">
+                                                    <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> {rating} star</label>
+                                                    <progress aria-labelledby="p03e-label" id="p03e" max="100" value="75" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400" max="100" value={(ratingCounts[parseInt(rating)] / reviews.length) * 100}> {(ratingCounts[parseInt(rating)] / reviews.length) * 100}%</progress>
+                                                    <span className="text-xs font-bold w-9 text-slate-700">{ratingCounts[parseInt(rating)]}</span>
+                                                </span>
+                                            ))}
+
                                         </span>
                                     </div>
                                 </div>
