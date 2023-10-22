@@ -84,7 +84,7 @@ const CourseContentPage = () => {
                                 <i className="fa-solid fa-check"></i>
                             </div>
                             <div className="content-list-u">
-                                <div className='cursor-pointer'  onClick={() => handleVideoTitleClick(video.videoURL)} key={video.id}>{video.videoTitle}</div>
+                                <div className='cursor-pointer' onClick={() => handleVideoTitleClick(video.videoURL)} key={video.id}>{video.videoTitle}</div>
                                 <div>  <i className="fa-regular fa-bookmark hi"></i></div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                <video controls src={selectedVideoUrl}></video>
+                    <video controls src={selectedVideoUrl}></video>
                 </div>
 
                 <div className="content-container-bottom">
