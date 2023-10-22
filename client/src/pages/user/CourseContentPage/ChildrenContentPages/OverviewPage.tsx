@@ -187,7 +187,7 @@ const OverViewPage = () => {
                 </div>
                 <div className="content-structor-main">
                     <div className="content-structor-main-avatar">
-                        <img src="https://scontent.fhan2-4.fna.fbcdn.net/v/t39.30808-6/386508760_279874624965111_8360920880500341994_n.jpg?stp=dst-jpg_p843x403&_nc_cat=105&ccb=1-7&_nc_sid=4c1e7d&_nc_ohc=Q3uEob4BmaEAX_me2wR&_nc_ht=scontent.fhan2-4.fna&_nc_e2o=s&oh=00_AfCd3GfjFVr-wZ-ZUlarvqOzRIYvEzkdeUAezu6ySPSF9Q&oe=6523B643" alt="" />
+                        <img src="https://f10-zpcloud.zdn.vn/8154582047521615141/d3ef92e85e708b2ed261.jpg" alt="" />
                     </div>
                     <div className="content-structor-main-name">
                         <div className="children-structor-main">
@@ -219,7 +219,7 @@ const OverViewPage = () => {
                     <div className="instructors">
                         <div className="instructors-children">
                             <div className="instruc-left">
-                                <img src='https://scontent.fhan2-4.fna.fbcdn.net/v/t39.30808-6/386508760_279874624965111_8360920880500341994_n.jpg?stp=dst-jpg_p843x403&_nc_cat=105&ccb=1-7&_nc_sid=4c1e7d&_nc_ohc=Q3uEob4BmaEAX_me2wR&_nc_ht=scontent.fhan2-4.fna&_nc_e2o=s&oh=00_AfCd3GfjFVr-wZ-ZUlarvqOzRIYvEzkdeUAezu6ySPSF9Q&oe=6523B643' alt="" />
+                                <img src='https://f10-zpcloud.zdn.vn/8154582047521615141/d3ef92e85e708b2ed261.jpg' alt="" />
                             </div>
                             <div className="instruc-right">
                                 <h1>Trần Phùng</h1>

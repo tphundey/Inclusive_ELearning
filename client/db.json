@@ -325,7 +325,9 @@
   ],
   "Notes": [
     {
-      "note": "ưa test ttxd",
+      "videoID": 2,
+      "note": "1. Lưu trữ gì gì đó\n",
+      "date": "2023-10-22",
       "id": 1
     }
   ],
@@ -357,12 +359,12 @@
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQEwTx3ue79FbA/learning-original-video-vbr-720/0/1658272575588?e=1697289816&v=beta&t=KsMDjh9Dg_i2xk_-khb5IQCBBOMhF5IyUZkevUIH56g"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHgtKOcE0LYVw/learning-original-video-vbr-720/0/1599158356234?e=1697979602&v=beta&t=naH5KKjRLJKFo499Jknpv1FWnjo5hGAJ0GG8eFMRJW4"
     },
     {
       "id": 2,
-      "videoTitle": "Graphic Design Principles",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4D0DAQGLO7KQuN66DA/learning-original-video-vbr-720/0/1598805657315?e=1697289856&v=beta&t=KHxokcNj_XSrFvJzd0vrx3fKM0ZF932nRGtXXr0PXII"
+      "videoTitle": "Graphic Design Principles - Part 2",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQGXqrqzqFLpmw/learning-original-video-vbr-720/0/1598844838437?e=1697979664&v=beta&t=y5JCC3ZuWJYn8dcOdlLn_IOUKXVu4TqqmhihlzO7KmU"
     },
     {
       "videoTitle": "video 1",
