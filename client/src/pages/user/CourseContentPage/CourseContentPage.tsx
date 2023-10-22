@@ -107,7 +107,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls src={selectedVideoUrl}></video>
+                    <video controls autoPlay src={selectedVideoUrl}></video>
                 </div>
 
                 <div className="content-container-bottom">
