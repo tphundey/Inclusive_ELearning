@@ -325,18 +325,8 @@
   ],
   "Notes": [
     {
-      "_id": 1,
-      "userID": 1,
-      "videoID": 1,
-      "noteTime": "02:30",
-      "note": "Important concept explained here."
-    },
-    {
-      "_id": 2,
-      "userID": 2,
-      "videoID": 2,
-      "noteTime": "01:45",
-      "note": "Great tip for design!"
+      "note": "ưa test ttxd",
+      "id": 1
     }
   ],
   "Role": [
