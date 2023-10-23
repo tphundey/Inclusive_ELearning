@@ -80,6 +80,24 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 9
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 10
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 11
     }
   ],
   "Reviews": [
@@ -90,6 +108,38 @@
       "courseID": 2,
       "date": "2023-10-22",
       "id": 1
+    },
+    {
+      "rating": 5,
+      "comment": "test",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-10-22",
+      "id": 2
+    },
+    {
+      "rating": 3,
+      "comment": "test",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-10-22",
+      "id": 3
+    },
+    {
+      "rating": 3,
+      "comment": "test",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-10-22",
+      "id": 4
+    },
+    {
+      "rating": 5,
+      "comment": "test",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-10-22",
+      "id": 5
     }
   ],
   "Categories": [
@@ -310,9 +360,9 @@
   "Notes": [
     {
       "videoID": 2,
-      "note": "1. Lưu trữ gì gì đó\n",
+      "note": "test update",
       "date": "2023-10-22",
-      "id": 1
+      "id": 2
     }
   ],
   "Role": [

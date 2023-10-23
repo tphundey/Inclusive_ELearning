@@ -134,3 +134,29 @@ nav div ul {
 .lups-left {
     margin-left: 5px;
 }
+
+
+.search-results {
+    background-color: white;
+    padding: 30px;
+    font-size: 16px;
+    width: 318px;
+    box-shadow: 0 0 1px 0 gray;
+    position: absolute;
+
+}
+
+.search-list {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-list .search-blue:hover {
+    color: blue;
+}
+
+.search-list img {
+    width: 70px;
+}
