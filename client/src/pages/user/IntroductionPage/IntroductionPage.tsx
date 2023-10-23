@@ -57,11 +57,11 @@ const IntroductionPage = () => {
     }, [id]);;
     useEffect(() => {
         const counts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    
+
         reviews.forEach((review) => {
             counts[review.rating] += 1;
         });
-    
+
         setRatingCounts(counts);
     }, [reviews]);
 
