@@ -19,8 +19,25 @@ const CourseContentPage = () => {
     const [UserProgress, setUserProgress] = useState([]);
     const [userId, setUserId] = useState(null);
     // Xác định trạng thái cho việc hoàn thành video
-    const [videoCompletionStatus, setVideoCompletionStatus] = useState<{ [key: number]: boolean }>({});
+    const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
+    const [initialUserProgress, setInitialUserProgress] = useState(null);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/UserProgress')
+            .then((response) => {
+                const userProgressData = response.data;
+                // Tạo một đối tượng trạng thái hoàn thành video ban đầu từ dữ liệu API
+                const initialVideoCompletionStatus = {};
+                userProgressData.forEach((progress) => {
+                    initialVideoCompletionStatus[progress.videoId] = progress.completionStatus;
+                });
+                setVideoCompletionStatus(initialVideoCompletionStatus);
+            })
+            .catch((error) => {
+                console.error('Error fetching initial user progress data:', error);
+            });
+    }, []);
 
     // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
     const encryptedProfile = localStorage.getItem('profile');
@@ -32,7 +49,6 @@ const CourseContentPage = () => {
     } else {
         console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
     }
-
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
         .then((response) => {
             if (response.ok) {
@@ -83,27 +99,26 @@ const CourseContentPage = () => {
             });
     }, [id]);
 
-    const handleVideoTitleClick = (videoURL, video) => {
+    const handleVideoTitleClick = (videoURL: any, video: any) => {
         setSelectedVideoUrl(videoURL);
         setCurrentVideo(video);
-
         // Cập nhật trạng thái xem video
         setVideoWatched(false);
     };
 
     const handleVideoEnded = () => {
-        // Tại đây, bạn có thể thực hiện các hành động khi video kết thúc, ví dụ như cập nhật trạng thái xem video và gửi thông tin lên API.
         if (currentVideo) {
             setVideoWatched(true);
-            // Cập nhật trạng thái hoàn thành của video trong state
-            setVideoCompletionStatus((prevStatus) => ({
-                ...prevStatus,
-                [currentVideo.id]: true, // Đặt trạng thái hoàn thành là true cho video hiện tại
-            }));
-            // Send progress to the API
+            const updatedCompletionStatus = {
+                ...videoCompletionStatus,
+                [currentVideo.id]: true,
+            };
+
+            setVideoCompletionStatus(updatedCompletionStatus);
+
             axios.post(`http://localhost:3000/UserProgress`, {
                 userId: userId,
-                videoId: currentVideo.id, // Sử dụng thông tin video hiện tại
+                videoId: currentVideo.id,
                 completionStatus: true,
             })
                 .then((response) => {
@@ -127,25 +142,16 @@ const CourseContentPage = () => {
             });
     }, []);
 
-    const handleVideoCompletion = () => {
-        // Khi video hoàn thành, thay đổi trạng thái của biểu tượng
-        setIsVideoCompleted(true);
-
-        // Gửi thông tin cập nhật lên API tại đây nếu cần
-    };
-
     // Sử dụng useEffect để lắng nghe sự kiện thay đổi trạng thái biểu tượng
     useEffect(() => {
         if (isVideoCompleted) {
-            // Biểu tượng đã hoàn thành, thực hiện các hành động cần thiết
-            // Ví dụ: Gửi thông tin lên API
-            // axios.post(`http://your-api-url/update-icon`, { iconStatus: 'completed' })
         }
     }, [isVideoCompleted]);
+
+
     if (!product) {
         return <div>Loading...</div>;
     }
-
     const tabs = [
         { label: 'Overview', icon: 'fa-solid fa-earth-americas', path: 'overview' },
         { label: 'Notebook', icon: 'fa-solid fa-book', path: 'notepage' }
@@ -160,13 +166,12 @@ const CourseContentPage = () => {
 
                 <div>
                     {videos.map((video) => {
-                        const userVideoProgress = UserProgress.find((progress) => progress.videoId === video.id);
-                        const isVideoCompleted = userVideoProgress && userVideoProgress.completionStatus;
+                    const isVideoCompleted = videoCompletionStatus[video.id] || false;
 
                         return (
                             <div className="content-left-title-course" key={video.id}>
                                 <div className="checkbox-container">
-                                {isVideoCompleted ? (
+                                    {isVideoCompleted ? (
                                         <i className="fa-solid fa-check"></i>
                                     ) : (
                                         <i className="fa-regular fa-circle"></i>
@@ -180,11 +185,9 @@ const CourseContentPage = () => {
                                         {video.videoTitle}
                                     </div>
                                     <div>
-                                        {videoCompletionStatus[video.id] ? (
-                                            <i className="fa-regular fa-bookmark hi"></i>
-                                        ) : (
-                                            <i className="fa-regular fa-bookmark"></i>
-                                        )}
+
+                                        <i className="fa-regular fa-bookmark hi"></i>
+
                                     </div>
                                 </div>
                             </div>
