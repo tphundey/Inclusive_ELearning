@@ -377,28 +377,28 @@
   ],
   "UserProgress": [
     {
-      "_id": 1,
-      "videoID": 1,
-      "userID": 1,
-      "completionStatus": true
+      "userId": 1,
+      "videoId": 1,
+      "completionStatus": true,
+      "id": 1
     },
     {
-      "_id": 2,
-      "videoID": 2,
-      "userID": 2,
-      "completionStatus": false
+      "userId": 1,
+      "videoId": 2,
+      "completionStatus": true,
+      "id": 2
     }
   ],
   "Videos": [
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHgtKOcE0LYVw/learning-original-video-vbr-720/0/1599158356234?e=1697979602&v=beta&t=naH5KKjRLJKFo499Jknpv1FWnjo5hGAJ0GG8eFMRJW4"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQHaIUc2er0wCg/learning-original-video-vbr-720/0/1621632614758?e=1698065198&v=beta&t=nMvK47YGrXvOlr7Q3i13JCDZtW0fBxByrptlhxql_Do"
     },
     {
       "id": 2,
       "videoTitle": "Graphic Design Principles - Part 2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQGXqrqzqFLpmw/learning-original-video-vbr-720/0/1598844838437?e=1697979664&v=beta&t=y5JCC3ZuWJYn8dcOdlLn_IOUKXVu4TqqmhihlzO7KmU"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
     },
     {
       "videoTitle": "video 1",
