@@ -1,145 +1,23 @@
 {
   "Payment": [
     {
-      "id": 1,
-      "userID": 1,
-      "courseID": 1,
-      "coupon": "COUPON123",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true
-    },
-    {
-      "userID": 1,
-      "courseID": 1,
-      "coupon": "COUPON123",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 2
-    },
-    {
-      "userID": 1,
-      "courseID": "2",
-      "coupon": "COUPON123",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 3
-    },
-    {
-      "userID": 1,
-      "courseID": "2",
-      "coupon": "COUPON123",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 4
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "COUPON123",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 5
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 50,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 6
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 7
-    },
-    {
       "userID": 1,
       "courseID": 2,
       "coupon": "null",
       "paymentAmount": 22500,
       "date": "2023-09-29",
       "payment_status": true,
-      "id": 8
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 9
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 10
-    },
-    {
-      "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 11
+      "id": 1
     }
   ],
   "Reviews": [
     {
       "rating": 4,
-      "comment": "biết best cap không =))",
+      "comment": "biết best cap khonggg?",
       "userID": 1,
       "courseID": 2,
-      "date": "2023-10-22",
+      "date": "2023-10-25",
       "id": 1
-    },
-    {
-      "rating": 5,
-      "comment": "test",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-22",
-      "id": 2
-    },
-    {
-      "rating": 3,
-      "comment": "test",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-22",
-      "id": 3
-    },
-    {
-      "rating": 3,
-      "comment": "test",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-22",
-      "id": 4
-    },
-    {
-      "rating": 5,
-      "comment": "test",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-22",
-      "id": 5
     }
   ],
   "Categories": [
@@ -382,18 +260,6 @@
       "videoId": 1,
       "completionStatus": true,
       "id": 1
-    },
-    {
-      "userId": 1,
-      "videoId": 2,
-      "completionStatus": true,
-      "id": 2
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "completionStatus": true,
-      "id": 3
     }
   ],
   "Videos": [

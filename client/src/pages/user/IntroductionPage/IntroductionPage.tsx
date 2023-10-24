@@ -27,23 +27,73 @@ const IntroductionPage = () => {
     const [, setEncryptedData] = useState<any>(null);
     const courseID = parseInt(id, 10);
     const [ratingCounts, setRatingCounts] = useState<{ [key: number]: number }>({});
+    const [canDisplayForm, setCanDisplayForm] = useState(false); // State để kiểm tra xem có thể hiển thị form hay không
+    const [userID, setUserID] = useState(null);
+
     // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
     const encryptedProfile = localStorage.getItem('profile');
     if (encryptedProfile) {
         const decryptedProfile = decodeData(encryptedProfile);
-
         // Bước 2: Chuyển thông tin đã giải mã thành đối tượng JSON
         const profile = JSON.parse(decryptedProfile);
-
         // Bước 3: Lấy email từ đối tượng profile
         var userEmail = profile.email;
-
         console.log('Email của người dùng:', userEmail);
-
         // Bước 4: Sử dụng email trong truy vấn hoặc hiển thị
     } else {
         console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
     }
+
+    // Thực hiện GET request để lấy ID từ API
+    fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to retrieve user ID from the API.');
+            }
+        })
+        .then((data) => {
+            const user = data.find((item: any) => item.email === userEmail);
+            // Bước 3: Lấy ID từ dữ liệu API
+            const userID = user.id;
+            setUserID(userID); // Đặt giá trị userID vào state
+            console.log(user.id, 'Từ state');
+        })
+        .catch((error) => {
+            console.error(error);
+            // Xử lý lỗi nếu có
+        });
+
+
+
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://localhost:3000/Payment`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data from the API.');
+                }
+                const data = await response.json();
+                console.log(data);
+
+                if (data) {
+                    const payment = data.find((item: any) => item.courseID === courseID && item.userID === userID && item.payment_status === true);
+                    if (payment) {
+                        setCanDisplayForm(true);
+                    }
+                } else {
+                    console.log('Dữ liệu không hợp lệ hoặc không có thuộc tính Payment.');
+                }
+            } catch (error) {
+                console.error('Lỗi khi gọi API:', error);
+            }
+        }
+        fetchData();
+    }, [courseID, userID]);
+
 
     useEffect(() => {
         axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
@@ -99,7 +149,8 @@ const IntroductionPage = () => {
                 const user = data.find((item: any) => item.email === userEmail);
                 // Bước 3: Lấy ID từ dữ liệu API
                 const userID = user.id;
-                console.log(user.id,);
+                setUserID(userID); // Đặt giá trị userID vào state
+                console.log(user.id, 'Từ state');
 
                 // Bước 4: Thực hiện POST request để tạo payment
                 const paymentData = {
@@ -133,6 +184,12 @@ const IntroductionPage = () => {
             });
 
     };
+
+
+
+
+
+
     // end thanh toán/////////////////////////////////////////////////////////////
     const handleRatingChange = (value: any) => {
         // Cập nhật rating trong state
@@ -237,56 +294,120 @@ const IntroductionPage = () => {
 
     //Post review
 
+    // Thực hiện GET request để lấy ID từ API
+    fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to retrieve user ID from the API.');
+            }
+        })
+        .then((data) => {
+            const user = data.find((item: any) => item.email === userEmail);
+            // Bước 3: Lấy ID từ dữ liệu API
+            var userID = user.id;
+            console.log(user.id,);
+        })
+        .catch((error) => {
+            console.error(error);
+            // Xử lý lỗi nếu có
+        });
+
+
     const postReview = () => {
-        if (!review.rating || review.rating === 0) {
-            notification.error({
-                message: 'Lỗi',
-                description: 'Bạn chưa lựa chọn số rate.',
-                placement: 'topRight', // Chọn vị trí bạn muốn
-            });
-            return;
+        // Lấy thông tin người dùng hiện tại từ localStorage
+        const encryptedProfile = localStorage.getItem('profile');
+        if (encryptedProfile) {
+            const decryptedProfile = decodeData(encryptedProfile);
+            const profile = JSON.parse(decryptedProfile);
+            const userEmail = profile.email;
+
+            // Lấy thông tin người dùng từ API bằng email
+            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to retrieve user data from the API.');
+                    }
+                })
+                .then((userData) => {
+                    const javascriptUserID = userData[0].id;
+
+                    // Kiểm tra xem người dùng đã đăng đánh giá cho khóa học này chưa
+                    const hasUserReviewed = reviews.some(
+                        (review) => review.courseID === parseInt(id) && review.userID === javascriptUserID
+                    );
+
+                    if (hasUserReviewed) {
+                        // Nếu người dùng đã đánh giá cho khóa học này, thông báo lỗi
+                        notification.warning({
+                            message: 'Lỗi',
+                            description: 'Bạn đã đăng đánh giá cho khóa học này rồi.',
+                            placement: 'topRight',
+                        });
+                    } else if (!review.rating || review.rating === 0) {
+                        notification.error({
+                            message: 'Lỗi',
+                            description: 'Bạn chưa lựa chọn số rate.',
+                            placement: 'topRight',
+                        });
+                    } else if (!review.comment) {
+                        notification.error({
+                            message: 'Lỗi',
+                            description: 'Bạn chưa nhập comment.',
+                            placement: 'topRight',
+                        });
+                    } else {
+                        // Nếu không có lỗi và người dùng chưa đánh giá, tiến hành đăng đánh giá
+                        const currentDate = moment().tz('Asia/Ho_Chi_Minh');
+                        const formattedDate = currentDate.format('YYYY-MM-DD');
+
+                        const dataToPost = {
+                            rating: review.rating,
+                            comment: review.comment,
+                            userID: javascriptUserID,
+                            courseID: parseInt(id), // Chuyển đổi id thành số
+                            date: formattedDate,
+                        };
+
+                        axios
+                            .post('http://localhost:3000/Reviews', dataToPost)
+                            .then((response) => {
+                                console.log('Đánh giá đã được đăng thành công', response.data);
+
+                                // Cập nhật danh sách đánh giá sau khi gửi thành công
+                                setReviews([...reviews, dataToPost]);
+
+                                // Đặt lại giá trị mặc định cho form đánh giá
+                                setReview({ rating: 0, comment: '' });
+                            })
+                            .catch((error) => {
+                                console.error('Lỗi khi đăng đánh giá', error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Lỗi khi kiểm tra thông tin người dùng', error);
+                });
         }
-
-        if (!review.comment) {
-            notification.error({
-                message: 'Lỗi',
-                description: 'Bạn chưa nhập comment.',
-                placement: 'topRight', // Chọn vị trí bạn muốn
-            });
-            return;
-        }
-
-        const currentDate = moment().tz('Asia/Ho_Chi_Minh'); // Lấy thời gian theo múi giờ Việt Nam
-        const formattedDate = currentDate.format('YYYY-MM-DD'); // Định dạng lại ngày
-
-        const dataToPost = {
-            rating: review.rating,
-            comment: review.comment,
-            userID: 1,
-            courseID: product.id, // Bạn cần đảm bảo product được định nghĩa ở đây
-            date: formattedDate,
-        };
-
-        axios.post('http://localhost:3000/Reviews', dataToPost)
-            .then((response) => {
-                // Xử lý kết quả ở đây nếu cần
-                console.log('Đánh giá đã được đăng thành công', response.data);
-
-                // Cập nhật danh sách đánh giá sau khi gửi thành công
-                setReviews([...reviews, dataToPost]);
-
-                // Đặt lại giá trị mặc định cho form đánh giá
-                setReview({ rating: 0, comment: '' });
-            })
-            .catch((error) => {
-                // Xử lý lỗi ở đây nếu có
-                console.error('Lỗi khi đăng đánh giá', error);
-            });
     };
 
 
 
+    const [userReviews, setUserReviews] = useState<any[]>([]);
 
+    useEffect(() => {
+        // Lấy danh sách đánh giá của người dùng từ API
+        axios.get(`http://localhost:3000/Reviews?userID=${userEmail}&courseID=${id}`)
+            .then((response) => {
+                setUserReviews(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [userEmail, id]);
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -413,25 +534,26 @@ const IntroductionPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <Form className='mt-7 formReview' action="" method="post" >
-                            <div className="gap-2">
-                                <div className='flex items-center gap-2'>
-                                    <Rating className='flex text-yellow-400'
-                                        value={review.rating}
-                                        onChange={handleRatingChange}
+                        {canDisplayForm && (
+                            <Form className='mt-7 formReview' action="" method="post" >
+                                <div className="gap-2">
+                                    <div className='flex items-center gap-2'>
+                                        <Rating className='flex text-yellow-400'
+                                            value={review.rating}
+                                            onChange={handleRatingChange}
+                                        />
+                                        <Typography className="font-medium mb-4 text-yellow-400">
+                                            {rated}.0
+                                        </Typography>
+                                    </div>
+                                    <Input
+                                        value={review.comment}
+                                        onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                     />
-                                    <Typography className="font-medium mb-4 text-yellow-400">
-                                        {rated}.0
-                                    </Typography>
+                                    <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
                                 </div>
-                                <Input
-                                    value={review.comment}
-                                    onChange={(e) => setReview({ ...review, comment: e.target.value })}
-                                />
-                                <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
-                            </div>
-                        </Form>
-
+                            </Form>
+                        )}
                         <div className="listReviewIntro">
                             {reviews.map((review) => (
                                 <div key={review.id} className="reviewIntroChildren">
