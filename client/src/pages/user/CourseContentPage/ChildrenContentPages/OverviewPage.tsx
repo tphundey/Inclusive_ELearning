@@ -230,63 +230,8 @@ const OverViewPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='font-medium text-xl mt-6'>
-                        Learner reviews
-                    </div>
-                    <div className="flex">
-                        <div className="overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200">
-                            <div className="p-6">
-                                <div className="flex items-center gap-2">
 
-                                    <div className='preview'>
-                                        <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>{calculateAverageRating(reviews)}</span> out 5</span></div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="mt-3">
-                                                <span className="text-sm rounded text-slate-500 ">
-                                                    <span className="flex gap-1 text-amber-400" role="img" aria-label="Rating: 4 out of 5 stars">
-                                                        <div className='starrev' id="starRating">{starRating}</div>
-                                                    </span>
-                                                </span>
-                                            </div>
-
-                                            <div className='mt-3'>
-                                                <span className="text-xs leading-6 text-slate-400">147 ratings</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <span className="flex flex-col w-full gap-4 pt-6">
-                                        <span className="flex items-center w-full gap-2">
-                                            <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 5 star</label>
-                                            <progress aria-labelledby="p03e-label" id="p03e" max="100" value="75" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                            <span className="text-xs font-bold w-9 text-slate-700">112 </span>
-                                        </span>
-                                        <span className="flex items-center w-full gap-2">
-                                            <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 4 star</label>
-                                            <progress aria-labelledby="p03e-label" id="p03e" max="100" value="28" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                            <span className="text-xs font-bold w-9 text-slate-700">17 </span>
-                                        </span>
-                                        <span className="flex items-center w-full gap-2">
-                                            <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 3 star</label>
-                                            <progress aria-labelledby="p03e-label" id="p03e" max="100" value="18" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                            <span className="text-xs font-bold w-9 text-slate-700">12 </span>
-                                        </span>
-                                        <span className="flex items-center w-full gap-2">
-                                            <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 2 star</label>
-                                            <progress aria-labelledby="p03e-label" id="p03e" max="100" value="8" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                            <span className="text-xs font-bold w-9 text-slate-700">2 </span>
-                                        </span>
-                                        <span className="flex items-center w-full gap-2">
-                                            <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> 1 star</label>
-                                            <progress aria-labelledby="p03e-label" id="p03e" max="100" value="10" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400">75%</progress>
-                                            <span className="text-xs font-bold w-9 text-slate-700">4 </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    {/* 
                     <div className="listReviewIntro">
                         {rateIDArray.map((rateID) => {
                             // Lọc danh sách đánh giá có courseID trùng với rateID trong mảng
@@ -311,7 +256,7 @@ const OverViewPage = () => {
                                 </div>
                             ));
                         })}
-                    </div>
+                    </div> */}
                     <br />
                 </div>
             </div>
