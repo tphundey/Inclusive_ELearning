@@ -57,7 +57,8 @@ export const ContactUs = () => {
             <input readOnly type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
             <label>Email</label>
             <input readOnly type="email" name="user_email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
-
+            <label>Url img</label>
+            <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} />
             <input type="submit" value="Send" />
         </form>
     );

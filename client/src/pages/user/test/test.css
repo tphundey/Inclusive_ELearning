@@ -1,0 +1,82 @@
+.certificate {
+    background-color: white;
+    padding: 20px;
+    width: 600px;
+    height: 350px;
+    margin: 0 auto;
+    border: 10px solid #476A69;
+}
+
+.cer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 200px;
+
+}
+
+.cer-top img {
+    width: 140px;
+    height: 80px;
+}
+
+.cer-top-1 {
+    margin-left: 250px;
+}
+
+.hr-cer {
+    height: 1px;
+    background-color: gray;
+    width: 540px;
+    position: absolute;
+    top: 260px;
+}
+
+.t22 {
+    width: 800px;
+    position: absolute;
+    left: 40%;
+    top: 35%;
+    font-family: 'Courier New', Courier, monospace;
+    color: #476A69;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.t33 {
+    width: 400px;
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 15px;
+}
+
+.name {
+    position: absolute;
+    top: 43%;
+    left: 47%;
+    font-family: cursive;
+}
+
+.t44 {
+    width: 400px;
+    position: absolute;
+    top: 47%;
+    left: 46.9%;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 15px;
+}
+
+.course {
+    position: absolute;
+    top: 51%;
+    left: 37%;
+    font-family: cursive;
+}
+
+.hudk {
+    opacity: 0.0;
+    position: absolute;
+}
+

@@ -69,7 +69,7 @@ const CourseContentPage = () => {
     }, [courseApiUrl, userProgressApiUrl]);
 
     const handleNavigate = () => {
-        window.location.href = 'http://localhost:5173/contact';
+        window.location.href = `http://localhost:5173/test/${id}`;
     };
 
 
