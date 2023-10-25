@@ -83,8 +83,8 @@
       ],
       "date": "2023-09-25",
       "videoID": [
-        1
-       
+        1,
+        2
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -241,6 +241,12 @@
       "note": "test update",
       "date": "2023-10-22",
       "id": 2
+    },
+    {
+      "videoID": 3,
+      "note": "hihi",
+      "date": "2023-10-25",
+      "id": 3
     }
   ],
   "Role": [
@@ -265,7 +271,7 @@
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQHaIUc2er0wCg/learning-original-video-vbr-720/0/1621632614758?e=1698065198&v=beta&t=nMvK47YGrXvOlr7Q3i13JCDZtW0fBxByrptlhxql_Do"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQGJ0-wK1U5sjQ/learning-original-video-vbr-720/0/1649954146391?e=1698239001&v=beta&t=4wnHZL5RQqkOLnPAcBQ4hU9kHS5FF6okAvOHhujzGlg"
     },
     {
       "id": 2,

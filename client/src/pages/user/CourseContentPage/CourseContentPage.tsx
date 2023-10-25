@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { Alert, Button } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
@@ -18,10 +19,59 @@ const CourseContentPage = () => {
     const [currentVideo, setCurrentVideo] = useState(null);
     const [UserProgress, setUserProgress] = useState([]);
     const [userId, setUserId] = useState(null);
-    // Xác định trạng thái cho việc hoàn thành video
     const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
     const [initialUserProgress, setInitialUserProgress] = useState(null);
+    const courseId = id; // Đặt ID khoá học của bạn ở đây
+    const courseApiUrl = `http://localhost:3000/Courses/${courseId}`;
+    const userProgressApiUrl = 'http://localhost:3000/UserProgress';
+    const [course, setCourse] = useState(null);
+    const [allVideosCompleted, setAllVideosCompleted] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+
+    useEffect(() => {
+        // Fetch thông tin khoá học từ API
+        axios.get(courseApiUrl)
+            .then((response) => {
+                const courseData = response.data;
+                setCourse(courseData);
+
+                // Lấy danh sách videoID từ khoá học
+                const videoIdsInCourse = courseData.videoID;
+
+                // Fetch danh sách video đã hoàn thành từ API
+                axios.get(userProgressApiUrl)
+                    .then((userProgressResponse) => {
+                        const userProgressData = userProgressResponse.data;
+
+                        // Lấy danh sách videoID đã hoàn thành
+                        const completedVideoIds = userProgressData
+                            .filter((progress: any) => videoIdsInCourse.includes(progress.videoId))
+                            .map((progress: any) => progress.videoId);
+
+                        // Kiểm tra xem tất cả videoID đã hoàn thành hay chưa
+                        const allVideosCompleted = videoIdsInCourse.every((videoId: any) => completedVideoIds.includes(videoId));
+
+                        setAllVideosCompleted(allVideosCompleted);
+
+                        if (allVideosCompleted) {
+                            setShowSuccessAlert(true);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching user progress data:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error fetching course data:', error);
+            });
+    }, [courseApiUrl, userProgressApiUrl]);
+
+    const handleNavigate = () => {
+        window.location.href = `http://localhost:5173/test/${id}`;
+    };
+
 
     useEffect(() => {
         axios.get('http://localhost:3000/UserProgress')
@@ -158,15 +208,15 @@ const CourseContentPage = () => {
     ];
 
     return (
+
         <div className='container-content-page'>
             <div className="contentpage-left">
                 <div className="content-left-title">
                     <i className="fa-solid fa-list"></i> <div>Contents</div>
                 </div>
-
                 <div>
                     {videos.map((video) => {
-                    const isVideoCompleted = videoCompletionStatus[video.id] || false;
+                        const isVideoCompleted = videoCompletionStatus[video.id] || false;
 
                         return (
                             <div className="content-left-title-course" key={video.id}>
@@ -194,9 +244,21 @@ const CourseContentPage = () => {
                         );
                     })}
 
-
-
-
+                    <div>
+                        <br />
+                        {showSuccessAlert && (
+                            <Alert
+                                message="Bạn đã hoàn thành chứng chỉ!"
+                                type="success"
+                                showIcon
+                                description={
+                                    <Button className='chungchi' type="primary" onClick={handleNavigate}>
+                                        Nhận chứng chỉ
+                                    </Button>
+                                }
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
 
