@@ -32,6 +32,7 @@ import AdminCategoryEdit from "./pages/admin/categorys/edit";
 import AdminVideo from "./pages/admin/videos";
 import AdminVideoAdd from "./pages/admin/videos/add";
 import AdminVideoEdit from "./pages/admin/videos/edit";
+import { ContactUs } from "./pages/user/SendEmail/sendEmail";
 
 export const routers = createBrowserRouter([
     {
@@ -41,6 +42,7 @@ export const routers = createBrowserRouter([
             { index: true, element: <Navigate to="homepage" /> },
             { path: "homepage", element: <Homepage /> },
             { path: "default", element: <Defaultpage /> },
+            { path: "contact", element: <ContactUs /> },
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
