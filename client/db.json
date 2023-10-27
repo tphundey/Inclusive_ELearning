@@ -88,7 +88,8 @@
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 3,
@@ -106,7 +107,8 @@
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": true
     },
     {
       "id": 4,
@@ -124,7 +126,8 @@
       ],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 5,
@@ -142,7 +145,8 @@
       ],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 6,
@@ -160,7 +164,8 @@
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3192365049190229066/58e628e534b4e3eabaa5.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 7,
@@ -178,7 +183,8 @@
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/157773873615069288/e7a89dab81fa56a40feb.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 8,
@@ -196,7 +202,8 @@
       ],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 9,
@@ -214,7 +221,8 @@
       ],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     },
     {
       "id": 10,
@@ -232,7 +240,8 @@
       ],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
-      "enrollment": 100
+      "enrollment": 100,
+      "isDeleted": false
     }
   ],
   "Notes": [

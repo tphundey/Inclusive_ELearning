@@ -7,4 +7,5 @@ export interface IProduct {
     videoID : Number,
     categoryID  : Number,
     courseIMG : string,
+    isDeleted: boolean,
 }
