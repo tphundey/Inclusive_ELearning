@@ -90,7 +90,7 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.map((product: any, index: any) => {
+                                    {productsData?.filter((product: any) => !product.isDeleted).map((product: any, index: any) => {
                                         const category = categoryData[index];
                                         const formattedPrice = formatCurrency(product.price);
                                         return (
@@ -132,7 +132,7 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.map((product: any, index: any) => {
+                                    {productsData?.filter((product: any) => !product.isDeleted).map((product: any, index: any) => {
                                         const category = categoryData[index];
                                         const formattedPrice = formatCurrency(product.price);
                                         return (

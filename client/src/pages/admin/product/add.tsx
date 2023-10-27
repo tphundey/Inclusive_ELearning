@@ -17,6 +17,7 @@ type FieldType = {
     videoID : Number;
     categoryID : Number;
     courseIMG : Number;
+    isDelete : boolean;
 };
 
 
@@ -61,7 +62,7 @@ const AdminProductAdd = () => {
         <>
             {contextHolder}
             <header className="mb-4">
-                <h2 className="text-2xl">Thêm sản phẩm</h2>
+                <h2 className="text-2xl">Thêm Khóa Học</h2>
             </header>
             <Form
                 form={form}
@@ -74,18 +75,18 @@ const AdminProductAdd = () => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
-                    label="Tên sản phẩm"
+                    label="Tên khóa học"
                     name="courseName"
                     rules={[
-                        { required: true, message: "Tên sản phẩm không được để trống!" },
-                        { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
+                        { required: true, message: "Tên khóa học không được để trống!" },
+                        { min: 3, message: "Tên khóa học ít nhất phải 3 ký tự" },
                     ]}
                 >
                     <Input />
                 </Form.Item>
 
                 <Form.Item<FieldType>
-                    label="Giá sản phẩm"
+                    label="Giá khóa học"
                     name="price"
                     rules={[{ required: true, message: "Phải nhập giá tiền" }]}
                 >
@@ -131,7 +132,7 @@ const AdminProductAdd = () => {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item label="Mô tả sản phẩm"
+                <Form.Item label="Mô tả"
                 name="description"
                 >
                     <TextArea  rows={4} />

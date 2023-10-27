@@ -38,7 +38,7 @@ const AdminProductEdit = () => {
         form.setFieldsValue(productData);
     }, [productData]);
     const onFinish = (values: any) => {
-        updateProduct({ ...values, id: idProduct })
+        updateProduct({ ...values, id: idProduct, isDeleted: true})
             .unwrap()
             .then(() => {
                 messageApi.open({
@@ -65,7 +65,7 @@ const AdminProductEdit = () => {
         <>
             {contextHolder}
             <header className="mb-4">
-                <h2 className="text-2xl">Cập nhật sản phẩm</h2>
+                <h2 className="text-2xl">Cập nhật khóa học</h2>
             </header>
             {isProductLoading ? (
                 <Skeleton />

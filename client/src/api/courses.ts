@@ -56,7 +56,15 @@ const productApi = createApi({
             query: (courses) => ({
                 url: `/Courses/${courses.id}`,
                 method: 'PATCH',
-                body: courses // Đảm bảo gửi dữ liệu trong đối tượng "data"
+                body: courses 
+            }),
+            invalidatesTags: ['Courses'],
+        }),
+        restoreProduct: builder.mutation<IProduct, Partial<IProduct>>({
+            query: (courses) => ({
+                url: `/Courses/${courses.id}`,
+                method: 'PATCH',
+                body: courses 
             }),
             invalidatesTags: ['Courses'],
         }),
@@ -69,6 +77,7 @@ export const {
     useGetProductByIdQuery,
     useRemoveProductMutation,
     useUpdateProductMutation,
+    useRestoreProductMutation
 } = productApi;
 
 export const productReducer = productApi.reducer;

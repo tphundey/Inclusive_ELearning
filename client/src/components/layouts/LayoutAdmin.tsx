@@ -33,7 +33,7 @@ const LayoutAdmin = () => {
                         {
                             key: "2",
                             icon: <AiOutlineVideoCamera />,
-                            label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
+                            label: <Link to="/admin/product">Quản lý khóa học</Link>,
                         },
                         {
                             key: "3",
