@@ -460,31 +460,14 @@ const IntroductionPage = () => {
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Shareable certificate</div>
-                        <div className="certificate mt-4" >
-                            <div className="certiLeft">
-                                <img src="https://static.licdn.com/aero-v1/sc/h/35xqn2j8lu3c1pgwy1r6hrdoj" alt="" />
-                            </div>
-                            <div className="certiRight">
-                                <img src="https://f10-zpcloud.zdn.vn/1128982520427566380/4fb638b9f0c1229f7bd0.jpg" alt="" />
-                                <div className='font-medium'>
-                                    Certificate of Completion
-                                </div>
-                                <div>
-                                    <ul>
-                                        <li> <i className="fa-solid fa-check"></i>Showcase on your LinkedIn profile under the "Licenses and Certificates" section</li>
-                                        <li><i className="fa-solid fa-check"></i>Download or print out as PDF to share with others</li>
-                                        <li><i className="fa-solid fa-check"></i>Share as image online to demonstrate your skill</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                       <img width={250} className='mt-3' src="https://f11-zpcloud.zdn.vn/8468826104549191620/bb5b8481eb753c2b6564.jpg" alt="" />
                         <div className='font-medium text-xl mt-6'>
                             Instructors
                         </div>
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
+                                    <img  src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
                                 </div>
                                 <div className="instruc-right">
                                     <h1>Trần Thị Hương Trà</h1>

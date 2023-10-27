@@ -265,18 +265,24 @@
       "videoId": 1,
       "completionStatus": true,
       "id": 1
+    },
+    {
+      "userId": 1,
+      "videoId": 2,
+      "completionStatus": true,
+      "id": 2
     }
   ],
   "Videos": [
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQGJ0-wK1U5sjQ/learning-original-video-vbr-720/0/1649954146391?e=1698239001&v=beta&t=4wnHZL5RQqkOLnPAcBQ4hU9kHS5FF6okAvOHhujzGlg"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFjVdvHmVSTMA/learning-original-video-vbr-720/0/1677706034798?e=1698419986&v=beta&t=CwOIQZLLCtNavY2bb_3UV6ql8xWwALn1F6PJ3HtQmxY"
     },
     {
       "id": 2,
       "videoTitle": "Graphic Design Principles - Part 2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQEKqyYrB84qCw/learning-original-video-vbr-720/0/1603474134884?e=1698359406&v=beta&t=Hu26Aii-rvhXHLHy2CtyA6ouZvAUqj82tSGfmA-B3l0"
     },
     {
       "id": 3,
@@ -307,6 +313,86 @@
       "name": "Dinh Van Tai PH 2 0 0 4 4",
       "img": "https://lh3.googleusercontent.com/a/ACg8ocKlC5NM4sqdudt-ttYLRJeKAFUocqnpp3GKg0Smkhn22Q=s96-c",
       "id": 3
+    }
+  ],
+  "userVideoProgress": [
+    {
+      "userId": 1,
+      "videoId": 2,
+      "watchedTime": 48.496232,
+      "id": 1
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 4.5815,
+      "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 29.757453,
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 29.757453,
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 29.757453,
+      "id": 5
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 29.757453,
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 25.908477,
+      "id": 7
+    },
+    {
+      "userId": 1,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 8
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 52.65134,
+      "id": 9
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 13.810646,
+      "id": 10
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 0,
+      "id": 11
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 124.957375,
+      "id": 12
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 124.957375,
+      "id": 13
     }
   ]
 }

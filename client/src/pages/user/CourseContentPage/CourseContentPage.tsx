@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Alert, Button } from 'antd';
-
+import { Modal } from 'antd';
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
     return decodeURIComponent(encryptedData);
@@ -28,8 +28,15 @@ const CourseContentPage = () => {
     const [course, setCourse] = useState(null);
     const [allVideosCompleted, setAllVideosCompleted] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-
-
+    const [videoWatchedTime, setVideoWatchedTime] = useState(0);
+    const [watchedTimeOnReturn, setWatchedTimeOnReturn] = useState(0);
+    const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
+    const [hasChangedVideo, setHasChangedVideo] = useState(false);
+    const [totalWatchedTime, setTotalWatchedTime] = useState(0);
+    const handleReturnButtonClick = () => {
+        // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
+        setShowWatchedTimeModal(true);
+    };
     useEffect(() => {
         // Fetch thông tin khoá học từ API
         axios.get(courseApiUrl)
@@ -150,9 +157,9 @@ const CourseContentPage = () => {
     }, [id]);
 
     const handleVideoTitleClick = (videoURL: any, video: any) => {
+        setHasChangedVideo(true); // Đã chuyển video
         setSelectedVideoUrl(videoURL);
         setCurrentVideo(video);
-        // Cập nhật trạng thái xem video
         setVideoWatched(false);
     };
 
@@ -198,7 +205,164 @@ const CourseContentPage = () => {
         }
     }, [isVideoCompleted]);
 
+    const [watchedTime, setWatchedTime] = useState(0);
 
+    const handleVideoTimeUpdate = (event) => {
+        const currentTime = event.target.currentTime;
+        setWatchedTime(currentTime);
+        console.log(currentTime, 'currenttime');
+
+        // Kiểm tra xem thời gian xem video hiện tại có lớn hơn thời gian đã lưu trong localStorage hay không
+        const savedWatchedTime = localStorage.getItem('videoWatchedTime');
+
+        if (savedWatchedTime) {
+            const parsedSavedWatchedTime = parseFloat(savedWatchedTime);
+
+            if (currentTime > parsedSavedWatchedTime) {
+                window.addEventListener('beforeunload', () => {
+                    // Lưu dữ liệu vào localStorage trước khi người dùng thoát trang
+                    localStorage.setItem('videoWatchedTime', currentTime.toString());
+                });
+            }
+        } else {
+            // Nếu chưa có thời gian xem video trong localStorage, lưu giá trị hiện tại
+            localStorage.setItem('videoWatchedTime', currentTime.toString());
+        }
+
+        // Tính thời gian đã xem so với thời lượng của video (ví dụ: 90% đã xem)
+        const watchedPercentage = (currentTime / event.target.duration) * 100;
+
+        // Lưu thời gian xem video vào localStorage
+        localStorage.setItem('videoWatchedTime', currentTime.toString());
+
+        if (watchedPercentage >= 90 && !isVideoCompleted) {
+            setIsVideoCompleted(true);
+
+            // Gửi dữ liệu lên API khi video đã hoàn thành
+            if (currentVideo) {
+                const updatedCompletionStatus = {
+                    ...videoCompletionStatus,
+                    [currentVideo.id]: true,
+                };
+
+                setVideoCompletionStatus(updatedCompletionStatus);
+
+                axios.post(`http://localhost:3000/userVideoProgress`, {
+                    userId: userId,
+                    videoId: currentVideo.id,
+                    watchedTime: videoWatchedTime,
+                })
+                    .then((response) => {
+                        console.log('User video progress updated successfully:', response.data);
+                    })
+                    .catch((error) => {
+                        console.error('Error updating user video progress:', error);
+                    });
+            }
+        }
+
+        if (!isVideoCompleted && currentTime > watchedTimeOnReturn) {
+            setWatchedTimeOnReturn(currentTime);
+        }
+
+        // Kiểm tra xem người dùng đã chuyển video hay chưa
+        if (hasChangedVideo) {
+            setHasChangedVideo(false);
+
+            // Lưu thời gian đã xem video hiện tại sau khi chuyển video
+            setWatchedTimeOnReturn(currentTime);
+        }
+    };
+
+    useEffect(() => {
+        // Kiểm tra xem có dữ liệu thời gian xem video trong localStorage hay không
+        const savedWatchedTime = localStorage.getItem('videoWatchedTime');
+
+        if (savedWatchedTime) {
+            // Chuyển giá trị từ chuỗi thành số
+            const parsedSavedWatchedTime = parseFloat(savedWatchedTime);
+
+            // Kiểm tra xem thời gian xem video hiện tại có lớn hơn thời gian đã lưu trong localStorage hay không
+            if (videoWatchedTime > parsedSavedWatchedTime) {
+                // Cập nhật thời gian xem video từ localStorage
+                setVideoWatchedTime(parsedSavedWatchedTime);
+            }
+        }
+    }, [videoWatchedTime]);
+
+    const sendWatchedTimeToAPI = () => {
+        axios
+            .post('http://localhost:3000/userVideoProgress', {
+                userId: userId,
+                videoId: id,
+                watchedTime: watchedTime,
+            })
+            .then((response) => {
+                console.log('Thời gian xem video đã được gửi lên API:', response.data);
+            })
+            .catch((error) => {
+                console.error('Lỗi khi gửi thời gian xem video lên API:', error);
+            });
+    };
+    const [videoDuration, setVideoDuration] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Hàm để lấy thời lượng video từ API
+    // Hàm để lấy thời lượng video từ API
+    const fetchVideoDuration = () => {
+        // Thay thế URL_CUA_API và videoId bằng URL và videoID thực tế
+        const API_URL = `http://localhost:3000/userVideoProgress/${id}`;
+        console.log(API_URL);
+
+        axios
+            .get(API_URL)
+            .then((response) => {
+                setVideoDuration(response.data.watchedTime); // Đặt thời lượng video vào state
+                setIsModalOpen(true); // Mở modal sau khi lấy được thời lượng
+            })
+            .catch((error) => {
+                console.error('Lỗi khi lấy thời lượng video từ API:', error);
+            });
+    };
+    const fetchLatestVideoDuration = () => {
+        // Kiểm tra nếu userID không bằng 1 thì không gửi yêu cầu API
+        if (userId !== 1) {
+            console.log('UserID không hợp lệ');
+            return;
+        }
+
+        // Sử dụng URL truy vấn để sắp xếp theo ID giảm dần và lấy dữ liệu với ID lớn nhất
+        const API_URL = `http://localhost:3000/userVideoProgress?_sort=id&_order=desc&_limit=1`;
+
+        axios
+            .get(API_URL)
+            .then((response) => {
+                if (response.data.length > 0) {
+                    const latestRecord = response.data[0];
+                    const watchedTimeInSeconds = latestRecord.watchedTime; // Thời lượng video tính bằng giây
+                    const minutes = Math.floor(watchedTimeInSeconds / 60);
+                    const seconds = watchedTimeInSeconds % 60;
+                    const formattedDuration = `${minutes} phút ${seconds} giây`;
+                    setVideoDuration(formattedDuration); // Đặt thời lượng video vào state
+                    setIsModalOpen(true); // Mở modal sau khi lấy được thời lượng
+                } else {
+                    console.log('Không tìm thấy bất kỳ dữ liệu nào.');
+                }
+            })
+            .catch((error) => {
+                console.error('Lỗi khi lấy thời lượng video từ API:', error);
+            });
+    };
+
+    // Thêm hàm để đóng modal
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    // Sau khi lấy dữ liệu thời lượng video, gọi hàm để đóng modal
+    const handleModalClose = () => {
+        closeModal();
+    };
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -277,7 +441,11 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls autoPlay src={selectedVideoUrl} onEnded={handleVideoEnded}></video>
+                    <video controls autoPlay src={selectedVideoUrl}
+                        onEnded={handleVideoEnded}
+                        onTimeUpdate={handleVideoTimeUpdate}
+                    ></video>
+
                 </div>
 
                 <div className="content-container-bottom">
@@ -293,6 +461,23 @@ const CourseContentPage = () => {
                         </ul>
                     </div>
                     <div>
+                        <div>
+                            {/* <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={handleReturnButtonClick}>Quay lại video</button> */}
+                            <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={sendWatchedTimeToAPI}>Gửi thời gian xem hiện tại</button>
+                            <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={fetchLatestVideoDuration}>Lấy thời gian xem dở</button>
+                        </div>
+                        <Modal
+                            title="Thời gian đã xem video khi quay trở lại"
+                            visible={showWatchedTimeModal}
+                            onOk={() => setShowWatchedTimeModal(false)}
+                            onCancel={() => setShowWatchedTimeModal(false)}
+                        >
+                            <p>Thời gian đã xem video khi quay trở lại: {watchedTimeOnReturn} giây</p>
+                        </Modal>
+                        {/* Modal hiển thị thời lượng video */}
+                        <Modal open={isModalOpen} onCancel={handleModalClose}>
+                            <p>Thời lượng video: {videoDuration} giây</p>
+                        </Modal>
                         <Outlet />
                     </div>
                 </div>
