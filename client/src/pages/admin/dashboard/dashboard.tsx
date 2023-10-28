@@ -1,9 +1,115 @@
 import './dashboard.css'
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-
+import { DualAxes } from "@ant-design/plots";
+import { Line } from '@ant-design/plots';
 const Dashboard = () => {
+    const [data, setData] = useState([]);
 
+  useEffect(() => {
+    asyncFetch();
+  }, []);
+
+  const asyncFetch = () => {
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => {
+        console.log('fetch data failed', error);
+      });
+  };
+    const uvBillData = [
+        {
+          course: "ReactJS",
+          value: 350,
+          type: "ReactJS",
+        },
+        {
+          course: "ReactJS",
+          value: 900,
+          type: "ReactJS",
+        },
+        {
+          course: "ReactJS",
+          value: 300,
+          type: "ReactJS",
+        },
+        {
+          course: "ReactJS",
+          value: 450,
+          type: "ReactJS",
+        },
+        {
+          course: "ReactJS",
+          value: 470,
+          type: "ReactJS",
+        },
+        {
+          course: "ReactJS",
+          value: 220,
+          type: "NodeJS",
+        },
+        {
+          course: "NodeJS",
+          value: 300,
+          type: "NodeJS",
+        },
+        {
+          course: "NodeJS",
+          value: 250,
+          type: "NodeJS",
+        },
+        {
+          course: "NestJS",
+          value: 220,
+          type: "NestJS",
+        },
+        {
+          course: "NestJS",
+          value: 362,
+          type: "NestJS",
+        },
+      ];
+      const transformData = [
+        {
+          course: "ReactJS",
+          count: 800,
+        },
+        {
+          course: "NodeJS",
+          count: 600,
+        },
+        {
+          course: "NestJS",
+          count: 400,
+        },
+      ];
+    
+      const config = {
+        data: [uvBillData, transformData],
+        xField: "course",
+        yField: ["value", "count"],
+        geometryOptions: [
+          {
+            geometry: "column",
+            isStack: true,
+            seriesField: "type",
+          },
+          {
+            geometry: "line",
+          },
+        ],
+      };
+      const configChart2 = {
+        data,
+        padding: 'auto',
+        xField: 'Date',
+        yField: 'scales',
+        xAxis: {
+          // type: 'timeCat',
+          tickCount: 5,
+        },
+      };
 
     return (
         <div>
@@ -78,12 +184,15 @@ const Dashboard = () => {
                         </div>
 
                     </div>
-
+                    <div className='m-[24px]'>
+                    <Line {...configChart2} />
+                    </div>
                 </div>
-                <div>
-                    dưa
+                <div className='m-[24px]'>
+                <DualAxes {...config} />
                 </div>
             </div>
+            
         </div>
     );
 }
