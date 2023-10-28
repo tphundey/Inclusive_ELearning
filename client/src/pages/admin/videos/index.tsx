@@ -1,8 +1,4 @@
-import { useGetCategorysQuery, useRemoveCategoryMutation } from "@/api/category";
-import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
 import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
-import { Icategory } from "@/interfaces/category";
-import { IProduct } from "@/interfaces/product";
 import { Ivideo } from "@/interfaces/video";
 import { Button, Table, Skeleton, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
@@ -32,17 +28,17 @@ const AdminVideo = (props: Props) => {
     };
     const columns = [
         {
-            title: "id Video",
+            title: "id",
             dataIndex: "key",
             key: "id",
         },
         {
-            title: "Mô tả video",
+            title: "Tiêu đề video",
             dataIndex: "videoTitle",
             key: "videoTitle",
         },
         {
-            title: "Link",
+            title: "Url Video",
             dataIndex: "videoURL",
             key: "videoURL",
         },
@@ -73,7 +69,7 @@ const AdminVideo = (props: Props) => {
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl">Quản lý Videos</h2>
+                <h2 className="text-2xl">Quản lý Video</h2>
                 <Button type="primary" danger>
                     <Link to="/admin/video/add">Thêm video</Link>
                 </Button>

@@ -1,22 +1,18 @@
 import { useGetCategorysQuery, useRemoveCategoryMutation } from "@/api/category";
-import { useGetProductsQuery, useRemoveProductMutation } from "@/api/courses";
 import { Icategory } from "@/interfaces/category";
-import { IProduct } from "@/interfaces/product";
 import { Button, Table, Skeleton, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
-type Props = {};
 
-const AdminCategory = (props: Props) => {
+const AdminCategory = (props: any) => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
     const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveCategoryMutation();
     const dataSource = productsData?.map((item: Icategory) => ({
         key: item.id,
         categoryName: item.categoryName,
-        categoryDescription : item.categoryDescription
+        categoryDescription: item.categoryDescription
     }));
     console.log(dataSource);
-    
 
     const confirm = (id: number | string) => {
         removeCategory(id)
@@ -28,9 +24,10 @@ const AdminCategory = (props: Props) => {
                 });
             });
     };
+
     const columns = [
         {
-            title: "id danh mục",
+            title: "id",
             dataIndex: "key",
             key: "id",
         },
@@ -40,12 +37,7 @@ const AdminCategory = (props: Props) => {
             key: "categoryName",
         },
         {
-            title: "mô tả danh mục",
-            dataIndex: "categoryDescription",
-            key: "categoryDescription",
-        },
-        {
-            title : "actions",
+            title: "Hành động",
             render: ({ key: id }: { key: number | string }) => (
                 <div className="flex space-x-2">
                     <Popconfirm
