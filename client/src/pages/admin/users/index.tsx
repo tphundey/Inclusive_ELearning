@@ -58,34 +58,29 @@ const AdminUser = (props: any) => {
 
     const columns = [
         {
-            title: "username",
+            title: "Tên người dùng",
             dataIndex: "username",
             key: "username",
         },
         {
-            title: "email",
+            title: "Email",
             dataIndex: "email",
             key: "email",
         },
         {
-            title: "avatarIMG",
+            title:" Ảnh đại diện",
             dataIndex: "avatarIMG",
             key: "avatarIMG",
         },
         {
-            title: "address",
+            title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
         },
         {
-            title: "phone",
+            title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
-        },
-        {
-            title: "roleID",
-            dataIndex: "roleID",
-            key: "roleID",
         },
         {
             title: "Hành động",

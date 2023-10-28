@@ -1,115 +1,81 @@
 import './dashboard.css'
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { DualAxes } from "@ant-design/plots";
 import { Line } from '@ant-design/plots';
+import axios from 'axios';
 const Dashboard = () => {
     const [data, setData] = useState([]);
+    const [paymentData, setPaymentData] = useState([]);
+    const [monthlyTotal, setMonthlyTotal] = useState({});
 
-  useEffect(() => {
-    asyncFetch();
-  }, []);
+    useEffect(() => {
+        // Gửi yêu cầu API để lấy dữ liệu
+        axios.get('http://localhost:3000/Payment')
+            .then(response => {
+                const data = response.data;
+                setPaymentData(data);
+                const monthlyTotalAmount = {};
+                data.forEach(payment => {
+                    const date = new Date(payment.date);
+                    const year = date.getFullYear();
+                    const month = date.getMonth() + 1;
+                    const key = `${year}-${month}`;
+                    if (monthlyTotalAmount[key]) {
+                        monthlyTotalAmount[key] += payment.paymentAmount;
+                    } else {
+                        monthlyTotalAmount[key] = payment.paymentAmount;
+                    }
+                });
 
-  const asyncFetch = () => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log('fetch data failed', error);
-      });
-  };
-    const uvBillData = [
-        {
-          course: "ReactJS",
-          value: 350,
-          type: "ReactJS",
-        },
-        {
-          course: "ReactJS",
-          value: 900,
-          type: "ReactJS",
-        },
-        {
-          course: "ReactJS",
-          value: 300,
-          type: "ReactJS",
-        },
-        {
-          course: "ReactJS",
-          value: 450,
-          type: "ReactJS",
-        },
-        {
-          course: "ReactJS",
-          value: 470,
-          type: "ReactJS",
-        },
-        {
-          course: "ReactJS",
-          value: 220,
-          type: "NodeJS",
-        },
-        {
-          course: "NodeJS",
-          value: 300,
-          type: "NodeJS",
-        },
-        {
-          course: "NodeJS",
-          value: 250,
-          type: "NodeJS",
-        },
-        {
-          course: "NestJS",
-          value: 220,
-          type: "NestJS",
-        },
-        {
-          course: "NestJS",
-          value: 362,
-          type: "NestJS",
-        },
-      ];
-      const transformData = [
-        {
-          course: "ReactJS",
-          count: 800,
-        },
-        {
-          course: "NodeJS",
-          count: 600,
-        },
-        {
-          course: "NestJS",
-          count: 400,
-        },
-      ];
-    
-      const config = {
-        data: [uvBillData, transformData],
-        xField: "course",
-        yField: ["value", "count"],
-        geometryOptions: [
-          {
-            geometry: "column",
-            isStack: true,
-            seriesField: "type",
-          },
-          {
-            geometry: "line",
-          },
-        ],
-      };
-      const configChart2 = {
-        data,
+                setMonthlyTotal(monthlyTotalAmount);
+            })
+            .catch(error => {
+                console.error('Lỗi khi gửi yêu cầu API: ', error);
+            });
+    }, []);
+
+
+    useEffect(() => {
+        asyncFetch();
+    }, []);
+    const asyncFetch = () => {
+        fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
+            .then((response) => response.json())
+            .then((json) => setData(json))
+            .catch((error) => {
+                console.log('fetch data failed', error);
+            });
+    };
+    const uvBillData = Object.keys(monthlyTotal).map(month => ({
+        course: `Tháng ${month}`,
+        value: monthlyTotal[month],
+        type: `Tháng ${month}`,
+    }));
+    uvBillData.sort((a, b) => {
+        const monthA = parseInt(a.type.split(' ')[1]);
+        const monthB = parseInt(b.type.split(' ')[1]);
+        return monthA - monthB;
+    });
+    uvBillData.reverse();
+
+    const uvBillMap = new Map();
+    uvBillData.forEach(item => {
+        const type = item.type;
+        if (uvBillMap.has(type)) {
+            uvBillMap.set(type, uvBillMap.get(type) + item.value);
+        } else {
+            uvBillMap.set(type, item.value);
+        }
+    });
+
+    const configChart2 = {
+        data: uvBillData,
         padding: 'auto',
-        xField: 'Date',
-        yField: 'scales',
+        xField: 'course',
+        yField: 'value',
         xAxis: {
-          // type: 'timeCat',
-          tickCount: 5,
+            tickCount: 5,
         },
-      };
+    };
 
     return (
         <div>
@@ -142,9 +108,6 @@ const Dashboard = () => {
                         <div className="stat">
                             <div className="stat-figure text-secondary">
                                 <div className="avatar online">
-                                    <div className="w-16 rounded-full">
-                                        <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-                                    </div>
                                 </div>
                             </div>
                             <div className="stat-value">86%</div>
@@ -156,43 +119,31 @@ const Dashboard = () => {
                     <br /><br />
                     <div className="stats shadow">
 
-                        <div className="stat">
-                            <div className="stat-figure text-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
+                        <div className="stat pr-20">
                             <div className="stat-title">Tổng khóa học</div>
                             <div className="stat-value">31K</div>
                             <div className="stat-desc">Jan 1st - Feb 1st</div>
                         </div>
 
-                        <div className="stat">
-                            <div className="stat-figure text-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                            </div>
+                        <div className="stat pr-20">
                             <div className="stat-title">Tổng danh mục</div>
                             <div className="stat-value">4,200</div>
                             <div className="stat-desc">↗︎ 400 (22%)</div>
                         </div>
 
-                        <div className="stat">
-                            <div className="stat-figure text-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                            </div>
+                        <div className="stat pr-20">
                             <div className="stat-title">Tổng số người dùng</div>
                             <div className="stat-value">1,200</div>
-                            <div className="stat-desc">↘︎ 90 (14%)</div>
+                            <div className="stat-desc"> 90 (14%)</div>
                         </div>
-
-                    </div>
-                    <div className='m-[24px]'>
-                    <Line {...configChart2} />
                     </div>
                 </div>
-                <div className='m-[24px]'>
-                <DualAxes {...config} />
+
+                <div style={{ width: '620px', paddingLeft: '20px' }} className='m-[24px]'>
+                    <Line {...configChart2} />
                 </div>
             </div>
-            
+
         </div>
     );
 }
