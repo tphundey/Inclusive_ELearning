@@ -87,8 +87,8 @@ const Homepage = () => {
 
                         <div className="product-slider">
                             {isProductLoading ? (
-                                // Show loading state
-                                <div>Loading...</div>
+                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
+
                             ) : (
                                 <Slider {...settings}>
                                     {visibleProducts?.map((product: any, index: any) => {
@@ -129,8 +129,8 @@ const Homepage = () => {
 
                         <div className="product-slider">
                             {isProductLoading ? (
-                                // Show loading state
-                                <div>Loading...</div>
+                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
+
                             ) : (
                                 <Slider {...settings}>
                                     {productsData?.filter((product: any) => !product.isDeleted).map((product: any, index: any) => {

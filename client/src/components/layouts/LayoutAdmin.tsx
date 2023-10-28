@@ -32,6 +32,7 @@ const LayoutAdmin = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
+                    className="pt-7"
                     defaultSelectedKeys={["1"]}
                     items={[
                         {
@@ -55,9 +56,9 @@ const LayoutAdmin = () => {
                             label: <Link to="/admin/videos">Quản lý video</Link>,
                         },
                         {
-                            key: "4",
+                            key: "5",
                             icon: <AiOutlineUser  />,
-                            label: <Link to="/admin/user">Quản lý user</Link>,
+                            label: <Link to="/admin/user">Quản lý người dùng</Link>,
                         },
                     ]}
                 />

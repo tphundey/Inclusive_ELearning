@@ -34,6 +34,7 @@ import AdminVideoAdd from "./pages/admin/videos/add";
 import AdminVideoEdit from "./pages/admin/videos/edit";
 import { ContactUs } from "./pages/user/SendEmail/sendEmail";
 import Certificate from "./pages/user/test/test";
+import Dashboard from "./pages/admin/dashboard/dashboard";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -89,11 +90,10 @@ export const routers = createBrowserRouter([
             {
                 path: "signup",
                 element: (
-                    // Thực hiện kiểm tra giá trị biến "isLoggedIn" trong Local Storage
                     localStorage.getItem('isLoggedIn') === 'true' ? (
-                        <Navigate to="404" /> // Điều hướng tới trang chính (hoặc trang bạn muốn)
+                        <Navigate to="404" />
                     ) : (
-                        <SignupPage /> // Nội dung trang đăng ký
+                        <SignupPage />
                     )
                 ),
             },
@@ -105,7 +105,7 @@ export const routers = createBrowserRouter([
         element: <LayoutAdmin />,
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
-            { path: "dashboard", element: <div>Dashboard</div> },
+            { path: "dashboard", element: <Dashboard /> },
             { path: "product", element: <AdminProduct /> },
             { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
             { path: "product/add", element: <AdminProductAdd /> },
