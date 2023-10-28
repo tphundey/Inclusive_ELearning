@@ -54,7 +54,7 @@
       "id": 4
     }
   ],
-  "Users": [
+  "users": [
     {
       "id": 1,
       "username": "Hương Trà",
@@ -151,7 +151,8 @@
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
       "enrollment": 100,
-      "isDeleted": false
+      "isDeleted": false,
+      "isHidden": false
     },
     {
       "id": 5,
@@ -284,12 +285,16 @@
   ],
   "Role": [
     {
-      "_id": 1,
+      "id": 1,
       "role": "Student"
     },
     {
-      "_id": 2,
+      "id": 2,
       "role": "Instructor"
+    },
+    {
+      "role": "khachhang",
+      "id": 3
     }
   ],
   "UserProgress": [
