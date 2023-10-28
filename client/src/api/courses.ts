@@ -35,14 +35,6 @@ const productApi = createApi({
             // }),
         }),
 
-        removeProduct: builder.mutation<void, number | string>({
-            query: (id) => ({
-                url: `/Courses/${id}`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['Courses'],
-        }),
-
         addProduct: builder.mutation<IProduct, Partial<IProduct>>({
             query: (Courses) => ({
                 url: '/Courses',
@@ -60,11 +52,19 @@ const productApi = createApi({
             }),
             invalidatesTags: ['Courses'],
         }),
-        restoreProduct: builder.mutation<IProduct, Partial<IProduct>>({
-            query: (courses) => ({
-                url: `/Courses/${courses.id}`,
-                method: 'PATCH',
-                body: courses 
+        hideProduct: builder.mutation<IProduct, number | string>({
+            query: (id) => ({
+                url: `/Courses/${id}/hide`,
+                method: 'PATCH', // Hoặc phương thức HTTP tương ứng
+            }),
+            invalidatesTags: ['Courses'],
+        }),
+
+        // Thêm API endpoint để khôi phục khóa học
+        restoreProduct: builder.mutation<IProduct, number | string>({
+            query: (id) => ({
+                url: `/Courses/${id}/restore`,
+                method: 'PATCH', // Hoặc phương thức HTTP tương ứng
             }),
             invalidatesTags: ['Courses'],
         }),
@@ -75,9 +75,9 @@ export const {
     useGetProductsQuery,
     useAddProductMutation,
     useGetProductByIdQuery,
-    useRemoveProductMutation,
     useUpdateProductMutation,
-    useRestoreProductMutation
+    useRestoreProductMutation,
+    useHideProductMutation,
 } = productApi;
 
 export const productReducer = productApi.reducer;

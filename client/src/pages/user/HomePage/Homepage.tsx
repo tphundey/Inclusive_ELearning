@@ -10,6 +10,7 @@ import { formatCurrency } from './formatCurency';
 const Homepage = () => {
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
     const [categoryData, setCategoryData] = useState<any[]>([]);
+    const visibleProducts = productsData?.filter((product: any) => !product.isHidden);
 
     useEffect(() => {
         const fetchCategoryData = async () => {
@@ -90,7 +91,7 @@ const Homepage = () => {
                                 <div>Loading...</div>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData?.filter((product: any) => !product.isDeleted).map((product: any, index: any) => {
+                                    {visibleProducts?.map((product: any, index: any) => {
                                         const category = categoryData[index];
                                         const formattedPrice = formatCurrency(product.price);
                                         return (

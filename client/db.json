@@ -89,7 +89,7 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100,
-      "isDeleted": false
+      "isHidden": true
     },
     {
       "id": 3,
@@ -108,7 +108,8 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
       "enrollment": 100,
-      "isDeleted": true
+      "isDeleted": true,
+      "isHidden": true
     },
     {
       "id": 4,
@@ -309,6 +310,9 @@
         2,
         3,
         4
+      ],
+      "registeredCourseID": [
+        1
       ]
     },
     {
@@ -327,81 +331,9 @@
   "userVideoProgress": [
     {
       "userId": 1,
-      "videoId": 2,
-      "watchedTime": 48.496232,
+      "videoId": "2",
+      "watchedTime": 70.990819,
       "id": 1
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 4.5815,
-      "id": 2
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 29.757453,
-      "id": 3
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 29.757453,
-      "id": 4
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 29.757453,
-      "id": 5
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 29.757453,
-      "id": 6
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 25.908477,
-      "id": 7
-    },
-    {
-      "userId": 1,
-      "videoId": 1,
-      "watchedTime": 0,
-      "id": 8
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 52.65134,
-      "id": 9
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 13.810646,
-      "id": 10
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 0,
-      "id": 11
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 124.957375,
-      "id": 12
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 124.957375,
-      "id": 13
     }
   ]
 }

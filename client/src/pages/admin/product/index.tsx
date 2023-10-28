@@ -1,140 +1,125 @@
-import { useGetProductByIdQuery, useGetProductsQuery, useRemoveProductMutation, useRestoreProductMutation, useUpdateProductMutation } from "@/api/courses";
-import { IProduct } from "@/interfaces/product";
-import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-type Props = {};
+import React, { useState, useEffect } from 'react';
+import { Button, Table, Skeleton, Popconfirm, message, Pagination } from 'antd';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const AdminProduct = (props: Props) => {
+const AdminProduct = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
-    const [removeProduct, { isLoading: isRemoveLoading }] = useRemoveProductMutation();
-    const [restoreProduct] = useRestoreProductMutation();
-    const [updateProduct] = useUpdateProductMutation();
-    const dataSource = productsData?.map((item: IProduct) => ({
-        key: item.id,
-        name: item.courseName,
-        price: item.price,
-        desc : item.description,
-        date: item.date,
-        courseIMG : <img src={item.courseIMG} className="w-full" />,
-        categoryID : item.categoryID,
-        isDeleted : item.isDeleted
-    }));
-    
-    const handleRestore = (id: any) => {
-        updateProduct({id, isDeleted: false})
-          .unwrap()
-          .then(() => {
-            messageApi.open({
-              type: "success",
-              content: "Khôi phục thành công!",
-            });
-          });
-      };
-    const confirm = (id : any) => {
-        updateProduct({id, isDeleted: true})
-            .unwrap()
-            .then(() => {
-                messageApi.open({
-                    type: "success",
-                    content: "Deleted successfully!",
-                });
+    const [productsData, setProductsData] = useState([]);
+    const [isProductLoading, setIsProductLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const pageSize = 3;
+
+
+    const handlePageChange = (page: any) => {
+        setCurrentPage(page);
+    };
+
+    const fetchData = () => {
+        fetch('http://localhost:3000/Courses')
+            .then((response) => response.json())
+            .then((data) => {
+                setProductsData(data);
+                setIsProductLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error fetching data: ', error);
+                setIsProductLoading(false);
             });
     };
-    
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+
     const columns = [
         {
-            title: "Tên khóa học",
-            dataIndex: "name",
-            key: "name",
+            title: 'Tên khóa học',
+            dataIndex: 'courseName',
+            key: 'name',
+            width: '200px',
         },
         {
-            title: "Giá khóa học",
-            dataIndex: "price",
-            key: "price",
+            title: 'Giá',
+            dataIndex: 'price',
+            key: 'price',
+            width: '100px',
         },
         {
-            title: "mô tả",
-            dataIndex: "desc",
-            key: "desc",
+            title: 'Mô tả ngắn',
+            dataIndex: 'desc',
+            key: 'desc',
         },
         {
-            title: "thời gian tạo",
-            dataIndex: "date",
-            key: "date",
+            title: 'Ngày phát hành',
+            dataIndex: 'date',
+            key: 'date',
+            width: '150px',
         },
         {
-            title: "courseIMG ",
-            dataIndex: "courseIMG",
-            key: "courseIMG",
+            title: 'Hình ảnh',
+            dataIndex: 'courseIMG',
+            key: 'courseIMG',
+            render: (courseIMG: any) => (
+                <img src={courseIMG} alt="Hình ảnh khóa học" style={{ width: '100px' }} />
+            ),
         },
         {
-            title : "actions",
-            render: ({ key: id,isDeleted }: { key: number | string; isDeleted :boolean }) => (
-                <div className="flex space-x-2">
-                {isDeleted==true && ( // Hiển thị button "Khôi phục" chỉ khi khóa học chưa bị xóa
-                  <Popconfirm
-                    placement="top"
-                    title={"Khôi phục khóa học"}
-                    description={"Bạn có chắc chắn muốn khôi phục khóa học này không?"}
-                    onConfirm={() => handleRestore(id)}
-                    okText="Khôi phục"
-                    cancelText="Hủy"
-                  >
-                    <Button type="primary" danger>Khôi phục</Button>
-                  </Popconfirm>
-                )
-                }
-                {isDeleted == false && (
+            title: 'Trạng thái',
+            dataIndex: 'isHidden',
+            key: 'isHidden',
+            render: (isHidden: any, record: any) => {
+                const hiddenButtonClass = isHidden ? 'hidden-button' : '';
+
+                return (
                     <>
-                    <Popconfirm
-                            placement="top"
-                            title={"Remove course"}
-                            description={"Bạn chắc chắn muốn xóa chứ?"}
-                            onConfirm={() => confirm(id)}
-                            okText="Yes"
-                            cancelText="No"
+                        <Popconfirm
+                            title={isHidden ? 'Bỏ ẩn khóa học?' : 'Ẩn khóa học?'}
+                            onConfirm={() => updateHiddenState(record.id, !isHidden)}
                         >
-                            <Button type="primary" danger>
-                                Xóa
+                            <Button type={isHidden ? 'dashed' : 'default'} className={hiddenButtonClass}>
+                                {isHidden ? 'Đã ẩn' : 'Ẩn'}
                             </Button>
                         </Popconfirm>
-                    <Button>
-                    <Link to={`/admin/product/${id}/edit`}>Sửa</Link>
-                  </Button></>
-                )}
-              </div>
-                    // <div className="flex space-x-2">
-                    //     <Popconfirm
-                    //         placement="top"
-                    //         title={"Remove course"}
-                    //         description={"Bạn chắc chắn muốn xóa chứ?"}
-                    //         onConfirm={() => confirm(id)}
-                    //         okText="Yes"
-                    //         cancelText="No"
-                    //     >
-                    //         <Button type="primary" danger>
-                    //             Xóa
-                    //         </Button>
-                    //     </Popconfirm>
-                    //     <Button>
-                    //         <Link to={`/admin/product/${id}/edit`}>Sửa</Link>
-                    //     </Button>
-                    // </div> 
-                    
-            ),
+                        <Button className='ml-2'>
+                            <Link to={`/admin/product/${record.id}/edit`}>Sửa</Link>
+                        </Button></>
+                );
+            },
         },
     ];
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 3; // Số bản ghi hiển thị trên mỗi trang
+
     const startItem = (currentPage - 1) * pageSize;
     const endItem = currentPage * pageSize;
-    const currentData = dataSource?.slice(startItem, endItem);
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-      };
+    const currentData = productsData.slice(startItem, endItem);
+
+    const updateHiddenState = (productId:any, isHidden:any) => {
+
+        const updatedHiddenState = { isHidden: isHidden };
+
+        axios
+            .patch(`http://localhost:3000/Courses/${productId}`, updatedHiddenState)
+            .then((response: any) => {
+                // Xử lý thành công, cập nhật trạng thái ẩn/mở khóa học ở phía client ngay sau khi nhận phản hồi từ API
+                const updatedProductsData = productsData.map((product) => {
+                    if (product.id === productId) {
+                        return { ...product, isHidden: isHidden };
+                    }
+                    return product;
+                });
+
+                setProductsData(updatedProductsData);
+            })
+            .catch((error) => {
+                console.error('Lỗi khi cập nhật trạng thái ẩn/mở khóa học: ', error);
+            });
+    };
+
+
+
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
@@ -144,16 +129,23 @@ const AdminProduct = (props: Props) => {
                 </Button>
             </header>
             {contextHolder}
-            {isProductLoading ? <Skeleton /> : <><Table 
-                                                    pagination={false} 
-                                                    dataSource={currentData} 
-                                                    columns={columns}
-                                                     /><Pagination
-                                                     current={currentPage}
-                                                     total={dataSource?.length}
-                                                     pageSize={pageSize}
-                                                     onChange={handlePageChange}
-                                                   /> </> }
+            {isProductLoading ? (
+                <Skeleton />
+            ) : (
+                <>
+                    <Table
+                        pagination={false}
+                        dataSource={currentData}
+                        columns={columns}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={productsData.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                    />
+                </>
+            )}
         </div>
     );
 };
