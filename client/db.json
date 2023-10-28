@@ -101,7 +101,11 @@
       "date": "2023-09-25",
       "videoID": [
         1,
-        2
+        2,
+        6,
+        7,
+        8,
+        4
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -121,7 +125,8 @@
       ],
       "date": "2023-09-25",
       "videoID": [
-        1
+        1,
+        5
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
@@ -316,6 +321,18 @@
       "id": 3,
       "videoTitle": "Graphic Design Principles - Part 3",
       "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
+    },
+    {
+      "videoTitle": "đuaw",
+      "videoURL": "đuawa",
+      "courseId": 2,
+      "id": 4
+    },
+    {
+      "videoTitle": "gdgdrdg",
+      "videoURL": "rdgrdgd",
+      "courseId": 3,
+      "id": 5
     }
   ],
   "googleAccount": [

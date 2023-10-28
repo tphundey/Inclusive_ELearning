@@ -150,7 +150,7 @@ const AdminProduct = () => {
                             </Button>
                         </Popconfirm>
                         <Button className='ml-2'>
-                            <Link to={`/admin/product/${record.id}/edit`}>Sửa</Link>
+                            <Link to={`/admin/product/${record.id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
                         </Button>
                         <Button className='ml-2' onClick={() => showCourseVideos(record.id, showCourseReviews(record.id))}>
                             <i className="fa-solid fa-bars"></i>
