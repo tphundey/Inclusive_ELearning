@@ -35,6 +35,12 @@ import AdminVideoEdit from "./pages/admin/videos/edit";
 import { ContactUs } from "./pages/user/SendEmail/sendEmail";
 import Certificate from "./pages/user/test/test";
 import Dashboard from "./pages/admin/dashboard/dashboard";
+import AdminUser from "./pages/admin/users";
+import AdminUserAdd from "./pages/admin/users/add";
+import AdminUserEdit from "./pages/admin/users/edit";
+import AdminRole from "./pages/admin/roles";
+import AdminRoleAdd from "./pages/admin/roles/add";
+import AdminRoleEdit from "./pages/admin/roles/edit";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -115,7 +121,12 @@ export const routers = createBrowserRouter([
             { path: "videos", element: <AdminVideo /> },
             { path: "video/add", element: <AdminVideoAdd /> },
             { path: "video/:idVideo/edit", element: <AdminVideoEdit /> },
-
+            { path: "users", element: <AdminUser/> },
+            { path: "user/add", element: <AdminUserAdd /> },
+            { path: "user/:idUser/edit", element: <AdminUserEdit /> },
+            { path: "roles", element: <AdminRole /> },
+            { path: "role/add", element: <AdminRoleAdd /> },
+            { path: "role/:idRole/edit", element: <AdminRoleEdit /> },
         ],
 
     },

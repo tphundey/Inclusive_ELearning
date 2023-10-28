@@ -1,5 +1,7 @@
 import categoryApi, { categoryReducer } from "@/api/category";
 import productApi, { productReducer } from "@/api/courses";
+import roleApi, { RoleReducer } from "@/api/role";
+import userApi, { UserReducer } from "@/api/user";
 import videoApi, { videoReducer } from "@/api/video";
 import { Action, ThunkAction, combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
@@ -21,7 +23,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
     [productApi.reducerPath]: productReducer,
     [categoryApi.reducerPath]: categoryReducer,
-    [videoApi.reducerPath]: videoReducer
+    [videoApi.reducerPath]: videoReducer,
+    [userApi.reducerPath]: UserReducer,
+    [roleApi.reducerPath]: RoleReducer,
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -32,7 +36,12 @@ export const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }).concat(productApi.middleware,categoryApi.middleware, videoApi.middleware)
+        }).
+        concat( productApi.middleware,
+                categoryApi.middleware, 
+                videoApi.middleware, 
+                userApi.middleware,
+                roleApi.middleware)
 })
 
 export type AppDispatch = typeof store.dispatch

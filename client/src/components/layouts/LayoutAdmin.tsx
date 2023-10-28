@@ -58,7 +58,7 @@ const LayoutAdmin = () => {
                         {
                             key: "5",
                             icon: <AiOutlineUser  />,
-                            label: <Link to="/admin/user">Quản lý người dùng</Link>,
+                            label: <Link to="/admin/users">Quản lý người dùng</Link>,
                         },
                     ]}
                 />
