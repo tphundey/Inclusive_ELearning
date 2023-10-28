@@ -8,6 +8,15 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 1
+    },
+    {
+      "userID": 2,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 2
     }
   ],
   "Reviews": [
@@ -18,6 +27,14 @@
       "courseID": 2,
       "date": "2023-10-25",
       "id": 1
+    },
+    {
+      "rating": 2,
+      "comment": "mua tốn tiền vãi chưởng =))",
+      "userID": 2,
+      "courseID": 2,
+      "date": "2023-10-28",
+      "id": 2
     }
   ],
   "Categories": [
@@ -74,7 +91,7 @@
   "Courses": [
     {
       "id": 2,
-      "courseName": "Learning Word Online (Microsoft 3655)",
+      "courseName": "Learning Word Online (Microsoft 36555)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 22500,
       "duration": 120,
@@ -89,7 +106,8 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100,
-      "isHidden": true
+      "isHidden": true,
+      "isDeleted": true
     },
     {
       "id": 3,
@@ -287,7 +305,7 @@
     {
       "id": 1,
       "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFjVdvHmVSTMA/learning-original-video-vbr-720/0/1677706034798?e=1698419986&v=beta&t=CwOIQZLLCtNavY2bb_3UV6ql8xWwALn1F6PJ3HtQmxY"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQEug6wDwP9Lvw/learning-original-video-vbr-720/0/1623261622223?e=1698465916&v=beta&t=pFs_c-LJYWC568TLxRwnSszuSA41Tdac6SP8AcuNJxw"
     },
     {
       "id": 2,
