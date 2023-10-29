@@ -71,6 +71,14 @@
       "courseID": 2,
       "date": "2023-10-28",
       "id": 2
+    },
+    {
+      "rating": 4,
+      "comment": "3r",
+      "userID": 2,
+      "courseID": 4,
+      "date": "2023-10-29",
+      "id": 3
     }
   ],
   "Categories": [
@@ -112,7 +120,7 @@
       "username": "Trần Phùng",
       "email": "user456@example.com",
       "password": "hashedpassword456",
-      "avatarIMG": "https://scontent.xx.fbcdn.net/v/t1.15752-9/384510279_858046575764787_6948924531175803538_n.jpg?stp=dst-jpg_s280x280&_nc_cat=102&ccb=1-7&_nc_sid=aee45a&_nc_ohc=uulO2zDTXFwAX-ZEx83&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdT_dd5ZKWCjA4i6MAxy4KJ2L8YqF_fz73_J2K_ePBc7Jg&oe=654358DF",
+      "avatarIMG": "https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg",
       "address": "456 Elm St",
       "phone": "987-654-3210",
       "roleID": 2,
@@ -141,7 +149,9 @@
         6,
         7,
         8,
-        4
+        4,
+        4,
+        5
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -213,7 +223,7 @@
       "id": 6,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
-      "price": 2500,
+      "price": 25000,
       "duration": 120,
       "rateID": [
         1,
@@ -251,7 +261,7 @@
       "id": 8,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
-      "price": 500,
+      "price": 50000,
       "duration": 120,
       "rateID": [
         1,
@@ -262,7 +272,7 @@
         1
       ],
       "categoryID": 2,
-      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/2381223573937777274/63a1c19b7c15ab4bf204.jpg",
       "enrollment": 100,
       "isDeleted": false
     },
@@ -270,7 +280,7 @@
       "id": 9,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
-      "price": 500,
+      "price": 50000,
       "duration": 120,
       "rateID": [
         1,
@@ -281,7 +291,7 @@
         1
       ],
       "categoryID": 2,
-      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/7194595383535648932/6632c5087886afd8f697.jpg",
       "enrollment": 100,
       "isDeleted": false
     },
@@ -289,7 +299,7 @@
       "id": 10,
       "courseName": "Learning Word Online (Microsoft 365)",
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
-      "price": 500,
+      "price": 45000,
       "duration": 120,
       "rateID": [
         1,
@@ -300,7 +310,7 @@
         1
       ],
       "categoryID": 2,
-      "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
+      "courseIMG": "https://f11-zpcloud.zdn.vn/673344602545237661/ce8d42bfff31286f7120.jpg",
       "enrollment": 100,
       "isDeleted": false
     }
@@ -362,6 +372,18 @@
       "id": 3,
       "videoTitle": "Graphic Design Principles - Part 3",
       "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
+    },
+    {
+      "videoTitle": "Graphic Design Principles - Part 2",
+      "videoURL": "Graphic Design Principles - Part 2",
+      "courseId": 2,
+      "id": 4
+    },
+    {
+      "videoTitle": "Graphic Design Principles - Part 4",
+      "videoURL": "Graphic Design Principles - Part 2",
+      "courseId": 2,
+      "id": 5
     }
   ],
   "googleAccount": [

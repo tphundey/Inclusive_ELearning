@@ -49,11 +49,11 @@ const AdminCategory = (props: any) => {
                         cancelText="No"
                     >
                         <Button type="primary" danger>
-                            Xóa
+                        <i className="fa-solid fa-trash"></i>
                         </Button>
                     </Popconfirm>
                     <Button>
-                        <Link to={`/admin/category/${id}/edit`}>Sửa</Link>
+                        <Link to={`/admin/category/${id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
                     </Button>
                 </div>
             ),

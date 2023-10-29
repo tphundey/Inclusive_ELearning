@@ -19,7 +19,6 @@ body {
 
 .ant-message-error {
     z-index: 1000;
-    /* Đảm bảo rằng z-index của thông báo cao hơn z-index của header */
 }
 
 header .flex-hd {
@@ -33,7 +32,8 @@ header .flex-hd {
 }
 
 .box1 img {
-    width: 170px;
+    width: 120px;
+    padding: 5px;
 }
 
 .box2 {
@@ -159,4 +159,8 @@ nav div ul {
 
 .search-list img {
     width: 70px;
+}
+
+.header-mypro{
+    right: -250%;
 }

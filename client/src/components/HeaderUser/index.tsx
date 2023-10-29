@@ -1,16 +1,16 @@
 import './HeaderUser.css'
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button, Space } from 'antd';
 import { GoogleLogout } from 'react-google-login';
 const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
-
 const HeaderUser = () => {
-
 
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [isListVisible, setListVisible] = useState(false); // Sử dụng trạng thái này để quản lý hiển thị danh sách
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
     let listTimeout;
     const handleLogout = () => {
         localStorage.clear();
@@ -21,8 +21,6 @@ const HeaderUser = () => {
     };
 
     useEffect(() => {
-        // Fetch data from your API http://localhost:3000/Courses
-        // For simplicity, we're using dummy data here.
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
             .then((data) => {
@@ -39,7 +37,7 @@ const HeaderUser = () => {
         setFilteredProducts(filtered.slice(0, 5));
         setListVisible(true);
     };
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: any) => {
         const inputValue = e.target.value;
         setSearchTerm(inputValue);
         handleSearch(); // Gọi hàm tìm kiếm khi có sự thay đổi trong input
@@ -49,7 +47,6 @@ const HeaderUser = () => {
         setSearchTerm('');
     };
     const handleInputBlur = () => {
-        // Chỉ ẩn danh sách nếu input không được focus trong khoảng thời gian trễ
         if (!document.activeElement || !document.activeElement.classList.contains('product-item')) {
             listTimeout = setTimeout(() => {
                 setListVisible(false);
@@ -61,17 +58,17 @@ const HeaderUser = () => {
         clearTimeout(listTimeout);
     };
     // Xử lý sự kiện khi bấm vào một phần tử trong danh sách
-    const handleItemClick = (product) => {
-        // Thực hiện điều gì đó khi bấm vào một phần tử, ví dụ: chuyển tới trang chi tiết sản phẩm
+    const handleItemClick = (product: any) => {
         window.location.href = `/introduction/${product.id}`;
     };
+
     return (
         <div className='header-static'>
             <header>
                 <div className="containerCss flex-hd">
                     <div className="box1">
                         <div className="logo">
-                            <a href="http://localhost:5173/homepage"> <img src="https://f9-zpcloud.zdn.vn/6063566139068766470/d60a9b137ea1adfff4b0.jpg" alt="logo website" /></a>
+                            <a href="http://localhost:5173/homepage"> <img src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="logo website" /></a>
                         </div>
                     </div>
                     <div className="box2">
@@ -113,13 +110,13 @@ const HeaderUser = () => {
                         </div>
                         <div className="right">
                             <ul>
-                                <li>
+                                <li style={{ color: 'gray' }}>
                                     <a className='thea' href="http://localhost:5173/homepage">
                                         <i className="fa-solid fa-house lups"></i>
                                         <div>Home</div>
                                     </a>
                                 </li>
-                                <li>
+                                <li style={{ color: 'gray' }}>
                                     <a className='thea' href="http://localhost:5173/mylearning/progress">
                                         <i className="fa-regular fa-file lups"></i>
                                         <div>My learning</div>
@@ -137,18 +134,27 @@ const HeaderUser = () => {
                                                 Me <i className={`fa-solid fa-caret-${isDropdownOpen ? 'up' : 'down'} lups-left`}></i>
                                             </div>
                                             {isDropdownOpen && (
-                                                <div className="absolute mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                                <div className="absolute mt-2 w-48 header-mypro bg-white border border-gray-300 rounded-lg shadow-lg">
                                                     {/* Nội dung của dropdown ở đây */}
-                                                    <ul>
-                                                        <li>
-                                                            <GoogleLogout
-                                                                clientId={clientId}
-                                                                buttonText="Đăng Xuất" // Văn bản trên nút đăng xuất
-                                                                onLogoutSuccess={handleLogout} // Callback khi người dùng đăng xuất thành công
-                                                            >
-                                                            </GoogleLogout>
-                                                        </li>
-                                                    </ul>
+                                                    <div className="avatar">
+                                                        <div className="w-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                                            <img src="https://f10-zpcloud.zdn.vn/8154582047521615141/d3ef92e85e708b2ed261.jpg" />
+                                                        </div>
+                                                    </div>
+                                                    <br /><br />
+                                                    <Space>
+                                                        <Button type="dashed">My Profile</Button>
+                                                    </Space>
+                                                    <br /><br />
+                                                    <Space>
+                                                        <GoogleLogout
+                                                            clientId={clientId}
+                                                            buttonText="Đăng Xuất"
+                                                            onLogoutSuccess={handleLogout}
+                                                        >
+                                                        </GoogleLogout>
+                                                    </Space>
+                                                    <br /><br />
                                                 </div>
                                             )}
                                         </div>
@@ -156,14 +162,17 @@ const HeaderUser = () => {
                                 </li>
                                 <li>
                                     <a className='thea' href="">
-                                        <i className="fa-solid fa-earth-europe lups"></i>
+                                        <label className="swap swap-rotate">
+                                            <input type="checkbox" />
+                                            <svg style={{ color: 'gray' }} className="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" /></svg>
+                                            <svg style={{ color: 'gray' }} className="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" /></svg>
+                                        </label>
                                         <div>EN<i className="fa-solid fa-caret-down lups-left"></i></div>
                                     </a>
                                 </li>
-
                             </ul>
                             <div className='freemonth'>
-                                <a href="">Start my free month</a>
+                                <a href="">Start your progress</a>
                             </div>
                         </div>
                     </div>

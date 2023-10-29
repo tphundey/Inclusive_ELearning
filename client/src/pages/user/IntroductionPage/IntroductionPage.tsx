@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import { renderReviewRateIcon } from './ratingIcons';
 import moment from 'moment';
 import { notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import { Timeline } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
@@ -29,7 +31,48 @@ const IntroductionPage = () => {
     const [ratingCounts, setRatingCounts] = useState<{ [key: number]: number }>({});
     const [canDisplayForm, setCanDisplayForm] = useState(false); // State để kiểm tra xem có thể hiển thị form hay không
     const [userID, setUserID] = useState(null);
+    /////////////////////////////////////
+    const [videos, setVideos] = useState([]);
+    const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
+    const [currentVideo, setCurrentVideo] = useState(null);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
 
+    useEffect(() => {
+        // Fetch course details
+        axios.get(`http://localhost:3000/Courses/${id}`)
+            .then((response) => {
+                const productData = response.data;
+                setProduct(productData);
+
+                // Assuming you have an API endpoint to fetch all videos
+                axios.get(`http://localhost:3000/Videos`)
+                    .then((videoResponse) => {
+                        const allVideos = videoResponse.data;
+                        const videoIdsInCourse = productData.videoID;
+                        const filteredVideos = allVideos.filter((video) =>
+                            videoIdsInCourse.includes(video.id)
+                        );
+                        setVideos(filteredVideos);
+                        if (filteredVideos.length > 0) {
+                            setSelectedVideoUrl(filteredVideos[0].videoURL);
+                            setCurrentVideo(filteredVideos[0]);
+                        }
+                    })
+                    .catch((videoError) => {
+                        console.error('Error fetching video data:', videoError);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+    }, [id]);
+
+
+    const handleReturnButtonClick = () => {
+        // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
+        setShowWatchedTimeModal(true);
+    };
     // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
     const encryptedProfile = localStorage.getItem('profile');
     if (encryptedProfile) {
@@ -64,8 +107,6 @@ const IntroductionPage = () => {
             console.error(error);
             // Xử lý lỗi nếu có
         });
-
-
 
 
     useEffect(() => {
@@ -394,7 +435,22 @@ const IntroductionPage = () => {
         }
     };
 
+    const timelineItems = videos.map((video) => ({
+        color: 'green',
+        children: (
+            <div key={video.id}>
+                {video.videoTitle}
+            </div>
+        ),
+    }));
 
+    timelineItems.push(
+        {
+            color: '#00CCFF',
+            dot: <SmileOutlined />,
+            children: <p>Certificate</p>,
+        }
+    );
 
     const [userReviews, setUserReviews] = useState<any[]>([]);
 
@@ -460,14 +516,14 @@ const IntroductionPage = () => {
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Shareable certificate</div>
-                       <img width={250} className='mt-3' src="https://f11-zpcloud.zdn.vn/8468826104549191620/bb5b8481eb753c2b6564.jpg" alt="" />
+                        <img width={250} className='mt-3' src="https://f11-zpcloud.zdn.vn/8468826104549191620/bb5b8481eb753c2b6564.jpg" alt="" />
                         <div className='font-medium text-xl mt-6'>
                             Instructors
                         </div>
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img  src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
+                                    <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
                                 </div>
                                 <div className="instruc-right">
                                     <h1>Trần Thị Hương Trà</h1>
@@ -555,11 +611,31 @@ const IntroductionPage = () => {
                             ))}
                         </div>
                     </div>
-
                 </div>
                 <div className='introducation-right'>
-                    <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
+                    <h2 className='text-xl font-medium p-3 mt-12 mb-5'>Introduction</h2>
+                    <div>
+                        <div className=' p-5'>
+                            <Timeline items={timelineItems} />
 
+                            <div>
+                                <br />
+                                {showSuccessAlert && (
+                                    <Alert
+                                        message="Bạn đã hoàn thành chứng chỉ!"
+                                        type="success"
+                                        showIcon
+                                        description={
+                                            <Button className='chungchi' type="primary" onClick={handleNavigate}>
+                                                Nhận chứng chỉ
+                                            </Button>
+                                        }
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <h2 className='text-xl font-medium p-3'>Related courses</h2>
                     <ul className="divide-y divide-slate-100">
                         {similarProducts.map((similarProduct) => (
                             <li key={similarProducts.id} className="flex items-start gap-4 px-4 py-3">

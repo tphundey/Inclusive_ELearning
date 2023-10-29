@@ -17,7 +17,7 @@ const FooterUser = () => {
 
                 <div className='des-footer'>
                     <div>
-                        <img src="https://f10-zpcloud.zdn.vn/706288530532766860/ae8d07d0756da633ff7c.jpg" alt="" />
+                        <img width={90} src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="" />
                     </div>
                     <div className="des">
                         LinkedIn Corporation © 2023
