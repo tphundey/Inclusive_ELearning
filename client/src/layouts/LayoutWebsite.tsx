@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
-import HeaderUser from "../HeaderUser";
-import FooterUser from "../FooterUser";
+import HeaderUser from "../components/HeaderUser";
+import FooterUser from "../components/FooterUser";
 const LayoutWebsite = () => {
     return <div>
         <HeaderUser />

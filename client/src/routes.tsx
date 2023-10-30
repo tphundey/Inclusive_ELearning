@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import LayoutWebsite from "./components/layouts/LayoutWebsite";
-import LayoutAdmin from "./components/layouts/LayoutAdmin";
+import LayoutWebsite from "./layouts/LayoutWebsite";
+import LayoutAdmin from "./layouts/LayoutAdmin";
 import { Navigate } from "react-router-dom";
 import AdminProduct from "./pages/admin/product";
 import AdminProductAdd from "./pages/admin/product/add";
