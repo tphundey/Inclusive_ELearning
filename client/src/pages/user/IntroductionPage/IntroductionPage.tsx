@@ -10,47 +10,48 @@ import { Link } from 'react-router-dom';
 import { renderReviewRateIcon } from './ratingIcons';
 import moment from 'moment';
 import { notification } from 'antd';
-import { SmileOutlined } from '@ant-design/icons';
+import { decodeData } from '@/components/Decodedata/Decodedata';
 import { Timeline } from 'antd';
-
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+import { getUserEmail } from '@/components/EncryptedProfile/EncryptedProfile';
+import { generateTimelineItems } from '@/components/TimeLineItem/TimeLineItem';
+import { Skeleton } from 'antd';
 
 const IntroductionPage = () => {
-    const [rated, setRated] = React.useState(4);
+
+   const userEmail: string = getUserEmail();
+    const [rated, setRated] = React.useState<number>(4);
     const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[]>([]);
     const [reviews, setReviews] = useState<any[]>([]);
-    const [review, setReview] = useState({ rating: 4, comment: '' });;
+    const [review, setReview] = useState({ rating: 4, comment: '' });
     const [users, setUsers] = useState<any[]>([]);
-    const { id } = useParams();
+    const { id }: { id?: string } = useParams();
     const [, setEncryptedData] = useState<any>(null);
-    const courseID = parseInt(id, 10);
+    const courseID: number | undefined = id ? parseInt(id, 10) : undefined;
     const [ratingCounts, setRatingCounts] = useState<{ [key: number]: number }>({});
-    const [canDisplayForm, setCanDisplayForm] = useState(false); // State để kiểm tra xem có thể hiển thị form hay không
-    const [userID, setUserID] = useState(null);
-    /////////////////////////////////////
-    const [videos, setVideos] = useState([]);
-    const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
-    const [currentVideo, setCurrentVideo] = useState(null);
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
+    const [canDisplayForm, setCanDisplayForm] = useState<boolean>(false);
+    const [userID, setUserID] = useState<number | null>(null);
+    const [videos, setVideos] = useState<any[]>([]);
+    const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
+    const [currentVideo, setCurrentVideo] = useState<any>(null);
+    const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+    const timelineItems = generateTimelineItems(videos);
+    const [userReviews, setUserReviews] = useState<any[]>([]);
+
+
+    ////////////////////Lấy thông tin khóa học theo ID////////////////////
 
     useEffect(() => {
-        // Fetch course details
         axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
                 const productData = response.data;
                 setProduct(productData);
 
-                // Assuming you have an API endpoint to fetch all videos
                 axios.get(`http://localhost:3000/Videos`)
                     .then((videoResponse) => {
                         const allVideos = videoResponse.data;
                         const videoIdsInCourse = productData.videoID;
-                        const filteredVideos = allVideos.filter((video) =>
+                        const filteredVideos = allVideos.filter((video: any) =>
                             videoIdsInCourse.includes(video.id)
                         );
                         setVideos(filteredVideos);
@@ -69,25 +70,9 @@ const IntroductionPage = () => {
     }, [id]);
 
 
-    const handleReturnButtonClick = () => {
-        // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
-        setShowWatchedTimeModal(true);
-    };
-    // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-    const encryptedProfile = localStorage.getItem('profile');
-    if (encryptedProfile) {
-        const decryptedProfile = decodeData(encryptedProfile);
-        // Bước 2: Chuyển thông tin đã giải mã thành đối tượng JSON
-        const profile = JSON.parse(decryptedProfile);
-        // Bước 3: Lấy email từ đối tượng profile
-        var userEmail = profile.email;
-        console.log('Email của người dùng:', userEmail);
-        // Bước 4: Sử dụng email trong truy vấn hoặc hiển thị
-    } else {
-        console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
-    }
+    ////////////////////Lấy thông tin tài khoản google dựa theo Email////////////////////
 
-    // Thực hiện GET request để lấy ID từ API
+
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
         .then((response) => {
             if (response.ok) {
@@ -98,15 +83,15 @@ const IntroductionPage = () => {
         })
         .then((data) => {
             const user = data.find((item: any) => item.email === userEmail);
-            // Bước 3: Lấy ID từ dữ liệu API
             const userID = user.id;
-            setUserID(userID); // Đặt giá trị userID vào state
-            console.log(user.id, 'Từ state');
+            setUserID(userID);
         })
         .catch((error) => {
             console.error(error);
-            // Xử lý lỗi nếu có
         });
+
+
+    ////////////////////Lấy thông tin thanh toán////////////////////
 
 
     useEffect(() => {
@@ -118,8 +103,6 @@ const IntroductionPage = () => {
                     throw new Error('Failed to fetch data from the API.');
                 }
                 const data = await response.json();
-                console.log(data);
-
                 if (data) {
                     const payment = data.find((item: any) => item.courseID === courseID && item.userID === userID && item.payment_status === true);
                     if (payment) {
@@ -136,29 +119,39 @@ const IntroductionPage = () => {
     }, [courseID, userID]);
 
 
+    ////////////////////Lấy thông tin đánh giá ////////////////////
+
+
     useEffect(() => {
         axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
             .then((response) => {
-                console.log(response.data); // Ghi lại dữ liệu từ API
+                console.log(response.data);
                 setReviews(response.data);
             })
             .catch((error) => {
                 console.error(error);
             });
     }, [id]);;
+
+
+    ////////////////////Lấy thông tin số rate////////////////////
+
+
     useEffect(() => {
         const counts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
         reviews.forEach((review) => {
             counts[review.rating] += 1;
         });
-
         setRatingCounts(counts);
     }, [reviews]);
 
+
+    ////////////////////Giải mã thông tin từ local ////////////////////
+
+
     useEffect(() => {
         async function start() {
-            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
             const encryptedProfile: any = localStorage.getItem('profile');
             if (encryptedProfile) {
                 const decryptedProfile: any = decodeData(encryptedProfile);
@@ -171,6 +164,9 @@ const IntroductionPage = () => {
         }
         start();
     }, []);
+
+
+    ////////////////////Chức năng thanh toán khóa học ////////////////////
 
 
     const handleBuyButtonClick = () => {
@@ -191,9 +187,7 @@ const IntroductionPage = () => {
                 // Bước 3: Lấy ID từ dữ liệu API
                 const userID = user.id;
                 setUserID(userID); // Đặt giá trị userID vào state
-                console.log(user.id, 'Từ state');
 
-                // Bước 4: Thực hiện POST request để tạo payment
                 const paymentData = {
                     userID: userID, // Sử dụng userID lấy được từ API
                     courseID: courseID, // Chọn courseID tùy theo logic của bạn
@@ -214,35 +208,26 @@ const IntroductionPage = () => {
             .then((response) => {
                 if (response.ok) {
                     console.log('Payment successful');
-                    // Xử lý khi payment thành công
                 } else {
                     throw new Error('Payment failed.');
                 }
             })
             .catch((error) => {
                 console.error(error);
-                // Xử lý lỗi nếu có
             });
 
     };
 
 
+    ////////////////////Thay đổi số rate////////////////////
 
 
-
-
-    // end thanh toán/////////////////////////////////////////////////////////////
     const handleRatingChange = (value: any) => {
-        // Cập nhật rating trong state
         setReview({ ...review, rating: value });
-
-
-        // Cập nhật rated để hiển thị số tương ứng
         setRated(value);
     };
     useEffect(() => {
         if (id) {
-            // Chuyển đổi _id thành chuỗi
             const stringId = id.toString();
             const apiUrl = `http://localhost:3000/Courses/${stringId}`;
             axios
@@ -256,8 +241,11 @@ const IntroductionPage = () => {
         }
     }, [id]);
 
+
+    ////////////////////Lấy thông tin khóa học cùng loại////////////////////
+
+
     useEffect(() => {
-        // Lấy tất cả sản phẩm có cùng categoryID
         if (product.categoryID) {
             const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
             axios.get(apiUrl)
@@ -270,8 +258,11 @@ const IntroductionPage = () => {
         }
     }, [product.categoryID]);
 
+
+    ////////////////////Lấy tất cả đánh giá từ API có courseID trùng với id ////////////////////
+
+
     useEffect(() => {
-        // Lấy tất cả đánh giá từ API có courseID trùng với id trên URL
         axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
             .then((response) => {
                 setReviews(response.data);
@@ -282,7 +273,6 @@ const IntroductionPage = () => {
                 console.error(error);
             });
 
-        // Lấy tất cả người dùng từ API
         axios
             .get('http://localhost:3000/users')
             .then((response) => {
@@ -296,6 +286,7 @@ const IntroductionPage = () => {
     function findUserById(userID: any) {
         return users.find((user) => user.id === userID);
     }
+
 
     function calculateAverageRating(reviews: any) {
         if (reviews && reviews.length > 0) {
@@ -317,23 +308,22 @@ const IntroductionPage = () => {
 
         const starRating = [];
         for (let i = 0; i < fullStars; i++) {
-            starRating.push('★'); // Ký tự sao đầy
+            starRating.push('★');
         }
         if (halfStar) {
-            starRating.push('☆'); // Ký tự sao trống nếu có nửa sao
+            starRating.push('☆');
         }
         for (let i = 0; i < emptyStars; i++) {
-            starRating.push('☆'); // Ký tự sao trống
+            starRating.push('☆');
         }
-
-        return starRating.join(' '); // Chuyển mảng thành chuỗi
+        return starRating.join(' ');
     }
-
-    const rateIDArray = Array.isArray(product.rateID) ? product.rateID : [];
     const averageRating = calculateAverageRating(reviews);
-    const starRating = convertToStarRating(averageRating);
+    const starRating: string = convertToStarRating(averageRating.toString());
 
-    //Post review
+
+    ////////////////////Post đánh giá người dùng ////////////////////
+
 
     // Thực hiện GET request để lấy ID từ API
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
@@ -346,15 +336,12 @@ const IntroductionPage = () => {
         })
         .then((data) => {
             const user = data.find((item: any) => item.email === userEmail);
-            // Bước 3: Lấy ID từ dữ liệu API
-            var userID = user.id;
+            const userID = user.id;
             console.log(user.id,);
         })
         .catch((error) => {
             console.error(error);
-            // Xử lý lỗi nếu có
         });
-
 
     const postReview = () => {
         // Lấy thông tin người dùng hiện tại từ localStorage
@@ -435,25 +422,6 @@ const IntroductionPage = () => {
         }
     };
 
-    const timelineItems = videos.map((video) => ({
-        color: 'green',
-        children: (
-            <div key={video.id}>
-                {video.videoTitle}
-            </div>
-        ),
-    }));
-
-    timelineItems.push(
-        {
-            color: '#00CCFF',
-            dot: <SmileOutlined />,
-            children: <p>Certificate</p>,
-        }
-    );
-
-    const [userReviews, setUserReviews] = useState<any[]>([]);
-
     useEffect(() => {
         // Lấy danh sách đánh giá của người dùng từ API
         axios.get(`http://localhost:3000/Reviews?userID=${userEmail}&courseID=${id}`)
@@ -464,8 +432,10 @@ const IntroductionPage = () => {
                 console.error(error);
             });
     }, [userEmail, id]);
+
+
     if (!product) {
-        return <div>Loading...</div>;
+        return <Skeleton active />;
     }
     return (
         <div className="containerCss">
@@ -488,7 +458,7 @@ const IntroductionPage = () => {
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             <Link to={`/content/${id}`}>
-                                <button className='intro-bt1'>Start my free month</button>
+                                <button className='intro-bt1'>Start your progress</button>
                             </Link>
                             <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy for my team</button>
                         </div>
@@ -523,7 +493,7 @@ const IntroductionPage = () => {
                         <div className="instructors">
                             <div className="instructors-children">
                                 <div className="instruc-left">
-                                    <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.15752-9/383292251_829901122012637_7869564018659041068_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=isJ5azOlmdMAX9kwwJD&_nc_ht=scontent.fhan2-3.fna&_nc_e2o=s&oh=03_AdSeeh6rPRQcy3YfM7RB0VudMtnM-g0IMmvF76DjiEjJtg&oe=655208E8" alt="" />
+                                    <img src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
                                 </div>
                                 <div className="instruc-right">
                                     <h1>Trần Thị Hương Trà</h1>
@@ -617,22 +587,6 @@ const IntroductionPage = () => {
                     <div>
                         <div className=' p-5'>
                             <Timeline items={timelineItems} />
-
-                            <div>
-                                <br />
-                                {showSuccessAlert && (
-                                    <Alert
-                                        message="Bạn đã hoàn thành chứng chỉ!"
-                                        type="success"
-                                        showIcon
-                                        description={
-                                            <Button className='chungchi' type="primary" onClick={handleNavigate}>
-                                                Nhận chứng chỉ
-                                            </Button>
-                                        }
-                                    />
-                                )}
-                            </div>
                         </div>
                     </div>
                     <h2 className='text-xl font-medium p-3'>Related courses</h2>

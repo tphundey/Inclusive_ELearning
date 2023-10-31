@@ -1,5 +1,4 @@
 import { Icategory } from '@/interfaces/category';
-import { IProduct } from '@/interfaces/product';
 import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 

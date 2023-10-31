@@ -2,6 +2,7 @@ import './BrowsePage.css'
 import { NavLink, Outlet } from 'react-router-dom';
 
 const Browsepage = () => {
+    
     const tabs = [
         { label: 'Business', icon: 'fa-solid fa-chart-simple', path: 'business' },
         { label: 'Creative', icon: 'fa-regular fa-gem', path: 'creative' },

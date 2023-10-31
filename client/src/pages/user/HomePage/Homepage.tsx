@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
-import { formatCurrency } from './formatCurency';
+import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
 
 const Homepage = () => {
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
@@ -34,12 +34,13 @@ const Homepage = () => {
         fetchCategoryData();
     }, [productsData]);
 
+
     const settings = {
         arrows: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 4, // Hiển thị 4 sản phẩm trên mỗi dòng
-        slidesToScroll: 1,
+        slidesToShow: 4,
+        slidesToScroll: 3,
     };
 
     return (
@@ -52,8 +53,8 @@ const Homepage = () => {
                         <span>Millions of members are on LinkedIn Learning</span>
                     </div>
                     <div className="fl-button">
-                    <button className="btn btn-active btn-ghost">Start your progress</button>
-                    <button className="btn btn-outline btn-accent">Buy for my team</button>
+                        <button className="btn btn-active btn-ghost">Start your progress</button>
+                        <button className="btn btn-outline btn-accent">Buy for my team</button>
                     </div>
                 </div>
                 <div className="bannerBosu">
@@ -95,6 +96,9 @@ const Homepage = () => {
                                     {visibleProducts?.map((product: any, index: any) => {
                                         const category = categoryData[index];
                                         const formattedPrice = formatCurrency(product.price);
+                                        const categoryContent = category ? category.categoryName : (
+                                            <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
+                                        );
                                         return (
                                             <div className="group relative">
                                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -104,7 +108,7 @@ const Homepage = () => {
                                                     <div>
                                                         <h3 className="text-xs text-gray-700">
                                                             <span className="absolute inset-2 popular">COURSE</span>
-                                                            {category ? category.categoryName : 'No Category'}
+                                                            {categoryContent}
                                                         </h3>
                                                         <a href={`/introduction/${product.id}`} key={index}>
                                                             <p className="mt-1 text-base">{product.courseName}</p>
@@ -137,6 +141,9 @@ const Homepage = () => {
                                         .map((product: any, index: any) => {
                                             const category = categoryData[index];
                                             const formattedPrice = formatCurrency(product.price);
+                                            const categoryContent = category ? category.categoryName : (
+                                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
+                                            );
                                             return (
                                                 <div className="group relative" key={index}>
                                                     <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -146,7 +153,7 @@ const Homepage = () => {
                                                         <div>
                                                             <h3 className="text-xs text-gray-700">
                                                                 <span className="absolute inset-2 popular">COURSE</span>
-                                                                {category ? category.categoryName : 'No Category'}
+                                                                {categoryContent}
                                                             </h3>
                                                             <Link to={`/introduction/${product._id}`}>
                                                                 <p className="mt-1 text-base">{product.courseName}</p>

@@ -2,57 +2,21 @@
   "Payment": [
     {
       "userID": 1,
-      "courseID": 2,
+      "courseID": 8,
       "coupon": "null",
-      "paymentAmount": 22500,
+      "paymentAmount": 50000,
       "date": "2023-09-29",
       "payment_status": true,
       "id": 1
     },
     {
-      "userID": 2,
-      "courseID": 2,
+      "userID": 1,
+      "courseID": 4,
       "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-08-29",
+      "paymentAmount": 50000,
+      "date": "2023-09-29",
       "payment_status": true,
       "id": 2
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-08-29",
-      "payment_status": true,
-      "id": 3
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-07-29",
-      "payment_status": true,
-      "id": 4
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-07-29",
-      "payment_status": true,
-      "id": 5
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-06-29",
-      "payment_status": true,
-      "id": 6
     }
   ],
   "Reviews": [
@@ -79,6 +43,30 @@
       "courseID": 4,
       "date": "2023-10-29",
       "id": 3
+    },
+    {
+      "rating": 4,
+      "comment": "khá phí tiền",
+      "userID": 1,
+      "courseID": 7,
+      "date": "2023-10-31",
+      "id": 4
+    },
+    {
+      "rating": 4,
+      "comment": "Hí hí hí",
+      "userID": 1,
+      "courseID": 8,
+      "date": "2023-10-31",
+      "id": 5
+    },
+    {
+      "rating": 4,
+      "comment": "Hơi đắtt =((",
+      "userID": 1,
+      "courseID": 4,
+      "date": "2023-10-31",
+      "id": 6
     }
   ],
   "Categories": [
