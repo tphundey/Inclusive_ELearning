@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
+import { Empty, Pagination } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
@@ -7,27 +8,9 @@ function decodeData(encryptedData: any): any {
 
 const InProgress = () => {
     const [savedCourses, setSavedCourses] = useState([]);
-    const [email, setEmail] = useState(''); // Lưu email của người dùng
-    const [encryptedData, setEncryptedData] = useState<any>(null);
-
-    // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-    const encryptedProfile = localStorage.getItem('profile');
-    if (encryptedProfile) {
-        const decryptedProfile = decodeData(encryptedProfile);
-
-        // Bước 2: Chuyển thông tin đã giải mã thành đối tượng JSON
-        const profile = JSON.parse(decryptedProfile);
-
-        // Bước 3: Lấy email từ đối tượng profile
-        const userEmail = profile.email;
-
-        console.log('Email của người dùng:', userEmail);
-
-        // Bước 4: Sử dụng email trong truy vấn hoặc hiển thị
-    } else {
-        console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
-    }
-
+    const [currentPage, setCurrentPage] = useState(1); // Thêm trạng thái trang hiện tại
+    // const [encryptedData, setEncryptedData] = useState<any>(null);
+    const [, setEncryptedData] = useState<any>(null);
     useEffect(() => {
         async function start() {
             // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
@@ -36,8 +19,7 @@ const InProgress = () => {
                 const decryptedProfile: any = decodeData(encryptedProfile);
                 console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
                 setEncryptedData(decryptedProfile);
-            }
-            else {
+            } else {
                 console.log('Ko chạy');
             }
         }
@@ -45,34 +27,25 @@ const InProgress = () => {
     }, []);
 
     useEffect(() => {
-        // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
         const encryptedProfile = localStorage.getItem('profile');
         if (encryptedProfile) {
             const decryptedProfile = decodeData(encryptedProfile);
-            // Bước 2: Chuyển thông tin đã giải mã thành đối tượng JSON
             const profile = JSON.parse(decryptedProfile);
-            // Bước 3: Lấy email từ đối tượng profile
             const userEmail = profile.email;
             console.log('Email của người dùng:', userEmail);
 
-            // Bước 4: Sử dụng email để lấy danh sách khóa học đã lưu
             fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
                 .then((response) => response.json())
                 .then((userData) => {
                     if (userData.length > 0) {
                         const user = userData[0];
-                        // Bước 5: Lấy danh sách id khóa học đã lưu từ thông tin người dùng
-                        const savedCourseIds = user.courseSaved;
-
-                        // Bước 6: Thực hiện truy vấn để lấy danh sách khóa học từ cơ sở dữ liệu
+                        const savedCourseIds = user.registeredCourseID;
                         fetch(`http://localhost:3000/Courses`)
                             .then((response) => response.json())
                             .then((coursesData) => {
-                                // Bước 7: Lọc danh sách khóa học dựa trên id đã lưu
-                                const savedCourses = coursesData.filter((course) =>
+                                const savedCourses = coursesData.filter((course: any) =>
                                     savedCourseIds.includes(course.id)
                                 );
-                                // Bước 8: Lưu danh sách khóa học vào state
                                 setSavedCourses(savedCourses);
                             })
                             .catch((error) => {
@@ -88,36 +61,63 @@ const InProgress = () => {
         }
     }, []);
 
+    // Số lượng phần tử mỗi trang
+    const itemsPerPage = 2;
+
+    // Tính chỉ mục bắt đầu và chỉ mục kết thúc dựa trên trang hiện tại
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    // Danh sách khóa học cần hiển thị trên trang hiện tại
+    const coursesToDisplay = savedCourses.slice(startIndex, endIndex);
+
+    const handlePageChange = (page:any) => {
+        setCurrentPage(page);
+    };
+
     return (
         <div className="listProgress">
-
-            {savedCourses.map((course: any) => (
-                <div>
-                    <div className="courseProgress">
-                        <div className="imgCoureProgress">
-                            <img src={course.courseIMG} alt="" />
-                        </div>
-                        <div className="infoCourseProgress">
-                            <h3>COURSE</h3>
-                            <a href={`/introduction/${course.id}`}> <h2>{course.courseName}</h2></a>
-                            <div className="fl-info-progress">
-                                <div className="fl1-info-progress">
-                                    <img src="https://media.licdn.com/dms/image/C560BAQHaVYd13rRz3A/company-logo_100_100/0/1638831589865?e=1700092800&v=beta&t=MFjcNX0hJDW7Goe5R8ZoAUHDj4B5d0UltcbssljghMY" alt="" />
-                                </div>
-                                <div className="fl2-info-progress">
-                                    LinkedIn - By: Hương Trà - 1 month ago
+            {savedCourses.length > 0 ? (
+                coursesToDisplay.map((course: any) => (
+                    <div>
+                        {/* Hiển thị thông tin khóa học */}
+                        <div className="courseProgress">
+                            <div className="imgCoureProgress">
+                                <img src={course.courseIMG} alt="" />
+                            </div>
+                            <div className="infoCourseProgress">
+                                <h3>COURSE</h3>
+                                <a href={`/introduction/${course.id}`}> <h2>{course.courseName}</h2></a>
+                                <div className="fl-info-progress">
+                                    <div className="fl1-info-progress">
+                                        <img src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="" />
+                                    </div>
+                                    <div className="fl2-info-progress">
+                                        LinkedIn - By: Trần Phùng 
+                                    </div>
                                 </div>
                             </div>
+                            <div className="option-course-progress">
+                                <button><i className="fa-solid fa-ellipsis"></i></button>
+                            </div>
                         </div>
-                        <div className="option-course-progress">
-                            <button><i className="fa-solid fa-ellipsis"></i></button>
-                        </div>
+                        <hr />
                     </div>
-                    <hr />
-                </div>
-            ))}
+                ))
+            ) : (
+                <Empty className='mt-20' />
+            )}
+            {savedCourses.length > itemsPerPage && (
+                <Pagination
+                    defaultCurrent={1}
+                    total={savedCourses.length}
+                    pageSize={itemsPerPage}
+                    current={currentPage}
+                    onChange={handlePageChange}
+                />
+            )}
         </div>
-    )
+    );
 };
 
 export default InProgress;

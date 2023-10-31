@@ -7,7 +7,7 @@ import { Button } from 'antd';
 import { useParams } from 'react-router-dom';
 import { Form } from 'antd';
 import { Link } from 'react-router-dom';
-import { renderReviewRateIcon } from './ratingIcons';
+import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
 import moment from 'moment';
 import { notification } from 'antd';
 import { decodeData } from '@/components/Decodedata/Decodedata';
@@ -18,7 +18,7 @@ import { Skeleton } from 'antd';
 
 const IntroductionPage = () => {
 
-   const userEmail: string = getUserEmail();
+    const userEmail: string = getUserEmail();
     const [rated, setRated] = React.useState<number>(4);
     const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[]>([]);
@@ -37,7 +37,9 @@ const IntroductionPage = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
     const timelineItems = generateTimelineItems(videos);
     const [userReviews, setUserReviews] = useState<any[]>([]);
-
+    const [totalReviews, setTotalReviews] = useState(0);
+    const [paymentCount, setPaymentCount] = useState(0);
+    const [categoryName, setCategoryName] = useState('');
 
     ////////////////////Lấy thông tin khóa học theo ID////////////////////
 
@@ -68,6 +70,24 @@ const IntroductionPage = () => {
                 console.error('Error fetching product data:', error);
             });
     }, [id]);
+
+    ///////////////////////// Láy thông tin danh mục///////////////////////////
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/Categories')
+            .then((response) => {
+                if (response.status === 200) {
+                    const categories = response.data;
+                    const matchedCategory = categories.find((category: any) => category.id === product.categoryID);
+                    if (matchedCategory) {
+                        setCategoryName(matchedCategory.categoryName);
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Lỗi khi tải dữ liệu Categories:', error);
+            });
+    }, [product.categoryID]);
 
 
     ////////////////////Lấy thông tin tài khoản google dựa theo Email////////////////////
@@ -165,38 +185,63 @@ const IntroductionPage = () => {
         start();
     }, []);
 
-
-    ////////////////////Chức năng thanh toán khóa học ////////////////////
-
-
     const handleBuyButtonClick = () => {
-
-        const { price } = product; // Lấy giá sản phẩm từ trường price của object product
+        const { price } = product;
         const paymentAmount = parseFloat(price);
-        // Thực hiện GET request để lấy ID từ API
+    
+        // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Failed to retrieve user ID from the API.');
+                    throw new Error('Failed to retrieve user data from the API.');
                 }
             })
-            .then((data) => {
-                const user = data.find((item: any) => item.email === userEmail);
-                // Bước 3: Lấy ID từ dữ liệu API
+            .then((userData) => {
+                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
                 const userID = user.id;
-                setUserID(userID); // Đặt giá trị userID vào state
-
+    
+                // Bước 2: Lấy danh sách khóa học đã mua của người dùng
+                const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
+    
+                // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
+                if (!registeredCourseIDs.includes(courseID)) {
+                    registeredCourseIDs.push(courseID);
+                }
+    
+                // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
+                user.registeredCourseID = registeredCourseIDs;
+    
+                // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
+                fetch(`http://localhost:3000/googleAccount/${userID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user),
+                })
+                    .then((updateResponse) => {
+                        if (updateResponse.ok) {
+                            console.log('User data updated successfully');
+                        } else {
+                            throw new Error('Failed to update user data.');
+                        }
+                    })
+                    .catch((updateError) => {
+                        console.error('Error updating user data:', updateError);
+                    });
+    
+                // Bước 5: Thực hiện thanh toán
                 const paymentData = {
-                    userID: userID, // Sử dụng userID lấy được từ API
-                    courseID: courseID, // Chọn courseID tùy theo logic của bạn
+                    userID,
+                    courseID,
                     coupon: "null",
-                    paymentAmount: paymentAmount,
+                    paymentAmount,
                     date: "2023-09-29",
                     payment_status: true
                 };
-
+    
                 return fetch('http://localhost:3000/payment', {
                     method: 'POST',
                     headers: {
@@ -205,19 +250,21 @@ const IntroductionPage = () => {
                     body: JSON.stringify(paymentData),
                 });
             })
-            .then((response) => {
-                if (response.ok) {
+            .then((paymentResponse) => {
+                if (paymentResponse.ok) {
                     console.log('Payment successful');
+                    // Cập nhật trạng thái giao dịch hoặc thông báo cho người dùng
                 } else {
                     throw new Error('Payment failed.');
                 }
             })
             .catch((error) => {
-                console.error(error);
+                console.error('Error:', error);
+                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             });
-
     };
-
+    
+    
 
     ////////////////////Thay đổi số rate////////////////////
 
@@ -267,7 +314,6 @@ const IntroductionPage = () => {
             .then((response) => {
                 setReviews(response.data);
                 console.log(response.data);
-
             })
             .catch((error) => {
                 console.error(error);
@@ -283,10 +329,28 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
+    //////////////////// Lấy ra tổng số đánh giá///////////////////////
+
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/Reviews?courseID=${id}`);
+                const allReviews = response.data;
+                setReviews(allReviews);
+                const totalReviews = allReviews.length;
+                setTotalReviews(totalReviews); // Cập nhật tổng số đánh giá
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchReviews();
+    }, [id]);
+
+
     function findUserById(userID: any) {
         return users.find((user) => user.id === userID);
     }
-
 
     function calculateAverageRating(reviews: any) {
         if (reviews && reviews.length > 0) {
@@ -407,6 +471,13 @@ const IntroductionPage = () => {
 
                                 // Cập nhật danh sách đánh giá sau khi gửi thành công
                                 setReviews([...reviews, dataToPost]);
+                                // Cập nhật tổng số đánh giá
+                                // Cập nhật số lượng đánh giá cho mức rating tương ứng
+                                setRatingCounts((prevCounts) => {
+                                    const updatedCounts = { ...prevCounts };
+                                    updatedCounts[review.rating] = updatedCounts[review.rating] + 1;
+                                    return updatedCounts;
+                                });
 
                                 // Đặt lại giá trị mặc định cho form đánh giá
                                 setReview({ rating: 0, comment: '' });
@@ -434,6 +505,26 @@ const IntroductionPage = () => {
     }, [userEmail, id]);
 
 
+    ///////////////////////Tính số người tham gia khóa học/////////////////////////
+
+    useEffect(() => {
+        // Thực hiện GET request để lấy dữ liệu từ API Payment
+        axios.get('http://localhost:3000/Payment')
+            .then((response) => {
+                if (response.status === 200) {
+                    // Lấy danh sách payment từ response data
+                    const payments = response.data;
+                    // Tính tổng số lượng payment có courseID trùng với id
+                    const count = payments.filter((payment: any) => payment.courseID === parseInt(id, 10)).length;
+                    setPaymentCount(count);
+                }
+            })
+            .catch((error) => {
+                console.error('Lỗi khi tải dữ liệu Payment:', error);
+            });
+    }, [id]);
+
+
     if (!product) {
         return <Skeleton active />;
     }
@@ -444,7 +535,7 @@ const IntroductionPage = () => {
                     <div className="courseLeft">
                         <a className='courseLeft-ah1' href="">{product.courseName}</a>
                         <div className="course-span-left mt-3">
-                            <span>product.level</span>
+                            <span>{categoryName}</span>
                             <span className='mb-1 font-bold'>.</span>
                             <span>{product.duration} m</span>
                             <span className='mb-1 font-bold'>.</span>
@@ -453,8 +544,8 @@ const IntroductionPage = () => {
                         <div className="course-span-leftx">
                             <div className='mt-1'>{averageRating}</div>
                             <div className='starrev' id="starRating">{starRating}</div>
-                            <div className='mt-1'>(240)</div>
-                            <div className='mt-1'><span>{product.enrollment} learners</span></div>
+                            <div className='mt-1'>({reviews.length})</div>
+                            <div className='mt-1'><span>{paymentCount} learners</span></div>
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             <Link to={`/content/${id}`}>
@@ -522,7 +613,7 @@ const IntroductionPage = () => {
                                                 </div>
 
                                                 <div className='mt-3'>
-                                                    <span className="text-xs leading-6 text-slate-400">147 ratings</span>
+                                                    <span className="text-xs leading-6 text-slate-400">{reviews.length} ratings</span>
                                                 </div>
                                             </div>
                                         </div>

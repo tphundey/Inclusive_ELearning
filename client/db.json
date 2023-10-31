@@ -2,18 +2,18 @@
   "Payment": [
     {
       "userID": 1,
-      "courseID": 8,
+      "courseID": 2,
       "coupon": "null",
-      "paymentAmount": 50000,
+      "paymentAmount": 22500,
       "date": "2023-09-29",
       "payment_status": true,
       "id": 1
     },
     {
       "userID": 1,
-      "courseID": 4,
+      "courseID": 6,
       "coupon": "null",
-      "paymentAmount": 50000,
+      "paymentAmount": 25000,
       "date": "2023-09-29",
       "payment_status": true,
       "id": 2
@@ -35,38 +35,6 @@
       "courseID": 2,
       "date": "2023-10-28",
       "id": 2
-    },
-    {
-      "rating": 4,
-      "comment": "3r",
-      "userID": 2,
-      "courseID": 4,
-      "date": "2023-10-29",
-      "id": 3
-    },
-    {
-      "rating": 4,
-      "comment": "khá phí tiền",
-      "userID": 1,
-      "courseID": 7,
-      "date": "2023-10-31",
-      "id": 4
-    },
-    {
-      "rating": 4,
-      "comment": "Hí hí hí",
-      "userID": 1,
-      "courseID": 8,
-      "date": "2023-10-31",
-      "id": 5
-    },
-    {
-      "rating": 4,
-      "comment": "Hơi đắtt =((",
-      "userID": 1,
-      "courseID": 4,
-      "date": "2023-10-31",
-      "id": 6
     }
   ],
   "Categories": [
@@ -383,10 +351,12 @@
       "courseSaved": [
         2,
         3,
-        4
+        4,
+        5
       ],
       "registeredCourseID": [
-        1
+        2,
+        6
       ]
     },
     {
