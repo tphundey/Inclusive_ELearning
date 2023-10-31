@@ -97,8 +97,15 @@ const Collection = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="option-course-progress">
-                                <button><i className="fa-solid fa-ellipsis"></i></button>
+                            <div className="option-course-progress ">
+                                <div className="dropdown dropdown-right dropdown-end">
+                                    <label tabIndex={0} className="btn m-1"><i className="fa-solid fa-ellipsis"></i></label>
+                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                        <li><a>Item 1</a></li>
+                                        <li><a>Item 2</a></li>
+                                    </ul>
+                                </div>
+
                             </div>
                         </div>
                         <hr />

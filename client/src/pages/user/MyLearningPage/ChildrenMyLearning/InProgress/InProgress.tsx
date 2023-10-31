@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Empty, Pagination } from 'antd';
 
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
@@ -61,17 +61,60 @@ const InProgress = () => {
         }
     }, []);
 
-    // Số lượng phần tử mỗi trang
-    const itemsPerPage = 2;
+    const handleRemoveCourse = (courseId:any) => {
+        const encryptedProfile = localStorage.getItem('profile');
+        if (encryptedProfile) {
+            const decryptedProfile = decodeData(encryptedProfile);
+            const profile = JSON.parse(decryptedProfile);
+            const userEmail = profile.email;
 
-    // Tính chỉ mục bắt đầu và chỉ mục kết thúc dựa trên trang hiện tại
+            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+                .then((response) => response.json())
+                .then((userData) => {
+                    if (userData.length > 0) {
+                        const user = userData[0];
+                        const registeredCourseIds = user.registeredCourseID;
+
+                        // Loại bỏ courseId khỏi danh sách registeredCourseIds
+                        const updatedRegisteredCourseIds = registeredCourseIds.filter((id:any) => id !== courseId);
+
+                        // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID đã cập nhật
+                        const updatedUserData = { ...user, registeredCourseID: updatedRegisteredCourseIds };
+
+                        // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
+                        fetch(`http://localhost:3000/googleAccount/${user.id}`, {
+                            method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(updatedUserData),
+                        })
+                            .then((response) => {
+                                if (response.ok) {
+                                    // Cập nhật lại danh sách khóa học đã đăng ký sau khi xóa
+                                    const updatedSavedCourses = savedCourses.filter((course) => course.id !== courseId);
+                                    setSavedCourses(updatedSavedCourses);
+                                } else {
+                                    console.error('Failed to update user data:', response);
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('Error updating user data:', error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+    };
+
+    const itemsPerPage = 2;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-
-    // Danh sách khóa học cần hiển thị trên trang hiện tại
     const coursesToDisplay = savedCourses.slice(startIndex, endIndex);
 
-    const handlePageChange = (page:any) => {
+    const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
 
@@ -79,7 +122,7 @@ const InProgress = () => {
         <div className="listProgress">
             {savedCourses.length > 0 ? (
                 coursesToDisplay.map((course: any) => (
-                    <div>
+                    <div className='ty-contai'>
                         {/* Hiển thị thông tin khóa học */}
                         <div className="courseProgress">
                             <div className="imgCoureProgress">
@@ -90,15 +133,22 @@ const InProgress = () => {
                                 <a href={`/introduction/${course.id}`}> <h2>{course.courseName}</h2></a>
                                 <div className="fl-info-progress">
                                     <div className="fl1-info-progress">
-                                        <img src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="" />
+                                        <img className='mt-1' src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="" />
                                     </div>
                                     <div className="fl2-info-progress">
-                                        LinkedIn - By: Trần Phùng 
+                                        LinkedIn - By: Trần Phùng
                                     </div>
                                 </div>
                             </div>
-                            <div className="option-course-progress">
-                                <button><i className="fa-solid fa-ellipsis"></i></button>
+                        </div>
+                        <div className="option-course-progress">
+                            <div className="dropdown dropdown-right dropdown-end mt-5">
+                                <label tabIndex={0} className="btn m-1"><i className="fa-solid fa-ellipsis"></i></label>
+                                <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
+                                    <li><a>Add to collections</a></li>
+                                    <li><a>Move to history</a></li>
+                                    <li><a onClick={() => handleRemoveCourse(course.id)}>Remove</a></li> {/* Thêm hàm xử lý xóa */}
+                                </ul>
                             </div>
                         </div>
                         <hr />
@@ -109,6 +159,7 @@ const InProgress = () => {
             )}
             {savedCourses.length > itemsPerPage && (
                 <Pagination
+                    className='mb-3'
                     defaultCurrent={1}
                     total={savedCourses.length}
                     pageSize={itemsPerPage}

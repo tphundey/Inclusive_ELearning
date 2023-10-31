@@ -47,6 +47,7 @@
     display: flex;
     gap: 25px;
     padding: 20px;
+    width: 70%;
 }
 
 .imgCoureProgress img {
@@ -77,12 +78,6 @@
     color: gray;
 }
 
-.option-course-progress button {
-    margin-left: 250px;
-    font-size: 27px;
-    color: gray;
-}
-
 .if-donthave-any-course {
     width: 700px;
     padding-left: 50px;
@@ -93,4 +88,9 @@
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.ty-contai {
+    display: flex;
+    justify-content: space-between;
 }
