@@ -33,6 +33,8 @@ const CourseContentPage = () => {
     const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
     const [hasChangedVideo, setHasChangedVideo] = useState(false);
     const [totalWatchedTime, setTotalWatchedTime] = useState(0);
+    const [totalVideos, setTotalVideos] = useState(0);
+
     const handleReturnButtonClick = () => {
         // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
         setShowWatchedTimeModal(true);
@@ -46,7 +48,8 @@ const CourseContentPage = () => {
 
                 // Lấy danh sách videoID từ khoá học
                 const videoIdsInCourse = courseData.videoID;
-
+                const totalVideos = videoIdsInCourse.length; // Gán giá trị cho totalVideos
+                setTotalVideos(totalVideos); // Lưu giá trị totalVideos vào state
                 // Fetch danh sách video đã hoàn thành từ API
                 axios.get(userProgressApiUrl)
                     .then((userProgressResponse) => {
@@ -74,6 +77,7 @@ const CourseContentPage = () => {
                 console.error('Error fetching course data:', error);
             });
     }, [courseApiUrl, userProgressApiUrl]);
+
 
     const handleNavigate = () => {
         window.location.href = `http://localhost:5173/test/${id}`;
@@ -363,6 +367,15 @@ const CourseContentPage = () => {
     const handleModalClose = () => {
         closeModal();
     };
+
+    // Tính số video đã hoàn thành
+    const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
+
+    // Tính số video chưa hoàn thành
+    const remainingVideos = totalVideos - completedVideos;
+    const completionPercentage = (completedVideos / totalVideos) * 100;
+    console.log('Số video đã hoàn thành: ' + completedVideos);
+    console.log('Số video chưa hoàn thành: ' + remainingVideos);
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -375,8 +388,16 @@ const CourseContentPage = () => {
 
         <div className='container-content-page'>
             <div className="contentpage-left">
-                <div className="content-left-title">
-                    <i className="fa-solid fa-list"></i> <div>Contents</div>
+                <div className='content-intro'>
+                    <div className="content-left-title">
+                        <i className="fa-solid fa-list"></i> <div>Contents</div>
+                    </div>
+                    <div className='pro-content'>
+                        {/* <p className=''>Tổng số video: {totalVideos}</p> */}
+                        <div className="radial-progress text-white pro-content bg-gray-800" style={{ "--value": `${completionPercentage.toFixed(2)}`, fontSize: "15px", width: "50px", height: "50px", borderRadius: "50%" }}>
+                            {completionPercentage >= 1 && completionPercentage <= 100 ? `${Math.round(completionPercentage)}` : "100%"}
+                        </div>
+                    </div>
                 </div>
                 <div>
                     {videos.map((video) => {

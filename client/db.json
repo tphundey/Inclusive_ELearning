@@ -102,12 +102,7 @@
       "videoID": [
         1,
         2,
-        6,
-        7,
-        8,
-        4,
-        4,
-        5
+        3
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -311,6 +306,12 @@
       "videoId": 2,
       "completionStatus": true,
       "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "completionStatus": true,
+      "id": 3
     }
   ],
   "Videos": [
@@ -327,7 +328,7 @@
     {
       "id": 3,
       "videoTitle": "Graphic Design Principles - Part 3",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQEu-OokXW7oPw/learning-original-video-vbr-720/0/1642635312109?e=1698811173&v=beta&t=r3HDseagmO5NHp9gB6yYkC5-LCtUSUQ7YQSe8BsQVV4"
     },
     {
       "videoTitle": "Graphic Design Principles - Part 2",
@@ -376,6 +377,42 @@
       "videoId": "2",
       "watchedTime": 70.990819,
       "id": 1
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 5
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 7
     }
   ]
 }
