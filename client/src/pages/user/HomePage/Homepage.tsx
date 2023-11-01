@@ -8,10 +8,17 @@ import { Link } from 'react-router-dom';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
 
 const Homepage = () => {
+    const user = JSON.parse(localStorage.getItem("users")!);
+    console.log(user);
+    
     const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
     const [categoryData, setCategoryData] = useState<any[]>([]);
-    const visibleProducts = productsData?.filter((product: any) => !product.isHidden);
-
+    // const visibleProducts = productsData?.filter((product: any) => !product.isHidden);
+    const visibleProducts = productsData?.filter((product: any) => !product.isHidden).map((product: any) => {
+        const isPurchased = user?.registeredCourseID.includes(product.id);
+        return { ...product, isPurchased };
+      });
+      
     useEffect(() => {
         const fetchCategoryData = async () => {
             if (productsData) {
@@ -99,6 +106,9 @@ const Homepage = () => {
                                         const categoryContent = category ? category.categoryName : (
                                             <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
                                         );
+                                        if (product.isHidden && !product.isPurchased) {
+                                            return null; // Bỏ qua việc hiển thị khóa học
+                                          }
                                         return (
                                             <div className="group relative">
                                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
