@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 const AdminProduct = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [productsData, setProductsData] = useState([]);
@@ -93,6 +93,14 @@ const AdminProduct = () => {
             dataIndex: 'price',
             key: 'price',
             width: '100px',
+            render: (price: number) => {
+                const formattedPrice = formatCurrency(price);
+                return (
+                    <>
+                        {formattedPrice}
+                    </>
+                );
+            },
         },
         {
             title: 'Mô tả khóa học',
