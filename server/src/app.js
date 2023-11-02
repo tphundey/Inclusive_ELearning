@@ -6,6 +6,7 @@ import authRouter from "./Routers/auth";
 import categoryRouter from "./Routers/Categorys";
 import videoRouter from './Routers/video';
 import userRouter from './Routers/user'
+import Uploader from './Routers/uploader'
 import cors from 'cors';
 
 const app = express();
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
     res.send("Hello word");
 });
 app.use('/api', CourseRouter);
+app.use('/api', Uploader);
 app.use('/api',videoRouter);
 app.use('/auth', authRouter)
 app.use('/api', categoryRouter)
