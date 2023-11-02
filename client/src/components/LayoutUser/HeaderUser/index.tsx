@@ -136,7 +136,7 @@ const HeaderUser = () => {
                                                         </div></label>
                                                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
                                                         <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
-                                                        <Button type="dashed">My Profile</Button>
+                                                        <Button type="dashed" href="http://localhost:5173/profile">My Profile</Button>
                                                         <GoogleLogout
                                                             clientId={clientId}
                                                             buttonText="Đăng Xuất"

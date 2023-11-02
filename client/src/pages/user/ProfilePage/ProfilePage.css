@@ -1,0 +1,15 @@
+.custom-button {
+    border: none; /* Bỏ viền */
+    background: none; /* Bỏ nền */
+    padding: 0; /* Bỏ khoảng cách xung quanh nút */
+  }
+  .custom-icon {
+    font-size: 30px; /* Điều chỉnh kích thước theo mong muốnn */
+  }
+  .logo {
+    width: 70px;
+    height: 70px;
+  }
+ .icon {
+    padding-top: 95px;
+ }
