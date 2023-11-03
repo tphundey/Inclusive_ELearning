@@ -5,12 +5,16 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Alert, Button } from 'antd';
 import { Modal } from 'antd';
+import { getUserEmail } from '@/components/EncryptedProfile/EncryptedProfile';
+import { message } from 'antd';
+
 // Hàm giải mã dữ liệu sử dụng decodeURIComponent
 function decodeData(encryptedData: any): any {
     return decodeURIComponent(encryptedData);
 }
 
 const CourseContentPage = () => {
+    const userEmail: string = getUserEmail();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [videos, setVideos] = useState([]);
@@ -22,7 +26,7 @@ const CourseContentPage = () => {
     const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
     const [initialUserProgress, setInitialUserProgress] = useState(null);
-    const courseId = id; // Đặt ID khoá học của bạn ở đây
+    const courseId = parseInt(id, 10);
     const courseApiUrl = `http://localhost:3000/Courses/${courseId}`;
     const userProgressApiUrl = 'http://localhost:3000/UserProgress';
     const [course, setCourse] = useState(null);
@@ -33,6 +37,8 @@ const CourseContentPage = () => {
     const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
     const [hasChangedVideo, setHasChangedVideo] = useState(false);
     const [totalWatchedTime, setTotalWatchedTime] = useState(0);
+    const [totalVideos, setTotalVideos] = useState(0);
+
     const handleReturnButtonClick = () => {
         // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
         setShowWatchedTimeModal(true);
@@ -46,7 +52,8 @@ const CourseContentPage = () => {
 
                 // Lấy danh sách videoID từ khoá học
                 const videoIdsInCourse = courseData.videoID;
-
+                const totalVideos = videoIdsInCourse.length; // Gán giá trị cho totalVideos
+                setTotalVideos(totalVideos); // Lưu giá trị totalVideos vào state
                 // Fetch danh sách video đã hoàn thành từ API
                 axios.get(userProgressApiUrl)
                     .then((userProgressResponse) => {
@@ -75,6 +82,7 @@ const CourseContentPage = () => {
             });
     }, [courseApiUrl, userProgressApiUrl]);
 
+
     const handleNavigate = () => {
         window.location.href = `http://localhost:5173/test/${id}`;
     };
@@ -101,11 +109,12 @@ const CourseContentPage = () => {
     if (encryptedProfile) {
         const decryptedProfile = decodeData(encryptedProfile);
         const profile = JSON.parse(decryptedProfile);
-        var userEmail = profile.email;
+        const userEmail = profile.email;
         console.log('Email của người dùng:', userEmail);
     } else {
         console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
     }
+
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
         .then((response) => {
             if (response.ok) {
@@ -363,6 +372,82 @@ const CourseContentPage = () => {
     const handleModalClose = () => {
         closeModal();
     };
+
+    // Tính số video đã hoàn thành
+    const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
+
+    // Tính số video chưa hoàn thành
+    const remainingVideos = totalVideos - completedVideos;
+    const completionPercentage = (completedVideos / totalVideos) * 100;
+    // console.log('Số video đã hoàn thành: ' + completedVideos);
+    // console.log('Số video chưa hoàn thành: ' + remainingVideos);
+    console.log(userId);
+
+
+    const handleBookmarkClick = () => {
+        // Bước 1: Lấy thông tin người dùng từ API
+        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to retrieve user data from the API.');
+                }
+            })
+            .then((userData) => {
+                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
+
+                // Bước 2: Lấy danh sách khóa học đã lưu của người dùng
+                const savedCourses = user.courseSaved || []; // Danh sách khóa học đã lưu
+
+                // Kiểm tra xem courseID đã tồn tại trong danh sách đã lưu chưa
+                if (!savedCourses.includes(courseId)) {
+                    // Nếu chưa tồn tại, thêm courseID vào danh sách đã lưu
+                    savedCourses.push(courseId);
+
+                    // Bước 3: Cập nhật danh sách khóa học đã lưu của người dùng
+                    user.courseSaved = savedCourses;
+
+                    // Kiểm tra xem user.id có phải là số hay không
+                    if (typeof user.id !== 'number') {
+                        // Chuyển đổi user.id thành số nếu nó không phải là số
+                        user.id = parseInt(user.id);
+                    }
+
+                    // Bước 4: Cập nhật dữ liệu người dùng sau khi lưu khóa học
+                    fetch(`http://localhost:3000/googleAccount/${user.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(user),
+                    })
+                        .then((updateResponse) => {
+                            if (updateResponse.ok) {
+                                // Hiển thị thông báo thành công
+                                message.success('Lưu khóa học thành công !');
+                            } else {
+                                throw new Error('Failed to update user data.');
+                            }
+                        })
+                        .catch((updateError) => {
+                            console.error('Error updating user data:', updateError);
+                            message.error('Failed to update user data.');
+                        });
+                } else {
+                    console.log('Khóa học đã được lưu.');
+                    message.error('Khóa học đã được lưu.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
+            });
+    };
+
+
+
+
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -375,8 +460,16 @@ const CourseContentPage = () => {
 
         <div className='container-content-page'>
             <div className="contentpage-left">
-                <div className="content-left-title">
-                    <i className="fa-solid fa-list"></i> <div>Contents</div>
+                <div className='content-intro'>
+                    <div className="content-left-title">
+                        <i className="fa-solid fa-list"></i> <div>Contents</div>
+                    </div>
+                    <div className='pro-content'>
+                        {/* <p className=''>Tổng số video: {totalVideos}</p> */}
+                        <div className="radial-progress text-white pro-content bg-gray-800" style={{ "--value": `${completionPercentage.toFixed(2)}`, fontSize: "15px", width: "50px", height: "50px", borderRadius: "50%" }}>
+                            {completionPercentage >= 1 && completionPercentage <= 100 ? `${Math.round(completionPercentage)}` : "100%"}
+                        </div>
+                    </div>
                 </div>
                 <div>
                     {videos.map((video) => {
@@ -435,7 +528,7 @@ const CourseContentPage = () => {
                         </div>
                         <div className='fl-content-option'>
                             <i className="fa-regular fa-thumbs-up"></i> <span>23</span>
-                            <i className="fa-regular fa-bookmark"></i>  <span>2304</span> |
+                            <i className="fa-regular fa-bookmark" onClick={handleBookmarkClick}></i> <span>2304</span> |
                             <i className="fa-solid fa-share"></i>
                         </div>
                     </div>

@@ -1,64 +1,37 @@
-import '../BrowsePage.css'
+import '../BrowsePage.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useGetProductsQuery } from '@/api/courses';
+import Axios from 'axios';
+import { useState, useEffect } from 'react';
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 
 const Creativepage = () => {
-    const products = [
+    const [courses, setCourses] = useState<any[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
+    const fetchCourses = () => Axios.get('http://localhost:3000/Courses');
+    const fetchCategories = () => Axios.get('http://localhost:3000/Categories');
 
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C4E0DAQE84AgCpYxX-Q/learning-public-crop_144_256/0/1678908578362?e=1692212400&v=beta&t=0gWnv8lmjYUq5u3Qe4p1C5fZbLYYnzA3yPsP7CTR5LA'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://f8-zpc.zdn.vn/4985019956753817370/33d1cdd5156cc6329f7d.jpg'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://f8-zpc.zdn.vn/4985019956753817370/33d1cdd5156cc6329f7d.jpg'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/D560DAQG9VyhnmRNFyA/learning-public-crop_144_256/0/1687374541931?e=1692212400&v=beta&t=EgzhTM4gdoTNQSxtDC1IypzFpm9BGLcT3ZBK83cVGdA'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C560DAQEayGdFL5OhhQ/learning-public-crop_144_256/0/1675884235222?e=1692212400&v=beta&t=aq5AI8conYMXXoHPhm57YtraUp6P3R0inDlsOx-O_jU'
-        },
-        {
-            name: 'COURSE',
-            color: 'After Effects: Using Expressions',
-            price: 'By: Luisa Winters',
-            imageSrc: 'https://media.licdn.com/dms/image/C4E0DAQGdrDxOMG6FBg/learning-public-crop_144_256/0/1679097853060?e=1692212400&v=beta&t=h1wYf40djVUdc25wocJA4wK8uci6QCCSTKSB97KJpg4'
-        },
-
-    ];
-
-    const settings = {
+    const settings: any = {
         arrows: true,
         infinite: true,
         speed: 500,
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
     };
-    const { data: courseData } = useGetProductsQuery()
-    console.log(courseData);
+
+    useEffect(() => {
+        fetchCourses()
+            .then(response => setCourses(response.data))
+            .catch(error => console.error(error));
+        fetchCategories()
+            .then(response => setCategories(response.data))
+            .catch(error => console.error(error));
+    }, []);
 
     return (
         <div className="containerCss-browepage  business">
-            <h2 className='h2-bsn'>Creative</h2>
+            <h2 className='h2-bsn'>Business</h2>
             <br />
             <h2 className='h2-bsn2'>Role Guides</h2>
             <span className='sp1-bsn'>Explore foundational content and tools to help you understand, learn, and improve at the skills involved in trending industry roles.</span>
@@ -85,28 +58,35 @@ const Creativepage = () => {
             </div>
             <hr />
             <div className="product-slider2 business-slider">
-                <Slider {...settings}>
-                    {courseData?.map((course, index) => (
 
-                        <div key={index} className="group relative">
-                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide2">
-                                <img src={course?.imageurl} alt="" />
-                            </div>
-                            <div className="mt-2">
-                                <div>
-                                    <h3 className="text-xs text-gray-700">
-                                        <a href="#">
-                                            <span className="absolute inset-2 popular">POPULAR</span>
-                                            {course.title}
-                                        </a>
-                                    </h3>
-                                    <p className="mt-1 text-base">{course?.instructor}</p>
-                                    <p className="mt-1 text-base">{course?.publishedDate}</p>
+                <Slider {...settings}>
+                    {courses
+                        .filter((course: any) => {
+                            const category = categories.find((cat: any) => cat.id === course.categoryID);
+                            return category && category.id === 1;
+                        })
+                        .map((course: any, index: number) => (
+
+                            <div key={index} className="group relative">
+                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide2">
+                                    <img src={course.courseIMG} alt="" />
                                 </div>
-                                <p className=" mt-1 text-xs text-gray">{course.price}$</p>
+                                <div className="mt-2">
+                                    <div>
+                                        <h3 className="text-xs text-gray-700">
+                                            <a href="#">
+                                                <span className="absolute inset-2 popular">POPULAR</span>
+                                                Admin
+                                            </a>
+                                        </h3>
+                                        <a href={`/introduction/${course.id}`} key={index}>
+                                            <p className="mt-1 text-sm">{course.courseName}</p>
+                                        </a>
+                                    </div>
+                                    <p className=" mt-1 text-xs text-gray">{formatCurrency(course.price)}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </Slider>
             </div>
 
@@ -130,7 +110,6 @@ const Creativepage = () => {
             </div>
         </div>
     )
-
 };
 
 export default Creativepage;

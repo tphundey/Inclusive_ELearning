@@ -10,49 +10,22 @@
       "id": 1
     },
     {
-      "userID": 2,
-      "courseID": 2,
+      "userID": 1,
+      "courseID": 6,
       "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-08-29",
+      "paymentAmount": 25000,
+      "date": "2023-10-29",
       "payment_status": true,
       "id": 2
     },
     {
-      "userID": 2,
+      "userID": 1,
       "courseID": 4,
       "coupon": "null",
       "paymentAmount": 50000,
-      "date": "2023-08-29",
+      "date": "2023-11-29",
       "payment_status": true,
       "id": 3
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-07-29",
-      "payment_status": true,
-      "id": 4
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-07-29",
-      "payment_status": true,
-      "id": 5
-    },
-    {
-      "userID": 2,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-06-29",
-      "payment_status": true,
-      "id": 6
     }
   ],
   "Reviews": [
@@ -73,11 +46,11 @@
       "id": 2
     },
     {
-      "rating": 4,
-      "comment": "3r",
-      "userID": 2,
+      "rating": 1,
+      "comment": "học chả hiểu gì nên 1 sao nhé",
+      "userID": 1,
       "courseID": 4,
-      "date": "2023-10-29",
+      "date": "2023-11-01",
       "id": 3
     }
   ],
@@ -107,7 +80,7 @@
       "avatarIMG": "https://scontent.xx.fbcdn.net/v/t1.15752-9/384427051_1110086643301663_6463764182478675672_n.jpg?stp=dst-jpg_s280x280&_nc_cat=110&ccb=1-7&_nc_sid=aee45a&_nc_ohc=lisVSqTIifYAX-kdEYC&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdTY-5HSApIE23hflMQEFRGnjkh00mN4KQhKBxcIG3rVIQ&oe=654339BB",
       "address": "123 Main St",
       "phone": "123-456-7890",
-      "roleID": 1,
+      "roleID": 2,
       "registeredCourseID": [
         1
       ],
@@ -146,12 +119,7 @@
       "videoID": [
         1,
         2,
-        6,
-        7,
-        8,
-        4,
-        4,
-        5
+        3
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -355,6 +323,12 @@
       "videoId": 2,
       "completionStatus": true,
       "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "completionStatus": true,
+      "id": 3
     }
   ],
   "Videos": [
@@ -371,7 +345,7 @@
     {
       "id": 3,
       "videoTitle": "Graphic Design Principles - Part 3",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFD1Vc_OIgHgw/learning-original-video-vbr-720/0/1620675107580?e=1698067816&v=beta&t=P9xISnezWHfcZoJukFaIAhqBcvMdIOFWYI9Cg8BpRi0"
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQEu-OokXW7oPw/learning-original-video-vbr-720/0/1642635312109?e=1698811173&v=beta&t=r3HDseagmO5NHp9gB6yYkC5-LCtUSUQ7YQSe8BsQVV4"
     },
     {
       "videoTitle": "Graphic Design Principles - Part 2",
@@ -393,12 +367,13 @@
       "img": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
       "courseSaved": [
-        2,
         3,
-        4
+        5,
+        4,
+        8
       ],
       "registeredCourseID": [
-        1
+        4
       ]
     },
     {
@@ -420,6 +395,42 @@
       "videoId": "2",
       "watchedTime": 70.990819,
       "id": 1
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 5
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "videoId": 3,
+      "watchedTime": 0,
+      "id": 7
     }
   ]
 }

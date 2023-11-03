@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import LayoutWebsite from "./components/layouts/LayoutWebsite";
-import LayoutAdmin from "./components/layouts/LayoutAdmin";
+import LayoutWebsite from "./layouts/LayoutWebsite";
+import LayoutAdmin from "./layouts/LayoutAdmin";
 import { Navigate } from "react-router-dom";
 import AdminProduct from "./pages/admin/product";
 import AdminProductAdd from "./pages/admin/product/add";
@@ -41,6 +41,7 @@ import AdminUserEdit from "./pages/admin/users/edit";
 import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
+import Profile from "./pages/user/ProfilePage/ProfilePage";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -54,6 +55,7 @@ export const routers = createBrowserRouter([
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
+            { path: "profile", element: <Profile /> },
             {
                 path: "content/:id",
                 element: <CourseContentPage />,

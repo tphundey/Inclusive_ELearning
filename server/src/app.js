@@ -23,6 +23,7 @@ app.use('/api',videoRouter);
 app.use('/auth', authRouter)
 app.use('/api', categoryRouter)
 app.use('/api',userRouter)
+app.use('/api',upload)
 
 mongoose.connect('mongodb+srv://datnsph25191:lvmSjx4T4CvRDckN@cluster0.4xubugv.mongodb.net/').then(
     console.log('Connected successfully')

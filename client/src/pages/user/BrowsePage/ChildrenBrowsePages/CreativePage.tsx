@@ -1,42 +1,37 @@
-import '../BrowsePage.css'
+import '../BrowsePage.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { formatCurrency } from './formatCurency';
+import { useState, useEffect } from 'react';
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 
 const Certificationpage = () => {
-    const [courses, setCourses] = useState([]);
-    const [categories, setCategories] = useState([]);
-
+    const [courses, setCourses] = useState<any[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
     const fetchCourses = () => Axios.get('http://localhost:3000/Courses');
     const fetchCategories = () => Axios.get('http://localhost:3000/Categories');
-    const settings = {
+
+    const settings: any = {
         arrows: true,
         infinite: true,
         speed: 500,
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
     };
 
     useEffect(() => {
-        // Fetch danh sách sản phẩm
         fetchCourses()
             .then(response => setCourses(response.data))
             .catch(error => console.error(error));
-
-        // Fetch danh sách danh mục
         fetchCategories()
             .then(response => setCategories(response.data))
             .catch(error => console.error(error));
     }, []);
 
-
-
     return (
         <div className="containerCss-browepage  business">
-            <h2 className='h2-bsn'>Certification</h2>
+            <h2 className='h2-bsn'>Business</h2>
             <br />
             <h2 className='h2-bsn2'>Role Guides</h2>
             <span className='sp1-bsn'>Explore foundational content and tools to help you understand, learn, and improve at the skills involved in trending industry roles.</span>
@@ -63,16 +58,14 @@ const Certificationpage = () => {
             </div>
             <hr />
             <div className="product-slider2 business-slider">
+
                 <Slider {...settings}>
-
                     {courses
-                        .filter(course => {
-                            const category = categories.find(cat => cat.id === course.categoryID);
+                        .filter((course: any) => {
+                            const category = categories.find((cat: any) => cat.id === course.categoryID);
                             return category && category.id === 2;
-                            // Lọc sản phẩm có category.id bằng 1
                         })
-
-                        .map((course, index) => (
+                        .map((course: any, index: number) => (
 
                             <div key={index} className="group relative">
                                 <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide2">
@@ -89,7 +82,6 @@ const Certificationpage = () => {
                                         <a href={`/introduction/${course.id}`} key={index}>
                                             <p className="mt-1 text-sm">{course.courseName}</p>
                                         </a>
-                                        {/* <p className="mt-1 text-base">{course?.date}</p> */}
                                     </div>
                                     <p className=" mt-1 text-xs text-gray">{formatCurrency(course.price)}</p>
                                 </div>
@@ -118,7 +110,6 @@ const Certificationpage = () => {
             </div>
         </div>
     )
-
 };
 
 export default Certificationpage;

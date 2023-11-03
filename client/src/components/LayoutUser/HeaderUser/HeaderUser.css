@@ -98,6 +98,11 @@ header .flex-hd {
     text-align: center;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+}
+
+.tutut {
+    cursor: pointer;
 }
 
 .right ul li div {
@@ -161,6 +166,14 @@ nav div ul {
     width: 70px;
 }
 
-.header-mypro{
+.header-mypro {
     right: -250%;
+}
+
+.avtme {
+    width: 70px;
+    height: 70px;
+    border-radius: 100px;
+    padding: 0px;
+    margin: 0px auto;
 }

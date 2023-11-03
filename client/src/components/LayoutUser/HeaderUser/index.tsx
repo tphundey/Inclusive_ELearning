@@ -124,40 +124,27 @@ const HeaderUser = () => {
                                 </li>
                                 <li>
 
-                                    <div className='thea'>
-                                        <i className="fa-regular fa-user lups"></i>
-                                        <div className="relative">
-                                            <div
-                                                onClick={toggleDropdown}
-                                                className="cursor-pointer"
-                                            >
-                                                Me <i className={`fa-solid fa-caret-${isDropdownOpen ? 'up' : 'down'} lups-left`}></i>
-                                            </div>
-                                            {isDropdownOpen && (
-                                                <div className="absolute mt-2 w-48 header-mypro bg-white border border-gray-300 rounded-lg shadow-lg">
-                                                    {/* Nội dung của dropdown ở đây */}
-                                                    <div className="avatar">
-                                                        <div className="w-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                                            <img src="https://f10-zpcloud.zdn.vn/8154582047521615141/d3ef92e85e708b2ed261.jpg" />
-                                                        </div>
-                                                    </div>
-                                                    <br /><br />
-                                                    <Space>
+                                    <div className='thea dropdown dropdown-bottom'>
+                                        <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
+                                            <div className="relative">
+                                                <div className="dropdown ">
+                                                    <label tabIndex={0} className="">
+                                                        <div
+                                                            onClick={toggleDropdown}
+                                                            className="cursor-pointer mt-1">
+                                                            Me <i className={'fa-solid fa-caret-down'}></i>
+                                                        </div></label>
+                                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
+                                                        <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
                                                         <Button type="dashed">My Profile</Button>
-                                                    </Space>
-                                                    <br /><br />
-                                                    <Space>
                                                         <GoogleLogout
                                                             clientId={clientId}
                                                             buttonText="Đăng Xuất"
-                                                            onLogoutSuccess={handleLogout}
-                                                        >
+                                                            onLogoutSuccess={handleLogout}>
                                                         </GoogleLogout>
-                                                    </Space>
-                                                    <br /><br />
+                                                    </ul>
                                                 </div>
-                                            )}
-                                        </div>
+                                            </div></label>
                                     </div>
                                 </li>
                                 <li>
