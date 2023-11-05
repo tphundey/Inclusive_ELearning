@@ -3,7 +3,20 @@ import { useState, useEffect } from 'react';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import axios from 'axios';
-
+import { useAddUserMutation } from '@/api/user';
+import { Button, DatePicker, Form, Input, Select, Upload, UploadProps, message } from "antd";
+import { Iuser } from '@/interfaces/user';
+import { useNavigate } from 'react-router';
+type FieldType = {
+    id?: number,
+    username?: string,
+    email?: string,
+    password?: string,
+    avatarIMG?: string,
+    address?: string,
+    phone?: number,
+    roleID?: number
+};
 const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
 
 // Hàm mã hóa dữ liệu sử dụng encodeURIComponent
@@ -17,11 +30,14 @@ function decodeData(encryptedData: any): any {
 }
 
 const SignupPage = () => {
+    const navigate = useNavigate();
+    const [form] = Form.useForm();
     const [password, setPassword] = useState<any>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [encryptedData, setEncryptedData] = useState<any>(null);
     const [profileName, setProfileName] = useState<any>(null);
-
+    const [addUser] = useAddUserMutation();
+    const [messageApi, contextHolder] = message.useMessage();
     const onSuccess = async (res: any) => {
         const profile: any = {
             email: res.profileObj.email,
@@ -85,12 +101,34 @@ const SignupPage = () => {
 
         gapi.load('client:auth2', start);
     }, []);
-
+    const onFinish = async  (values : Iuser) => {
+        try {
+            const roleID = 1
+            const newData = {...values, roleID}
+            const check = await addUser(newData);
+            if(check){
+                messageApi.open({
+                    type: "success",
+                    content: "đăng kí thành công",
+                });
+            }
+           
+                
+                form.resetFields();
+                setTimeout(() => {
+                    navigate("/signin");
+                }, 1500);
+       
+        } catch (error) {
+            
+        }
+    }
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
     return (
         <div>
+            {contextHolder}
             <div className="loginpage">
                 <div className="login_bn">
                     <img src="https://f10-zpcloud.zdn.vn/1488129773092553661/6a7b44d847c0929ecbd1.jpg" alt="" />
@@ -100,7 +138,7 @@ const SignupPage = () => {
                     <div className='lg-ct2'>By clicking Agree & Join, you agree to the LinkedIn User Agreement</div>
                 </div>
                 <div className='login-input'>
-                    <form action="">
+                    {/* <form action="">
                         <label className='signup-label' htmlFor="">Email</label>
                         <input type="text" placeholder='Email or Phone' />
                         <label className='signup-label' htmlFor="">Password (6+ characters)
@@ -118,7 +156,40 @@ const SignupPage = () => {
                         </div>
 
                         <button>Agree & Join</button>
-                    </form>
+                    </form> */}
+                     <Form
+                        form={form}
+                        name="basic"
+                        onFinish={onFinish}
+                        // onFinishFailed={onFinishFailed}
+                        autoComplete="off"
+                    >
+                        <Form.Item<FieldType>
+                            name="username"
+                            rules={[{ required: true, message: 'Please input your username!' }]}
+                        >
+                            <Input placeholder='username'/>
+                        </Form.Item>
+                        <Form.Item<FieldType>
+                            name="email"
+                            rules={[{ required: true, message: 'Please input your email!' }]}
+                        >
+                            <Input placeholder='Email or Phone'/>
+                        </Form.Item>
+
+                        <Form.Item<FieldType>
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password!' }]}
+                        >
+                            <Input 
+                                placeholder='Password'
+                            />
+                            
+                        </Form.Item>
+                        
+                        <button type='submit'>Agree & Join</button>
+                       
+                    </Form>
                     <div className="signup-or">
                         <div className="sin-hr"></div>
                         <div className="">or</div>
