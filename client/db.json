@@ -103,6 +103,13 @@
       "courseSaved": [
         1
       ]
+    },
+    {
+      "email": "dung@gmail.com",
+      "password": "$2a$10$cay8KEEt.Aaoo5pAFljnBOZ.sedCMaNJNWDTGsLrjvBjHBPLvVt7W",
+      "username": "dung",
+      "roleID": 1,
+      "id": 3
     }
   ],
   "Courses": [
@@ -166,7 +173,7 @@
       "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
       "enrollment": 100,
       "isDeleted": false,
-      "isHidden": false
+      "isHidden": true
     },
     {
       "id": 5,

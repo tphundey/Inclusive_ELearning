@@ -10,3 +10,7 @@ export interface Iuser{
     registeredCourseID:number;
     courseSaved : number;
 }
+export interface ILogin {
+    email: string,
+    password: string
+}

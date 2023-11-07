@@ -1,10 +1,11 @@
 import { Icategory } from '@/interfaces/category';
 import { IProduct } from '@/interfaces/product';
-import { Iuser } from '@/interfaces/user';
+import { ILogin, Iuser } from '@/interfaces/user';
 import { Ivideo } from '@/interfaces/video';
 import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
+import instance from "./instance";
+import { AxiosError } from 'axios';
 const userApi = createApi({
     reducerPath: "users",
     tagTypes: ['users'],
@@ -76,3 +77,20 @@ export const {
 
 export const UserReducer = userApi.reducer;
 export default userApi;
+export const loginUser = async (user: ILogin) => {
+    try {
+        const response = await instance.post("/login", user)
+        if (response.status === 200) {
+            localStorage.setItem('token', response.data.accessToken);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            return true;
+        }
+    } catch (error: unknown) {
+        if (error instanceof AxiosError && error.response && error.response.status === 400) {
+            throw new Error(error.response.data.message);
+        } else {
+            console.log(error);
+            throw new Error('Đã xảy ra lỗi khi đăng nhập!');
+        }
+    }
+};
