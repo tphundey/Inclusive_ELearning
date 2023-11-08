@@ -214,11 +214,12 @@ export const createPayment = async(req, res, next)=> {
   var date = new Date();
   var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
   let createDate = moment(date).format("YYYYMMDDHHmmss");
-  var orderId = dateFormat(date, "HHmmss");
+  var orderId = dateFormat(date, "DDHHmmss");
   var amount = req.body.amount;
-  var bankCode = "VNBANK"; //'VNPAYQR' //req.body.bankCode;
+  var bankCode = req.body.bankCode //"VNBANK"; //'VNPAYQR' //req.body.bankCode;
   var orderInfo = req.body.orderDescription;
   var orderType = req.body.orderType;
+  // var orderType = req.body.orderType;
   var locale = "vn";
   if (locale === null || locale === "") {
     locale = "vn";
@@ -250,7 +251,7 @@ export const createPayment = async(req, res, next)=> {
   var signData = querystring.stringify(vnp_Params, { encode: false });
   // var crypto = require("crypto");
   
-  var hmac = crypto.HmacSHA256(signData, "XLINBOYMWFBQLTYEFJHWWEVQPBRBWDDL");
+  var hmac = crypto.HmacSHA256(signData, secretKey);
   var signed = hmac.toString(crypto.enc.Hex);
   vnp_Params["vnp_SecureHash"] = signed.toString();
 vnpUrl += "?" + querystring.stringify(vnp_Params, null, null, { encodeURIComponent: querystring.unescape });
@@ -259,6 +260,7 @@ vnpUrl += "?" + querystring.stringify(vnp_Params, null, null, { encodeURICompone
   // vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
   res.send(vnpUrl);
+  console.log(vnpUrl);
   // res.redirect(vnpUrl);
 
   //   res.writeHead(302, {
