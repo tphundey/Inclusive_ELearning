@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
 // import routerApp from "./router";
-import CourseRouter from "./routers/Course";
+import CourseRouter from "./Routers/Course";
+import payments from "./Routers/payments";
 import authRouter from "./Routers/auth";
 import categoryRouter from "./Routers/Categorys";
 import videoRouter from './Routers/video';
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
     res.send("Hello word");
 });
 app.use('/', CourseRouter);
+app.use('/api', payments);
 app.use('/',videoRouter);
 app.use('/', authRouter)
 app.use('/', categoryRouter)
