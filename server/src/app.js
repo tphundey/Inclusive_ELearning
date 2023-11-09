@@ -7,6 +7,7 @@ import categoryRouter from "./Routers/Categorys";
 import videoRouter from './Routers/video';
 import userRouter from './Routers/user'
 import upload from './Routers/uploader'
+import payments from "./Routers/payments";
 import cors from 'cors';
 
 const app = express();
@@ -23,6 +24,8 @@ app.use('/', authRouter)
 app.use('/', categoryRouter)
 app.use('/',userRouter)
 app.use('/',upload)
+app.use('/api', payments);
+
 
 mongoose.connect('mongodb+srv://datnsph25191:lvmSjx4T4CvRDckN@cluster0.4xubugv.mongodb.net/').then(
     console.log('Connected successfully')
