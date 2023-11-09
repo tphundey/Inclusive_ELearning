@@ -24,7 +24,7 @@ const paymentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Booking",
       required: true,
-      unique: true,
+      // unique: true,
     },
     description: {
       type: String,

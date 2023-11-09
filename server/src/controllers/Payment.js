@@ -5,18 +5,18 @@ import qs from "qs"
 dotenv.config();
 import moment from "moment";
 import dateFormat from "dateformat";
-import crypto from "crypto-js"
-import sha256 from 'crypto-js/sha256';
+import cryptojs from "crypto-js";
+import crypto from "crypto";
 // import { log } from "console";
 // import { registerMail } from "./Mailer";
 import { createTransport } from "nodemailer";
 import Mailgen from "mailgen";
 import { pagingnation } from "./Pagingnation";
 import Booking from "../models/course";
-// import { findOneAndUpdate } from "../models/accounts";
-// import Premium from "../models/premiums";
-//payment medthod
+import { log } from "console";
+
 export const addPaymentMethod =async (req, res) =>{
+  // const ngu = cryptyjs
   const { paymentname } = req.body;
   try {
     const paymentMethod = new PaymentMethod({
@@ -202,70 +202,65 @@ export const getPaymentById = async(req, res, next)=> {
 
 export const createPayment = async(req, res, next)=> {
   var ipAddr =
-    req.headers["x-forwarded-for"] ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    req.connection.socket.remoteAddress;
+  req.headers["x-forwarded-for"] ||
+  req.connection.remoteAddress ||
+  req.socket.remoteAddress ||
+  req.connection.socket.remoteAddress;
 
-  var tmnCode = process.env.vnp_TmnCode;
-  var secretKey = process.env.vnp_HashSecret;
-  var vnpUrl = process.env.vnp_Url;
-  var returnUrl = process.env.vnp_ReturnUrl;
-  var date = new Date();
-  var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
-  let createDate = moment(date).format("YYYYMMDDHHmmss");
-  var orderId = dateFormat(date, "DDHHmmss");
-  var amount = req.body.amount;
-  var bankCode = req.body.bankCode //"VNBANK"; //'VNPAYQR' //req.body.bankCode;
-  var orderInfo = req.body.orderDescription;
-  var orderType = req.body.orderType;
-  // var orderType = req.body.orderType;
-  var locale = "vn";
-  if (locale === null || locale === "") {
-    locale = "vn";
-  }
-  var currCode = "VND";
-  var vnp_Params = {};
-  vnp_Params["vnp_Version"] = "2.1.0";
-  vnp_Params["vnp_Command"] = "pay";
-  vnp_Params["vnp_TmnCode"] = tmnCode;
-  // vnp_Params['vnp_Merchant'] = ''
-  vnp_Params["vnp_Locale"] = locale;
-  vnp_Params["vnp_CurrCode"] = currCode;
-  vnp_Params["vnp_TxnRef"] = orderId;
-  vnp_Params["vnp_OrderInfo"] = orderInfo;
-  vnp_Params["vnp_OrderType"] = orderType;
-  vnp_Params["vnp_Amount"] = amount * 100;
-  vnp_Params["vnp_ReturnUrl"] = returnUrl;
-  vnp_Params["vnp_IpAddr"] = ipAddr;
-  vnp_Params["vnp_CreateDate"] = createDate;
-  vnp_Params["vnp_ExpireDate"] = expireDate;
+var tmnCode = process.env.vnp_TmnCode;
+var secretKey = process.env.vnp_HashSecret;
+var vnpUrl = process.env.vnp_Url;
+var returnUrl = process.env.vnp_ReturnUrl;
+var date = new Date();
+var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
+let createDate = moment(date).format("YYYYMMDDHHmmss");
+var orderId = dateFormat(date, "HHmmss");
+var amount = req.body.amount;
+var bankCode = "VNBANK"; //'VNPAYQR' //req.body.bankCode;
+var orderInfo = req.body.orderDescription;
+var orderType = req.body.orderType;
+var locale = "vn";
+if (locale === null || locale === "") {
+  locale = "vn";
+}
+var currCode = "VND";
+var vnp_Params = {};
+vnp_Params["vnp_Version"] = "2.1.0";
+vnp_Params["vnp_Command"] = "pay";
+vnp_Params["vnp_TmnCode"] = tmnCode;
+// vnp_Params['vnp_Merchant'] = ''
+vnp_Params["vnp_Locale"] = locale;
+vnp_Params["vnp_CurrCode"] = currCode;
+vnp_Params["vnp_TxnRef"] = orderId;
+vnp_Params["vnp_OrderInfo"] = orderInfo;
+vnp_Params["vnp_OrderType"] = orderType;
+vnp_Params["vnp_Amount"] = amount * 100;
+vnp_Params["vnp_ReturnUrl"] = returnUrl;
+vnp_Params["vnp_IpAddr"] = ipAddr;
+vnp_Params["vnp_CreateDate"] = createDate;
+vnp_Params["vnp_ExpireDate"] = expireDate;
 
-  if (bankCode !== null && bankCode !== "") {
-    vnp_Params["vnp_BankCode"] = bankCode;
-  }
+if (bankCode !== null && bankCode !== "") {
+  vnp_Params["vnp_BankCode"] = bankCode;
+}
 
-  vnp_Params = sortObject(vnp_Params);
+vnp_Params = sortObject(vnp_Params);
 
-  var querystring =qs;
-  var signData = querystring.stringify(vnp_Params, { encode: false });
-  // var crypto = require("crypto");
-  
-  var hmac = crypto.HmacSHA256(signData, secretKey);
-  var signed = hmac.toString(crypto.enc.Hex);
-  vnp_Params["vnp_SecureHash"] = signed.toString();
-vnpUrl += "?" + querystring.stringify(vnp_Params, null, null, { encodeURIComponent: querystring.unescape });
-  // var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-  // vnp_Params["vnp_SecureHash"] = signed;
-  // vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+// var querystring = require("qs");
+var signData = qs.stringify(vnp_Params, { encode: false });
+// var crypto = require("crypto");
+var hmac = crypto.createHmac("sha512", secretKey);
+var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+vnp_Params["vnp_SecureHash"] = signed;
+vnpUrl += "?" + qs.stringify(vnp_Params, { encode: false });
 
-  res.send(vnpUrl);
-  console.log(vnpUrl);
+res.send(vnpUrl);
+// res.redirect(vnpUrl);
+
+//   res.writeHead(302, {
+//     Location: ur
+// });
   // res.redirect(vnpUrl);
-
-  //   res.writeHead(302, {
-  //     Location: ur
-  // });
 }
 
 export const runUrl = async(req, res, next)=> {
@@ -283,21 +278,19 @@ export const vnpayIPN = async(req, res, next)=> {
 
   vnp_Params = sortObject(vnp_Params);
   let secretKey = process.env.vnp_HashSecret;
-  let querystring = qs;
-  let signData = querystring.stringify(vnp_Params, { encode: false });
-  // let crypto = crypto;
-  var hmac = crypto.HmacSHA256(signData, "XLINBOYMWFBQLTYEFJHWWEVQPBRBWDDL");
-  var signed = hmac.toString(crypto.enc.Hex);
-  // let hmac = hmacSHA512( secretKey);
-  // let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+  // let querystring = require("qs");
+  let signData = qs.stringify(vnp_Params, { encode: false });
+  // let crypto = require("crypto");
+  let hmac = crypto.createHmac("sha512", secretKey);
+  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
   let paymentStatus = "0"; // Giả sử '0' là trạng thái khởi tạo giao dịch, chưa có IPN. Trạng thái này được lưu khi yêu cầu thanh toán chuyển hướng sang Cổng thanh toán VNPAY tại đầu khởi tạo đơn hàng.
   //let paymentStatus = '1'; // Giả sử '1' là trạng thái thành công bạn cập nhật sau IPN được gọi và trả kết quả về nó
   //let paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
   let checkOrderId = true; // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
   let checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
   const getData = vnp_Params["vnp_OrderInfo"]; //id,thiengk563@gmail.com,name
-  // console.log(getData,"getdataa");
   const dataArray = getData.split("%2C");
+  console.log(dataArray);
   const userID = dataArray[0];
   const email = dataArray[1];
   const usernamePayment = dataArray[2];
@@ -425,13 +418,12 @@ export const vnpayReturn =async (req, res, next)=> {
 
   let tmnCode = process.env.vnp_TmnCode;
   let secretKey = process.env.vnp_HashSecret;
-  let querystring = qs ;
-  let signData = querystring.stringify(vnp_Params, { encode: false });
-  // let crypto = crypto;
-  var hmac = crypto.HmacSHA256(signData, "XLINBOYMWFBQLTYEFJHWWEVQPBRBWDDL");
-  var signed = hmac.toString(crypto.enc.Hex);
-  // let hmac = crypto.createHmac("sha512", secretKey);
-  // let signed = hmac.update(new Buffer.from(signData, "utf-8")).digest("hex");
+
+  //  let querystring = require("qs");
+  let signData = qs.stringify(vnp_Params, { encode: false });
+  // let crypto = require("crypto");
+  let hmac = crypto.createHmac("sha512", secretKey);
+  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
 
   if (secureHash === signed) {
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
