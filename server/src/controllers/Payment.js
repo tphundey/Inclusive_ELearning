@@ -5,7 +5,6 @@ import qs from "qs"
 dotenv.config();
 import moment from "moment";
 import dateFormat from "dateformat";
-import cryptojs from "crypto-js";
 import crypto from "crypto";
 // import { log } from "console";
 // import { registerMail } from "./Mailer";
@@ -13,7 +12,6 @@ import { createTransport } from "nodemailer";
 import Mailgen from "mailgen";
 import { pagingnation } from "./Pagingnation";
 import Booking from "../models/course";
-import { log } from "console";
 
 export const addPaymentMethod =async (req, res) =>{
   // const ngu = cryptyjs
@@ -216,6 +214,7 @@ var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
 let createDate = moment(date).format("YYYYMMDDHHmmss");
 var orderId = dateFormat(date, "HHmmss");
 var amount = req.body.amount;
+// var orderId = req.body.orderId;
 var bankCode = "VNBANK"; //'VNPAYQR' //req.body.bankCode;
 var orderInfo = req.body.orderDescription;
 var orderType = req.body.orderType;
@@ -288,68 +287,59 @@ export const vnpayIPN = async(req, res, next)=> {
   //let paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
   let checkOrderId = true; // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
   let checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
-  const getData = vnp_Params["vnp_OrderInfo"]; //id,thiengk563@gmail.com,name
+  const getData = vnp_Params["vnp_OrderInfo"]; //id,thiengk563@gmail.com,course_id
   const dataArray = getData.split("%2C");
   console.log(dataArray);
   const userID = dataArray[0];
   const email = dataArray[1];
-  const usernamePayment = dataArray[2];
-  const premium_id = dataArray[3];
+  // const usernamePayment = dataArray[2];
+  const course_id = dataArray[2];
   const replacedEmail = email.replace("%40", "@");
   if (secureHash === signed) {
     //kiểm tra checksum
     if (checkOrderId) {
       if (checkAmount) {
         if (paymentStatus == "0") {
-          //kiểm tra tình trạng giao dịch trước khi cập nhật tình trạng thanh toán
           if (rspCode == "00") {
-            res.status(200).json({ RspCode: "00", Message: "Success" });
-            // const booking = new Booking({
-            //   member_id: userID,
-            // });
-            // booking.save().then((result) => {
-            //   const bookingID = result._id;
-            //   const payment = new Payment({
-            //     recipient: "Yoga HeartBeat",
-            //     paymentDate: vnp_Params["vnp_PayDate"],
-            //     paymentAmount: vnp_Params["vnp_Amount"] / 100,
-            //     paymentMethod_id: "647da80b6aa8563399cbc6ff",
-            //     booking_id: bookingID,
-            //     premium_id: premium_id,
-            //     status: 10,
-            //     meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
-            //   });
-            //   // return save result as a response
-            //   payment
-            //     .save()
-            //     .then(async (result) => {
-            //       const premiumName = await findOne({
-            //         _id: premium_id,
-            //       });
-            //       const date = new Date();
-            //       const dateString = date.toISOString();
-            //       const memeberAccount = await findOneAndUpdate(
-            //         { _id: userID },
-            //         {
-            //           meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}`,
-            //         }
-            //       );
-            //       req.user = {
-            //         userEmail: replacedEmail,
-            //         username: usernamePayment,
-            //         text: `We are pleased to inform you that your payment (id; ${
-            //           result._id
-            //         }) for ${
-            //           premiumName && premiumName.premiumname
-            //         } package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
-            //         subject: "Payment Successful",
-            //         result_id: result._id,
-            //       };
-            //       next();
-            //     })
-            //     .catch((error) =>
-            //       res.status(500).send({ error: error.message })
-            //     );
+              const payment = new Payment({
+                paymentDate: vnp_Params["vnp_PayDate"],
+                paymentAmount: vnp_Params["vnp_Amount"] / 100,
+                paymentMethod_id: "647da80b6aa8563399cbc6ff",
+                course_id: course_id,
+                // premium_id: premium_id,
+                meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
+              });
+                payment
+                .save()
+                // .then(async (result) => {
+                //   const premiumName = await findOne({
+                //     _id: premium_id,
+                //   });
+                //   const date = new Date();
+                //   const dateString = date.toISOString();
+                //   const memeberAccount = await findOneAndUpdate(
+                //     { _id: userID },
+                //     {
+                //       meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}`,
+                //     }
+                //   );
+                //   req.user = {
+                //     userEmail: replacedEmail,
+                //     username: usernamePayment,
+                //     text: `We are pleased to inform you that your payment (id; ${
+                //       result._id
+                //     }) for ${
+                //       premiumName && premiumName.premiumname
+                //     } package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                //     subject: "Payment Successful",
+                //     result_id: result._id,
+                //   };
+                //   next();
+                // })
+                .catch((error) =>
+                  res.status(500).send({ error: error.message })
+                );
+               res.status(200).json({ Message: "Payment success" });
             // });
           } else {
             //fail
