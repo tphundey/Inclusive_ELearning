@@ -10,9 +10,9 @@ const videoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    courseId : {
+    sectionid : {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Course',
+        ref: 'section',
         required: true,
     },
 }, { collection: "Video", timestamps: true })
