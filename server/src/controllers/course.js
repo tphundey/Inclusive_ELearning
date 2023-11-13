@@ -5,50 +5,53 @@ import Category from "../models/category";
 import dotenv from "dotenv";
 dotenv.config;
 
+
 export const getAllCourse = async (req, res) => {
   const {
     _page = 1,
     _limit = 10,
-    _sort = "createAt",
-    _oder = "asc",
+    _sort = "createdAt", // Chú ý đến chính tả ở đây
+    _order = "asc", // Đổi "_oder" thành "_order"
     _keyword = "",
   } = req.query;
 
   const option = {
-    page: _page,
-    limit: _limit,
+    page: parseInt(_page, 10),
+    limit: parseInt(_limit, 10),
     sort: {
-      [_sort]: _oder === "desc" ? 1 : -1,
+      [_sort]: _order === "desc" ? -1 : 1, // Sửa ở đây, 1 cho asc, -1 cho desc
     },
   };
-  try {
-    const searchData = (courseData) => {
-      return courseData?.docs?.filter((item) =>
-        item?.name?.toLowerCase().includes(_keyword)
-      );
-    };
 
+  try {
     const courseData = await Course.paginate({}, option);
-    if (!courseData.docs || courseData.docs.length == 0) {
+    if (!courseData.docs || courseData.docs.length === 0) {
       return res.status(400).json({
-        message: "khong tim thay san pham!",
+        message: "Không tìm thấy sản phẩm!",
       });
     }
-    const searchDataCourse = await searchData(courseData);
 
-    const courseRespoonse = await { ...courseData, docs: searchDataCourse };
+    // Chuyển đổi _id thành id cho mỗi course
+    const convertedDocs = courseData.docs.map((doc) => {
+      const docObject = doc.toObject();
+      docObject.id = docObject._id.toString();
+      delete docObject._id;
+      return docObject;
+    });
+
+    const courseResponse = { ...courseData, docs: convertedDocs };
 
     return res.status(200).json({
-      message: "lay khoa hoc thanh cong",
-      courseRespoonse,
+      message: "Lấy khóa học thành công",
+      courseResponse,
       pagination: {
         currentPage: courseData.page,
         totalPages: courseData.totalPages,
-        totalItems: courseData.totalItems,
+        totalItems: courseData.totalDocs, // Đổi từ totalItems thành totalDocs
       },
     });
   } catch (err) {
-    return res.status(404).json({
+    return res.status(500).json({
       message: err.message,
     });
   }

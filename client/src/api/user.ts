@@ -1,15 +1,16 @@
 import { Icategory } from '@/interfaces/category';
 import { IProduct } from '@/interfaces/product';
-import { Iuser } from '@/interfaces/user';
+import { ILogin, Iuser } from '@/interfaces/user';
 import { Ivideo } from '@/interfaces/video';
 import { pause } from '@/utils/pause';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
+import instance from "./instance";
+import { AxiosError } from 'axios';
 const userApi = createApi({
-    reducerPath: "users",
-    tagTypes: ['users'],
+    reducerPath: "user",
+    tagTypes: ['googleAccount'],
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'http://localhost:3000/',
         fetchFn: async (...args) => {
             await pause(1000);
             return fetch(...args)
@@ -17,8 +18,8 @@ const userApi = createApi({
     }),
     endpoints: (builder) => ({
         getUsers: builder.query<any[], void>({
-            query: () => `/users`,
-            providesTags: ['users'],
+            query: () => `/googleAccount`,
+            providesTags: ['googleAccount'],
             transformResponse: (response: any) => {
                 console.log(response);
 
@@ -30,8 +31,8 @@ const userApi = createApi({
         }),
 
         getUserById: builder.query<Iuser, number | string>({
-            query: (id) => `/users/${id}`,
-            providesTags: ['users'],
+            query: (id) => `/googleAccount/${id}`,
+            providesTags: ['googleAccount'],
             // transformResponse: (response: any) => ({
             //     ...response.data.attributes,
             //     id: response.data.id
@@ -40,28 +41,28 @@ const userApi = createApi({
 
         removeUser: builder.mutation<void, number | string>({
             query: (id) => ({
-                url: `/users/${id}`,
+                url: `/googleAccount/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
 
         addUser: builder.mutation<Iuser, Partial<Iuser>>({
             query: (Users) => ({
-                url: '/users',
+                url: '/googleAccount',
                 method: 'POST',
                 body: Users
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
 
         updateUser: builder.mutation<Iuser, Partial<Iuser>>({
             query: (user) => ({
-                url: `/users/${user.id}`,
+                url: `/googleAccount/${user.id}`,
                 method: "PATCH",
                 body: user
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
     })
 });
@@ -76,3 +77,20 @@ export const {
 
 export const UserReducer = userApi.reducer;
 export default userApi;
+export const loginUser = async (user: ILogin) => {
+    try {
+        const response = await instance.post("/login", user)
+        if (response.status === 200) {
+            localStorage.setItem('token', response.data.accessToken);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            return true;
+        }
+    } catch (error: unknown) {
+        if (error instanceof AxiosError && error.response && error.response.status === 400) {
+            throw new Error(error.response.data.message);
+        } else {
+            console.log(error);
+            throw new Error('Đã xảy ra lỗi khi đăng nhập!');
+        }
+    }
+};

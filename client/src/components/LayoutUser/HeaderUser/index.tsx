@@ -1,16 +1,19 @@
 import './HeaderUser.css'
 import React, { useEffect, useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, message } from 'antd';
 import { GoogleLogout } from 'react-google-login';
+import { useNavigate } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
 const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
 const HeaderUser = () => {
-
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [isListVisible, setListVisible] = useState(false); // Sử dụng trạng thái này để quản lý hiển thị danh sách
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+    const data = localStorage.getItem("user")
+    const user = data && JSON.parse(data);
     let listTimeout;
     const handleLogout = () => {
         localStorage.clear();
@@ -125,7 +128,7 @@ const HeaderUser = () => {
                                 <li>
 
                                     <div className='thea dropdown dropdown-bottom'>
-                                        <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
+                                         <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
                                             <div className="relative">
                                                 <div className="dropdown ">
                                                     <label tabIndex={0} className="">
@@ -137,6 +140,7 @@ const HeaderUser = () => {
                                                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
                                                         <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
                                                         <Button type="dashed">My Profile</Button>
+                                                        
                                                         <GoogleLogout
                                                             clientId={clientId}
                                                             buttonText="Đăng Xuất"
@@ -144,7 +148,8 @@ const HeaderUser = () => {
                                                         </GoogleLogout>
                                                     </ul>
                                                 </div>
-                                            </div></label>
+                                            </div>
+                                        </label>
                                     </div>
                                 </li>
                                 <li>

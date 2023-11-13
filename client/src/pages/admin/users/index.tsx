@@ -17,17 +17,16 @@ const AdminUser = (props: any) => {
         role: item.role
     }));
 
-    const dataSource = usersData?.map((item: Iuser) => {
+    const dataSource = usersData?.map((item: any) => {
         const userRole = roleSource?.find(role => role.key === item.roleID);
-
         return {
             key: item.id,
-            username: item.username,
+            username: item.name,
             email: item.email,
             password: item.password,
-            avatarIMG: item.avatarIMG ? (<div className="avatar placeholder">
+            avatarIMG: item.img ? (<div className="avatar placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-24">
-                    <span className="text-3xl"><img src={item.avatarIMG} alt="" /></span>
+                    <span className="text-3xl"><img src={item.img} alt="" /></span>
                 </div>
             </div>) : (<>chưa có ảnh</>),
             address: item.address,
@@ -128,9 +127,9 @@ const AdminUser = (props: any) => {
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Quản lý người dùng</h2>
-                <Button type="primary" danger>
+                {/* <Button type="primary" danger>
                     <Link to="/admin/user/add">Thêm User</Link>
-                </Button>
+                </Button> */}
             </header>
             {contextHolder}
             {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />}
