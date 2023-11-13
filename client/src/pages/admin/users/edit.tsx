@@ -17,10 +17,10 @@ const { Option } = Select;
 
 type FieldType = {
     id: number,
-    username: string,
+    name: string,
     email: string,
     password: string,
-    avatarIMG: string,
+    img: string,
     address: string,
     phone: number,
     roleID: number
@@ -84,7 +84,7 @@ const AdminUserEdit = () => {
             >
                 <Form.Item<FieldType>
                     label="Tên user"
-                    name="username"
+                    name="name"
                     rules={[
                         { required: true, message: "Tên user không được để trống!" },
                         { min: 3, message: "Tên user ít nhất phải 3 ký tự" },
@@ -109,7 +109,7 @@ const AdminUserEdit = () => {
 
                 <Form.Item<FieldType>
                     label="avatarIMG"
-                    name="avatarIMG"
+                    name="img"
                 >
                     <Input />
                 </Form.Item>

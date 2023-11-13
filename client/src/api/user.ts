@@ -7,10 +7,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import instance from "./instance";
 import { AxiosError } from 'axios';
 const userApi = createApi({
-    reducerPath: "users",
-    tagTypes: ['users'],
+    reducerPath: "user",
+    tagTypes: ['googleAccount'],
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'http://localhost:3000/',
         fetchFn: async (...args) => {
             await pause(1000);
             return fetch(...args)
@@ -18,8 +18,8 @@ const userApi = createApi({
     }),
     endpoints: (builder) => ({
         getUsers: builder.query<any[], void>({
-            query: () => `/users`,
-            providesTags: ['users'],
+            query: () => `/googleAccount`,
+            providesTags: ['googleAccount'],
             transformResponse: (response: any) => {
                 console.log(response);
 
@@ -31,8 +31,8 @@ const userApi = createApi({
         }),
 
         getUserById: builder.query<Iuser, number | string>({
-            query: (id) => `/users/${id}`,
-            providesTags: ['users'],
+            query: (id) => `/googleAccount/${id}`,
+            providesTags: ['googleAccount'],
             // transformResponse: (response: any) => ({
             //     ...response.data.attributes,
             //     id: response.data.id
@@ -41,28 +41,28 @@ const userApi = createApi({
 
         removeUser: builder.mutation<void, number | string>({
             query: (id) => ({
-                url: `/users/${id}`,
+                url: `/googleAccount/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
 
         addUser: builder.mutation<Iuser, Partial<Iuser>>({
             query: (Users) => ({
-                url: '/users',
+                url: '/googleAccount',
                 method: 'POST',
                 body: Users
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
 
         updateUser: builder.mutation<Iuser, Partial<Iuser>>({
             query: (user) => ({
-                url: `/users/${user.id}`,
+                url: `/googleAccount/${user.id}`,
                 method: "PATCH",
                 body: user
             }),
-            invalidatesTags: ['users'],
+            invalidatesTags: ['googleAccount'],
         }),
     })
 });
