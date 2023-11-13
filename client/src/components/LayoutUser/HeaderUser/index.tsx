@@ -128,7 +128,7 @@ const HeaderUser = () => {
                                 <li>
 
                                     <div className='thea dropdown dropdown-bottom'>
-                                        { user? (<label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
+                                         <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
                                             <div className="relative">
                                                 <div className="dropdown ">
                                                     <label tabIndex={0} className="">
@@ -140,23 +140,7 @@ const HeaderUser = () => {
                                                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
                                                         <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
                                                         <Button type="dashed">My Profile</Button>
-                                                        {
-                                                            user ? (
-                                                                <button onClick={() => {
-                                                                    localStorage.clear()
-                                                                    message.success("Đăng xuất thành công!");
-                                                                    setTimeout(() => {
-                                                                        navigate('/')
-                                                                    }, 1000)
-                                                                }}>
-                                                                    Logout
-                                                                </button>
-                                                            ) : ( 
-                                                                <div >
-                                                                    
-                                                                </div>
-                                                            )
-                                                        }
+                                                        
                                                         <GoogleLogout
                                                             clientId={clientId}
                                                             buttonText="Đăng Xuất"
@@ -165,12 +149,7 @@ const HeaderUser = () => {
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </label>) : ( <> 
-                                        <div className='flex justify-between items-center gap-2'>
-                                            <Link to={`/signup`}>join now</Link>
-                                            <Link to={`/signin`}>sign in</Link>
-                                        </div>
-                                        </>)}
+                                        </label>
                                     </div>
                                 </li>
                                 <li>
