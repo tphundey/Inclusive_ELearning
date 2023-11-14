@@ -1,10 +1,24 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import { Button } from 'antd';
-import { GoogleLogout } from 'react-google-login';
+import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { useNavigate } from 'react-router';
 import './HeaderUser.css'
 
-const clientId: string = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
+const firebaseConfig = {
+    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
+    authDomain: "course23-c0a29.firebaseapp.com",
+    projectId: "course23-c0a29",
+    storageBucket: "course23-c0a29.appspot.com",
+    messagingSenderId: "1090440812389",
+    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
+    measurementId: "G-51L48W6PCB"
+};
+
+
+// Khởi tạo ứng dụng Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const HeaderUser: React.FC = () => {
     const navigate = useNavigate();
@@ -13,13 +27,6 @@ const HeaderUser: React.FC = () => {
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
     const [isListVisible, setListVisible] = useState<boolean>(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-
-    let listTimeout: number;
-
-    const handleLogout = () => {
-        localStorage.clear();
-        console.log('User logged out');
-    };
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -53,18 +60,6 @@ const HeaderUser: React.FC = () => {
         setSearchTerm('');
     };
 
-    const handleInputBlur = () => {
-        if (!document.activeElement || !document.activeElement.classList.contains('product-item')) {
-            listTimeout = setTimeout(() => {
-                setListVisible(false);
-            }, 300);
-        }
-    };
-
-    const handleInputFocus = () => {
-        clearTimeout(listTimeout);
-    };
-
     const handleItemClick = (product: any) => {
         navigate(`/introduction/${product.id}`);
     };
@@ -89,8 +84,6 @@ const HeaderUser: React.FC = () => {
                                         type="text"
                                         value={searchTerm}
                                         onInput={handleInputChange}
-                                        onFocus={handleInputFocus}
-                                        onBlur={handleInputBlur}  // Sử dụng sự kiện onInput để theo dõi thay đổi trong input
                                     />
                                     {searchTerm && ( // Hiển thị nút xóa chỉ khi có giá trị trong input
                                         <button onClick={handleClearInput} className="clear-button">
@@ -132,25 +125,20 @@ const HeaderUser: React.FC = () => {
                                 </li>
                                 <li>
                                     <div className='thea dropdown dropdown-bottom'>
-                                         <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
-                                            <div className="relative">
+                                        <label tabIndex={0} className="dropdown"><i className="fa-regular fa-user lups tutut"></i>
+                                            <label tabIndex={0} className="">
+                                                <div
+                                                    onClick={toggleDropdown}
+                                                    className="cursor-pointer mt-1">
+                                                    Me <i className={'fa-solid fa-caret-down'}></i>
+                                                </div></label>
+                                            <div className="absolute top-1 left-36">
                                                 <div className="dropdown ">
-                                                    <label tabIndex={0} className="">
-                                                        <div
-                                                            onClick={toggleDropdown}
-                                                            className="cursor-pointer mt-1">
-                                                            Me <i className={'fa-solid fa-caret-down'}></i>
-                                                        </div></label>
-                                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
-                                                        <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
-                                                        <Button type="dashed">My Profile</Button>
-                                                        
-                                                        <GoogleLogout
-                                                            clientId={clientId}
-                                                            buttonText="Đăng Xuất"
-                                                            onLogoutSuccess={handleLogout}>
-                                                        </GoogleLogout>
-                                                    </ul>
+                                                    <div className="dropdown dropdown-bottom dropdown-end mt-5">
+                                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
+                                                            <Button onClick={() => auth.signOut()}>Đăng xuất</Button>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </label>
