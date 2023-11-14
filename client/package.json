@@ -20,6 +20,7 @@
         "axios": "^1.4.0",
         "concurrently": "^8.2.0",
         "daisyui": "^3.9.4",
+        "firebase": "^10.6.0",
         "fuse.js": "^6.6.2",
         "gapi-script": "^1.2.0",
         "html2canvas": "^1.4.1",

@@ -1,134 +1,91 @@
 import './SignupPage.css';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { useState, useEffect } from 'react';
-import GoogleLogin, { GoogleLogout } from 'react-google-login';
-import { gapi } from 'gapi-script';
 import axios from 'axios';
 import { useAddUserMutation } from '@/api/user';
-import { Button, DatePicker, Form, Input, Select, Upload, UploadProps, message } from "antd";
-import { Iuser } from '@/interfaces/user';
+import { Form, Input, message } from "antd";
 import { useNavigate } from 'react-router';
-type FieldType = {
-    id?: number,
-    username?: string,
-    email?: string,
-    password?: string,
-    avatarIMG?: string,
-    address?: string,
-    phone?: number,
-    roleID?: number
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
+    authDomain: "course23-c0a29.firebaseapp.com",
+    projectId: "course23-c0a29",
+    storageBucket: "course23-c0a29.appspot.com",
+    messagingSenderId: "1090440812389",
+    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
+    measurementId: "G-51L48W6PCB"
 };
-const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
 
-// Hàm mã hóa dữ liệu sử dụng encodeURIComponent
-function encodeData(data: any): any {
-    return encodeURIComponent(data);
-}
-
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+// Khởi tạo ứng dụng Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const SignupPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
-    const [password, setPassword] = useState<any>('');
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [encryptedData, setEncryptedData] = useState<any>(null);
-    const [profileName, setProfileName] = useState<any>(null);
-    const [addUser] = useAddUserMutation();
-    const [messageApi, contextHolder] = message.useMessage();
-    const onSuccess = async (res: any) => {
-        const profile: any = {
-            email: res.profileObj.email,
-            name: res.profileObj.name,
-            img: res.profileObj.imageUrl
-        };
-        const profileJSON: any = JSON.stringify(profile);
-
-        console.log("Login Success", res.profileObj);
-
-        // Mã hóa thông tin trước khi lưu vào localStorage
-        const encryptedProfile: any = encodeData(profileJSON);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('profile', encryptedProfile);
-        console.log('Thông tin đã được mã hóa và lưu vào localStorage.');
-
-        // Kiểm tra email trùng trước khi gửi yêu cầu POST
-        axios.get(`http://localhost:3000/googleAccount?email=${res.profileObj.email}`)
-            .then((response: any) => {
-                if (response.data.length > 0) {
-                    console.log('Đã có Email trùng rồi rồi');
-                } else {
-                    axios.post('http://localhost:3000/googleAccount', profile)
-                        .then((response: any) => {
-                            console.log('Post thông tin tài khoản thành công !');
-                        })
-                        .catch((error: any) => {
-                            console.log(error);
-                        });
-                }
-            })
-            .catch((error: any) => {
-                console.log(error);
-            });
-    }
-
-    const onFailure = (res: any) => {
-        console.log("Login Fail", res);
-        alert('Không thành công');
-    }
+    const [user, setUser] = useState(null);
+    const [email, setEmail] = useState(null);
 
     useEffect(() => {
-        async function start() {
-            gapi.client.init({
-                clientId: clientId,
-                scope: ""
+        // Sử dụng onAuthStateChanged để kiểm tra trạng thái xác thực của người dùng
+        const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+            if (currentUser) {
+                setUser(currentUser);
+                // Người dùng đã đăng nhậpd
+                setEmail(currentUser.email)
+                console.log(email);
+
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
+    const googleSignIn = () => {
+
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                axios.get(`http://localhost:3000/googleAccount?email=${user.email}`)
+                    .then((response) => {
+                        if (response.data.length === 0) {
+                            axios.post('http://localhost:3000/googleAccount', {
+                                displayName: user.displayName,
+                                email: user.email,
+                                photoURL: user.photoURL,
+                            })
+                                .then((response) => {
+                                    console.log('User information sent to API:', response.data);
+                                })
+                                .catch((error) => {
+                                    console.error('Error sending user information to API:', error);
+                                    alert('Không thành công');
+                                });
+                        } else {
+                            console.log('Email already exists:', user.email);
+                            navigate('/')
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error checking email existence:', error);
+                        alert('Không thành công');
+                    });
+            })
+            .catch((error) => {
+                console.error('Authentication failed:', error);
+                alert('Không thành công');
             });
-
-            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-            }
-            else {
-                console.log('Ko chạy');
-
-            }
-        }
-
-        gapi.load('client:auth2', start);
-    }, []);
-    const onFinish = async  (values : Iuser) => {
-        try {
-            const roleID = 1
-            const newData = {...values, roleID}
-            const check = await addUser(newData);
-            if(check){
-                messageApi.open({
-                    type: "success",
-                    content: "đăng kí thành công",
-                });
-            }
-           
-                
-                form.resetFields();
-                setTimeout(() => {
-                    navigate("/signin");
-                }, 1500);
-       
-        } catch (error) {
-            
-        }
-    }
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
     };
+
     return (
         <div>
-            {contextHolder}
+
             <div className="loginpage">
                 <div className="login_bn">
                     <img src="https://f10-zpcloud.zdn.vn/1488129773092553661/6a7b44d847c0929ecbd1.jpg" alt="" />
@@ -138,57 +95,36 @@ const SignupPage = () => {
                     <div className='lg-ct2'>By clicking Agree & Join, you agree to the LinkedIn User Agreement</div>
                 </div>
                 <div className='login-input'>
-                    {/* <form action="">
-                        <label className='signup-label' htmlFor="">Email</label>
-                        <input type="text" placeholder='Email or Phone' />
-                        <label className='signup-label' htmlFor="">Password (6+ characters)
-                        </label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder='Password'
-                            id="password"
-                            name="password"
-                            value={password}
-                            onChange={(e: any) => setPassword(e.target.value)}
-                        />
-                        <div className="password-toggle" onClick={togglePasswordVisibility}>
-                            {showPassword ? 'Hide' : 'Show'}
-                        </div>
-
-                        <button>Agree & Join</button>
-                    </form> */}
-                     <Form
+                    <Form
                         form={form}
                         name="basic"
-                        onFinish={onFinish}
-                        // onFinishFailed={onFinishFailed}
                         autoComplete="off"
                     >
-                        <Form.Item<FieldType>
+                        <Form.Item<any>
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}
                         >
-                            <Input placeholder='username'/>
+                            <Input placeholder='Username' />
                         </Form.Item>
-                        <Form.Item<FieldType>
+                        <Form.Item<any>
                             name="email"
                             rules={[{ required: true, message: 'Please input your email!' }]}
                         >
-                            <Input placeholder='Email or Phone'/>
+                            <Input placeholder='Email or Phone' />
                         </Form.Item>
 
-                        <Form.Item<FieldType>
+                        <Form.Item<any>
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
-                            <Input 
+                            <Input
                                 placeholder='Password'
                             />
-                            
+
                         </Form.Item>
-                        
+
                         <button type='submit'>Agree & Join</button>
-                       
+
                     </Form>
                     <div className="signup-or">
                         <div className="sin-hr"></div>
@@ -196,14 +132,10 @@ const SignupPage = () => {
                         <div className="sin-hr"></div>
                     </div>
 
-                    <GoogleLogin
-                        clientId={clientId}
-                        buttonText="Đăng nhập bằng Google"
-                        onSuccess={onSuccess}
-                        onFailure={onFailure}
-                        cookiePolicy={'single_host_origin'}
-                        isSignedIn={true}
-                    />
+                    <button className="signin_google" onClick={googleSignIn}>
+                        <div className="icon"></div>
+                        Đăng nhập bằng Google
+                    </button>
                     {/* <GoogleLogout>DƯA</GoogleLogout> */}
                     <br />
                     <div className="login-new">
