@@ -383,16 +383,13 @@
       "name": "Mai Tranthi",
       "img": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
-      "role":1,
+      "role": 1,
       "courseSaved": [
         3,
-        5,
         4,
         8
       ],
-      "registeredCourseID": [
-        4
-      ]
+      "registeredCourseID": []
     },
     {
       "email": "taidvph20044@gmail.com",
