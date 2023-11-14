@@ -1,24 +1,26 @@
-import './HeaderUser.css'
-import React, { useEffect, useState } from 'react';
-import { Button, Space, message } from 'antd';
+import React, { useEffect, useState, ChangeEvent } from 'react';
+import { Button } from 'antd';
 import { GoogleLogout } from 'react-google-login';
 import { useNavigate } from 'react-router';
-import { Link, NavLink } from 'react-router-dom';
-const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
-const HeaderUser = () => {
+import './HeaderUser.css'
+
+const clientId: string = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
+
+const HeaderUser: React.FC = () => {
     const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [isListVisible, setListVisible] = useState(false); // Sử dụng trạng thái này để quản lý hiển thị danh sách
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const data = localStorage.getItem("user")
-    const user = data && JSON.parse(data);
-    let listTimeout;
+    const [products, setProducts] = useState<any[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+    const [isListVisible, setListVisible] = useState<boolean>(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+    let listTimeout: number;
+
     const handleLogout = () => {
         localStorage.clear();
         console.log('User logged out');
-    }
+    };
+
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -26,44 +28,47 @@ const HeaderUser = () => {
     useEffect(() => {
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
-            .then((data) => {
+            .then((data: any[]) => {
                 setProducts(data);
                 setFilteredProducts(data);
             });
     }, []);
 
     const handleSearch = () => {
-        const firstChar = searchTerm.charAt(0); // Lấy ký tự đầu tiên từ từ khóa
+        const firstChar = searchTerm.charAt(0);
         const filtered = products.filter((product) =>
             product.courseName.toLowerCase().startsWith(firstChar.toLowerCase())
         );
         setFilteredProducts(filtered.slice(0, 5));
         setListVisible(true);
     };
-    const handleInputChange = (e: any) => {
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
         setSearchTerm(inputValue);
-        handleSearch(); // Gọi hàm tìm kiếm khi có sự thay đổi trong input
+        handleSearch();
     };
-    // Hàm để xóa giá trị trong input
+
     const handleClearInput = () => {
         setSearchTerm('');
     };
+
     const handleInputBlur = () => {
         if (!document.activeElement || !document.activeElement.classList.contains('product-item')) {
             listTimeout = setTimeout(() => {
                 setListVisible(false);
-            }, 300); // Đặt thời gian trễ là 300 milliseconds (0,3 giây)
+            }, 300);
         }
     };
+
     const handleInputFocus = () => {
-        // Hủy bỏ khoảng thời gian trễ nếu input được focus trở lại
         clearTimeout(listTimeout);
     };
-    // Xử lý sự kiện khi bấm vào một phần tử trong danh sách
+
     const handleItemClick = (product: any) => {
-        window.location.href = `/introduction/${product.id}`;
+        navigate(`/introduction/${product.id}`);
     };
+
 
     return (
         <div className='header-static'>
@@ -100,7 +105,7 @@ const HeaderUser = () => {
                                             {filteredProducts.length > 0 ? (
                                                 filteredProducts.map((product) => (
                                                     <a href={`/introduction/${product.id}`} key={product.id}>
-                                                        <div className='flex search-list'>        <div> <img className='w-5' src={product.courseIMG} alt="" /></div><div className='search-blue' onClick={() => handleItemClick(product)}>{product.courseName}</div></div>
+                                                        <div className='flex search-list'><div> <img className='w-5' src={product.courseIMG} alt="" /></div><div className='search-blue' onClick={() => handleItemClick(product)}>{product.courseName}</div></div>
                                                     </a>
                                                 ))
                                             ) : (
@@ -126,7 +131,6 @@ const HeaderUser = () => {
                                     </a>
                                 </li>
                                 <li>
-
                                     <div className='thea dropdown dropdown-bottom'>
                                          <label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
                                             <div className="relative">
