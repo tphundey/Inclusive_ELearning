@@ -1,6 +1,6 @@
 import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
 import { Ivideo } from "@/interfaces/video";
-import { Button, Table, Skeleton, Popconfirm, message } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
 import { Link } from "react-router-dom";
 import { Modal } from "antd";
 import { useEffect, useState, useCallback } from "react";
@@ -20,8 +20,25 @@ const AdminVideo = (props: Props) => {
         videoURL: item.videoURL,
     }));
     console.log(dataSource);
-   
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 4;
+    const startItem = (currentPage - 1) * pageSize;
+    const endItem = currentPage * pageSize;
+    const currentData = dataSource?.slice(startItem, endItem);
 
+    const handlePageChange = (page: any) => {
+        setCurrentPage(page);
+    };
+    const fetchData = () => {
+        fetch('http://localhost:3000/Courses')
+            .then((response) => response.json())
+            .then((data) => {
+                setVideosData(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching data: ', error);
+            });
+    };
     useEffect(() => {
         // Lấy thông tin khóa học từ API "http://localhost:3000/Courses"
         fetch('http://localhost:3000/Courses')
@@ -102,7 +119,7 @@ const AdminVideo = (props: Props) => {
             key: "videoURL",
         },
         {
-            title: "actions",
+            title: "Hành động",
             render: ({ key: id }: { key: number | string }) => (
                 <div className="flex space-x-2">
                     <Modal
@@ -134,7 +151,24 @@ const AdminVideo = (props: Props) => {
                 </Button>
             </header>
             {contextHolder}
-            {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />}
+            {/* {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />} */}
+            {isProductLoading ? (
+                <Skeleton />
+            ) : (
+                <>
+                    <Table
+                        pagination={false}
+                        dataSource={currentData}
+                        columns={columns}
+                    />
+                    <Pagination 
+                        current={currentPage}
+                        total={productsData?.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                    />
+                </>
+            )}
         </div>
     );
 };
