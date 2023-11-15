@@ -27,11 +27,11 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    videoId: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Video',
-        required: true
-    },
+    // videoId: {
+    //     type: mongoose.SchemaTypes.ObjectId,
+    //     ref: 'Video',
+    //     required: true
+    // },
     categoryId: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Category',

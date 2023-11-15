@@ -1,5 +1,5 @@
 import userRouter from "./user";
-import productRouter from './Course'
+import productRouter from "./Course";
 import UploadRouter from "./uploader";
 // import CartRouter from "./Cart";
 import paymentsRouter from "./payments";
