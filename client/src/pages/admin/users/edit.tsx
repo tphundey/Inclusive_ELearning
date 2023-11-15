@@ -135,7 +135,7 @@ const AdminUserEdit = () => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item name="roleID" label="role" rules={[
+                {/* <Form.Item name="roleID" label="role" rules={[
                     { required: true }
                     ]}>
                     <Select
@@ -150,7 +150,7 @@ const AdminUserEdit = () => {
                             })
                         }
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" danger htmlType="submit">
                         {isUpdateLoading ? (
