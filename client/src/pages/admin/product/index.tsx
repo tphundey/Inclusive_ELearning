@@ -13,7 +13,7 @@ const AdminProduct = () => {
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
     const [selectedCourseReviews, setSelectedCourseReviews] = useState([]);
     const [isReviewsModalVisible, setIsReviewsModalVisible] = useState(false);
-    const pageSize = 3;
+    const pageSize = 4;
 
 
     const handlePageChange = (page: any) => {

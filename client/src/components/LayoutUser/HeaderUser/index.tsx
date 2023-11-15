@@ -1,24 +1,33 @@
-import './HeaderUser.css'
-import React, { useEffect, useState } from 'react';
-import { Button, Space, message } from 'antd';
-import { GoogleLogout } from 'react-google-login';
+import React, { useEffect, useState, ChangeEvent } from 'react';
+import { Button } from 'antd';
+import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { useNavigate } from 'react-router';
-import { Link, NavLink } from 'react-router-dom';
-const clientId: any = "617522400337-v8petg67tn301qkocslk6or3j9c4jjmn.apps.googleusercontent.com";
-const HeaderUser = () => {
+import './HeaderUser.css'
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
+    authDomain: "course23-c0a29.firebaseapp.com",
+    projectId: "course23-c0a29",
+    storageBucket: "course23-c0a29.appspot.com",
+    messagingSenderId: "1090440812389",
+    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
+    measurementId: "G-51L48W6PCB"
+};
+
+
+// Khởi tạo ứng dụng Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const HeaderUser: React.FC = () => {
     const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [isListVisible, setListVisible] = useState(false); // Sử dụng trạng thái này để quản lý hiển thị danh sách
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const data = localStorage.getItem("user")
-    const user = data && JSON.parse(data);
-    let listTimeout;
-    const handleLogout = () => {
-        localStorage.clear();
-        console.log('User logged out');
-    }
+    const [products, setProducts] = useState<any[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+    const [isListVisible, setListVisible] = useState<boolean>(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -26,44 +35,35 @@ const HeaderUser = () => {
     useEffect(() => {
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
-            .then((data) => {
+            .then((data: any[]) => {
                 setProducts(data);
                 setFilteredProducts(data);
             });
     }, []);
 
     const handleSearch = () => {
-        const firstChar = searchTerm.charAt(0); // Lấy ký tự đầu tiên từ từ khóa
+        const firstChar = searchTerm.charAt(0);
         const filtered = products.filter((product) =>
             product.courseName.toLowerCase().startsWith(firstChar.toLowerCase())
         );
         setFilteredProducts(filtered.slice(0, 5));
         setListVisible(true);
     };
-    const handleInputChange = (e: any) => {
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
         setSearchTerm(inputValue);
-        handleSearch(); // Gọi hàm tìm kiếm khi có sự thay đổi trong input
+        handleSearch();
     };
-    // Hàm để xóa giá trị trong input
+
     const handleClearInput = () => {
         setSearchTerm('');
     };
-    const handleInputBlur = () => {
-        if (!document.activeElement || !document.activeElement.classList.contains('product-item')) {
-            listTimeout = setTimeout(() => {
-                setListVisible(false);
-            }, 300); // Đặt thời gian trễ là 300 milliseconds (0,3 giây)
-        }
-    };
-    const handleInputFocus = () => {
-        // Hủy bỏ khoảng thời gian trễ nếu input được focus trở lại
-        clearTimeout(listTimeout);
-    };
-    // Xử lý sự kiện khi bấm vào một phần tử trong danh sách
+
     const handleItemClick = (product: any) => {
-        window.location.href = `/introduction/${product.id}`;
+        navigate(`/introduction/${product.id}`);
     };
+
 
     return (
         <div className='header-static'>
@@ -84,8 +84,6 @@ const HeaderUser = () => {
                                         type="text"
                                         value={searchTerm}
                                         onInput={handleInputChange}
-                                        onFocus={handleInputFocus}
-                                        onBlur={handleInputBlur}  // Sử dụng sự kiện onInput để theo dõi thay đổi trong input
                                     />
                                     {searchTerm && ( // Hiển thị nút xóa chỉ khi có giá trị trong input
                                         <button onClick={handleClearInput} className="clear-button">
@@ -100,7 +98,7 @@ const HeaderUser = () => {
                                             {filteredProducts.length > 0 ? (
                                                 filteredProducts.map((product) => (
                                                     <a href={`/introduction/${product.id}`} key={product.id}>
-                                                        <div className='flex search-list'>        <div> <img className='w-5' src={product.courseIMG} alt="" /></div><div className='search-blue' onClick={() => handleItemClick(product)}>{product.courseName}</div></div>
+                                                        <div className='flex search-list'><div> <img className='w-5' src={product.courseIMG} alt="" /></div><div className='search-blue' onClick={() => handleItemClick(product)}>{product.courseName}</div></div>
                                                     </a>
                                                 ))
                                             ) : (
@@ -126,51 +124,24 @@ const HeaderUser = () => {
                                     </a>
                                 </li>
                                 <li>
-
                                     <div className='thea dropdown dropdown-bottom'>
-                                        { user? (<label tabIndex={0} className=""><i className="fa-regular fa-user lups tutut"></i>
-                                            <div className="relative">
+                                        <label tabIndex={0} className="dropdown"><i className="fa-regular fa-user lups tutut"></i>
+                                            <label tabIndex={0} className="">
+                                                <div
+                                                    onClick={toggleDropdown}
+                                                    className="cursor-pointer mt-1">
+                                                    Me <i className={'fa-solid fa-caret-down'}></i>
+                                                </div></label>
+                                            <div className="absolute top-1 left-36">
                                                 <div className="dropdown ">
-                                                    <label tabIndex={0} className="">
-                                                        <div
-                                                            onClick={toggleDropdown}
-                                                            className="cursor-pointer mt-1">
-                                                            Me <i className={'fa-solid fa-caret-down'}></i>
-                                                        </div></label>
-                                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100  w-52">
-                                                        <img className='avtme' src="https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg" alt="" />
-                                                        <Button type="dashed">My Profile</Button>
-                                                        {
-                                                            user ? (
-                                                                <button onClick={() => {
-                                                                    localStorage.clear()
-                                                                    message.success("Đăng xuất thành công!");
-                                                                    setTimeout(() => {
-                                                                        navigate('/')
-                                                                    }, 1000)
-                                                                }}>
-                                                                    Logout
-                                                                </button>
-                                                            ) : ( 
-                                                                <div >
-                                                                    
-                                                                </div>
-                                                            )
-                                                        }
-                                                        <GoogleLogout
-                                                            clientId={clientId}
-                                                            buttonText="Đăng Xuất"
-                                                            onLogoutSuccess={handleLogout}>
-                                                        </GoogleLogout>
-                                                    </ul>
+                                                    <div className="dropdown dropdown-bottom dropdown-end mt-5">
+                                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
+                                                            <Button onClick={() => auth.signOut()}>Đăng xuất</Button>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </label>) : ( <> 
-                                        <div className='flex justify-between items-center gap-2'>
-                                            <Link to={`/signup`}>join now</Link>
-                                            <Link to={`/signin`}>sign in</Link>
-                                        </div>
-                                        </>)}
+                                        </label>
                                     </div>
                                 </li>
                                 <li>

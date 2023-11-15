@@ -4,7 +4,8 @@ import { useGetUsersQuery, useUpdateUserMutation } from "@/api/user";
 import { Icategory } from "@/interfaces/category";
 import { Irole } from "@/interfaces/role";
 import { Iuser } from "@/interfaces/user";
-import { Button, Table, Skeleton, Popconfirm, message, Select } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Select, Pagination } from "antd";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 const { Option } = Select;
 const AdminUser = (props: any) => {
@@ -16,27 +17,40 @@ const AdminUser = (props: any) => {
         key: item.id,
         role: item.role
     }));
-
-    const dataSource = usersData?.map((item: Iuser) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 3;
+    const handlePageChange = (page: any) => {
+        setCurrentPage(page);
+    };
+    
+    const dataSource = usersData?.map((item: any) => {
         const userRole = roleSource?.find(role => role.key === item.roleID);
-
         return {
             key: item.id,
-            username: item.username,
+            username: item.name ? (
+                <span >{item.name}</span>
+            ) : (<>thiếu thông tin</>),
             email: item.email,
             password: item.password,
-            avatarIMG: item.avatarIMG ? (<div className="avatar placeholder">
+            avatarIMG: item.img ? (<div className="avatar placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-24">
-                    <span className="text-3xl"><img src={item.avatarIMG} alt="" /></span>
+                    <span className="text-3xl"><img src={item.img} alt="" /></span>
                 </div>
             </div>) : (<>chưa có ảnh</>),
-            address: item.address,
-            phone: item.phone,
+            address: item.address ? (
+            <span >{item.address}</span>
+        ) : (<>thiếu thông tin</>),
+            phone: item.phone? (
+                <span >{item.phone}</span>
+            ) : (<>thiếu thông tin</>),
             roleID: userRole ? userRole.role : "",
             registeredCourseID: item.registeredCourseID,
             courseSaved: item.courseSaved
         };
     });
+    const startItem = (currentPage - 1) * pageSize;
+    const endItem = currentPage * pageSize;
+    const currentData = dataSource?.slice(startItem, endItem);
     console.log(dataSource);
 
     const confirm = (id: any) => {
@@ -128,12 +142,29 @@ const AdminUser = (props: any) => {
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Quản lý người dùng</h2>
-                <Button type="primary" danger>
+                {/* <Button type="primary" danger>
                     <Link to="/admin/user/add">Thêm User</Link>
-                </Button>
+                </Button> */}
             </header>
             {contextHolder}
-            {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />}
+            {/* {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />} */}
+            {isProductLoading ? (
+                <Skeleton />
+            ) : (
+                <>
+                    <Table
+                        pagination={false}
+                        dataSource={currentData}
+                        columns={columns}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={usersData?.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                    />
+                </>
+            )}
         </div>
     );
 };

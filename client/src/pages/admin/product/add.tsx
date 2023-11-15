@@ -94,17 +94,17 @@ const AdminProductAdd = () => {
                 </Form.Item>
 
                 <Form.Item<FieldType>
-                    label="courseIMG"
+                    label="Hình ảnh"
                     name="courseIMG"
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                 name="date"
-                label="DatePicker">
+                label="Thời gian tạo">
                     <DatePicker  />
                 </Form.Item>
-                <Form.Item name="videoID" label="video" rules={[{ required: true }]}>
+                <Form.Item name="videoID" label="video hhóa học" >
                     <Select
                         placeholder="pick a videoID"
                         allowClear
@@ -118,7 +118,7 @@ const AdminProductAdd = () => {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item name="categoryID" label="Category" rules={[{ required: true }]}>
+                <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
                         allowClear

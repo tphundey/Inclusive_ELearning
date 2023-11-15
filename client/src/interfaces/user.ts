@@ -1,6 +1,6 @@
 export interface Iuser{
     id?:number | string;
-    username: string;
+    name: string;
     email: string;
     password: string;
     avatarIMG: string;
@@ -10,6 +10,7 @@ export interface Iuser{
     registeredCourseID:number;
     courseSaved : number;
 }
+
 export interface ILogin {
     email: string,
     password: string

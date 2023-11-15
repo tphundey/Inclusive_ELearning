@@ -9,6 +9,7 @@ import { Ivideo } from "@/interfaces/video";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, Select, Upload, UploadProps, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Navigate, useNavigate } from "react-router-dom";
 const { Option } = Select;
@@ -37,6 +38,9 @@ const AdminUserAdd = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [addUser, { isLoading: isAddProductLoading }] = useAddUserMutation();
     const { data: RolesData } = useGetRolesQuery();
+    const [images, setimages] = useState("");
+console.log(images);
+
     const roleSource = RolesData?.map((item: Irole) => ({
         key: item.id,
         role: item.role
@@ -101,12 +105,19 @@ const AdminUserAdd = () => {
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item<FieldType>
-                    label="avatarIMG"
-                    name="avatarIMG"
-                >
-                    <Input />
-                </Form.Item> 
+                <Upload
+      action="http://localhost:8080/api/images/upload"
+      name='images'
+      listType="picture"
+      maxCount={1}
+      onChange={(info) => {
+        console.log(info,"inffo");
+        
+        // setimages(info?.file.response?.urls[0].url)        
+      }}
+    >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
                 
                 {/* <Form.Item<FieldType>
                     label="avatarIMG"

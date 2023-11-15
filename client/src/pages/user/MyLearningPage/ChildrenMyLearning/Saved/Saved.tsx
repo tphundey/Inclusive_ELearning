@@ -1,75 +1,69 @@
 import { useState, useEffect } from 'react';
 import { Empty, Pagination } from 'antd';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp, FirebaseApp } from 'firebase/app';
 
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+const firebaseConfig = {
+    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
+    authDomain: "course23-c0a29.firebaseapp.com",
+    projectId: "course23-c0a29",
+    storageBucket: "course23-c0a29.appspot.com",
+    messagingSenderId: "1090440812389",
+    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
+    measurementId: "G-51L48W6PCB"
+};
+const app: FirebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const Saved = () => {
+    const [user, setUser] = useState<User | null>(null);
+    const [email, setEmail] = useState<any | null>(null);
+    const [loading, setLoading] = useState(true);
     const [savedCourses, setSavedCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Thêm trạng thái trang hiện tại
-    // const [encryptedData, setEncryptedData] = useState<any>(null);
-    const [, setEncryptedData] = useState<any>(null);
+ 
     useEffect(() => {
-        async function start() {
-            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-            } else {
-                console.log('Ko chạy');
-            }
-        }
-        start();
-    }, []);
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setEmail(currentUser?.email)
+            setLoading(false);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
 
     useEffect(() => {
-        const encryptedProfile = localStorage.getItem('profile');
-        if (encryptedProfile) {
-            const decryptedProfile = decodeData(encryptedProfile);
-            const profile = JSON.parse(decryptedProfile);
-            const userEmail = profile.email;
-            console.log('Email của người dùng:', userEmail);
-
-            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-                .then((response) => response.json())
-                .then((userData) => {
-                    if (userData.length > 0) {
-                        const user = userData[0];
-                        const savedCourseIds = user.courseSaved;
-                        fetch(`http://localhost:3000/Courses`)
-                            .then((response) => response.json())
-                            .then((coursesData) => {
-                                const savedCourses = coursesData.filter((course: any) =>
-                                    savedCourseIds.includes(course.id)
-                                );
-                                setSavedCourses(savedCourses);
-                            })
-                            .catch((error) => {
-                                console.error('Error fetching courses: ', error);
-                            });
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching user data: ', error);
-                });
-        } else {
-            console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
-        }
-    }, []);
+        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+            .then((response) => response.json())
+            .then((userData) => {
+                if (userData.length > 0) {
+                    const user = userData[0];
+                    const savedCourseIds = user.courseSaved;
+                    fetch(`http://localhost:3000/Courses`)
+                        .then((response) => response.json())
+                        .then((coursesData) => {
+                            const savedCourses = coursesData.filter((course: any) =>
+                                savedCourseIds.includes(course.id)
+                            );
+                            setSavedCourses(savedCourses);
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching courses: ', error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user data: ', error);
+            });
+    }, [email]
+    );
 
 
     const handleRemoveCourse = (courseId: any) => {
-        const encryptedProfile = localStorage.getItem('profile');
-        if (encryptedProfile) {
-            const decryptedProfile = decodeData(encryptedProfile);
-            const profile = JSON.parse(decryptedProfile);
-            const userEmail = profile.email;
+       
 
-            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+            fetch(`http://localhost:3000/googleAccount?email=${email}`)
                 .then((response) => response.json())
                 .then((userData) => {
                     if (userData.length > 0) {
@@ -103,12 +97,8 @@ const Saved = () => {
                                 console.error('Error updating user data:', error);
                             });
                     }
-                })
-                .catch((error) => {
-                    console.error('Error fetching user data:', error);
-                });
-        }
-    };
+                }), [email]
+            };
 
     const itemsPerPage = 2;
     const startIndex = (currentPage - 1) * itemsPerPage;

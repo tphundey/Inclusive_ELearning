@@ -4,7 +4,7 @@
   <p align="center">
     Dự án Tốt Nghiệp về Hệ Thống Giáo Dục Trực Tuyến
     <br />
-    <a href="https://github.com/bunbonhieuhanh/LinkedIn_Learning"><strong>Khám phá dự án »</strong></a>
+    <a href="[https://github.com/bunbonhieuhanh/LinkedIn_Learning](https://github.com/tphun999/Inclusive_ELearning)"><strong>Khám phá dự án »</strong></a>
     <br />
     <br />
     <a href="https://demo.example.com">Xem Demo</a>
@@ -17,7 +17,7 @@
 
 ## Giới Thiệu
 
-Dự án này tập trung vào việc xây dựng một Hệ Thống Khóa Học Trực Tuyến hoàn chỉnh, nhằm cung cấp một nền tảng giáo dục linh hoạt và tiện lợi cho học sinh ở mọi nơi. Chúng tôi mục tiêu tạo ra một trải nghiệm học tập tương tác và hấp dẫn thông qua việc kết hợp các tài liệu giảng dạy, bài giảng video, bài tập và các công cụ giao tiếp.
+Dự án này tập trung vào việc xây dựng một Hệ Thống Khóa Học Trực Tuyến hoàn chỉnh, nhằm cung cấp một nền tảng giáo dục linh hoạt và tiện lợi cho học sinh ở mọi nơi. Chúng tôi mục tiêu tạo ra một trải nghiệm học tập tương tác và hấp dẫn thông qua việc kết hợp các tài liệu giảng dạy, bài giảng video, các trang thảo luận giữa các thành viên.
 
 ## Tính Năng
 
@@ -25,7 +25,8 @@ Dự án này tập trung vào việc xây dựng một Hệ Thống Khóa Học
 
 - 🎥 **Bài Giảng Video**: Video giảng dạy sẽ giúp học sinh hiểu rõ hơn về nội dung khóa học thông qua việc trực quan hóa giảng dạy.
 
-- ✅ **Hệ Thống Bài Tập và Kiểm Tra**: Hệ thống sẽ cung cấp các bài tập và kiểm tra đa dạng để học sinh có thể kiểm tra kiến thức của mình.
+- ✅ **Hệ Thống Note**: Hệ thống sẽ cho bạn note lại các kiến thức mà bạn muốn ghi nhớ.
+  
 - 📣 **Diễn Đàn Thảo Luận**: Một diễn đàn thảo luận sẽ được tích hợp để học sinh có thể trao đổi, thảo luận và hỗ trợ lẫn nhau.
 
 - 📊 **Theo Dõi Tiến Độ**: Học sinh có thể theo dõi tiến độ học tập của mình thông qua giao diện dễ sử dụng.
@@ -42,12 +43,12 @@ git clone https://github.com/bunbonhieuhanh/LinkedIn_Learning.git
 2. **Cài Đặt Các Phụ Thuộc**: Di chuyển vào thư mục dự án và cài đặt các phụ thuộc bằng lệnh:
 
 cd Linkedln_Learning <br>
-npm install
+npm install (server | client)
 
 3. **Khởi Chạy Ứng Dụng**: Chạy ứng dụng trên máy cục bộ:
 
 npm run dev | Khởi chạy client <br>
-npm run develop | Khởi chạy server
+npm run dev | Khởi chạy server
 
 
 ## Đóng Góp
@@ -56,7 +57,7 @@ Chúng tôi hoan nghênh mọi đóng góp từ cộng đồng. Nếu bạn mu�
 
 ## Tác Giả
 
-Dự án này được thực hiện bởi nhóm dự án tốt nghiệp của trường Fpt Polytechnic. Liên hệ: taidvph20044@gmail.com
+Dự án này được thực hiện bởi nhóm dự án tốt nghiệp của trường FPL. Liên hệ: taidvph20044@gmail.com
 
 ---
 

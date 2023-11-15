@@ -1,112 +1,100 @@
 import { useState, useEffect } from 'react';
 import { Empty, Pagination } from 'antd';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp, FirebaseApp } from 'firebase/app';
 
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+const firebaseConfig = {
+    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
+    authDomain: "course23-c0a29.firebaseapp.com",
+    projectId: "course23-c0a29",
+    storageBucket: "course23-c0a29.appspot.com",
+    messagingSenderId: "1090440812389",
+    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
+    measurementId: "G-51L48W6PCB"
+};
+const app: FirebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const InProgress = () => {
+    const [user, setUser] = useState<User | null>(null);
+    const [email, setEmail] = useState<any | null>(null);
+    const [loading, setLoading] = useState(true);
     const [savedCourses, setSavedCourses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1); // Thêm trạng thái trang hiện tại
-    // const [encryptedData, setEncryptedData] = useState<any>(null);
-    const [, setEncryptedData] = useState<any>(null);
-    useEffect(() => {
-        async function start() {
-            // Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-            } else {
-                console.log('Ko chạy');
-            }
-        }
-        start();
-    }, []);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const encryptedProfile = localStorage.getItem('profile');
-        if (encryptedProfile) {
-            const decryptedProfile = decodeData(encryptedProfile);
-            const profile = JSON.parse(decryptedProfile);
-            const userEmail = profile.email;
-            console.log('Email của người dùng:', userEmail);
-
-            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-                .then((response) => response.json())
-                .then((userData) => {
-                    if (userData.length > 0) {
-                        const user = userData[0];
-                        const savedCourseIds = user.registeredCourseID;
-                        fetch(`http://localhost:3000/Courses`)
-                            .then((response) => response.json())
-                            .then((coursesData) => {
-                                const savedCourses = coursesData.filter((course: any) =>
-                                    savedCourseIds.includes(course.id)
-                                );
-                                setSavedCourses(savedCourses);
-                            })
-                            .catch((error) => {
-                                console.error('Error fetching courses: ', error);
-                            });
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching user data: ', error);
-                });
-        } else {
-            console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
-        }
-    }, []);
-
-    const handleRemoveCourse = (courseId:any) => {
-        const encryptedProfile = localStorage.getItem('profile');
-        if (encryptedProfile) {
-            const decryptedProfile = decodeData(encryptedProfile);
-            const profile = JSON.parse(decryptedProfile);
-            const userEmail = profile.email;
-
-            fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-                .then((response) => response.json())
-                .then((userData) => {
-                    if (userData.length > 0) {
-                        const user = userData[0];
-                        const registeredCourseIds = user.registeredCourseID;
-
-                        // Loại bỏ courseId khỏi danh sách registeredCourseIds
-                        const updatedRegisteredCourseIds = registeredCourseIds.filter((id:any) => id !== courseId);
-
-                        // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID đã cập nhật
-                        const updatedUserData = { ...user, registeredCourseID: updatedRegisteredCourseIds };
-
-                        // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
-                        fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                            method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(updatedUserData),
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setEmail(currentUser?.email)
+            setLoading(false);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+    useEffect(() => {
+        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+            .then((response) => response.json())
+            .then((userData) => {
+                if (userData.length > 0) {
+                    const user = userData[0];
+                    const savedCourseIds = user.registeredCourseID;
+                    fetch(`http://localhost:3000/Courses`)
+                        .then((response) => response.json())
+                        .then((coursesData) => {
+                            const savedCourses = coursesData.filter((course: any) =>
+                                savedCourseIds.includes(course.id)
+                            );
+                            setSavedCourses(savedCourses);
                         })
-                            .then((response) => {
-                                if (response.ok) {
-                                    // Cập nhật lại danh sách khóa học đã đăng ký sau khi xóa
-                                    const updatedSavedCourses = savedCourses.filter((course) => course.id !== courseId);
-                                    setSavedCourses(updatedSavedCourses);
-                                } else {
-                                    console.error('Failed to update user data:', response);
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('Error updating user data:', error);
-                            });
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching user data:', error);
-                });
-        }
+                        .catch((error) => {
+                            console.error('Error fetching courses: ', error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user data: ', error);
+            });
+    }, [email]
+    );
+
+    const handleRemoveCourse = (courseId: any) => {
+
+        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+            .then((response) => response.json())
+            .then((userData: any) => {
+                if (userData.length > 0) {
+                    const user = userData[0];
+                    const registeredCourseIds = user.registeredCourseID;
+
+                    // Loại bỏ courseId khỏi danh sách registeredCourseIds
+                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
+
+                    // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID đã cập nhật
+                    const updatedUserData = { ...user, registeredCourseID: updatedRegisteredCourseIds };
+
+                    // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
+                    fetch(`http://localhost:3000/googleAccount/${user.id}`, {
+                        method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedUserData),
+                    })
+                        .then((response: any) => {
+                            if (response.ok) {
+                                // Cập nhật lại danh sách khóa học đã đăng ký sau khi xóa
+                                const updatedSavedCourses = savedCourses.filter((course: any) => course.id !== courseId);
+                                setSavedCourses(updatedSavedCourses);
+                            } else {
+                                console.error('Failed to update user data:', response);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error updating user data:', error);
+                        });
+                }
+            }), [email]
     };
 
     const itemsPerPage = 2;

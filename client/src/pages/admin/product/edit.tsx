@@ -81,18 +81,18 @@ const AdminProductEdit = () => {
                     autoComplete="off"
                 >
                     <Form.Item<FieldType>
-                        label="Tên sản phẩm"
+                        label="Tên khóa học"
                         name="courseName"
                         rules={[
-                            { required: true, message: "Tên sản phẩm không được để trống!" },
-                            { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
+                            { required: true, message: "Tên sản khóa học được để trống!" },
+                            { min: 3, message: "Tên khóa học ít nhất phải 3 ký tự" },
                         ]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item<FieldType>
-                        label="Giá sản phẩm"
+                        label="Giá khóa học"
                         name="price"
                         rules={[{ required: true, message: "Phải nhập giá tiền" }]}
                     >
@@ -100,7 +100,7 @@ const AdminProductEdit = () => {
                     </Form.Item>
                     
                 <Form.Item<FieldType>
-                    label="courseIMG"
+                    label="Hình ảnh"
                     name="courseIMG"
                 >
                     <Input />
@@ -110,7 +110,7 @@ const AdminProductEdit = () => {
                 label="DatePicker">
                     <DatePicker  />
                 </Form.Item> */}
-                <Form.Item name="categoryID" label="Category" rules={[{ required: true }]}>
+                <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
                         allowClear
@@ -124,7 +124,7 @@ const AdminProductEdit = () => {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item label="Mô tả sản phẩm"
+                <Form.Item label="Mô tả khóa học"
                 name="description"
                 >
                     <TextArea  rows={4} />
