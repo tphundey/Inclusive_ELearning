@@ -6,34 +6,17 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
+import { fetchCategoryData } from '@/api/course';
 
 const Homepage = () => {
-    const { data: productsData, isLoading: isProductLoading } = useGetProductsQuery();
+    const { data: productsData } = useGetProductsQuery();
     const [categoryData, setCategoryData] = useState<any[]>([]);
     const visibleProducts = productsData?.filter((product: any) => !product.isHidden);
+    const [isCategoryLoading, setIsCategoryLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategoryData = async () => {
-            if (productsData) {
-                const categoryPromises = productsData.map(async (product: any) => {
-                    try {
-                        const response = await fetch(`http://localhost:3000/Categories/${product.categoryID}`);
-                        if (response.ok) {
-                            const category = await response.json();
-                            return category;
-                        }
-                    } catch (error) {
-                        console.error('Error fetching category data:', error);
-                    }
-                    return null;
-                });
-                const categories = await Promise.all(categoryPromises);
-                setCategoryData(categories.filter(category => category !== null));
-            }
-        };
-        fetchCategoryData();
+        fetchCategoryData(productsData, setCategoryData, setIsCategoryLoading);
     }, [productsData]);
-
 
     const settings = {
         arrows: true,
@@ -65,17 +48,6 @@ const Homepage = () => {
             </div>
 
             <div className='Recommended-hp'>
-                {/* <div className='rcm-1'>
-                    <img src="https://f10-zpcloud.zdn.vn/5816977808189187612/c8dfdd3f757aa724fe6b.jpg" alt="" />
-                </div>
-                <div className='rcm-2'>
-                    <div className="rcm2-1">Recommended</div>
-                    <div className="rcm2-2">Hi, advance your career with personalized learning</div>
-                    <div className="rcm2-3">Get custom skill and course recommendations based on your goals. Your response is private to you.</div>
-                </div>
-                <div className='rcm-3'>
-                    <button>Get started</button>
-                </div> */}
                 <div className="mockup-code w-full">
                     <pre data-prefix="$"><code>npm i Recommended</code></pre>
                     <pre data-prefix=">" className="text-warning"><code>Hi, advance your career with personalized learning...</code></pre>
@@ -89,7 +61,7 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Top picks for you</h2>
 
                         <div className="product-slider">
-                            {isProductLoading ? (
+                            {isCategoryLoading ? (
                                 <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
                             ) : (
                                 <Slider {...settings}>
@@ -132,7 +104,7 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">This week’s top courses</h2>
 
                         <div className="product-slider">
-                            {isProductLoading ? (
+                            {isCategoryLoading ? (
                                 <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
                             ) : (
                                 <Slider {...settings}>
