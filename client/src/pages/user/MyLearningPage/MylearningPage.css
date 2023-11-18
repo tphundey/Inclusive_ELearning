@@ -94,3 +94,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.notlogin{
+    width: 220px;
+    padding: 0px;
+    margin: 0px auto;
+}

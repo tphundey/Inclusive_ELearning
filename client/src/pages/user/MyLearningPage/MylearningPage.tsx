@@ -5,7 +5,7 @@ import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { Spin } from 'antd';
-
+import { Alert, Space } from 'antd';
 interface ITabs {
     label: string;
     path: string;
@@ -26,7 +26,7 @@ const MylearningPageLayout = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setLoading(false); 
+            setLoading(false);
         });
         return () => {
             unsubscribe();
@@ -43,7 +43,15 @@ const MylearningPageLayout = () => {
     }
     if (!user) {
         return (
-            <div>Bạn cần đang nhập</div>
+            <div className='notlogin mt-4 mb-4 text-center'>
+                <Space><Alert
+                    message="Error"
+                    description="Bạn chưa đăng nhập."
+                    type="error"
+                    showIcon/>
+                </Space>
+                <a className='link text-blue-500 text-sm ' href="/signup">Chuyển hướng đăng nhập</a>
+                </div>
         );
     }
     return (
