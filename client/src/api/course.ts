@@ -1,7 +1,3 @@
-// api.js
-import axios from 'axios';
-
-
 export const fetchCategoryData = async (productsData: any, setCategoryData: any, setIsCategoryLoading: any) => {
   if (productsData) {
     setIsCategoryLoading(true);

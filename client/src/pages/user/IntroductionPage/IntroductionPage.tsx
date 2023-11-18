@@ -1,24 +1,23 @@
 import './introduction.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Rating, Typography } from "@material-tailwind/react";
-import Input from 'antd/es/input/Input';
-import { Button } from 'antd';
-import { useParams } from 'react-router-dom';
-import { Form } from 'antd';
-import { Link } from 'react-router-dom';
-import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
 import moment from 'moment';
-import { notification } from 'antd';
-import { decodeData } from '@/components/Decodedata/Decodedata';
-import { Timeline } from 'antd';
-import { getUserEmail } from '@/components/EncryptedProfile/EncryptedProfile';
+import Input from 'antd/es/input/Input';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { initializeApp } from 'firebase/app';
+import { Timeline, Form, Button, notification, Skeleton } from 'antd';
+import { Rating, Typography } from "@material-tailwind/react";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
 import { generateTimelineItems } from '@/components/TimeLineItem/TimeLineItem';
-import { Skeleton } from 'antd';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const IntroductionPage = () => {
-
-    const userEmail: string = getUserEmail();
+    const [user, setUser] = useState<any | null>(null);
+    const [userEmail, setuserEmail] = useState<any | null>(null);
     const [rated, setRated] = React.useState<number>(4);
     const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[]>([]);
@@ -26,7 +25,6 @@ const IntroductionPage = () => {
     const [review, setReview] = useState({ rating: 4, comment: '' });
     const [users, setUsers] = useState<any[]>([]);
     const { id }: { id?: string } = useParams();
-    const [, setEncryptedData] = useState<any>(null);
     const courseID: number | undefined = id ? parseInt(id, 10) : undefined;
     const [ratingCounts, setRatingCounts] = useState<{ [key: number]: number }>({});
     const [canDisplayForm, setCanDisplayForm] = useState<boolean>(false);
@@ -34,21 +32,29 @@ const IntroductionPage = () => {
     const [videos, setVideos] = useState<any[]>([]);
     const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
     const [currentVideo, setCurrentVideo] = useState<any>(null);
-    const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
     const timelineItems = generateTimelineItems(videos);
     const [userReviews, setUserReviews] = useState<any[]>([]);
     const [totalReviews, setTotalReviews] = useState(0);
     const [paymentCount, setPaymentCount] = useState(0);
     const [categoryName, setCategoryName] = useState('');
 
-    ////////////////////Lấy thông tin khóa học theo ID////////////////////
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setuserEmail(currentUser?.email)
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
 
+
+    ////////////////////Lấy thông tin khóa học (videos) theo ID////////////////////
     useEffect(() => {
         axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
                 const productData = response.data;
                 setProduct(productData);
-
                 axios.get(`http://localhost:3000/Videos`)
                     .then((videoResponse) => {
                         const allVideos = videoResponse.data;
@@ -71,8 +77,8 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
-    ///////////////////////// Láy thông tin danh mục///////////////////////////
 
+    ///////////////////////// Láy thông tin danh mục///////////////////////////
     useEffect(() => {
         axios.get('http://localhost:3000/Categories')
             .then((response) => {
@@ -91,8 +97,6 @@ const IntroductionPage = () => {
 
 
     ////////////////////Lấy thông tin tài khoản google dựa theo Email////////////////////
-
-
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
         .then((response) => {
             if (response.ok) {
@@ -112,13 +116,10 @@ const IntroductionPage = () => {
 
 
     ////////////////////Lấy thông tin thanh toán////////////////////
-
-
     useEffect(() => {
         async function fetchData() {
             try {
                 const response = await fetch(`http://localhost:3000/Payment`);
-
                 if (!response.ok) {
                     throw new Error('Failed to fetch data from the API.');
                 }
@@ -139,9 +140,8 @@ const IntroductionPage = () => {
     }, [courseID, userID]);
 
 
+
     ////////////////////Lấy thông tin đánh giá ////////////////////
-
-
     useEffect(() => {
         axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
             .then((response) => {
@@ -155,11 +155,8 @@ const IntroductionPage = () => {
 
 
     ////////////////////Lấy thông tin số rate////////////////////
-
-
     useEffect(() => {
         const counts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-
         reviews.forEach((review) => {
             counts[review.rating] += 1;
         });
@@ -167,28 +164,10 @@ const IntroductionPage = () => {
     }, [reviews]);
 
 
-    ////////////////////Giải mã thông tin từ local ////////////////////
-
-
-    useEffect(() => {
-        async function start() {
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-            }
-            else {
-                console.log('Ko chạy');
-            }
-        }
-        start();
-    }, []);
-
     const handleBuyButtonClick = () => {
         const { price } = product;
         const paymentAmount = parseFloat(price);
-    
+
         // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
@@ -201,18 +180,18 @@ const IntroductionPage = () => {
             .then((userData) => {
                 const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
                 const userID = user.id;
-    
+
                 // Bước 2: Lấy danh sách khóa học đã mua của người dùng
                 const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
-    
+
                 // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
                 if (!registeredCourseIDs.includes(courseID)) {
                     registeredCourseIDs.push(courseID);
                 }
-    
+
                 // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
                 user.registeredCourseID = registeredCourseIDs;
-    
+
                 // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
                 fetch(`http://localhost:3000/googleAccount/${userID}`, {
                     method: 'PUT',
@@ -231,7 +210,7 @@ const IntroductionPage = () => {
                     .catch((updateError) => {
                         console.error('Error updating user data:', updateError);
                     });
-    
+
                 // Bước 5: Thực hiện thanh toán
                 const paymentData = {
                     userID,
@@ -241,7 +220,7 @@ const IntroductionPage = () => {
                     date: "2023-09-29",
                     payment_status: true
                 };
-    
+
                 return fetch('http://localhost:3000/payment', {
                     method: 'POST',
                     headers: {
@@ -263,12 +242,9 @@ const IntroductionPage = () => {
                 // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             });
     };
-    
-    
+
 
     ////////////////////Thay đổi số rate////////////////////
-
-
     const handleRatingChange = (value: any) => {
         setReview({ ...review, rating: value });
         setRated(value);
@@ -289,9 +265,7 @@ const IntroductionPage = () => {
     }, [id]);
 
 
-    ////////////////////Lấy thông tin khóa học cùng loại////////////////////
-
-
+    ////////////////////Lấy thông tin khóa học cùng loại///////////////////
     useEffect(() => {
         if (product.categoryID) {
             const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
@@ -306,13 +280,10 @@ const IntroductionPage = () => {
     }, [product.categoryID]);
 
 
-    ////////////////////Lấy tất cả đánh giá từ API có courseID trùng với id ////////////////////
-
-
     useEffect(() => {
         axios.get(`http://localhost:3000/Reviews?courseID=${id}`)
             .then((response) => {
-                setReviews(response.data);
+                setReviews(response.data.reverse());
                 console.log(response.data);
             })
             .catch((error) => {
@@ -320,7 +291,7 @@ const IntroductionPage = () => {
             });
 
         axios
-            .get('http://localhost:3000/users')
+            .get('http://localhost:3000/googleAccount')
             .then((response) => {
                 setUsers(response.data);
             })
@@ -329,9 +300,9 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
+
+
     //////////////////// Lấy ra tổng số đánh giá///////////////////////
-
-
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -382,116 +353,91 @@ const IntroductionPage = () => {
         }
         return starRating.join(' ');
     }
+
     const averageRating = calculateAverageRating(reviews);
     const starRating: string = convertToStarRating(averageRating.toString());
 
 
-    ////////////////////Post đánh giá người dùng ////////////////////
-
-
-    // Thực hiện GET request để lấy ID từ API
-    fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to retrieve user ID from the API.');
-            }
-        })
-        .then((data) => {
-            const user = data.find((item: any) => item.email === userEmail);
-            const userID = user.id;
-            console.log(user.id,);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-
     const postReview = () => {
-        // Lấy thông tin người dùng hiện tại từ localStorage
-        const encryptedProfile = localStorage.getItem('profile');
-        if (encryptedProfile) {
-            const decryptedProfile = decodeData(encryptedProfile);
-            const profile = JSON.parse(decryptedProfile);
-            const userEmail = profile.email;
-
+        if (userEmail) {
             // Lấy thông tin người dùng từ API bằng email
             fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
                     } else {
-                        throw new Error('Failed to retrieve user data from the API.');
+                        throw new Error('Lấy thông tin người dùng từ API thất bại.');
                     }
                 })
                 .then((userData) => {
                     const javascriptUserID = userData[0].id;
 
-                    // Kiểm tra xem người dùng đã đăng đánh giá cho khóa học này chưa
-                    const hasUserReviewed = reviews.some(
-                        (review) => review.courseID === parseInt(id) && review.userID === javascriptUserID
-                    );
+                    if (typeof id === 'string') {
 
-                    if (hasUserReviewed) {
-                        // Nếu người dùng đã đánh giá cho khóa học này, thông báo lỗi
-                        notification.warning({
-                            message: 'Lỗi',
-                            description: 'Bạn đã đăng đánh giá cho khóa học này rồi.',
-                            placement: 'topRight',
-                        });
-                    } else if (!review.rating || review.rating === 0) {
-                        notification.error({
-                            message: 'Lỗi',
-                            description: 'Bạn chưa lựa chọn số rate.',
-                            placement: 'topRight',
-                        });
-                    } else if (!review.comment) {
-                        notification.error({
-                            message: 'Lỗi',
-                            description: 'Bạn chưa nhập comment.',
-                            placement: 'topRight',
-                        });
-                    } else {
-                        // Nếu không có lỗi và người dùng chưa đánh giá, tiến hành đăng đánh giá
-                        const currentDate = moment().tz('Asia/Ho_Chi_Minh');
-                        const formattedDate = currentDate.format('YYYY-MM-DD');
+                        const hasUserReviewed = reviews.some(
+                            (review) => review.courseID === parseInt(id) && review.userID === javascriptUserID
+                        );
 
-                        const dataToPost = {
-                            rating: review.rating,
-                            comment: review.comment,
-                            userID: javascriptUserID,
-                            courseID: parseInt(id), // Chuyển đổi id thành số
-                            date: formattedDate,
-                        };
-
-                        axios
-                            .post('http://localhost:3000/Reviews', dataToPost)
-                            .then((response) => {
-                                console.log('Đánh giá đã được đăng thành công', response.data);
-
-                                // Cập nhật danh sách đánh giá sau khi gửi thành công
-                                setReviews([...reviews, dataToPost]);
-                                // Cập nhật tổng số đánh giá
-                                // Cập nhật số lượng đánh giá cho mức rating tương ứng
-                                setRatingCounts((prevCounts) => {
-                                    const updatedCounts = { ...prevCounts };
-                                    updatedCounts[review.rating] = updatedCounts[review.rating] + 1;
-                                    return updatedCounts;
-                                });
-
-                                // Đặt lại giá trị mặc định cho form đánh giá
-                                setReview({ rating: 0, comment: '' });
-                            })
-                            .catch((error) => {
-                                console.error('Lỗi khi đăng đánh giá', error);
+                        if (hasUserReviewed) {
+                            notification.warning({
+                                message: 'Lỗi',
+                                description: 'Bạn đã đăng đánh giá cho khóa học này rồi.',
+                                placement: 'topRight',
                             });
+                        } else if (!review.rating || review.rating === 0) {
+                            notification.error({
+                                message: 'Lỗi',
+                                description: 'Bạn chưa lựa chọn số rate.',
+                                placement: 'topRight',
+                            });
+                        } else if (!review.comment) {
+                            notification.error({
+                                message: 'Lỗi',
+                                description: 'Bạn chưa nhập comment.',
+                                placement: 'topRight',
+                            });
+                        } else {
+
+                            const currentDate = moment().tz('Asia/Ho_Chi_Minh');
+                            const formattedDate = currentDate.format('YYYY-MM-DD');
+
+                            const dataToPost = {
+                                rating: review.rating,
+                                comment: review.comment,
+                                userID: javascriptUserID,
+                                courseID: parseInt(id),
+                                date: formattedDate,
+                            };
+
+                            axios
+                                .post('http://localhost:3000/Reviews', dataToPost)
+                                .then((response) => {
+                                    console.log('Đánh giá đã được đăng thành công', response.data);
+                                    setReviews([...reviews, dataToPost]);
+                                    setRatingCounts((prevCounts) => {
+                                        const updatedCounts = { ...prevCounts };
+                                        updatedCounts[review.rating] = updatedCounts[review.rating] + 1;
+                                        return updatedCounts;
+                                    });
+                                    setReview({ rating: 0, comment: '' });
+                                })
+                                .catch((error) => {
+                                    console.error('Lỗi khi đăng đánh giá', error);
+                                });
+                        }
+                    } else {
+                        console.error('Lỗi: ID không phải là một chuỗi hợp lệ.');
                     }
                 })
                 .catch((error) => {
                     console.error('Lỗi khi kiểm tra thông tin người dùng', error);
                 });
+        } else {
+            console.error('Lỗi: Email người dùng không được xác định.');
         }
     };
+
+
 
     useEffect(() => {
         // Lấy danh sách đánh giá của người dùng từ API
@@ -506,9 +452,7 @@ const IntroductionPage = () => {
 
 
     ///////////////////////Tính số người tham gia khóa học/////////////////////////
-
     useEffect(() => {
-        // Thực hiện GET request để lấy dữ liệu từ API Payment
         axios.get('http://localhost:3000/Payment')
             .then((response) => {
                 if (response.status === 200) {
@@ -600,7 +544,6 @@ const IntroductionPage = () => {
                             <div className="overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200">
                                 <div className="p-6">
                                     <div className="flex items-center gap-2">
-
                                         <div className='preview'>
                                             <div className='mt-4'> <span><span className='text-4xl font-bold text-black'>{calculateAverageRating(reviews)}</span> out 5</span></div>
                                             <div className="flex items-center gap-2">
@@ -658,10 +601,10 @@ const IntroductionPage = () => {
                             {reviews.map((review) => (
                                 <div key={review.id} className="reviewIntroChildren">
                                     <div className="avatarReview">
-                                        <img src={findUserById(review.userID)?.avatarIMG} alt="" />
+                                        <img src={findUserById(review.userID)?.img} alt="" />
                                     </div>
                                     <div className="desReview">
-                                        <div className="desrv1">{findUserById(review.userID)?.username}</div>
+                                        <div className="desrv1">{findUserById(review.userID)?.name}</div>
                                         <div className="desrv2">{review.comment}</div>
                                         <div className="flex items-center gap-10">
                                             <div>{renderReviewRateIcon(review.rating)}</div>
@@ -683,15 +626,15 @@ const IntroductionPage = () => {
                     <h2 className='text-xl font-medium p-3'>Related courses</h2>
                     <ul className="divide-y divide-slate-100">
                         {similarProducts.map((similarProduct) => (
-                            <li key={similarProducts.id} className="flex items-start gap-4 px-4 py-3">
+                            <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
                                 <div className="flex items-center shrink-0">
                                     <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
                                 </div>
                                 <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
                                     <h4 className='text-xs'>COURSE</h4>
                                     <h4 className="text-base text-slate-700 font-medium">
-                                        <Link to={`/introduction/${similarProduct.id}`}>
-                                            <p className="mt-1 text-base">{similarProduct.courseName}</p> </Link></h4>
+                                        <a href={`/introduction/${similarProduct.id}`}><p className="mt-1 text-base">{similarProduct.courseName}</p></a>
+                                    </h4>
                                     <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
                                     <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
                                 </div>

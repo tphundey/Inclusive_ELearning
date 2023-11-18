@@ -1,27 +1,18 @@
 import './MylearningPage.css';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { initializeApp, FirebaseApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import { Spin } from 'antd';
 
 interface ITabs {
     label: string;
     path: string;
 }
-const firebaseConfig = {
-    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
-    authDomain: "course23-c0a29.firebaseapp.com",
-    projectId: "course23-c0a29",
-    storageBucket: "course23-c0a29.appspot.com",
-    messagingSenderId: "1090440812389",
-    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
-    measurementId: "G-51L48W6PCB"
-};
 
-const app: FirebaseApp = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
 const MylearningPageLayout = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
@@ -35,7 +26,7 @@ const MylearningPageLayout = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setLoading(false); // Đánh dấu đã kết thúc quá trình loading
+            setLoading(false); 
         });
         return () => {
             unsubscribe();

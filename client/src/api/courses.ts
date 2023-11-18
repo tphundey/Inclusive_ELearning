@@ -52,6 +52,7 @@ const productApi = createApi({
             }),
             invalidatesTags: ['Courses'],
         }),
+        
         hideProduct: builder.mutation<IProduct, number | string>({
             query: (id) => ({
                 url: `/Courses/${id}/hide`,
