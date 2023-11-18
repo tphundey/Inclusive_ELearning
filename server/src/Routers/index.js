@@ -6,12 +6,12 @@ import paymentsRouter from "./payments";
 import categoryRouter from "./Categorys";
 
 const routerApp = (app) => {
-    app.use("/api", userRouter);
-    app.use("/api", productRouter);
-    app.use("/api", categoryRouter);
-    app.use("/api", UploadRouter);
+    app.use(userRouter);
+    app.use(productRouter);
+    app.use(categoryRouter);
+    app.use(UploadRouter);
     // app.use("/api", CartRouter);
-    app.use("/api", paymentsRouter);
+    app.use(paymentsRouter);
 };
 
 export default routerApp;
