@@ -7,14 +7,14 @@ import { Alert, Button } from 'antd';
 import { Modal } from 'antd';
 import { getUserEmail } from '@/components/EncryptedProfile/EncryptedProfile';
 import { message } from 'antd';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const CourseContentPage = () => {
-    const userEmail: string = getUserEmail();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [videos, setVideos] = useState([]);
@@ -25,7 +25,6 @@ const CourseContentPage = () => {
     const [userId, setUserId] = useState(null);
     const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
-    const [initialUserProgress, setInitialUserProgress] = useState(null);
     const courseId = parseInt(id, 10);
     const courseApiUrl = `http://localhost:3000/Courses/${courseId}`;
     const userProgressApiUrl = 'http://localhost:3000/UserProgress';
@@ -36,13 +35,20 @@ const CourseContentPage = () => {
     const [watchedTimeOnReturn, setWatchedTimeOnReturn] = useState(0);
     const [showWatchedTimeModal, setShowWatchedTimeModal] = useState(false);
     const [hasChangedVideo, setHasChangedVideo] = useState(false);
-    const [totalWatchedTime, setTotalWatchedTime] = useState(0);
     const [totalVideos, setTotalVideos] = useState(0);
+    const [user, setUser] = useState<User | null>(null);
+    const [userEmail, setuserEmail] = useState<any | null>(null);
 
-    const handleReturnButtonClick = () => {
-        // Hiển thị thông báo với thời gian đã xem video khi quay trở lại
-        setShowWatchedTimeModal(true);
-    };
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+          setuserEmail(currentUser?.email)
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
     useEffect(() => {
         // Fetch thông tin khoá học từ API
         axios.get(courseApiUrl)
@@ -87,14 +93,13 @@ const CourseContentPage = () => {
         window.location.href = `http://localhost:5173/test/${id}`;
     };
 
-
     useEffect(() => {
         axios.get('http://localhost:3000/UserProgress')
             .then((response) => {
                 const userProgressData = response.data;
                 // Tạo một đối tượng trạng thái hoàn thành video ban đầu từ dữ liệu API
                 const initialVideoCompletionStatus = {};
-                userProgressData.forEach((progress) => {
+                userProgressData.forEach((progress:any) => {
                     initialVideoCompletionStatus[progress.videoId] = progress.completionStatus;
                 });
                 setVideoCompletionStatus(initialVideoCompletionStatus);
@@ -104,31 +109,32 @@ const CourseContentPage = () => {
             });
     }, []);
 
-    // Bước 1: Kiểm tra và giải mã dữ liệu từ localStorage (nếu có)
-    const encryptedProfile = localStorage.getItem('profile');
-    if (encryptedProfile) {
-        const decryptedProfile = decodeData(encryptedProfile);
-        const profile = JSON.parse(decryptedProfile);
-        const userEmail = profile.email;
-        console.log('Email của người dùng:', userEmail);
-    } else {
-        console.log('Không tìm thấy thông tin người dùng đã mã hóa trong Local Storage.');
-    }
-
+   console.log(userEmail);
+   
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to retrieve user ID from the API.');
-            }
-        })
-        .then((data) => {
-            const user = data.find((item: any) => item.email === userEmail);
-            const userrID = user.id;
-            setUserId(userrID); // Lưu userId vào state
-            console.log(user.id);
-        });
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to retrieve user ID from the API.');
+        }
+    })
+    .then((data) => {
+        const user = data.find((item:any) => item.email === userEmail);
+
+        if (user) {
+            const userId = user.id;
+            console.log(userId);
+
+            setUserId(userId); // Lưu userId vào state
+        } else {
+            console.log('User not found');
+        }
+    })
+    .catch((error) => {
+        console.error('Error fetching data:', error);
+    });
+
 
     useEffect(() => {
         // Fetch course details
@@ -216,7 +222,7 @@ const CourseContentPage = () => {
 
     const [watchedTime, setWatchedTime] = useState(0);
 
-    const handleVideoTimeUpdate = (event) => {
+    const handleVideoTimeUpdate = (event:any) => {
         const currentTime = event.target.currentTime;
         setWatchedTime(currentTime);
         console.log(currentTime, 'currenttime');

@@ -462,6 +462,10 @@
         6,
         5,
         9
+      ],
+      "courseSaved": [
+        5,
+        8
       ]
     }
   ],
@@ -513,6 +517,12 @@
       "videoId": "5",
       "watchedTime": 0,
       "id": 8
+    },
+    {
+      "userId": 2,
+      "videoId": "6",
+      "watchedTime": 0,
+      "id": 9
     }
   ]
 }
