@@ -5,6 +5,7 @@ import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import './HeaderUser.css'
+import { Link } from 'react-router-dom';
 
 
 
@@ -147,7 +148,7 @@ const HeaderUser: React.FC = () => {
                                                             </li>
                                                         </div>
                                                         <li>
-                                                            <Button>Profile</Button>
+                                                            <Link to="/Profile"><Button style={{width:160}}>Profile</Button></Link>
                                                         </li>
                                                         <li>
                                                             <Button>Thảo luận</Button>
