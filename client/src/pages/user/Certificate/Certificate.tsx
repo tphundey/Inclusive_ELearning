@@ -1,40 +1,34 @@
 import React, { useRef, useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
-import './test.css'
+import './Certificate.css'
 import emailjs from '@emailjs/browser';
 import { useParams } from 'react-router-dom';
-// Hàm giải mã dữ liệu sử dụng decodeURIComponent
-function decodeData(encryptedData: any): any {
-    return decodeURIComponent(encryptedData);
-}
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const Certificate = () => {
+    const [user, setUser] = useState<User | null>(null);
     const form = useRef();
     const [name, setName] = useState('');
     const [userEmail, setUserEmail] = useState('');
-    const [message, setMessage] = useState('');
     const { id } = useParams();
     const contentRef = useRef(null);
-    const [encryptedData, setEncryptedData] = useState<any>(null);
-    const [profileName, setProfileName] = useState<any>(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State để kiểm tra đăng nhập
     const [courseData, setCourseData] = useState(null);
+
     useEffect(() => {
-        async function start() {
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-                setIsLoggedIn(true); // Đã đăng nhập
-            } else {
-                console.log('Ko chạy');
-                setIsLoggedIn(false); // Chưa đăng nhập
-            }
-        }
-        start();
-    }, []);
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
 
     useEffect(() => {
         // Sử dụng `id` để tạo URL yêu cầu
@@ -52,6 +46,7 @@ const Certificate = () => {
             });
     }, [id]); // Khi `id` thay đổi, useEffect sẽ chạy lại
 
+
     const generateCertificate = () => {
         const content = contentRef.current;
         html2canvas(content)
@@ -65,6 +60,7 @@ const Certificate = () => {
                 document.body.appendChild(certificateImage);
             });
     };
+
     const sendEmail = (e: any) => {
         e.preventDefault();
 
@@ -76,30 +72,17 @@ const Certificate = () => {
             });
     };
 
-    useEffect(() => {
-        async function start() {
-            const encryptedProfile: any = localStorage.getItem('profile');
-            if (encryptedProfile) {
-                const decryptedProfile: any = decodeData(encryptedProfile);
-                console.log('Thông tin đã được giải mã từ localStorage:', decryptedProfile);
-                setEncryptedData(decryptedProfile);
-                setIsLoggedIn(true); // Đã đăng nhập
+ 
 
-                // Cập nhật giá trị cho các input
-                const parsedProfile = JSON.parse(decryptedProfile);
-                setName(parsedProfile.name);
-                setUserEmail(parsedProfile.email);
-                setMessage(parsedProfile.message);
-            } else {
-                console.log('Ko chạy');
-                setIsLoggedIn(false); // Chưa đăng nhập
-            }
-        }
-        start();
-    }, []);
-    // Kiểm tra xem dữ liệu đã tải thành công
     if (courseData === null) {
         return <p>Loading...</p>;
+    }
+    if (!user) {
+        return (
+            <div className='notlogin mt-4 mb-4 text-center'>
+               deađuawa
+                </div>
+        );
     }
     return (
         <div>
@@ -142,7 +125,7 @@ const Certificate = () => {
                         <p>Certificate of Completion</p>
                     </div>
                     <p className='t33'> This is to acknowledge that</p>
-                    <p className="name"><u>{JSON.parse(encryptedData).name}</u></p>
+                    <p className="name"><u>{user.displayName}</u></p>
                     <p className="t44">has completed</p>
                     <p className="course">A Training Course on: <b><u>  {courseData.courseName}  </u></b></p>
                 </div>

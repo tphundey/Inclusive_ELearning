@@ -33,7 +33,7 @@ import AdminVideo from "./pages/admin/videos";
 import AdminVideoAdd from "./pages/admin/videos/add";
 import AdminVideoEdit from "./pages/admin/videos/edit";
 import { ContactUs } from "./pages/user/SendEmail/sendEmail";
-import Certificate from "./pages/user/test/test";
+import Certificate from "./pages/user/Certificate/Certificate";
 import Dashboard from "./pages/admin/dashboard/dashboard";
 import AdminUser from "./pages/admin/users";
 import AdminUserAdd from "./pages/admin/users/add";
@@ -51,7 +51,7 @@ export const routers = createBrowserRouter([
             { path: "homepage", element: <Homepage /> },
             { path: "default", element: <Defaultpage /> },
             { path: "contact", element: <ContactUs /> },
-            { path: "test/:id", element: <Certificate /> },
+            { path: "getcertificate/:id", element: <Certificate /> },
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Alert, Button } from 'antd';
 import { Modal } from 'antd';
-import { getUserEmail } from '@/components/EncryptedProfile/EncryptedProfile';
 import { message } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
@@ -90,7 +89,7 @@ const CourseContentPage = () => {
 
 
     const handleNavigate = () => {
-        window.location.href = `http://localhost:5173/test/${id}`;
+        window.location.href = `http://localhost:5173/getcertificate/${id}`;
     };
 
     useEffect(() => {
