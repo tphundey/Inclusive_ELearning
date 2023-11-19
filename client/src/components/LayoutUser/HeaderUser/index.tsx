@@ -1,19 +1,11 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import { Button } from 'antd';
-import { getAuth } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
 import { useNavigate } from 'react-router';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import './HeaderUser.css'
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
-    authDomain: "course23-c0a29.firebaseapp.com",
-    projectId: "course23-c0a29",
-    storageBucket: "course23-c0a29.appspot.com",
-    messagingSenderId: "1090440812389",
-    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
-    measurementId: "G-51L48W6PCB"
-};
 
 
 // Khởi tạo ứng dụng Firebase
@@ -26,11 +18,17 @@ const HeaderUser: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
     const [isListVisible, setListVisible] = useState<boolean>(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    const [user, setUser] = useState<any | null>(null);
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
 
     useEffect(() => {
         fetch('http://localhost:3000/Courses')
@@ -125,25 +123,46 @@ const HeaderUser: React.FC = () => {
                                 </li>
                                 <li>
                                     <div className='thea dropdown dropdown-bottom'>
-                                        <label tabIndex={0} className="dropdown"><i className="fa-regular fa-user lups tutut"></i>
-                                            <label tabIndex={0} className="">
-                                                <div
-                                                    onClick={toggleDropdown}
-                                                    className="cursor-pointer mt-1">
-                                                    Me <i className={'fa-solid fa-caret-down'}></i>
-                                                </div></label>
-                                            <div className="absolute top-1 left-36">
-                                                <div className="dropdown ">
-                                                    <div className="dropdown dropdown-bottom dropdown-end mt-5">
-                                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
+                                        <label tabIndex={0} className="dropdown"><i className="fa-regular fa-user lups tutut"></i>   </label>
+                                        <label className="">
+                                            <div tabIndex={0}
+                                                className="cursor-pointer mt-1 ">
+                                                Me <i tabIndex={0} className={'fa-solid fa-caret-down'}></i>
+                                            </div></label>
+                                        <div className="absolute top-1 left-36">
+                                            <div className="dropdown">
+                                                <div className="dropdown dropdown-bottom dropdown-end mt-5" onClick={(e) => e.stopPropagation()}>
+                                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
+                                                        <div className="flex justify-center items-center">
+                                                            <li className="text-center ttf">
+                                                                <div className="avatar online">
+                                                                    <div className="w-10 rounded-full">
+                                                                        {user && user.photoURL ? (
+                                                                            <img src={user.photoURL} alt="Ảnh đại diện" />
+                                                                        ) : (
+                                                                            <img src="https://cdn2.iconfinder.com/data/icons/web-mobile-2-1/64/user_avatar_admin_web_mobile_business_office-512.png" alt="Ảnh mặc định" />
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                        <li>
+                                                            <Button>Profile</Button>
+                                                        </li>
+                                                        <li>
+                                                            <Button>Thảo luận</Button>
+                                                        </li>
+                                                        <li>
                                                             <Button onClick={() => auth.signOut()}>Đăng xuất</Button>
-                                                        </ul>
-                                                    </div>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                        </label>
+                                        </div>
+
                                     </div>
                                 </li>
+
                                 <li>
                                     <a className='thea' href="">
                                         <label className="swap swap-rotate">
