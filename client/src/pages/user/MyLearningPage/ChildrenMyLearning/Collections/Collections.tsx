@@ -2,22 +2,15 @@ import { useState, useEffect } from 'react';
 import { Empty, Pagination } from 'antd';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp, FirebaseApp } from 'firebase/app';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
-    authDomain: "course23-c0a29.firebaseapp.com",
-    projectId: "course23-c0a29",
-    storageBucket: "course23-c0a29.appspot.com",
-    messagingSenderId: "1090440812389",
-    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
-    measurementId: "G-51L48W6PCB"
-};
 const app: FirebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const Collection = () => {
     const [user, setUser] = useState<User | null>(null);
     const [email, setEmail] = useState<any | null>(null);
+    const [userId, setUserId] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [savedCourses, setSavedCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,15 +18,19 @@ const Collection = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setEmail(currentUser?.email)
+            setEmail(currentUser?.email);
+            setUserId(currentUser?.uid)
+
             setLoading(false);
         });
         return () => {
             unsubscribe();
         };
     }, [auth]);
+    console.log(userId);
+
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData.length > 0) {
@@ -59,21 +56,14 @@ const Collection = () => {
     );
 
     const handleRemoveCourse = (courseId: any) => {
-
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
                 if (userData.length > 0) {
                     const user = userData[0];
-                    const registeredCourseIds = user.registeredCourseID;
-
-                    // Loại bỏ courseId khỏi danh sách registeredCourseIds
+                    const registeredCourseIds = user.collectionCourseID;
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
-
-                    // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID đã cập nhật
-                    const updatedUserData = { ...user, registeredCourseID: updatedRegisteredCourseIds };
-
-                    // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
+                    const updatedUserData = { ...user, collectionCourseID: updatedRegisteredCourseIds };
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
                         method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
                         headers: {
@@ -96,27 +86,27 @@ const Collection = () => {
                 }
             }), [email]
     };
-    const handleMoveToHistory = (courseId) => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+    const handleMoveToHistory = (courseId: any) => {
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData.length > 0) {
                     const user = userData[0];
-                    const registeredCourseIds = user.registeredCourseID;
-    
+                    const registeredCourseIds = user.collectionCourseID;
+
                     // Loại bỏ courseId khỏi danh sách registeredCourseIds
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id) => id !== courseId);
-    
+
                     // Thêm courseId vào danh sách history
                     const updatedHistoryCourseIds = [...user.historyCourseID, courseId];
-    
+
                     // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID và historyCourseID đã cập nhật
                     const updatedUserData = {
                         ...user,
-                        registeredCourseID: updatedRegisteredCourseIds,
+                        collectionCourseID: updatedRegisteredCourseIds,
                         historyCourseID: updatedHistoryCourseIds,
                     };
-    
+
                     // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
                         method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
@@ -144,52 +134,7 @@ const Collection = () => {
             });
     };
 
-    const handleAddToCollections = (courseId) => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
-            .then((response) => response.json())
-            .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
-                    const collectionCourseIds = user.collectionCourseID || [];
-    
-                    // Kiểm tra xem courseId đã tồn tại trong danh sách collections chưa
-                    if (!collectionCourseIds.includes(courseId)) {
-                        // Thêm courseId vào danh sách collections
-                        const updatedCollectionCourseIds = [...collectionCourseIds, courseId];
-    
-                        // Tạo phiên bản mới của thông tin người dùng với trường collectionCourseID đã cập nhật
-                        const updatedUserData = {
-                            ...user,
-                            collectionCourseID: updatedCollectionCourseIds,
-                        };
-    
-                        // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
-                        fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                            method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(updatedUserData),
-                        })
-                            .then((response) => {
-                                if (response.ok) {
-                                    console.log('Added to collections successfully!');
-                                } else {
-                                    console.error('Failed to update user data:', response);
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('Error updating user data:', error);
-                            });
-                    } else {
-                        console.log('Course is already in collections.');
-                    }
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching user data: ', error);
-            });
-    };
+
     const itemsPerPage = 2;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -226,7 +171,6 @@ const Collection = () => {
                             <div className="dropdown dropdown-right dropdown-end mt-5">
                                 <label tabIndex={0} className="btn m-1"><i className="fa-solid fa-ellipsis"></i></label>
                                 <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
-                                <li><a onClick={() => handleAddToCollections(course.id)}>Add to collections</a></li>
                                     <li><a onClick={() => handleMoveToHistory(course.id)}>Move to history</a></li>
                                     <li><a onClick={() => handleRemoveCourse(course.id)}>Remove</a></li> {/* Thêm hàm xử lý xóa */}
                                 </ul>

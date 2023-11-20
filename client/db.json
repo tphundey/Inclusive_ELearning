@@ -2,84 +2,21 @@
   "Payment": [
     {
       "userID": 1,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 1
-    },
-    {
-      "userID": 1,
-      "courseID": 6,
-      "coupon": "null",
-      "paymentAmount": 25000,
-      "date": "2023-10-29",
-      "payment_status": true,
-      "id": 2
-    },
-    {
-      "userID": 1,
-      "courseID": 4,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-11-29",
-      "payment_status": true,
-      "id": 3
-    },
-    {
-      "userID": 2,
-      "courseID": 6,
-      "coupon": "null",
-      "paymentAmount": 25000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 4
-    },
-    {
-      "userID": 1,
-      "courseID": 5,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 5
-    },
-    {
-      "userID": 1,
       "courseID": 10,
       "coupon": "null",
       "paymentAmount": 45000,
       "date": "2023-09-29",
       "payment_status": true,
-      "id": 6
+      "id": 1
     },
     {
       "userID": 2,
-      "courseID": 5,
+      "courseID": 2,
       "coupon": "null",
-      "paymentAmount": 50000,
+      "paymentAmount": 22500,
       "date": "2023-09-29",
       "payment_status": true,
-      "id": 7
-    },
-    {
-      "userID": 2,
-      "courseID": 9,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 8
-    },
-    {
-      "userID": 2,
-      "courseID": 9,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 9
+      "id": 2
     },
     {
       "userID": 2,
@@ -88,147 +25,36 @@
       "paymentAmount": 45500,
       "date": "2023-09-29",
       "payment_status": true,
-      "id": 10
-    },
-    {
-      "userID": 2,
-      "courseID": 8,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 11
-    },
-    {
-      "userID": 2,
-      "courseID": 5,
-      "coupon": "null",
-      "paymentAmount": 50000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 12
-    },
-    {
-      "userID": 2,
-      "courseID": 6,
-      "coupon": "null",
-      "paymentAmount": 25000,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 13
-    },
-    {
-      "userID": 3,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 14
-    },
-    {
-      "userID": 3,
-      "courseID": 2,
-      "coupon": "null",
-      "paymentAmount": 22500,
-      "date": "2023-09-29",
-      "payment_status": true,
-      "id": 15
-    }
-  ],
-  "Reviews": [
-    {
-      "rating": 4,
-      "comment": "biết best cap khonggg?",
-      "userID": 1,
-      "courseID": 2,
-      "date": "2023-10-25",
-      "id": 1
-    },
-    {
-      "rating": 2,
-      "comment": "mua tốn tiền vãi chưởng =))",
-      "userID": 2,
-      "courseID": 2,
-      "date": "2023-10-28",
-      "id": 2
-    },
-    {
-      "rating": 5,
-      "comment": "féà",
-      "userID": 1,
-      "courseID": 5,
-      "date": "2023-11-19",
       "id": 3
     },
     {
-      "rating": 4,
-      "comment": "aâ",
-      "userID": 2,
-      "courseID": 9,
-      "date": "2023-11-19",
+      "userID": 4,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
       "id": 4
     },
     {
-      "rating": 3,
-      "comment": "hihihi",
-      "userID": 2,
-      "courseID": 6,
-      "date": "2023-11-20",
+      "userID": 5,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
       "id": 5
     }
   ],
+  "Reviews": [],
   "Categories": [
     {
       "id": 1,
-      "categoryName": "Programming",
-      "categoryDescription": "Learn programming languages"
+      "categoryName": "Programming"
     },
     {
       "id": 2,
-      "categoryName": "Design",
-      "categoryDescription": "Creative design courses"
-    }
-  ],
-  "users": [
-    {
-      "id": 1,
-      "username": "Hương Trà",
-      "email": "user123@example.com",
-      "password": "hashedpassword123",
-      "avatarIMG": "https://scontent.xx.fbcdn.net/v/t1.15752-9/384427051_1110086643301663_6463764182478675672_n.jpg?stp=dst-jpg_s280x280&_nc_cat=110&ccb=1-7&_nc_sid=aee45a&_nc_ohc=lisVSqTIifYAX-kdEYC&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdTY-5HSApIE23hflMQEFRGnjkh00mN4KQhKBxcIG3rVIQ&oe=654339BB",
-      "address": "123 Main St",
-      "phone": "123-456-7890",
-      "roleID": 2,
-      "registeredCourseID": [
-        1
-      ],
-      "courseSaved": [
-        2
-      ]
-    },
-    {
-      "id": 2,
-      "username": "Trần Phùng",
-      "email": "user456@example.com",
-      "password": "hashedpassword456",
-      "avatarIMG": "https://f10-zpcloud.zdn.vn/2458057547727804667/390dc301899a5cc4058b.jpg",
-      "address": "456 Elm St",
-      "phone": "987-654-3210",
-      "roleID": 2,
-      "registeredCourseID": [
-        2
-      ],
-      "courseSaved": [
-        1
-      ]
-    },
-    {
-      "email": "dung@gmail.com",
-      "password": "$2a$10$cay8KEEt.Aaoo5pAFljnBOZ.sedCMaNJNWDTGsLrjvBjHBPLvVt7W",
-      "username": "dung",
-      "roleID": 1,
-      "id": 3
+      "categoryName": "Design"
     }
   ],
   "Courses": [
@@ -238,22 +64,15 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 22500,
       "duration": 120,
-      "rateID": [
-        1
-      ],
+      "rateID": [],
       "date": "2023-09-25",
       "videoID": [
-        1,
-        2,
-        3,
-        6,
-        7
+        8
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100,
-      "isHidden": false,
-      "isDeleted": true
+      "isHidden": false
     },
     {
       "id": 3,
@@ -273,7 +92,6 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
       "enrollment": 100,
-      "isDeleted": true,
       "isHidden": true
     },
     {
@@ -293,7 +111,6 @@
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
       "enrollment": 100,
-      "isDeleted": false,
       "isHidden": true
     },
     {
@@ -302,15 +119,9 @@
       "description": "With Word for the web, you can create, view, edit, and share documents directly in your browser. In this course, Microsoft productivity expert David Rivers provides a quick tour of Word's online app, showing the unique features of the browser version and the differences from the desktop app. ",
       "price": 50000,
       "duration": 120,
-      "rateID": [
-        1,
-        2
-      ],
+      "rateID": [],
       "date": "2023-09-25",
-      "videoID": [
-        1,
-        6
-      ],
+      "videoID": [],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2224319419275953959/6b69136a0f3bd865812a.jpg",
       "enrollment": 100,
@@ -415,21 +226,9 @@
   "Notes": [
     {
       "videoID": 2,
-      "note": "test update",
-      "date": "2023-10-22",
-      "id": 2
-    },
-    {
-      "videoID": 3,
-      "note": "hihi",
-      "date": "2023-10-25",
-      "id": 3
-    },
-    {
-      "videoID": 5,
-      "note": "gaga fa",
-      "date": "2023-11-19",
-      "id": 4
+      "note": "test",
+      "date": "2023-11-20",
+      "id": 1
     }
   ],
   "Role": [
@@ -482,6 +281,12 @@
       "videoId": 7,
       "completionStatus": true,
       "id": 6
+    },
+    {
+      "userId": 5,
+      "videoId": 8,
+      "completionStatus": true,
+      "id": 7
     }
   ],
   "Videos": [
@@ -508,202 +313,98 @@
       "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHh5oihphmiRA/learning-original-video-vbr-720/0/1656435034843?e=1700469807&v=beta&t=M1ofrTDdlsHSas-YWUmNssilLaVw9Ymq9XMOyFHa0zY",
       "courseId": 2,
       "id": 7
+    },
+    {
+      "videoTitle": "duawa",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQH2HHvX-Y1ZCA/learning-original-video-vbr-720/0/1630684215980?e=1700469573&v=beta&t=bRNs73ZkKl-eQ82jxHq7_-30gOMguBcJsYMeJZ9p_dA",
+      "courseId": 2,
+      "id": 8
     }
   ],
   "googleAccount": [
     {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "displayName": "Mai Tranthi",
       "email": "maitranthi651@gmail.com",
-      "name": "Mai Tranthi",
-      "img": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
-      "role": 1,
-      "courseSaved": [
-        3,
-        4,
-        8
+      "registeredCourseID": [],
+      "collectionCourseID": [
+        10
       ],
-      "registeredCourseID": [
-        5,
+      "historyCourseID": [
+        10
+      ],
+      "courseSaved": [
         10
       ]
     },
     {
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
+      "displayName": "Tài Đinh Văn",
       "email": "taidvph20044@gmail.com",
-      "name": "Tài Đinh Văn",
-      "img": "https://lh3.googleusercontent.com/a/ACg8ocKJJ1paGWKCnHOGm3j3pONTOmT0LBwy4In8h06aQDkF=s96-c",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKJJ1paGWKCnHOGm3j3pONTOmT0LBwy4In8h06aQDkF=s96-c",
       "id": 2,
-      "registeredCourseID": [
-        8
-      ],
-      "courseSaved": [
-        5
-      ],
+      "courseSaved": [],
+      "registeredCourseID": [],
+      "collectionCourseID": [],
       "historyCourseID": [
-        5,
-        6,
-        5,
-        9,
-        7,
-        7
-      ],
-      "collectionCourseID": [
-        9,
-        7,
-        5
+        10,
+        10
       ]
     },
     {
-      "displayName": "face detao",
-      "email": "detaoface2003@gmail.com",
-      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocK7pruupiKh4fo1RZTe7UA3LZaxuVRX_eThMjx7f-4I=s96-c",
-      "id": 3,
+      "userId": "gFiPGD52BvSYYJl5NwQY2sxmbZl1",
+      "displayName": "tai dinh",
+      "email": "bosstrum4x@gmail.com",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKVsReHRAnBOqi2aZpuwuWgj8MKlT3yVmHctbrTjXel=s96-c",
       "registeredCourseID": [],
+      "collectionCourseID": [],
+      "historyCourseID": [],
+      "courseSaved": [],
+      "id": 3
+    },
+    {
+      "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
+      "displayName": "Dinh Van Tai PH 2 0 0 4 4",
+      "email": "taidvph20044@fpt.edu.vn",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKlC5NM4sqdudt-ttYLRJeKAFUocqnpp3GKg0Smkhn22Q=s96-c",
+      "registeredCourseID": [],
+      "collectionCourseID": [],
+      "historyCourseID": [
+        2
+      ],
       "courseSaved": [
         2
       ],
-      "collectionCourseID": [
+      "id": 4
+    },
+    {
+      "userId": "Nhi7a5t693QOFcwBvjZ38UbnVrl1",
+      "displayName": "Xế biết code",
+      "email": "anhnek033@gmail.com",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKrGIoEBqruBlx99jAn0vtS27kAoZQupKU3moryN6Btsg=s96-c",
+      "registeredCourseID": [
         2
-      ]
+      ],
+      "collectionCourseID": [],
+      "historyCourseID": [],
+      "courseSaved": [],
+      "id": 5
     }
   ],
   "userVideoProgress": [
     {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 70.990819,
+      "userId": 5,
+      "videoId": 8,
+      "watchedTime": 0,
       "id": 1
     },
     {
-      "userId": 1,
-      "videoId": 3,
+      "userId": 5,
+      "videoId": 8,
       "watchedTime": 0,
       "id": 2
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "watchedTime": 0,
-      "id": 3
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "watchedTime": 0,
-      "id": 4
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "watchedTime": 0,
-      "id": 5
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "watchedTime": 0,
-      "id": 6
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "watchedTime": 0,
-      "id": 7
-    },
-    {
-      "userId": null,
-      "videoId": "5",
-      "watchedTime": 0,
-      "id": 8
-    },
-    {
-      "userId": 2,
-      "videoId": "6",
-      "watchedTime": 0,
-      "id": 9
-    },
-    {
-      "userId": 1,
-      "videoId": 1,
-      "watchedTime": 0,
-      "id": 10
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 32.589705,
-      "id": 11
-    },
-    {
-      "userId": 1,
-      "videoId": "2",
-      "watchedTime": 48.521886,
-      "id": 12
-    },
-    {
-      "userId": 1,
-      "videoId": 6,
-      "watchedTime": 0,
-      "id": 13
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 14.030786,
-      "id": 14
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 14.030786,
-      "id": 15
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 14.030786,
-      "id": 16
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 14.853086,
-      "id": 17
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 16.193864,
-      "id": 18
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 17.243019,
-      "id": 19
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 18.307619,
-      "id": 20
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 2.111115,
-      "id": 21
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 26.44602,
-      "id": 22
-    },
-    {
-      "userId": 3,
-      "videoId": "2",
-      "watchedTime": 14.254253,
-      "id": 23
     }
   ]
 }

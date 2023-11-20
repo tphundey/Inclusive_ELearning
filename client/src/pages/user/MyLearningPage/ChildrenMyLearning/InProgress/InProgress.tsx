@@ -10,6 +10,7 @@ const auth = getAuth(app);
 const InProgress = () => {
     const [user, setUser] = useState<User | null>(null);
     const [email, setEmail] = useState<any | null>(null);
+    const [userId, setUserId] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [savedCourses, setSavedCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -17,16 +18,19 @@ const InProgress = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setEmail(currentUser?.email)
+            setEmail(currentUser?.email);
+            setUserId(currentUser?.uid)
+
             setLoading(false);
         });
         return () => {
             unsubscribe();
         };
     }, [auth]);
+    console.log(userId);
     
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData.length > 0) {
@@ -52,7 +56,7 @@ const InProgress = () => {
     );
 
     const handleRemoveCourse = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
                 if (userData.length > 0) {
@@ -83,7 +87,7 @@ const InProgress = () => {
             }), [email]
     };
     const handleMoveToHistory = (courseId:any) => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData.length > 0) {
@@ -131,7 +135,7 @@ const InProgress = () => {
     };
 
     const handleAddToCollections = (courseId) => {
-        fetch(`http://localhost:3000/googleAccount?email=${email}`)
+        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData.length > 0) {

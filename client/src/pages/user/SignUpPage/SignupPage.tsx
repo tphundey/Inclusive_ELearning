@@ -3,19 +3,9 @@ import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from
 import { initializeApp } from 'firebase/app';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAddUserMutation } from '@/api/user';
 import { Form, Input, message } from "antd";
 import { useNavigate } from 'react-router';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyB1EWRdSA6tMWHHB-2nHwljjQIGDL_-x_E",
-    authDomain: "course23-c0a29.firebaseapp.com",
-    projectId: "course23-c0a29",
-    storageBucket: "course23-c0a29.appspot.com",
-    messagingSenderId: "1090440812389",
-    appId: "1:1090440812389:web:e96b86b4d952f89c0d738c",
-    measurementId: "G-51L48W6PCB"
-};
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 
 // Khởi tạo ứng dụng Firebase
 const app = initializeApp(firebaseConfig);
@@ -32,7 +22,6 @@ const SignupPage = () => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
             if (currentUser) {
                 setUser(currentUser);
-                // Người dùng đã đăng nhậpd
                 setEmail(currentUser.email)
                 console.log(email);
 
@@ -47,21 +36,27 @@ const SignupPage = () => {
     }, [auth]);
 
     const googleSignIn = () => {
-
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
+                const firebaseUserId = user.uid; // Get Firebase user ID
                 axios.get(`http://localhost:3000/googleAccount?email=${user.email}`)
                     .then((response) => {
                         if (response.data.length === 0) {
                             axios.post('http://localhost:3000/googleAccount', {
+                                userId: firebaseUserId, // Include Firebase user ID in the data
                                 displayName: user.displayName,
                                 email: user.email,
                                 photoURL: user.photoURL,
+                                registeredCourseID: [],
+                                collectionCourseID: [],
+                                historyCourseID: [],
+                                courseSaved: [],
                             })
                                 .then((response) => {
                                     console.log('User information sent to API:', response.data);
+                                    navigate('/')
                                 })
                                 .catch((error) => {
                                     console.error('Error sending user information to API:', error);
