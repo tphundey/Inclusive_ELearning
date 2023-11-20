@@ -48,6 +48,7 @@ const CourseContentPage = () => {
         };
     }, [auth]);
 
+
     useEffect(() => {
         // Fetch thông tin khoá học từ API
         axios.get(courseApiUrl)
@@ -55,7 +56,6 @@ const CourseContentPage = () => {
                 const courseData = response.data;
                 setCourse(courseData);
 
-                // Lấy danh sách videoID từ khoá học
                 const videoIdsInCourse = courseData.videoID;
                 const totalVideos = videoIdsInCourse.length; // Gán giá trị cho totalVideos
                 setTotalVideos(totalVideos); // Lưu giá trị totalVideos vào state
@@ -108,7 +108,7 @@ const CourseContentPage = () => {
             });
     }, []);
 
-   console.log(userEmail);
+  
    
     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
     .then((response) => {
@@ -321,23 +321,7 @@ const CourseContentPage = () => {
     const [videoDuration, setVideoDuration] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Hàm để lấy thời lượng video từ API
-    // Hàm để lấy thời lượng video từ API
-    const fetchVideoDuration = () => {
-        // Thay thế URL_CUA_API và videoId bằng URL và videoID thực tế
-        const API_URL = `http://localhost:3000/userVideoProgress/${id}`;
-        console.log(API_URL);
-
-        axios
-            .get(API_URL)
-            .then((response) => {
-                setVideoDuration(response.data.watchedTime); // Đặt thời lượng video vào state
-                setIsModalOpen(true); // Mở modal sau khi lấy được thời lượng
-            })
-            .catch((error) => {
-                console.error('Lỗi khi lấy thời lượng video từ API:', error);
-            });
-    };
+    
     const fetchLatestVideoDuration = () => {
         // Kiểm tra nếu userID không bằng 1 thì không gửi yêu cầu API
         if (userId !== 1) {
@@ -378,15 +362,12 @@ const CourseContentPage = () => {
         closeModal();
     };
 
+
+
+    
     // Tính số video đã hoàn thành
     const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
-
-    // Tính số video chưa hoàn thành
-    const remainingVideos = totalVideos - completedVideos;
     const completionPercentage = (completedVideos / totalVideos) * 100;
-    // console.log('Số video đã hoàn thành: ' + completedVideos);
-    // console.log('Số video chưa hoàn thành: ' + remainingVideos);
-    console.log(userId);
 
 
     const handleBookmarkClick = () => {
@@ -449,8 +430,6 @@ const CourseContentPage = () => {
                 // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             });
     };
-
-
 
 
     if (!product) {

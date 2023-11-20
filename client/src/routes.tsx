@@ -55,7 +55,7 @@ export const routers = createBrowserRouter([
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
-            { path: "profile", element: <Profile /> },
+            { path: "profile/:id", element: <Profile /> },
             {
                 path: "content/:id",
                 element: <CourseContentPage />,

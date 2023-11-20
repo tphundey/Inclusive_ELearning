@@ -148,7 +148,9 @@ const HeaderUser: React.FC = () => {
                                                             </li>
                                                         </div>
                                                         <li>
-                                                            <Link to="/Profile"><Button style={{width:160}}>Profile</Button></Link>
+                                                            <Link to={`/Profile/${user ? user.uid : ''}`}>
+                                                                <Button style={{ width: 160 }}>Profile</Button>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             <Button>Thảo luận</Button>

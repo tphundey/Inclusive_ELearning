@@ -2,7 +2,12 @@ import { useGetUserByIdQuery } from "@/api/user";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Modal } from 'antd';
-import React, { useState } from 'react';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
+
 const items: MenuProps['items'] = [
     {
         key: '1',
@@ -37,9 +42,40 @@ const items: MenuProps['items'] = [
     },
 ];
 
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 const Profile = () => {
+    const { id  } = useParams();
+    const [profileData, setProfileData] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+          try {
+            const response = await fetch(`http://localhost:3000/googleAccount?id=${id}`);
+            const data = await response.json();
+            setProfileData(data);
+          } catch (error) {
+            console.error('Error fetching profile data:', error);
+          }
+        };
+    
+        if (id) {
+          fetchProfileData();
+        }
+      }, [id]);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -68,30 +104,30 @@ const Profile = () => {
                     </div>
                     <div className="flex flex-col -mt-20 pl-10">
                         <div className="w-40 h-40 z-[1]">
-                            <img src={userInfo?.avatarIMG} className="object-cover w-full h-full block border-4 border-white rounded-full" />
+                            {user?.photoURL && <img src={user?.photoURL} className="object-cover w-full h-full block border-4 border-white rounded-full" />}
                         </div>
                         <div className="flex items-center space-x-2 mt-2">
-                            <p className="text-2xl">{userInfo?.username}</p>
+                            <p className="text-2xl">{user?.displayName}</p>
                         </div>
-                        <p className="text-gray-700">ha noi .  
-                        <span onClick={showModal} className="tran">
-                            <a href="#" className="underline text-blue-500">Contact info</a>
-                        </span>
-                            <Modal title={`${userInfo?.username}`} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                                <hr className="pb-5"/>
+                        <p className="text-gray-700">{user?.email}
+                            <span onClick={showModal} className="tran">
+                                <a href="#" className="underline text-blue-500">Contact info</a>
+                            </span>
+                            <Modal title={`${user?.displayName}`} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                                <hr className="pb-5" />
                                 <p className="text-black text-xl pb-2">Contact Info</p>
                                 <div className="text-l flex item-center">
                                     <div className="w-10"><UserOutlined /> </div>
                                     <div>
                                         <h5>Your Profile</h5>
-                                        <a href="#" className="underline text-blue-500">linkedin.com/in/ngoc-hoàng-thu-233121284</a>
+                                        <a href="#" className="underline text-blue-500">{user?.email}</a>
                                     </div>
                                 </div>
                                 <div className="text-l flex item-center">
                                     <div className="w-10"><MailOutlined /> </div>
                                     <div>
                                         <h5>Email</h5>
-                                        <a href="#" className="underline text-blue-500">{userInfo?.email}</a>
+                                        <a href="#" className="underline text-blue-500">{user?.email}</a>
                                     </div>
                                 </div>
                             </Modal></p>

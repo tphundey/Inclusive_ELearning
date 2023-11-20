@@ -116,6 +116,24 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 13
+    },
+    {
+      "userID": 3,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 14
+    },
+    {
+      "userID": 3,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 15
     }
   ],
   "Reviews": [
@@ -150,6 +168,14 @@
       "courseID": 9,
       "date": "2023-11-19",
       "id": 4
+    },
+    {
+      "rating": 3,
+      "comment": "hihihi",
+      "userID": 2,
+      "courseID": 6,
+      "date": "2023-11-20",
+      "id": 5
     }
   ],
   "Categories": [
@@ -162,11 +188,6 @@
       "id": 2,
       "categoryName": "Design",
       "categoryDescription": "Creative design courses"
-    },
-    {
-      "categoryName": "danh muc 2",
-      "categoryDescription": "danh muc xam xi",
-      "id": 4
     }
   ],
   "users": [
@@ -224,12 +245,14 @@
       "videoID": [
         1,
         2,
-        3
+        3,
+        6,
+        7
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100,
-      "isHidden": true,
+      "isHidden": false,
       "isDeleted": true
     },
     {
@@ -441,24 +464,27 @@
       "videoId": 3,
       "completionStatus": true,
       "id": 3
+    },
+    {
+      "userId": 1,
+      "videoId": 1,
+      "completionStatus": true,
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "videoId": 6,
+      "completionStatus": true,
+      "id": 5
+    },
+    {
+      "userId": 1,
+      "videoId": 7,
+      "completionStatus": true,
+      "id": 6
     }
   ],
   "Videos": [
-    {
-      "id": 1,
-      "videoTitle": "Introduction to Programming - Part 1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQE-ax5uJb5hWg/mp4-720p-30fp-crf28/0/1685770342065?e=1698500210&v=beta&t=NYLagiShrDD187gBSTBWNPMGZYWHf_m49gQKImkjLF4"
-    },
-    {
-      "id": 2,
-      "videoTitle": "Graphic Design Principles - Part 2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQEKqyYrB84qCw/learning-original-video-vbr-720/0/1603474134884?e=1698359406&v=beta&t=Hu26Aii-rvhXHLHy2CtyA6ouZvAUqj82tSGfmA-B3l0"
-    },
-    {
-      "id": 3,
-      "videoTitle": "Graphic Design Principles - Part 3",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQEu-OokXW7oPw/learning-original-video-vbr-720/0/1642635312109?e=1698811173&v=beta&t=r3HDseagmO5NHp9gB6yYkC5-LCtUSUQ7YQSe8BsQVV4"
-    },
     {
       "videoTitle": "Graphic Design Principles - Part 2",
       "videoURL": "Graphic Design Principles - Part 2",
@@ -470,6 +496,18 @@
       "videoURL": "Graphic Design Principles - Part 2",
       "courseId": 2,
       "id": 5
+    },
+    {
+      "videoTitle": "Intro1",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQH2HHvX-Y1ZCA/learning-original-video-vbr-720/0/1630684215980?e=1700469573&v=beta&t=bRNs73ZkKl-eQ82jxHq7_-30gOMguBcJsYMeJZ9p_dA",
+      "courseId": 2,
+      "id": 6
+    },
+    {
+      "videoTitle": "Intro2",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHh5oihphmiRA/learning-original-video-vbr-720/0/1656435034843?e=1700469807&v=beta&t=M1ofrTDdlsHSas-YWUmNssilLaVw9Ymq9XMOyFHa0zY",
+      "courseId": 2,
+      "id": 7
     }
   ],
   "googleAccount": [
@@ -512,6 +550,19 @@
         9,
         7,
         5
+      ]
+    },
+    {
+      "displayName": "face detao",
+      "email": "detaoface2003@gmail.com",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocK7pruupiKh4fo1RZTe7UA3LZaxuVRX_eThMjx7f-4I=s96-c",
+      "id": 3,
+      "registeredCourseID": [],
+      "courseSaved": [
+        2
+      ],
+      "collectionCourseID": [
+        2
       ]
     }
   ],
@@ -569,6 +620,90 @@
       "videoId": "6",
       "watchedTime": 0,
       "id": 9
+    },
+    {
+      "userId": 1,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 10
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 32.589705,
+      "id": 11
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 48.521886,
+      "id": 12
+    },
+    {
+      "userId": 1,
+      "videoId": 6,
+      "watchedTime": 0,
+      "id": 13
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 14.030786,
+      "id": 14
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 14.030786,
+      "id": 15
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 14.030786,
+      "id": 16
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 14.853086,
+      "id": 17
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 16.193864,
+      "id": 18
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 17.243019,
+      "id": 19
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 18.307619,
+      "id": 20
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 2.111115,
+      "id": 21
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 26.44602,
+      "id": 22
+    },
+    {
+      "userId": 3,
+      "videoId": "2",
+      "watchedTime": 14.254253,
+      "id": 23
     }
   ]
 }
