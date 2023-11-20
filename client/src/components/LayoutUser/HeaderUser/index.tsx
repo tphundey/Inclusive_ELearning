@@ -156,7 +156,10 @@ const HeaderUser: React.FC = () => {
                                                             <Button>Thảo luận</Button>
                                                         </li>
                                                         <li>
-                                                            <Button onClick={() => auth.signOut()}>Đăng xuất</Button>
+                                                            <Button onClick={() => {
+                                                                localStorage.clear();
+                                                                auth.signOut()
+                                                            }}>Đăng xuất</Button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -178,7 +181,7 @@ const HeaderUser: React.FC = () => {
                                 </li>
                             </ul>
                             <div className='freemonth'>
-                                <a href="">Start your progress</a>
+                                <a href="/signup">Start your progress</a>
                             </div>
                         </div>
                     </div>
