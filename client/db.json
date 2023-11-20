@@ -337,7 +337,8 @@
       ],
       "courseSaved": [
         10
-      ]
+      ],
+      "role": 1
     },
     {
       "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
@@ -351,7 +352,8 @@
       "historyCourseID": [
         10,
         10
-      ]
+      ],
+      "role": 1
     },
     {
       "userId": "gFiPGD52BvSYYJl5NwQY2sxmbZl1",
@@ -362,7 +364,8 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "id": 3
+      "id": 3,
+      "role": 1
     },
     {
       "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
@@ -377,7 +380,8 @@
       "courseSaved": [
         2
       ],
-      "id": 4
+      "id": 4,
+      "role": 1
     },
     {
       "userId": "Nhi7a5t693QOFcwBvjZ38UbnVrl1",
@@ -390,7 +394,32 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "id": 5
+      "id": 5,
+      "role": 1
+    },
+    {
+      "userId": "2o2RPub7yJd9liwygYQJxTA98uV2",
+      "displayName": "dungntph 2 0 0 1 8 fplhn",
+      "email": "dungntph20018@fpt.edu.vn",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJVK_Gqpr9VkSWy_p-XOPKPm7bu_khlxKiMM0fXEiaW=s96-c",
+      "registeredCourseID": [],
+      "collectionCourseID": [],
+      "historyCourseID": [],
+      "courseSaved": [],
+      "role": 1,
+      "id": 6
+    },
+    {
+      "userId": "iMx4adLiNzYS7znbmXxltJtiKdJ2",
+      "displayName": "dũng nguyễn",
+      "email": "dungntph20018@gmail.com",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKaSW8aTVGX23lf1tfxYdCqaDWptfsmSvkybUFUp65H=s96-c",
+      "registeredCourseID": [],
+      "collectionCourseID": [],
+      "historyCourseID": [],
+      "courseSaved": [],
+      "role": 2,
+      "id": 7
     }
   ],
   "userVideoProgress": [
