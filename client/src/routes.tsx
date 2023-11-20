@@ -42,11 +42,6 @@ import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
 import Profile from "./pages/user/ProfilePage/ProfilePage";
-
-const data = localStorage.getItem("userdata")
-const user = data && JSON.parse(data);
-console.log(user);
-
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -115,7 +110,7 @@ export const routers = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: user?.[0]?.role === 1 ? <LayoutAdmin /> : <ErrorPage/>,
+        element:  <LayoutAdmin /> ,
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
             { path: "dashboard", element: <Dashboard /> },
