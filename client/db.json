@@ -67,7 +67,9 @@
       "rateID": [],
       "date": "2023-09-25",
       "videoID": [
-        8
+        8,
+        8,
+        9
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -223,14 +225,7 @@
       "isDeleted": false
     }
   ],
-  "Notes": [
-    {
-      "videoID": 2,
-      "note": "test",
-      "date": "2023-11-20",
-      "id": 1
-    }
-  ],
+  "Notes": [],
   "Role": [
     {
       "id": 1,
@@ -247,61 +242,19 @@
   ],
   "UserProgress": [
     {
-      "userId": 1,
-      "videoId": 1,
+      "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
+      "videoId": 8,
       "completionStatus": true,
       "id": 1
     },
     {
-      "userId": 1,
-      "videoId": 2,
+      "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
+      "videoId": 9,
       "completionStatus": true,
       "id": 2
-    },
-    {
-      "userId": 1,
-      "videoId": 3,
-      "completionStatus": true,
-      "id": 3
-    },
-    {
-      "userId": 1,
-      "videoId": 1,
-      "completionStatus": true,
-      "id": 4
-    },
-    {
-      "userId": 1,
-      "videoId": 6,
-      "completionStatus": true,
-      "id": 5
-    },
-    {
-      "userId": 1,
-      "videoId": 7,
-      "completionStatus": true,
-      "id": 6
-    },
-    {
-      "userId": 5,
-      "videoId": 8,
-      "completionStatus": true,
-      "id": 7
     }
   ],
   "Videos": [
-    {
-      "videoTitle": "Graphic Design Principles - Part 2",
-      "videoURL": "Graphic Design Principles - Part 2",
-      "courseId": 2,
-      "id": 4
-    },
-    {
-      "videoTitle": "Graphic Design Principles - Part 4",
-      "videoURL": "Graphic Design Principles - Part 2",
-      "courseId": 2,
-      "id": 5
-    },
     {
       "videoTitle": "Intro1",
       "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQH2HHvX-Y1ZCA/learning-original-video-vbr-720/0/1630684215980?e=1700469573&v=beta&t=bRNs73ZkKl-eQ82jxHq7_-30gOMguBcJsYMeJZ9p_dA",
@@ -315,10 +268,16 @@
       "id": 7
     },
     {
-      "videoTitle": "duawa",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQH2HHvX-Y1ZCA/learning-original-video-vbr-720/0/1630684215980?e=1700469573&v=beta&t=bRNs73ZkKl-eQ82jxHq7_-30gOMguBcJsYMeJZ9p_dA",
+      "videoTitle": "test",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQGE2gA7Gm1F6A/learning-original-video-vbr-720/0/1628018728639?e=1700591208&v=beta&t=RKqNUhjxv8RGX7x3TPcRDDK2OaeGwD07Ar9K4fRLxgw",
       "courseId": 2,
       "id": 8
+    },
+    {
+      "videoTitle": "test2",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQHoNvxHkE328Q/learning-original-video-vbr-720/0/1628018727002?e=1700591235&v=beta&t=-xMRi29GWYPptGqCDgt55AQl6fkLlYeT1qNaZVSLCJI",
+      "courseId": 2,
+      "id": 9
     }
   ],
   "googleAccount": [
@@ -404,19 +363,6 @@
       "id": 6,
       "address": "hà nội",
       "phoneNumber": 12345678
-    },
-    {
-      "userId": "iMx4adLiNzYS7znbmXxltJtiKdJ2",
-      "displayName": "dũng nguyễn",
-      "email": "dungntph20018@gmail.com",
-      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKaSW8aTVGX23lf1tfxYdCqaDWptfsmSvkybUFUp65H=s96-c",
-      "registeredCourseID": [],
-      "collectionCourseID": [],
-      "historyCourseID": [],
-      "courseSaved": [],
-      "id": 7,
-      "address": "hà nội",
-      "phoneNumber": 12345678
     }
   ],
   "userVideoProgress": [
@@ -431,6 +377,236 @@
       "videoId": 8,
       "watchedTime": 0,
       "id": 2
+    },
+    {
+      "userId": 1,
+      "videoId": "2",
+      "watchedTime": 0,
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 5
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 7
+    },
+    {
+      "userId": 1,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 8
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 9
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 10
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 11
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "completionStatus": true,
+      "watchedTime": 0,
+      "id": 12
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "completionStatus": true,
+      "watchedTime": 0,
+      "id": 13
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 14
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 15
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 16
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 17
+    },
+    {
+      "userId": 1,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 18
+    },
+    {
+      "userId": 3,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 19
+    },
+    {
+      "userId": 3,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 20
+    },
+    {
+      "userId": 3,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 21
+    },
+    {
+      "userId": 3,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 22
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 23
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 24
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 25
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 26
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 27
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 28
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 29
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 30
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 31
+    },
+    {
+      "userId": null,
+      "videoId": 9,
+      "watchedTime": 0,
+      "id": 32
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 33
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 34
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 35
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 36
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 37
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 38
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 39
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 40
     }
   ]
 }
