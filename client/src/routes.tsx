@@ -42,6 +42,7 @@ import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
 import Profile from "./pages/user/ProfilePage/ProfilePage";
+import Chats from "./pages/user/ChatsPage/ChatsPage";
 export const routers = createBrowserRouter([
     {
         path: "/",
@@ -56,6 +57,7 @@ export const routers = createBrowserRouter([
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "profile/:id", element: <Profile /> },
+            { path: "chats", element: <Chats /> },
             {
                 path: "content/:id",
                 element: <CourseContentPage />,
