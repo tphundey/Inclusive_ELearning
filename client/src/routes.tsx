@@ -42,7 +42,50 @@ import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
 import Profile from "./pages/user/ProfilePage/ProfilePage";
+import React from 'react';
+
+const getUidFromLocalStorage = () => {
+    return localStorage.getItem('uid');
+};
+let userRole: 0 | 1 = 0;
+
+const uid = getUidFromLocalStorage();
+
+if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
+    userRole = 1;
+}
+
+const withAuthorization = (allowedRoles: number[], WrappedComponent: React.ComponentType) => {
+    return class WithAuthorization extends React.Component {
+        hasPermission = () => {
+            return allowedRoles.includes(userRole);
+        };
+
+        render() {
+            const isAuthorized = this.hasPermission();
+            return isAuthorized ? <WrappedComponent {...this.props} /> : <Navigate to="/signup/404" />;
+        }
+    };
+};
+const AdminDashboardWithAuthorization = withAuthorization([1], Dashboard);
+const AdminProductWithAuthorization = withAuthorization([1], AdminProduct);
+const AdminProductEditWithAuthorization = withAuthorization([1], AdminProductEdit);
+const AdminProductAddWithAuthorization = withAuthorization([1], AdminProductAdd);
+const AdminCategoryWithAuthorization = withAuthorization([1], AdminCategory);
+const AdminCategoryAddWithAuthorization = withAuthorization([1], AdminCategoryAdd);
+const AdminCategoryEditWithAuthorization = withAuthorization([1], AdminCategoryEdit);
+const AdminVideoWithAuthorization = withAuthorization([1], AdminVideo);
+const AdminVideoAddWithAuthorization = withAuthorization([1], AdminVideoAdd);
+const AdminVideoEditWithAuthorization = withAuthorization([1], AdminVideoEdit);
+const AdminUserWithAuthorization = withAuthorization([1], AdminUser);
+const AdminUserAddWithAuthorization = withAuthorization([1], AdminUserAdd);
+const AdminUserEditWithAuthorization = withAuthorization([1], AdminUserEdit);
+const AdminRoleWithAuthorization = withAuthorization([1], AdminRole);
+const AdminRoleAddWithAuthorization = withAuthorization([1], AdminRoleAdd);
+const AdminRoleEditWithAuthorization = withAuthorization([1], AdminRoleEdit);
+
 export const routers = createBrowserRouter([
+
     {
         path: "/",
         element: <LayoutWebsite />,
@@ -98,7 +141,7 @@ export const routers = createBrowserRouter([
             {
                 path: "signup",
                 element: (
-                    localStorage.getItem('isLoggedIn') === 'true' ? (
+                    localStorage.getItem('uid') ? (
                         <Navigate to="404" />
                     ) : (
                         <SignupPage />
@@ -110,26 +153,25 @@ export const routers = createBrowserRouter([
     },
     {
         path: "/admin",
-        element:  <LayoutAdmin /> ,
+        element: <LayoutAdmin />,
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
-            { path: "dashboard", element: <Dashboard /> },
-            { path: "product", element: <AdminProduct /> },
-            { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
-            { path: "product/add", element: <AdminProductAdd /> },
-            { path: "categorys", element: <AdminCategory /> },
-            { path: "category/add", element: <AdminCategoryAdd /> },
-            { path: "category/:idCategory/edit", element: <AdminCategoryEdit /> },
-            { path: "videos", element: <AdminVideo /> },
-            { path: "video/add", element: <AdminVideoAdd /> },
-            { path: "video/:idVideo/edit", element: <AdminVideoEdit /> },
-            { path: "users", element: <AdminUser/> },
-            { path: "user/add", element: <AdminUserAdd /> },
-            { path: "user/:idUser/edit", element: <AdminUserEdit /> },
-            { path: "roles", element: <AdminRole /> },
-            { path: "role/add", element: <AdminRoleAdd /> },
-            { path: "role/:idRole/edit", element: <AdminRoleEdit /> },
+            { path: "dashboard", element: <AdminDashboardWithAuthorization /> },
+            { path: "product", element: <AdminProductWithAuthorization /> },
+            { path: "product/:idProduct/edit", element: <AdminProductEditWithAuthorization /> },
+            { path: "product/add", element: <AdminProductAddWithAuthorization /> },
+            { path: "categorys", element: <AdminCategoryWithAuthorization /> },
+            { path: "category/add", element: <AdminCategoryAddWithAuthorization /> },
+            { path: "category/:idCategory/edit", element: <AdminCategoryEditWithAuthorization /> },
+            { path: "videos", element: <AdminVideoWithAuthorization /> },
+            { path: "video/add", element: <AdminVideoAddWithAuthorization /> },
+            { path: "video/:idVideo/edit", element: <AdminVideoEditWithAuthorization /> },
+            { path: "users", element: <AdminUserWithAuthorization /> },
+            { path: "user/add", element: <AdminUserAddWithAuthorization /> },
+            { path: "user/:idUser/edit", element: <AdminUserEditWithAuthorization /> },
+            { path: "roles", element: <AdminRoleWithAuthorization /> },
+            { path: "role/add", element: <AdminRoleAddWithAuthorization /> },
+            { path: "role/:idRole/edit", element: <AdminRoleEditWithAuthorization /> },
         ],
-
     },
 ]);
