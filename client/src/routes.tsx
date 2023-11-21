@@ -42,47 +42,6 @@ import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
 import Profile from "./pages/user/ProfilePage/ProfilePage";
-import React from 'react';
-
-const getUidFromLocalStorage = () => {
-    return localStorage.getItem('uid');
-};
-let userRole: 0 | 1 = 0;
-
-const uid = getUidFromLocalStorage();
-
-if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
-    userRole = 1;
-}
-
-const withAuthorization = (allowedRoles: number[], WrappedComponent: React.ComponentType) => {
-    return class WithAuthorization extends React.Component {
-        hasPermission = () => {
-            return allowedRoles.includes(userRole);
-        };
-
-        render() {
-            const isAuthorized = this.hasPermission();
-            return isAuthorized ? <WrappedComponent {...this.props} /> : <Navigate to="/signup/404" />;
-        }
-    };
-};
-const AdminDashboardWithAuthorization = withAuthorization([1], Dashboard);
-const AdminProductWithAuthorization = withAuthorization([1], AdminProduct);
-const AdminProductEditWithAuthorization = withAuthorization([1], AdminProductEdit);
-const AdminProductAddWithAuthorization = withAuthorization([1], AdminProductAdd);
-const AdminCategoryWithAuthorization = withAuthorization([1], AdminCategory);
-const AdminCategoryAddWithAuthorization = withAuthorization([1], AdminCategoryAdd);
-const AdminCategoryEditWithAuthorization = withAuthorization([1], AdminCategoryEdit);
-const AdminVideoWithAuthorization = withAuthorization([1], AdminVideo);
-const AdminVideoAddWithAuthorization = withAuthorization([1], AdminVideoAdd);
-const AdminVideoEditWithAuthorization = withAuthorization([1], AdminVideoEdit);
-const AdminUserWithAuthorization = withAuthorization([1], AdminUser);
-const AdminUserAddWithAuthorization = withAuthorization([1], AdminUserAdd);
-const AdminUserEditWithAuthorization = withAuthorization([1], AdminUserEdit);
-const AdminRoleWithAuthorization = withAuthorization([1], AdminRole);
-const AdminRoleAddWithAuthorization = withAuthorization([1], AdminRoleAdd);
-const AdminRoleEditWithAuthorization = withAuthorization([1], AdminRoleEdit);
 
 export const routers = createBrowserRouter([
 
@@ -99,6 +58,7 @@ export const routers = createBrowserRouter([
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "profile/:id", element: <Profile /> },
+            { path: "chats", element: <Chats /> },
             {
                 path: "content/:id",
                 element: <CourseContentPage />,
