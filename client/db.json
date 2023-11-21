@@ -363,35 +363,6 @@
       "id": 6,
       "address": "hà nội",
       "phoneNumber": 12345678
-    },
-    {
-      "userId": "iMx4adLiNzYS7znbmXxltJtiKdJ2",
-      "displayName": "dũng nguyễn",
-      "email": "dungntph20018@gmail.com",
-      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKaSW8aTVGX23lf1tfxYdCqaDWptfsmSvkybUFUp65H=s96-c",
-      "registeredCourseID": [],
-      "collectionCourseID": [],
-      "historyCourseID": [],
-      "courseSaved": [],
-<<<<<<< HEAD
-      "role": 2,
-      "id": 7
-    },
-    {
-      "userId": "I3cDL5ADzdf1uOLprkXW7L3HnIH2",
-      "displayName": "face detao",
-      "email": "detaoface2003@gmail.com",
-      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocK7pruupiKh4fo1RZTe7UA3LZaxuVRX_eThMjx7f-4I=s96-c",
-      "registeredCourseID": [],
-      "collectionCourseID": [],
-      "historyCourseID": [],
-      "courseSaved": [],
-      "id": 8
-=======
-      "id": 7,
-      "address": "hà nội",
-      "phoneNumber": 12345678
->>>>>>> b7fe3c5cd9e75fe40dc60fa810a3f22d097bf6fc
     }
   ],
   "userVideoProgress": [
