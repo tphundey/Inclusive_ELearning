@@ -178,6 +178,14 @@ nav div ul {
     margin: 0px auto;
 }
 
-.ttf avatar{
+.ttf avatar {
     margin-bottom: 10px;
+}
+
+.testtt {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
 }

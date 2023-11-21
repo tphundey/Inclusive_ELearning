@@ -42,8 +42,9 @@ import AdminRole from "./pages/admin/roles";
 import AdminRoleAdd from "./pages/admin/roles/add";
 import AdminRoleEdit from "./pages/admin/roles/edit";
 import Profile from "./pages/user/ProfilePage/ProfilePage";
-import Chats from "./pages/user/ChatsPage/ChatsPage";
+
 export const routers = createBrowserRouter([
+
     {
         path: "/",
         element: <LayoutWebsite />,
@@ -100,7 +101,7 @@ export const routers = createBrowserRouter([
             {
                 path: "signup",
                 element: (
-                    localStorage.getItem('isLoggedIn') === 'true' ? (
+                    localStorage.getItem('uid') ? (
                         <Navigate to="404" />
                     ) : (
                         <SignupPage />
@@ -112,26 +113,25 @@ export const routers = createBrowserRouter([
     },
     {
         path: "/admin",
-        element:  <LayoutAdmin /> ,
+        element: <LayoutAdmin />,
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
-            { path: "dashboard", element: <Dashboard /> },
-            { path: "product", element: <AdminProduct /> },
-            { path: "product/:idProduct/edit", element: <AdminProductEdit /> },
-            { path: "product/add", element: <AdminProductAdd /> },
-            { path: "categorys", element: <AdminCategory /> },
-            { path: "category/add", element: <AdminCategoryAdd /> },
-            { path: "category/:idCategory/edit", element: <AdminCategoryEdit /> },
-            { path: "videos", element: <AdminVideo /> },
-            { path: "video/add", element: <AdminVideoAdd /> },
-            { path: "video/:idVideo/edit", element: <AdminVideoEdit /> },
-            { path: "users", element: <AdminUser/> },
-            { path: "user/add", element: <AdminUserAdd /> },
-            { path: "user/:idUser/edit", element: <AdminUserEdit /> },
-            { path: "roles", element: <AdminRole /> },
-            { path: "role/add", element: <AdminRoleAdd /> },
-            { path: "role/:idRole/edit", element: <AdminRoleEdit /> },
+            { path: "dashboard", element: <AdminDashboardWithAuthorization /> },
+            { path: "product", element: <AdminProductWithAuthorization /> },
+            { path: "product/:idProduct/edit", element: <AdminProductEditWithAuthorization /> },
+            { path: "product/add", element: <AdminProductAddWithAuthorization /> },
+            { path: "categorys", element: <AdminCategoryWithAuthorization /> },
+            { path: "category/add", element: <AdminCategoryAddWithAuthorization /> },
+            { path: "category/:idCategory/edit", element: <AdminCategoryEditWithAuthorization /> },
+            { path: "videos", element: <AdminVideoWithAuthorization /> },
+            { path: "video/add", element: <AdminVideoAddWithAuthorization /> },
+            { path: "video/:idVideo/edit", element: <AdminVideoEditWithAuthorization /> },
+            { path: "users", element: <AdminUserWithAuthorization /> },
+            { path: "user/add", element: <AdminUserAddWithAuthorization /> },
+            { path: "user/:idUser/edit", element: <AdminUserEditWithAuthorization /> },
+            { path: "roles", element: <AdminRoleWithAuthorization /> },
+            { path: "role/add", element: <AdminRoleAddWithAuthorization /> },
+            { path: "role/:idRole/edit", element: <AdminRoleEditWithAuthorization /> },
         ],
-
     },
 ]);

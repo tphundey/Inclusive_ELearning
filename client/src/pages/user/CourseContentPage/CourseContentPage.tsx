@@ -37,102 +37,107 @@ const CourseContentPage = () => {
     const [totalVideos, setTotalVideos] = useState(0);
     const [user, setUser] = useState<User | null>(null);
     const [userEmail, setuserEmail] = useState<any | null>(null);
+    const [userIdfirebase, setuserIdfirebase] = useState<any | null>(null);
+    const [userVideoCompletionStatus, setUserVideoCompletionStatus] = useState({});
+
+    useEffect(() => {
+        // Lấy dữ liệu tiến trình của người dùng với userId là 1
+        axios.get('http://localhost:3000/UserProgress')
+            .then((response) => {
+                const userProgressData = response.data;
+
+
+                const currentUserProgress = userProgressData.filter((progress) => progress.userId === userIdfirebase);
+
+
+                console.log('Filtered User Progress Data', currentUserProgress);
+
+                // Tạo đối tượng để lưu trạng thái hoàn thành của video
+                const initialUserVideoCompletionStatus = {};
+
+                // Xây dựng trạng thái hoàn thành của video từ dữ liệu lọc
+                currentUserProgress.forEach((progress) => {
+                    initialUserVideoCompletionStatus[progress.videoId] = progress.completionStatus;
+                });
+
+                // Log thông tin về trạng thái hoàn thành của video
+                console.log('Initial User Video Completion', initialUserVideoCompletionStatus);
+
+                // Lưu trạng thái hoàn thành của video vào state
+                setUserVideoCompletionStatus(initialUserVideoCompletionStatus);
+            })
+            .catch((error) => {
+                console.error('Error fetching user progress data:', error);
+            });
+    }, [userIdfirebase]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-          setuserEmail(currentUser?.email)
+            setuserEmail(currentUser?.email)
+            setuserIdfirebase(currentUser?.uid)
         });
         return () => {
             unsubscribe();
         };
     }, [auth]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch course details
+                const response = await axios.get(`http://localhost:3000/Courses/${id}`);
+                const productData = response.data;
+                setProduct(productData);
+
+                const uniqueVideoIdsInCourse = Array.from(new Set(productData.videoID));
+
+                const userProgressResponse = await axios.get('http://localhost:3000/UserProgress');
+                const userProgressData = userProgressResponse.data;
+
+                // Filter user progress based on current user
+                const currentUserProgress = userProgressData.filter((progress) => progress.userId === userIdfirebase);
+
+                const completedVideoIds = currentUserProgress
+                    .filter((progress) => uniqueVideoIdsInCourse.includes(progress.videoId))
+                    .map((progress) => progress.videoId);
+
+                const allVideosCompleted = uniqueVideoIdsInCourse.every((videoId) => completedVideoIds.includes(videoId));
+                setAllVideosCompleted(allVideosCompleted);
+
+                console.log('Course Data:', productData);
+                console.log('Video IDs in Course:', uniqueVideoIdsInCourse);
+                console.log('Initial User Video Completion:', userVideoCompletionStatus);
+                console.log('All Videos Completed:', allVideosCompleted);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                setuserIdfirebase(currentUser.uid);
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [id, auth, userVideoCompletionStatus, userIdfirebase]);
 
     useEffect(() => {
-        // Fetch thông tin khoá học từ API
-        axios.get(courseApiUrl)
-            .then((response) => {
-                const courseData = response.data;
-                setCourse(courseData);
-
-                const videoIdsInCourse = courseData.videoID;
-                const totalVideos = videoIdsInCourse.length; // Gán giá trị cho totalVideos
-                setTotalVideos(totalVideos); // Lưu giá trị totalVideos vào state
-                // Fetch danh sách video đã hoàn thành từ API
-                axios.get(userProgressApiUrl)
-                    .then((userProgressResponse) => {
-                        const userProgressData = userProgressResponse.data;
-
-                        // Lấy danh sách videoID đã hoàn thành
-                        const completedVideoIds = userProgressData
-                            .filter((progress: any) => videoIdsInCourse.includes(progress.videoId))
-                            .map((progress: any) => progress.videoId);
-
-                        // Kiểm tra xem tất cả videoID đã hoàn thành hay chưa
-                        const allVideosCompleted = videoIdsInCourse.every((videoId: any) => completedVideoIds.includes(videoId));
-
-                        setAllVideosCompleted(allVideosCompleted);
-
-                        if (allVideosCompleted) {
-                            setShowSuccessAlert(true);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error fetching user progress data:', error);
-                    });
-            })
-            .catch((error) => {
-                console.error('Error fetching course data:', error);
-            });
-    }, [courseApiUrl, userProgressApiUrl]);
-
+        if (allVideosCompleted) {
+            setShowSuccessAlert(true);
+        }
+    }, [allVideosCompleted]);
 
     const handleNavigate = () => {
         window.location.href = `http://localhost:5173/getcertificate/${id}`;
     };
 
-    useEffect(() => {
-        axios.get('http://localhost:3000/UserProgress')
-            .then((response) => {
-                const userProgressData = response.data;
-                // Tạo một đối tượng trạng thái hoàn thành video ban đầu từ dữ liệu API
-                const initialVideoCompletionStatus = {};
-                userProgressData.forEach((progress:any) => {
-                    initialVideoCompletionStatus[progress.videoId] = progress.completionStatus;
-                });
-                setVideoCompletionStatus(initialVideoCompletionStatus);
-            })
-            .catch((error) => {
-                console.error('Error fetching initial user progress data:', error);
-            });
-    }, []);
 
-  
-   
-    fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Failed to retrieve user ID from the API.');
-        }
-    })
-    .then((data) => {
-        const user = data.find((item:any) => item.email === userEmail);
-
-        if (user) {
-            const userId = user.id;
-            console.log(userId);
-
-            setUserId(userId); // Lưu userId vào state
-        } else {
-            console.log('User not found');
-        }
-    })
-    .catch((error) => {
-        console.error('Error fetching data:', error);
-    });
 
 
     useEffect(() => {
@@ -178,7 +183,7 @@ const CourseContentPage = () => {
     };
 
     const handleVideoEnded = () => {
-        if (currentVideo) {
+        if (currentVideo && userIdfirebase) {
             setVideoWatched(true);
             const updatedCompletionStatus = {
                 ...videoCompletionStatus,
@@ -188,18 +193,36 @@ const CourseContentPage = () => {
             setVideoCompletionStatus(updatedCompletionStatus);
 
             axios.post(`http://localhost:3000/UserProgress`, {
-                userId: userId,
+                userId: userIdfirebase,
                 videoId: currentVideo.id,
                 completionStatus: true,
             })
                 .then((response) => {
                     console.log('User progress updated successfully:', response.data);
+
+                    // Fetch updated user progress data and update the state
+                    axios.get('http://localhost:3000/UserProgress')
+                        .then((response) => {
+                            const userProgressData = response.data;
+                            const currentUserProgress = userProgressData.filter((progress) => progress.userId === userIdfirebase);
+
+                            const updatedUserVideoCompletionStatus = {};
+                            currentUserProgress.forEach((progress) => {
+                                updatedUserVideoCompletionStatus[progress.videoId] = progress.completionStatus;
+                            });
+
+                            setUserVideoCompletionStatus(updatedUserVideoCompletionStatus);
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching user progress data:', error);
+                        });
                 })
                 .catch((error) => {
                     console.error('Error updating user progress:', error);
                 });
         }
     };
+
     useEffect(() => {
         // Fetch UserProgress data from your API
         axios.get('http://localhost:3000/UserProgress')
@@ -221,7 +244,7 @@ const CourseContentPage = () => {
 
     const [watchedTime, setWatchedTime] = useState(0);
 
-    const handleVideoTimeUpdate = (event:any) => {
+    const handleVideoTimeUpdate = (event: any) => {
         const currentTime = event.target.currentTime;
         setWatchedTime(currentTime);
         console.log(currentTime, 'currenttime');
@@ -321,7 +344,7 @@ const CourseContentPage = () => {
     const [videoDuration, setVideoDuration] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    
+
     const fetchLatestVideoDuration = () => {
         // Kiểm tra nếu userID không bằng 1 thì không gửi yêu cầu API
         if (userId !== 1) {
@@ -364,7 +387,7 @@ const CourseContentPage = () => {
 
 
 
-    
+
     // Tính số video đã hoàn thành
     const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
     const completionPercentage = (completedVideos / totalVideos) * 100;
@@ -456,8 +479,8 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div>
-                    {videos.map((video) => {
-                        const isVideoCompleted = videoCompletionStatus[video.id] || false;
+                    {videos.map((video: any) => {
+                        const isVideoCompleted = userVideoCompletionStatus[video.id] || false;
 
                         return (
                             <div className="content-left-title-course" key={video.id}>
@@ -476,15 +499,12 @@ const CourseContentPage = () => {
                                         {video.videoTitle}
                                     </div>
                                     <div>
-
                                         <i className="fa-regular fa-bookmark hi"></i>
-
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
-
                     <div>
                         <br />
                         {showSuccessAlert && (

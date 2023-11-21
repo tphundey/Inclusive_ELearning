@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
-import { Button } from 'antd';
+import { Button, Grid } from 'antd';
 import { useNavigate } from 'react-router';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -147,20 +147,30 @@ const HeaderUser: React.FC = () => {
                                                                 </div>
                                                             </li>
                                                         </div>
-                                                        <li>
-                                                            <Link to={`/Profile/${user ? user.uid : ''}`}>
-                                                                <Button style={{ width: 160 }}>Profile</Button>
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Button>Thảo luận</Button>
-                                                        </li>
-                                                        <li>
-                                                            <Button onClick={() => {
-                                                                localStorage.clear();
-                                                                auth.signOut()
-                                                            }}>Đăng xuất</Button>
-                                                        </li>
+                                                        {user && user.uid ? (
+                                                            <div className='testtt'>
+                                                                <li >
+                                                                    <Link to={`/Profile/${user.uid}`}>
+                                                                        <Button style={{ width: 170 }}>
+                                                                            Profile
+                                                                        </Button>
+                                                                    </Link>
+
+                                                                </li>
+                                                                <li>
+                                                                    <Link to={`/`}>
+                                                                        <Button style={{ width: 170 }}>Thảo luận</Button>
+                                                                    </Link>
+
+                                                                </li>
+                                                                <li>
+                                                                    <Button style={{ width: 170 }} onClick={() => {
+                                                                        localStorage.clear();
+                                                                        auth.signOut();
+                                                                    }}>Đăng xuất</Button>
+                                                                </li>
+                                                            </div>
+                                                        ) : null}
                                                     </ul>
                                                 </div>
                                             </div>

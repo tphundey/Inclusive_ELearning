@@ -43,7 +43,7 @@ const SignupPage = () => {
                 const firebaseUserId = user.uid; // Get Firebase user ID
                 axios.get(`http://localhost:3000/googleAccount?email=${user.email}`)
                     .then((response) => {
-                                    
+
                         if (response.data.length === 0) {
                             axios.post('http://localhost:3000/googleAccount', {
                                 userId: firebaseUserId, // Include Firebase user ID in the data
@@ -57,6 +57,7 @@ const SignupPage = () => {
                             })
                                 .then((response) => {
                                     console.log('User information sent to API:', response.data);
+                                    localStorage.setItem('uid', firebaseUserId);
                                     navigate('/')
                                 })
                                 .catch((error) => {
@@ -65,6 +66,7 @@ const SignupPage = () => {
                                 });
                         } else {
                             console.log('Email already exists:', user.email);
+                            localStorage.setItem('uid', firebaseUserId);
                             navigate('/')
                         }
                     })
