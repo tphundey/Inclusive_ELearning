@@ -1,5 +1,8 @@
-import { Button, Layout, Menu, Popover, theme } from "antd";
-import { useState } from "react";
+import { Button, Layout, Menu, Popover, message, theme } from "antd";
+import { useEffect, useState } from "react";
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import {
     AiOutlineMenuFold,
     AiOutlineMenuUnfold,
@@ -10,23 +13,64 @@ import {
     AiOutlineAlignLeft,
     AiFillCloseCircle
 } from "react-icons/ai";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
-
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const LayoutAdmin = () => {
+    const Navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const [user, setUser] = useState<any | null>(null);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     const content = (
-        <div>
-            <p>0878517203</p>
-        </div>
+        <li>
+            <Button style={{ width: 170 }} onClick={() => {
+                auth.signOut();
+                localStorage.clear();
+                setTimeout(() => {
+                    // messageApi.open({
+                    //     type: "success",
+                    //     content: "Bạn đã thêm user thành công. Chờ 3s để quay về quản trị",
+                    // });
+                    Navigate("/");
+                }, 1500);
+
+            }}>Đăng xuất</Button><br /><br />
+            <Button style={{ width: 170 }} onClick={() => {
+                setTimeout(() => {
+                    // messageApi.open({
+                    //     type: "success",
+                    //     content: "Bạn đã thêm user thành công. Chờ 3s để quay về quản trị",
+                    // });
+                    Navigate("/");
+                }, 1500);
+
+            }}>Thoát</Button>
+        </li>
     )
-    const text = <span>Admin</span>
+    const text = <>
+    <span>Xin chào</span> <br />
+    <span>{user?.displayName}</span>
+    </>
     return (
-        <Layout className="h-screen">
+        
+        
+            <Layout className="h-screen">
+            
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
@@ -128,14 +172,14 @@ const LayoutAdmin = () => {
                                         <span className="sr-only">Menu</span>
                                         <img
                                             alt="Man"
-                                            src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                                            src={user?.photoURL}
                                             className="h-10 w-10 rounded-full object-cover"
                                         />
 
                                         <p className="ms-2 hidden text-left text-xs sm:block">
-                                            <strong className="block font-medium">Eric Frusciante</strong>
+                                            <strong className="block font-medium">{user?.displayName}</strong>
 
-                                            <span className="text-gray-500"> taidvph20044@gmail.com </span>
+                                            <span className="text-gray-500"> {user?.email} </span>
                                         </p>
                                         <Popover placement='bottomRight' title={text} content={content} trigger='click'>
                                             <svg
@@ -165,10 +209,12 @@ const LayoutAdmin = () => {
                         background: colorBgContainer,
                     }}
                 >
+                    {/* {contextHolder} */}
                     <Outlet />
                 </Content>
             </Layout>
         </Layout>
+        
     );
 };
 

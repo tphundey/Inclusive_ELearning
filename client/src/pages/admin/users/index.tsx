@@ -27,22 +27,22 @@ const AdminUser = (props: any) => {
         const userRole = roleSource?.find(role => role.key === item.roleID);
         return {
             key: item.id,
-            username: item.name ? (
-                <span >{item.name}</span>
-            ) : (<>thiếu thông tin</>),
+            username: item.displayName ? (
+                <span >{item.displayName}</span>
+            ) : (<><p className="text-red-500 ">thiếu thông tin</p></>),
             email: item.email,
             password: item.password,
-            avatarIMG: item.img ? (<div className="avatar placeholder">
+            avatarIMG: item.photoURL ? (<div className="avatar placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-24">
-                    <span className="text-3xl"><img src={item.img} alt="" /></span>
+                    <span className="text-3xl"><img src={item.photoURL} alt="" /></span>
                 </div>
-            </div>) : (<>chưa có ảnh</>),
+            </div>) : (<p className="text-red-500 ">chưa có ảnh</p>),
             address: item.address ? (
             <span >{item.address}</span>
-        ) : (<>thiếu thông tin</>),
-            phone: item.phone? (
-                <span >{item.phone}</span>
-            ) : (<>thiếu thông tin</>),
+        ) : (<><p className="text-red-500 ">thiếu thông tin</p></>),
+            phone: item.phoneNumber? (
+                <span >{item.phoneNumber}</span>
+            ) : (<p className="text-red-500 ">thiếu thông tin</p>),
             roleID: userRole ? userRole.role : "",
             registeredCourseID: item.registeredCourseID,
             courseSaved: item.courseSaved
@@ -126,9 +126,7 @@ const AdminUser = (props: any) => {
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="primary" danger>
-                            upgradeAdmin
-                        </Button>
+                        
                     </Popconfirm>)}
                     <Button>
                         <Link to={`/admin/user/${id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
