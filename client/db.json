@@ -337,8 +337,7 @@
       ],
       "courseSaved": [
         10
-      ],
-      "role": 1
+      ]
     },
     {
       "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
@@ -352,8 +351,7 @@
       "historyCourseID": [
         10,
         10
-      ],
-      "role": 1
+      ]
     },
     {
       "userId": "gFiPGD52BvSYYJl5NwQY2sxmbZl1",
@@ -364,8 +362,7 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "id": 3,
-      "role": 1
+      "id": 3
     },
     {
       "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
@@ -380,7 +377,6 @@
       "courseSaved": [
         2
       ],
-      "id": 4,
       "role": 1
     },
     {
@@ -394,8 +390,7 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "id": 5,
-      "role": 1
+      "id": 5
     },
     {
       "userId": "2o2RPub7yJd9liwygYQJxTA98uV2",
@@ -406,8 +401,9 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "role": 1,
-      "id": 6
+      "id": 6,
+      "address": "hà nội",
+      "phoneNumber": 12345678
     },
     {
       "userId": "iMx4adLiNzYS7znbmXxltJtiKdJ2",
@@ -418,8 +414,9 @@
       "collectionCourseID": [],
       "historyCourseID": [],
       "courseSaved": [],
-      "role": 2,
-      "id": 7
+      "id": 7,
+      "address": "hà nội",
+      "phoneNumber": 12345678
     }
   ],
   "userVideoProgress": [
