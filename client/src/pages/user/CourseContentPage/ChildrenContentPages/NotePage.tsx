@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment-timezone';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 function NotesComponent() {
+    const [user, setUser] = useState<User | null>(null);
     const [notes, setNotes] = useState<any[]>([]);
     const [editingNote, setEditingNote] = useState(null);
     const [editingNoteContent, setEditingNoteContent] = useState('');
@@ -11,22 +18,35 @@ function NotesComponent() {
     const [newNoteContent, setNewNoteContent] = useState(''); // Thêm trạng thái để lưu nội dung ghi chú mới
     const { id } = useParams();
     const parsedVideoID = parseInt(id, 10);
-    const [newNoteDate, setNewNoteDate] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/Notes?videoID=${id}`)
-            .then((response) => {
-                const notesData = response.data;
-                // Sắp xếp danh sách ghi chú theo trường date giảm dần (mới nhất đầu tiên)
-                notesData.sort((a, b) => new Date(b.date) - new Date(a.date));
-                setNotes(notesData);
-            })
-            .catch((error) => {
-                console.error('Lỗi khi tải dữ liệu ghi chú:', error);
-            });
-    }, [id]);
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
+
+    useEffect(() => {
+        // Retrieve user's ID from the user object
+        const userId = user?.uid;
+
+        if (userId) {
+            // Fetch notes for the current user using the user's ID
+            axios.get(`http://localhost:3000/Notes?videoID=${id}&uid=${userId}`)
+                .then((response:any) => {
+                    const notesData = response.data;
+                    notesData.sort((a:any, b:any) => new Date(b.date) - new Date(a.date));
+                    setNotes(notesData);
+                })
+                .catch((error) => {
+                    console.error('Error loading notes:', error);
+                });
+        }
+    }, [id, user]);
     // Hàm xóa ghi chú
-    const handleDeleteNote = (noteId) => {
+    const handleDeleteNote = (noteId:any) => {
         // Gửi yêu cầu xóa ghi chú đến API
         axios.delete(`http://localhost:3000/Notes/${noteId}`)
             .then((response) => {
@@ -38,14 +58,14 @@ function NotesComponent() {
             });
     };
     // Hàm xử lý khi nhấn nút chỉnh sửa
-    const handleEditNote = (noteId, noteContent) => {
+    const handleEditNote = (noteId:any, noteContent:any) => {
         // Đặt nội dung cũ vào trường nhập liệu và cập nhật trạng thái chỉnh sửa
         setOriginalNoteContent(noteContent); // Đặt nội dung cũ vào trạng thái
         setEditingNoteContent(noteContent); // Đặt nội dung cũ vào trường nhập liệu
         setEditingNote(noteId);
     };
     // Hàm xử lý khi nhấn nút lưu chỉnh sửa
-    const handleSaveEdit = (noteId) => {
+    const handleSaveEdit = (noteId:any) => {
         // Tìm ghi chú cần chỉnh sửa
         const noteToEdit = notes.find((note) => note.id === noteId);
 
@@ -73,32 +93,33 @@ function NotesComponent() {
                 console.error('Lỗi khi chỉnh sửa ghi chú:', error);
             });
     };
-    // Hàm xử lý khi người dùng nhập ghi chú mới và nhấn Enter
-    const handleNewNoteEnter = (e) => {
+    const handleNewNoteEnter = async (e:any) => {
         if (e.key === 'Enter') {
             e.preventDefault();
 
-            // Lấy thời gian hiện tại dựa theo múi giờ Việt Nam
-            const vietnamTime = moment.tz('Asia/Ho_Chi_Minh');
-            const formattedDate = vietnamTime.format('YYYY-MM-DD');
+            const userId = user?.uid;
 
-            // Gửi yêu cầu POST để tạo ghi chú mới
-            axios.post('http://localhost:3000/Notes', {
-                videoID: parsedVideoID,
-                note: newNoteContent,
-                date: formattedDate
-            })
-                .then((response) => {
-                    // Thêm ghi chú mới vào đầu danh sách
-                    setNotes([response.data, ...notes]);
-                    // Xóa nội dung trường nhập liệu
-                    setNewNoteContent('');
+            if (userId) {
+                const vietnamTime = moment.tz('Asia/Ho_Chi_Minh');
+                const formattedDate = vietnamTime.format('YYYY-MM-DD');
+
+                axios.post('http://localhost:3000/Notes', {
+                    videoID: parsedVideoID,
+                    note: newNoteContent,
+                    date: formattedDate,
+                    uid: userId, // Include the user's ID
                 })
-                .catch((error) => {
-                    console.error('Lỗi khi tạo ghi chú mới:', error);
-                });
+                    .then((response) => {
+                        setNotes([response.data, ...notes]);
+                        setNewNoteContent('');
+                    })
+                    .catch((error) => {
+                        console.error('Error creating a new note:', error);
+                    });
+            }
         }
     };
+
     return (
         <div className="note-page-content">
             <div className="notepage-left">
@@ -129,7 +150,7 @@ function NotesComponent() {
                                 />
                             </div>
                         ) : (
-                            <p className="note-user-content-main">{note.note}</p> // Sửa thành trường 'note'
+                            <p className="note-user-content-main">{note.note}</p> 
                         )}
                         <div className="btfornote">
                             {editingNote === note.id ? (

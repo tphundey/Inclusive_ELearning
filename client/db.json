@@ -225,7 +225,28 @@
       "isDeleted": false
     }
   ],
-  "Notes": [],
+  "Notes": [
+    {
+      "videoID": 2,
+      "note": "AHahaha",
+      "date": "2023-11-23",
+      "id": 1
+    },
+    {
+      "videoID": 2,
+      "note": "hí hs",
+      "date": "2023-11-23",
+      "uid": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "id": 2
+    },
+    {
+      "videoID": 3,
+      "note": "HI",
+      "date": "2023-11-23",
+      "uid": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "id": 3
+    }
+  ],
   "Role": [
     {
       "id": 1,
@@ -607,6 +628,18 @@
       "videoId": 8,
       "watchedTime": 0,
       "id": 40
+    },
+    {
+      "userId": null,
+      "videoId": 8,
+      "watchedTime": 0,
+      "id": 41
+    },
+    {
+      "userId": null,
+      "videoId": "2",
+      "watchedTime": 0,
+      "id": 42
     }
   ]
 }
