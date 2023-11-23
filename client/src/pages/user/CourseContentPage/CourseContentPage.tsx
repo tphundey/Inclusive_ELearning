@@ -330,7 +330,7 @@ const CourseContentPage = () => {
     const sendWatchedTimeToAPI = () => {
         axios
             .post('http://localhost:3000/userVideoProgress', {
-                userId: userId,
+                userId: userIdfirebase,
                 videoId: id,
                 watchedTime: watchedTime,
             })
@@ -347,7 +347,7 @@ const CourseContentPage = () => {
 
     const fetchLatestVideoDuration = () => {
         // Kiểm tra nếu userID không bằng 1 thì không gửi yêu cầu API
-        if (userId !== 1) {
+        if (userIdfirebase !== userIdfirebase) {
             console.log('UserID không hợp lệ');
             return;
         }
@@ -357,7 +357,7 @@ const CourseContentPage = () => {
 
         axios
             .get(API_URL)
-            .then((response) => {
+            .then((response: any) => {
                 if (response.data.length > 0) {
                     const latestRecord = response.data[0];
                     const watchedTimeInSeconds = latestRecord.watchedTime; // Thời lượng video tính bằng giây
@@ -560,7 +560,7 @@ const CourseContentPage = () => {
                     <div>
                         <div>
                             {/* <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={handleReturnButtonClick}>Quay lại video</button> */}
-                            <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={sendWatchedTimeToAPI}>Gửi thời gian xem hiện tại</button>
+                            <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={sendWatchedTimeToAPI}>Đánh dấu thời gian xem hiện tại</button>
                             <button className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={fetchLatestVideoDuration}>Lấy thời gian xem dở</button>
                         </div>
                         <Modal
@@ -573,7 +573,7 @@ const CourseContentPage = () => {
                         </Modal>
                         {/* Modal hiển thị thời lượng video */}
                         <Modal open={isModalOpen} onCancel={handleModalClose}>
-                            <p>Thời lượng video: {videoDuration} giây</p>
+                            <p>Thời lượng video: {videoDuration}</p>
                         </Modal>
                         <Outlet />
                     </div>

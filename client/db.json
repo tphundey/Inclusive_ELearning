@@ -69,7 +69,8 @@
       "videoID": [
         8,
         8,
-        9
+        9,
+        1
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -273,32 +274,26 @@
       "videoId": 9,
       "completionStatus": true,
       "id": 2
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": 1,
+      "completionStatus": true,
+      "id": 3
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": 1,
+      "completionStatus": true,
+      "id": 4
     }
   ],
   "Videos": [
     {
-      "videoTitle": "Intro1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQH2HHvX-Y1ZCA/learning-original-video-vbr-720/0/1630684215980?e=1700469573&v=beta&t=bRNs73ZkKl-eQ82jxHq7_-30gOMguBcJsYMeJZ9p_dA",
+      "videoTitle": "tt1",
+      "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQHMLmWayjsorw/mp4-720p-30fp-crf28/0/1695066613300?e=1700729849&v=beta&t=p7gBLR7iUQv7XdU5OswGvRNmtAFLC3QklraRp_JMUE8",
       "courseId": 2,
-      "id": 6
-    },
-    {
-      "videoTitle": "Intro2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQHh5oihphmiRA/learning-original-video-vbr-720/0/1656435034843?e=1700469807&v=beta&t=M1ofrTDdlsHSas-YWUmNssilLaVw9Ymq9XMOyFHa0zY",
-      "courseId": 2,
-      "id": 7
-    },
-    {
-      "videoTitle": "test",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQGE2gA7Gm1F6A/learning-original-video-vbr-720/0/1628018728639?e=1700591208&v=beta&t=RKqNUhjxv8RGX7x3TPcRDDK2OaeGwD07Ar9K4fRLxgw",
-      "courseId": 2,
-      "id": 8
-    },
-    {
-      "videoTitle": "test2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/C560DAQHoNvxHkE328Q/learning-original-video-vbr-720/0/1628018727002?e=1700591235&v=beta&t=-xMRi29GWYPptGqCDgt55AQl6fkLlYeT1qNaZVSLCJI",
-      "courseId": 2,
-      "id": 9
+      "id": 1
     }
   ],
   "googleAccount": [
@@ -640,6 +635,66 @@
       "videoId": "2",
       "watchedTime": 0,
       "id": 42
+    },
+    {
+      "userId": null,
+      "videoId": "2",
+      "watchedTime": 78.620232,
+      "id": 43
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 44
+    },
+    {
+      "userId": null,
+      "videoId": "2",
+      "watchedTime": 0.43739,
+      "id": 45
+    },
+    {
+      "userId": null,
+      "videoId": "2",
+      "watchedTime": 42.660109,
+      "id": 46
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": "2",
+      "watchedTime": 42.660109,
+      "id": 47
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": "2",
+      "watchedTime": 42.660109,
+      "id": 48
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 49
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": "2",
+      "watchedTime": 219.720123,
+      "id": 50
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": "2",
+      "watchedTime": 366.019256,
+      "id": 51
+    },
+    {
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": "2",
+      "watchedTime": 366.019256,
+      "id": 52
     }
   ]
 }
