@@ -67,10 +67,8 @@
       "rateID": [],
       "date": "2023-09-25",
       "videoID": [
-        8,
-        8,
-        9,
-        1
+        1,
+        2
       ],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
@@ -88,10 +86,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1,
-        5
-      ],
+      "videoID": [],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
       "enrollment": 100,
@@ -108,9 +103,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3106861393847444835/3b9e429d5ecc8992d0dd.jpg",
       "enrollment": 100,
@@ -141,9 +134,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/3192365049190229066/58e628e534b4e3eabaa5.jpg",
       "enrollment": 23100,
@@ -160,9 +151,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/157773873615069288/e7a89dab81fa56a40feb.jpg",
       "enrollment": 100,
@@ -179,9 +168,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/2381223573937777274/63a1c19b7c15ab4bf204.jpg",
       "enrollment": 100,
@@ -198,9 +185,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/7194595383535648932/6632c5087886afd8f697.jpg",
       "enrollment": 100,
@@ -217,9 +202,7 @@
         2
       ],
       "date": "2023-09-25",
-      "videoID": [
-        1
-      ],
+      "videoID": [],
       "categoryID": 2,
       "courseIMG": "https://f11-zpcloud.zdn.vn/673344602545237661/ce8d42bfff31286f7120.jpg",
       "enrollment": 100,
@@ -264,26 +247,32 @@
   ],
   "UserProgress": [
     {
-      "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
-      "videoId": 8,
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": 1,
       "completionStatus": true,
       "id": 1
     },
     {
-      "userId": "jx6nezuv2iQGF4Pya2GGCVteYXx2",
-      "videoId": 9,
+      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "videoId": 2,
       "completionStatus": true,
       "id": 2
     },
     {
-      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
       "videoId": 1,
       "completionStatus": true,
       "id": 3
     },
     {
-      "userId": "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
       "videoId": 1,
+      "completionStatus": true,
+      "id": 3
+    },
+    {
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
+      "videoId": 2,
       "completionStatus": true,
       "id": 4
     }
@@ -294,6 +283,12 @@
       "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQHMLmWayjsorw/mp4-720p-30fp-crf28/0/1695066613300?e=1700729849&v=beta&t=p7gBLR7iUQv7XdU5OswGvRNmtAFLC3QklraRp_JMUE8",
       "courseId": 2,
       "id": 1
+    },
+    {
+      "videoTitle": "tt2",
+      "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQHMLmWayjsorw/mp4-720p-30fp-crf28/0/1695066613300?e=1700729849&v=beta&t=p7gBLR7iUQv7XdU5OswGvRNmtAFLC3QklraRp_JMUE8",
+      "courseId": 2,
+      "id": 2
     }
   ],
   "googleAccount": [
@@ -695,6 +690,48 @@
       "videoId": "2",
       "watchedTime": 366.019256,
       "id": 52
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 53
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 54
+    },
+    {
+      "userId": null,
+      "videoId": 2,
+      "watchedTime": 0,
+      "id": 55
+    },
+    {
+      "userId": null,
+      "videoId": 2,
+      "watchedTime": 0,
+      "id": 56
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 57
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 58
+    },
+    {
+      "userId": null,
+      "videoId": 2,
+      "watchedTime": 0,
+      "id": 59
     }
   ]
 }

@@ -25,9 +25,6 @@ const CourseContentPage = () => {
     const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
     const courseId = parseInt(id, 10);
-    const courseApiUrl = `http://localhost:3000/Courses/${courseId}`;
-    const userProgressApiUrl = 'http://localhost:3000/UserProgress';
-    const [course, setCourse] = useState(null);
     const [allVideosCompleted, setAllVideosCompleted] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [videoWatchedTime, setVideoWatchedTime] = useState(0);
@@ -39,30 +36,21 @@ const CourseContentPage = () => {
     const [userEmail, setuserEmail] = useState<any | null>(null);
     const [userIdfirebase, setuserIdfirebase] = useState<any | null>(null);
     const [userVideoCompletionStatus, setUserVideoCompletionStatus] = useState({});
+    const [videoDuration, setVideoDuration] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        // Lấy dữ liệu tiến trình của người dùng với userId là 1
+
         axios.get('http://localhost:3000/UserProgress')
             .then((response) => {
                 const userProgressData = response.data;
-
-
-                const currentUserProgress = userProgressData.filter((progress) => progress.userId === userIdfirebase);
-
-
-                console.log('Filtered User Progress Data', currentUserProgress);
-
-                // Tạo đối tượng để lưu trạng thái hoàn thành của video
+                const currentUserProgress = userProgressData.filter((progress: any) => progress.userId === userIdfirebase);
                 const initialUserVideoCompletionStatus = {};
-
-                // Xây dựng trạng thái hoàn thành của video từ dữ liệu lọc
-                currentUserProgress.forEach((progress) => {
+                currentUserProgress.forEach((progress: any) => {
                     initialUserVideoCompletionStatus[progress.videoId] = progress.completionStatus;
                 });
-
                 // Log thông tin về trạng thái hoàn thành của video
                 console.log('Initial User Video Completion', initialUserVideoCompletionStatus);
-
                 // Lưu trạng thái hoàn thành của video vào state
                 setUserVideoCompletionStatus(initialUserVideoCompletionStatus);
             })
@@ -70,6 +58,7 @@ const CourseContentPage = () => {
                 console.error('Error fetching user progress data:', error);
             });
     }, [userIdfirebase]);
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -81,6 +70,7 @@ const CourseContentPage = () => {
             unsubscribe();
         };
     }, [auth]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -113,15 +103,12 @@ const CourseContentPage = () => {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
-
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 setuserIdfirebase(currentUser.uid);
             }
         });
-
         return () => {
             unsubscribe();
         };
@@ -138,16 +125,12 @@ const CourseContentPage = () => {
     };
 
 
-
-
     useEffect(() => {
         // Fetch course details
         axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
                 const productData = response.data;
                 setProduct(productData);
-
-                // Assuming you have an API endpoint to fetch all videos
                 axios.get(`http://localhost:3000/Videos`)
                     .then((videoResponse) => {
                         const allVideos = videoResponse.data;
@@ -157,10 +140,7 @@ const CourseContentPage = () => {
                         const filteredVideos = allVideos.filter((video) =>
                             videoIdsInCourse.includes(video.id)
                         );
-
                         setVideos(filteredVideos);
-
-                        // Set the default video URL as the first video in the course
                         if (filteredVideos.length > 0) {
                             setSelectedVideoUrl(filteredVideos[0].videoURL);
                             setCurrentVideo(filteredVideos[0]);
@@ -341,8 +321,7 @@ const CourseContentPage = () => {
                 console.error('Lỗi khi gửi thời gian xem video lên API:', error);
             });
     };
-    const [videoDuration, setVideoDuration] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
 
     const fetchLatestVideoDuration = () => {
@@ -384,13 +363,6 @@ const CourseContentPage = () => {
     const handleModalClose = () => {
         closeModal();
     };
-
-
-
-
-    // Tính số video đã hoàn thành
-    const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
-    const completionPercentage = (completedVideos / totalVideos) * 100;
 
 
     const handleBookmarkClick = () => {
@@ -463,19 +435,42 @@ const CourseContentPage = () => {
         { label: 'Notebook', icon: 'fa-solid fa-book', path: 'notepage' }
     ];
 
+
+    const completedVideos = Object.values(videoCompletionStatus).filter(status => status === true).length;
+    const completionPercentage = (completedVideos / totalVideos) * 100;
+
+    const currentUserId = userIdfirebase;
+
+    // Lọc ra các bản ghi từ UserProgress có userId trùng với người dùng hiện tại
+    const userProgressForCurrentUser = UserProgress.filter(progress => progress.userId === currentUserId);
+
+    // Sử dụng Set để theo dõi videoId đã xem xét
+    const examinedVideoIds = new Set();
+
+    // Lấy danh sách tất cả video trong khóa học, loại bỏ các videoId trùng nhau
+    const uniqueVideoIdsInCourse = Array.from(new Set(product.videoID));
+
+    // Lọc ra các bản ghi từ UserProgress của người dùng hiện tại và thuộc khóa học
+    const userProgressForCurrentCourse = userProgressForCurrentUser.filter(progress => {
+        if (!examinedVideoIds.has(progress.videoId)) {
+            examinedVideoIds.add(progress.videoId);
+            return uniqueVideoIdsInCourse.includes(progress.videoId);
+        }
+        return false;
+    });
+
+    // Số lượng video đã hoàn thành
+    const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
+
+    const calculatedCompletionPercentage = (numberOfCompletedVideos / uniqueVideoIdsInCourse.length) * 100;
+
     return (
 
         <div className='container-content-page'>
             <div className="contentpage-left">
                 <div className='content-intro'>
                     <div className="content-left-title">
-                        <i className="fa-solid fa-list"></i> <div>Contents</div>
-                    </div>
-                    <div className='pro-content'>
-                        {/* <p className=''>Tổng số video: {totalVideos}</p> */}
-                        <div className="radial-progress text-white pro-content bg-gray-800" style={{ "--value": `${completionPercentage.toFixed(2)}`, fontSize: "15px", width: "50px", height: "50px", borderRadius: "50%" }}>
-                            {completionPercentage >= 1 && completionPercentage <= 100 ? `${Math.round(completionPercentage)}` : "100%"}
-                        </div>
+                        <i className="fa-solid fa-list"></i> <div>Contents</div> {calculatedCompletionPercentage}%
                     </div>
                 </div>
                 <div>
