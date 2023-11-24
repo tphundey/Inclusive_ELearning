@@ -732,6 +732,56 @@
       "videoId": 2,
       "watchedTime": 0,
       "id": 59
+    },
+    {
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
+      "videoId": "2",
+      "watchedTime": 106.363731,
+      "id": 60
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "author": "Thu Ngoc",
+      "date": "Feb. 8, 2022",
+      "title": "Về tôi",
+      "content": "Flowbite is an open-source library of UI components built with the utility-first classes from Tailwind CSS. It also includes interactive elements such as dropdowns, modals, datepickers.",
+      "image": "https://flowbite.s3.amazonaws.com/typography-plugin/typography-image-1.png",
+      "likes": 16,
+      "comments": [
+        {
+          "id": 1,
+          "author": "Thungoc",
+          "time": "3:34 PM",
+          "text": "gút gút",
+          "likes": 0,
+          "replies": []
+        },
+        {
+          "id": 2,
+          "author": "Truong",
+          "time": "3:34 PM",
+          "text": "nâu nâu",
+          "likes": 0,
+          "replies": [
+            {
+              "id": 1,
+              "author": "Tai",
+              "time": "3:34 PM",
+              "text": "clo clo",
+              "likes": 0
+            },
+            {
+              "id": 2,
+              "author": "Dat",
+              "time": "3:34 PM",
+              "text": "a j no mo to",
+              "likes": 0
+            }
+          ]
+        }
+      ]
     }
   ]
 }

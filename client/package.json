@@ -38,7 +38,8 @@
         "redux": "^4.2.1",
         "redux-persist": "^6.0.0",
         "redux-thunk": "^2.4.2",
-        "slick-carousel": "^1.8.1"
+        "slick-carousel": "^1.8.1",
+        "ts-ignore": "^0.0.3"
     },
     "devDependencies": {
         "@types/react": "^18.0.37",
