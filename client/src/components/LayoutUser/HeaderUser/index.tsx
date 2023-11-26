@@ -167,7 +167,7 @@ const HeaderUser: React.FC = () => {
                                                                     <Button style={{ width: 170 }} onClick={() => {
                                                                         localStorage.clear();
                                                                         auth.signOut();
-                                                                    }}>Đăng xuất</Button>
+                                                                    }}><i className="fa-solid fa-right-from-bracket ml-14"></i></Button>
                                                                 </li>
                                                             </div>
                                                         ) : null}

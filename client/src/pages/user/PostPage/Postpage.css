@@ -1,0 +1,14 @@
+.container-postpage{
+    width: 650px;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.comment_img{
+    border-radius: 100%;
+}
+
+.cmt_flex{
+    display: flex;
+    align-items: center;
+}
