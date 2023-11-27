@@ -38,6 +38,11 @@ const IntroductionPage = () => {
     const [paymentCount, setPaymentCount] = useState(0);
     const [categoryName, setCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
+    const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+
+    const handlePreviewClick = () => {
+        setIsPreviewVisible(true);
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -475,10 +480,50 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
+    const shuffleArray = (array: any) => {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    };
+    const [showFullDescription, setShowFullDescription] = useState(false);
+    const maxLength = 500; 
+    const defaultDescription = product.description; 
+
+    const description = defaultDescription || ''; 
+
+    const truncatedDescription = showFullDescription ? description : description.slice(0, maxLength) + '...';
+    const truncateProductName = (name: any, maxLength: any) => {
+        return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+    };
+
+    const renderedSimilarProducts = shuffleArray(similarProducts).slice(0, 7).map((similarProduct: any) => (
+        <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
+            <div className="flex items-center shrink-0">
+                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
+            </div>
+            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
+                <h4 className='text-xs'>COURSE</h4>
+                <h4 className="text-base text-slate-700 font-medium">
+                    <a href={`/introduction/${similarProduct.id}`}>
+                        <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
+                    </a>
+                </h4>
+                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
+            </div>
+        </li>
+    ));
 
     if (loading) {
         return <Skeleton active />;
     }
+
+
 
     return (
         <div className="containerCss">
@@ -506,9 +551,15 @@ const IntroductionPage = () => {
                             <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy for my team</button>
                         </div>
                     </div>
-
                     <div className="courseRight">
-                        <button><i className="fa-solid fa-play"></i> Preview</button>
+                        {isPreviewVisible ? (
+                            <div className="overlay">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/bh_iIIVIfW0?si=EN3YdY1xIRbuKCLg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                <button className='intro_close' onClick={() => setIsPreviewVisible(false)}>Close</button>
+                            </div>
+                        ) : (
+                            <button className='intro_pre' onClick={handlePreviewClick}>Preview </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -525,7 +576,15 @@ const IntroductionPage = () => {
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Course description</div>
-                        <p>{product.description}</p>
+                        <p>
+                            {truncatedDescription}
+                            {description.length > maxLength && (
+                                <span onClick={() => setShowFullDescription(!showFullDescription)} style={{ color: 'blue', cursor: 'pointer' }}>
+                                    {' '}
+                                    {showFullDescription ? 'Thu gọn' : 'Xem tiếp'}
+                                </span>
+                            )}
+                        </p>
                     </div>
                     <div className="courseDescription">
                         <div className="titleCourseDescription">Shareable certificate</div>
@@ -631,23 +690,8 @@ const IntroductionPage = () => {
                             <Timeline items={timelineItems} />
                         </div>
                     </div>
-                    <h2 className='text-xl font-medium p-3'>Related courses</h2>
                     <ul className="divide-y divide-slate-100">
-                        {similarProducts.map((similarProduct) => (
-                            <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
-                                <div className="flex items-center shrink-0">
-                                    <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
-                                </div>
-                                <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                    <h4 className='text-xs'>COURSE</h4>
-                                    <h4 className="text-base text-slate-700 font-medium">
-                                        <a href={`/introduction/${similarProduct.id}`}><p className="mt-1 text-base">{similarProduct.courseName}</p></a>
-                                    </h4>
-                                    <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                                    <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
-                                </div>
-                            </li>
-                        ))}
+                        {renderedSimilarProducts}
                         <hr />
                     </ul>
                 </div>

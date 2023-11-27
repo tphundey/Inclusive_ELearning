@@ -62,6 +62,15 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 7
+    },
+    {
+      "userID": 1,
+      "courseID": 11,
+      "coupon": "null",
+      "paymentAmount": 30000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 8
     }
   ],
   "Reviews": [
@@ -72,6 +81,14 @@
       "courseID": 2,
       "date": "2023-11-27",
       "id": 1
+    },
+    {
+      "rating": 5,
+      "comment": "anh độ mixi",
+      "userID": 1,
+      "courseID": 11,
+      "date": "2023-11-28",
+      "id": 2
     }
   ],
   "Categories": [
@@ -234,6 +251,22 @@
       "courseIMG": "https://f11-zpcloud.zdn.vn/673344602545237661/ce8d42bfff31286f7120.jpg",
       "enrollment": 100,
       "isDeleted": false
+    },
+    {
+      "courseName": "(Restream) Khánh thành điểm trường Phe Mạnh 2 và trải nghiệm lần đầu tới Hà Giang.",
+      "price": "30000",
+      "courseIMG": "https://i.ytimg.com/vi/bh_iIIVIfW0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBKlxODlm1oGRvPG5RDAO9vBIg2RQ",
+      "duration": 120,
+      "date": "2023-11-28",
+      "videoID": [
+        1,
+        2
+      ],
+      "intro": "https://www.youtube.com/embed/bh_iIIVIfW0?si=WTlLCZ_NHtvlCf8l",
+      "categoryID": 1,
+      "enrollment": 100,
+      "description": "Lịch Livestream cố định đến năm 2059.\n* 22:22 - 23h59 hàng ngày trên này.\n* 0:01-03:00 hàng ngày trên: https://svip.nimo.tv/mixi\n(Chủ Nhật chỉ live bên nimo.tv/mixi vào 23:00 )\n\nBạn muốn đồng hành cùng SBC, bấm vào đây nhé: https://forms.gle/ji1nRoxW47xiKoik7\n\n-------------------------------------------------------------------------------------------------------------\n\n► DONATE:\n*  https://streamlabs.com/mixigamingoffi...\n*  https://playerduo.net/mixigaming\n*  https://qr.wescan.vn/Mixi\n\n►Trang web chính thức để các bạn xem lại video và livestream: https://mixigaming.com/\n\n► Fanpage chính thức: https://www.facebook.com/MixiGaming/\n► Facebook cá nhân: https://www.facebook.com/dophung89\n► Instagram: https://www.instagram.com/dochet1989\n► Link Discord giao lưu: https://discord.gg/mixigaming\n► Link Group FB:  https://www.facebook.com/groups/mixig...\n► Email liên hệ công việc: vanphongvotri.mixicorp@gmail.com\n\n-----------------------------------------------------------------------------------------------------------------\n\n► Shop game bản quyền số 1 Việt Nam: divineshop.vn\n(Nhập Code: mixigaming để giảm 5% tất cả game Steam trên DivineShop)\n\n-----------------------------------------------------------------------------------------------------------------\n\nmixigaming pubg gameplay lien minh 2017 lmht liên minh,pubg,battleground,battlegrounds,mixigaming\nTags: Mixigaming, Mixi, Độ Tày, Streamer Mixigaming, Funny, Mixigaming Funny Stream, Funny Stream, Streamer Việt Nam, Stream Việt Nam, Stream Việt, PUBG, Player Unknown's Battle Ground VN, PUBG VN, CSGO, CSGO VN, mixigaming talkshow, mixigaming reaction, mixigaming độ tộc 2",
+      "id": 11
     }
   ],
   "Notes": [
@@ -339,7 +372,8 @@
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
       "registeredCourseID": [
-        2
+        2,
+        11
       ],
       "collectionCourseID": [
         10

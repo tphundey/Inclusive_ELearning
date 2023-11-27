@@ -48,14 +48,12 @@
 }
 
 .imgHid img {
-    opacity: 0.3;
+    opacity: 0.5;
     position: absolute;
     top: 100px;
     left: 50%;
-    filter: blur(8px);
     width: 750px;
-    box-shadow: 0px -40px 50px 60px rgb(207, 201, 201);
-
+    box-shadow: 0px -40px 50px 60px rgb(225, 218, 218);
 }
 
 .intro-bt {
@@ -166,6 +164,7 @@
 
 .instruc-left img {
     width: 80px;
+    border-radius: 100%;
 }
 
 .instruc-right h1 {
@@ -198,7 +197,7 @@
     padding: 1px 10px;
     position: relative;
     top: -45px;
-    left: -80px;
+    left: -37%;
 }
 
 .listReviewIntro {
@@ -253,8 +252,46 @@
     font-size: 24px;
 }
 
-.instruc-left img{
+.instruc-left img {
     width: 90px;
     height: 90px;
     object-fit: cover;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    align-items: center;
+}
+
+.overlay iframe {
+    width: 80%;
+    height: 80%;
+    padding: 0;
+    margin: 0 auto;
+    position: absolute;
+    z-index: 99999;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.intro_pre {
+    position: absolute;
+    z-index: 1;
+}
+
+.intro_close {
+    position: absolute;
+    z-index: 1;
+    top: 2%;
+    right: 2%;
 }
