@@ -158,7 +158,7 @@ const HeaderUser: React.FC = () => {
 
                                                                 </li>
                                                                 <li>
-                                                                    <Link to={`/`}>
+                                                                    <Link to={`/Postpage/`}>
                                                                         <Button style={{ width: 170 }}>Thảo luận</Button>
                                                                     </Link>
 

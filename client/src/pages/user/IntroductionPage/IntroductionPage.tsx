@@ -37,6 +37,7 @@ const IntroductionPage = () => {
     const [totalReviews, setTotalReviews] = useState(0);
     const [paymentCount, setPaymentCount] = useState(0);
     const [categoryName, setCategoryName] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -87,6 +88,7 @@ const IntroductionPage = () => {
                     const matchedCategory = categories.find((category: any) => category.id === product.categoryID);
                     if (matchedCategory) {
                         setCategoryName(matchedCategory.categoryName);
+                        setLoading(false);
                     }
                 }
             })
@@ -109,6 +111,7 @@ const IntroductionPage = () => {
             const user = data.find((item: any) => item.email === userEmail);
             const userID = user.id;
             setUserID(userID);
+
         })
         .catch((error) => {
             console.error(error);
@@ -147,6 +150,7 @@ const IntroductionPage = () => {
             .then((response) => {
                 console.log(response.data);
                 setReviews(response.data);
+
             })
             .catch((error) => {
                 console.error(error);
@@ -272,6 +276,7 @@ const IntroductionPage = () => {
             axios.get(apiUrl)
                 .then((response) => {
                     setSimilarProducts(response.data);
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -311,6 +316,7 @@ const IntroductionPage = () => {
                 setReviews(allReviews);
                 const totalReviews = allReviews.length;
                 setTotalReviews(totalReviews); // Cập nhật tổng số đánh giá
+
             } catch (error) {
                 console.error(error);
             }
@@ -444,6 +450,7 @@ const IntroductionPage = () => {
         axios.get(`http://localhost:3000/Reviews?userID=${userEmail}&courseID=${id}`)
             .then((response) => {
                 setUserReviews(response.data);
+
             })
             .catch((error) => {
                 console.error(error);
@@ -469,9 +476,10 @@ const IntroductionPage = () => {
     }, [id]);
 
 
-    if (!product) {
+    if (loading) {
         return <Skeleton active />;
     }
+
     return (
         <div className="containerCss">
             <div className="course-header-container">
@@ -601,10 +609,10 @@ const IntroductionPage = () => {
                             {reviews.map((review) => (
                                 <div key={review.id} className="reviewIntroChildren">
                                     <div className="avatarReview">
-                                        <img src={findUserById(review.userID)?.img} alt="" />
+                                        <img src={findUserById(review.userID)?.photoURL} alt="" />
                                     </div>
                                     <div className="desReview">
-                                        <div className="desrv1">{findUserById(review.userID)?.name}</div>
+                                        <div className="desrv1">{findUserById(review.userID)?.displayName}</div>
                                         <div className="desrv2">{review.comment}</div>
                                         <div className="flex items-center gap-10">
                                             <div>{renderReviewRateIcon(review.rating)}</div>

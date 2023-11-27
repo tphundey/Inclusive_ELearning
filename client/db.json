@@ -53,9 +53,27 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 6
+    },
+    {
+      "userID": 1,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 7
     }
   ],
-  "Reviews": [],
+  "Reviews": [
+    {
+      "rating": 4,
+      "comment": "hihi",
+      "userID": 1,
+      "courseID": 2,
+      "date": "2023-11-27",
+      "id": 1
+    }
+  ],
   "Categories": [
     {
       "id": 1,
@@ -320,7 +338,9 @@
       "email": "maitranthi651@gmail.com",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
-      "registeredCourseID": [],
+      "registeredCourseID": [
+        2
+      ],
       "collectionCourseID": [
         10
       ],
