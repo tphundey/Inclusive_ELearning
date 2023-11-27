@@ -17,9 +17,10 @@ const { Option } = Select;
 
 type FieldType = {
     id: number,
-    name: string,
+    displayName: string,
     email: string,
     password: string,
+    photoURL: string,
     img: string,
     address: string,
     phone: number,
@@ -83,8 +84,8 @@ const AdminUserEdit = () => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
-                    label="Tên user"
-                    name="name"
+                    label="Tên người dùng"
+                    name="displayName"
                     rules={[
                         { required: true, message: "Tên user không được để trống!" },
                         { min: 3, message: "Tên user ít nhất phải 3 ký tự" },
@@ -99,17 +100,17 @@ const AdminUserEdit = () => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item<FieldType>
+                {/* <Form.Item<FieldType>
                     label="Mật Khẩu"
                     name="password"
                     rules={[{ required: true, message: "Phải nhập mật khẩu" }]}
                 >
                     <Input.Password />
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item<FieldType>
-                    label="avatarIMG"
-                    name="img"
+                    label="Hình ảnh"
+                    name="photoURL"
                 >
                     <Input />
                 </Form.Item>
@@ -130,7 +131,7 @@ const AdminUserEdit = () => {
                     <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
-                    label="Phone number"
+                    label="Số điện thoại"
                     name="phone"
                 >
                     <Input />
