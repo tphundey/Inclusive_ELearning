@@ -480,6 +480,16 @@ const IntroductionPage = () => {
             });
     }, [id]);
 
+
+    const [showFullDescription, setShowFullDescription] = useState(false);
+    const maxLength = 500;
+    const defaultDescription = product.description;
+    const description = defaultDescription || '';
+    const truncatedDescription = showFullDescription ? description : description.slice(0, maxLength) + '...';
+    const truncateProductName = (name: any, maxLength: any) => {
+        return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+    };
+
     const shuffleArray = (array: any) => {
         let currentIndex = array.length, randomIndex;
         while (currentIndex !== 0) {
@@ -490,18 +500,13 @@ const IntroductionPage = () => {
 
         return array;
     };
-    const [showFullDescription, setShowFullDescription] = useState(false);
-    const maxLength = 500; 
-    const defaultDescription = product.description; 
+    const [shuffledSimilarProducts, setShuffledSimilarProducts] = useState<any[]>([]);
 
-    const description = defaultDescription || ''; 
+    useEffect(() => {
+        setShuffledSimilarProducts(shuffleArray(similarProducts));
+    }, [similarProducts]);
 
-    const truncatedDescription = showFullDescription ? description : description.slice(0, maxLength) + '...';
-    const truncateProductName = (name: any, maxLength: any) => {
-        return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
-    };
-
-    const renderedSimilarProducts = shuffleArray(similarProducts).slice(0, 7).map((similarProduct: any) => (
+    const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
         <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
             <div className="flex items-center shrink-0">
                 <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
@@ -522,8 +527,6 @@ const IntroductionPage = () => {
     if (loading) {
         return <Skeleton active />;
     }
-
-
 
     return (
         <div className="containerCss">
@@ -690,6 +693,7 @@ const IntroductionPage = () => {
                             <Timeline items={timelineItems} />
                         </div>
                     </div>
+                    <h2 className='text-xl font-medium p-3'>Related courses</h2>
                     <ul className="divide-y divide-slate-100">
                         {renderedSimilarProducts}
                         <hr />

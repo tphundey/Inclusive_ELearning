@@ -4,7 +4,6 @@ import { useGetProductsQuery } from "@/api/courses";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Link } from 'react-router-dom';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
 import { fetchCategoryData } from '@/api/course';
 
@@ -18,14 +17,23 @@ const Homepage = () => {
         fetchCategoryData(productsData, setCategoryData, setIsCategoryLoading);
     }, [productsData]);
 
+    const shuffleArray = (array: any) => {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    };
+
     const settings = {
         arrows: true,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 3,
+        slidesToScroll: 4,
     };
-
     return (
         <div className='homepage containerCss'>
             <div className="height-banner">
@@ -83,7 +91,7 @@ const Homepage = () => {
                                                             {categoryContent}
                                                         </h3>
                                                         <a href={`/introduction/${product.id}`} key={index}>
-                                                            <p className="mt-1 text-base">{product.courseName}</p>
+                                                            <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
                                                         </a>
                                                     </div>
                                                     <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
@@ -108,36 +116,31 @@ const Homepage = () => {
                                 <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
                             ) : (
                                 <Slider {...settings}>
-                                    {productsData
-                                        ?.filter((product: any) => !product.isDeleted)
-                                        .map((product: any, index: any) => {
-                                            const category = categoryData[index];
-                                            const formattedPrice = formatCurrency(product.price);
-                                            const categoryContent = category ? category.categoryName : (
-                                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
-                                            );
-                                            return (
-                                                <div className="group relative" key={index}>
-                                                    <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                        <img src={product.courseIMG} alt="" />
-                                                    </div>
-                                                    <div className="mt-2">
-                                                        <div>
-                                                            <h3 className="text-xs text-gray-700">
-                                                                <span className="absolute inset-2 popular">COURSE</span>
-                                                                {categoryContent}
-                                                            </h3>
-                                                            <Link to={`/introduction/${product._id}`}>
-                                                                <p className="mt-1 text-base">{product.courseName}</p>
-                                                            </Link>
-                                                        </div>
-                                                        <p className="mt-1 text-xs text-gray">{formattedPrice}</p>
-                                                    </div>
+                                    {shuffleArray(visibleProducts)?.map((product: any, index: any) => {
+                                        const category = categoryData[index];
+                                        const categoryContent = category ? category.categoryName : (
+                                            <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
+                                        );
+                                        return (
+                                            <div className="group relative" key={index}>
+                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                    <img src={product.courseIMG} alt="" />
                                                 </div>
-                                            );
-                                        })
-                                        .reverse()
-                                    }
+                                                <div className="mt-2">
+                                                    <div>
+                                                        <h3 className="text-xs text-gray-700">
+                                                            <span className="absolute inset-2 popular">COURSE</span>
+                                                            {categoryContent}
+                                                        </h3>
+                                                        <a href={`/introduction/${product.id}`} key={index}>
+                                                            <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
+                                                        </a>
+                                                    </div>
+                                                    <p className=" mt-1 text-xs text-gray">{formatCurrency(product.price)}</p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </Slider>
                             )}
                         </div>

@@ -71,6 +71,15 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 8
+    },
+    {
+      "userID": 2,
+      "courseID": 11,
+      "coupon": "null",
+      "paymentAmount": 30000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 9
     }
   ],
   "Reviews": [
@@ -89,6 +98,14 @@
       "courseID": 11,
       "date": "2023-11-28",
       "id": 2
+    },
+    {
+      "rating": 3,
+      "comment": "em fan anh",
+      "userID": 2,
+      "courseID": 11,
+      "date": "2023-11-28",
+      "id": 3
     }
   ],
   "Categories": [
@@ -392,7 +409,9 @@
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKJJ1paGWKCnHOGm3j3pONTOmT0LBwy4In8h06aQDkF=s96-c",
       "id": 2,
       "courseSaved": [],
-      "registeredCourseID": [],
+      "registeredCourseID": [
+        11
+      ],
       "collectionCourseID": [],
       "historyCourseID": [
         10,
