@@ -6,10 +6,18 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import './HeaderUser.css'
 import { Link } from 'react-router-dom';
+const getUidFromLocalStorage = () => {
+    return localStorage.getItem('uid');
+};
+let userRole: 0 | 1 = 0;
+
+const uid = getUidFromLocalStorage();
+
+if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
+    userRole = 1;
+}
 
 
-
-// Khởi tạo ứng dụng Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -157,6 +165,15 @@ const HeaderUser: React.FC = () => {
                                                                     </Link>
 
                                                                 </li>
+                                                                {userRole === 1 && (
+                                                                    <li>
+                                                                        <Link to={`/admin`}>
+                                                                            <Button style={{ width: 170 }}>
+                                                                                Admin Profile
+                                                                            </Button>
+                                                                        </Link>
+                                                                    </li>
+                                                                )}
                                                                 <li>
                                                                     <Link to={`/Postpage/`}>
                                                                         <Button style={{ width: 170 }}>Thảo luận</Button>

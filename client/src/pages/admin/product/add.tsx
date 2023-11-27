@@ -1,45 +1,41 @@
 import { useGetCategorysQuery } from "@/api/category";
 import { useAddProductMutation } from "@/api/courses";
-import { useGetVideosQuery } from "@/api/video";
 import { Icategory } from "@/interfaces/category";
-import { Ivideo } from "@/interfaces/video";
 import { Button, DatePicker, Form, Input, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
-type FieldType = {
-    courseName?: string;
-    price?: number;
-    description? : string;
-    date : string;
-    videoID : Number;
-    categoryID : Number;
-    courseIMG : Number;
-    isDelete : boolean;
+const initialValues: any = {
+    courseName: '',
+    price: 0,
+    description: '',
+    date: undefined,
+    intro: '',
+    categoryID: undefined,
+    courseIMG: '',
+    enrollment: 0,
+    duration: 0,
+    isHidden: false,
 };
-
 
 const AdminProductAdd = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const { data: categorysData, isLoading: isProductLoading } = useGetCategorysQuery();
+    const { data: categorysData } = useGetCategorysQuery();
     const [messageApi, contextHolder] = message.useMessage();
     const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
+
     const cateSource = categorysData?.map((item: Icategory) => ({
         key: item.id,
         categoryName: item.categoryName,
-        categoryDescription : item.categoryDescription
+        categoryDescription: item.categoryDescription
     }));
-    const { data: videosData} = useGetVideosQuery();
-    const videoSource = videosData?.map((item: Ivideo) => ({
-        key: item.id,
-        videoTitle: item.videoTitle,
-        videoURL : item.videoURL
-    }));
-    console.log(cateSource);
+
     const onFinish = (values: any) => {
+        const dateValue = values.date.format('YYYY-MM-DD');
+        values.date = dateValue;
         addProduct(values)
             .unwrap()
             .then(() => {
@@ -58,6 +54,7 @@ const AdminProductAdd = () => {
         console.log("Failed:", errorInfo);
     };
 
+
     return (
         <>
             {contextHolder}
@@ -73,8 +70,9 @@ const AdminProductAdd = () => {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                initialValues={initialValues}
             >
-                <Form.Item<FieldType>
+                <Form.Item<any>
                     label="Tên khóa học"
                     name="courseName"
                     rules={[
@@ -85,7 +83,7 @@ const AdminProductAdd = () => {
                     <Input />
                 </Form.Item>
 
-                <Form.Item<FieldType>
+                <Form.Item<any>
                     label="Giá khóa học"
                     name="price"
                     rules={[{ required: true, message: "Phải nhập giá tiền" }]}
@@ -93,36 +91,31 @@ const AdminProductAdd = () => {
                     <Input />
                 </Form.Item>
 
-                <Form.Item<FieldType>
+                <Form.Item<any>
                     label="Hình ảnh"
                     name="courseIMG"
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
-                name="date"
-                label="Thời gian tạo">
-                    <DatePicker  />
+                <Form.Item<any>
+                    label="Thời lượng (m)"
+                    name="duration"
+                >
+                    <Input />
                 </Form.Item>
-                <Form.Item name="videoID" label="video hhóa học" >
-                    <Select
-                        placeholder="pick a videoID"
-                        allowClear
-                        >
-                        {
-                            videoSource?.map((item: any) => {
-                                return (
-                                    <Option value={item.key}>{item.videoTitle}</Option>
-                                )
-                            })
-                        }
-                    </Select>
+                <Form.Item
+                    name="date"
+                    label="Thời gian tạo">
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item name="intro" label="Video giới thiệu" rules={[{ required: true }]}>
+                    <Input />
                 </Form.Item>
                 <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
                         allowClear
-                        >
+                    >
                         {
                             cateSource?.map((item: any) => {
                                 return (
@@ -133,9 +126,9 @@ const AdminProductAdd = () => {
                     </Select>
                 </Form.Item>
                 <Form.Item label="Mô tả"
-                name="description"
+                    name="description"
                 >
-                    <TextArea  rows={4} />
+                    <TextArea rows={4} />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
