@@ -10,14 +10,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 function NotesComponent() {
-    const [user, setUser] = useState<User | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
+    const [user, setUser] = useState<any | null>(null);
     const [notes, setNotes] = useState<any[]>([]);
-    const [editingNote, setEditingNote] = useState(null);
+    const [editingNote, setEditingNote] = useState<any>(null);
     const [editingNoteContent, setEditingNoteContent] = useState('');
-    const [originalNoteContent, setOriginalNoteContent] = useState(''); // Thêm trạng thái để lưu nội dung cũ
-    const [newNoteContent, setNewNoteContent] = useState(''); // Thêm trạng thái để lưu nội dung ghi chú mới
-    const { id } = useParams();
+    const [originalNoteContent, setOriginalNoteContent] = useState('');
+    const [newNoteContent, setNewNoteContent] = useState('');
+    const { id } = useParams<any>();
+    const [courseInfo, setCourseInfo] = useState<any>(null);
+
     const parsedVideoID = parseInt(id, 10);
+    const [courseTitle, setCourseTitle] = useState('');
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -29,71 +33,47 @@ function NotesComponent() {
     }, [auth]);
 
     useEffect(() => {
-        // Retrieve user's ID from the user object
         const userId = user?.uid;
 
         if (userId) {
-            // Fetch notes for the current user using the user's ID
             axios.get(`http://localhost:3000/Notes?videoID=${id}&uid=${userId}`)
-                .then((response:any) => {
+                .then((response) => {
                     const notesData = response.data;
-                    notesData.sort((a:any, b:any) => new Date(b.date) - new Date(a.date));
-                    setNotes(notesData);
+                    const reversedNotesData = notesData.reverse();
+                    setNotes(reversedNotesData);
+
+                    axios.get(`http://localhost:3000/Courses/${id}`)
+                        .then((courseResponse) => {
+                            setCourseInfo(courseResponse.data);
+                            setCourseTitle(courseResponse.data.courseName);
+                        })
+                        .catch((courseError) => {
+                            console.error('Error loading course information:', courseError);
+                        });
                 })
                 .catch((error) => {
                     console.error('Error loading notes:', error);
                 });
         }
     }, [id, user]);
-    // Hàm xóa ghi chú
-    const handleDeleteNote = (noteId:any) => {
-        // Gửi yêu cầu xóa ghi chú đến API
+
+    const handleDeleteNote = (noteId: any) => {
         axios.delete(`http://localhost:3000/Notes/${noteId}`)
             .then((response) => {
-                // Sau khi xóa thành công, cập nhật trạng thái để loại bỏ ghi chú khỏi danh sách hiển thị
                 setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
             })
             .catch((error) => {
-                console.error('Lỗi khi xóa ghi chú:', error);
+                console.error('Error deleting note:', error);
             });
     };
-    // Hàm xử lý khi nhấn nút chỉnh sửa
-    const handleEditNote = (noteId:any, noteContent:any) => {
-        // Đặt nội dung cũ vào trường nhập liệu và cập nhật trạng thái chỉnh sửa
-        setOriginalNoteContent(noteContent); // Đặt nội dung cũ vào trạng thái
-        setEditingNoteContent(noteContent); // Đặt nội dung cũ vào trường nhập liệu
+
+    const handleEditNote = (noteId: any, noteContent: any) => {
+        setOriginalNoteContent(noteContent);
+        setEditingNoteContent(noteContent);
         setEditingNote(noteId);
     };
-    // Hàm xử lý khi nhấn nút lưu chỉnh sửa
-    const handleSaveEdit = (noteId:any) => {
-        // Tìm ghi chú cần chỉnh sửa
-        const noteToEdit = notes.find((note) => note.id === noteId);
 
-        // Lấy thời gian hiện tại dựa theo múi giờ Việt Nam
-        const vietnamTime = moment.tz('Asia/Ho_Chi_Minh');
-        const formattedDate = vietnamTime.format('YYYY-MM-DD');
-
-        // Gửi yêu cầu chỉnh sửa ghi chú đến API
-        axios.put(`http://localhost:3000/Notes/${noteId}`, {
-            videoID: noteToEdit.videoID,
-            note: editingNoteContent,
-            date: formattedDate // Cập nhật trường date thành thời gian hiện tại
-        })
-            .then((response) => {
-                // Sau khi chỉnh sửa thành công, cập nhật trạng thái danh sách ghi chú với nội dung mới
-                setNotes((prevNotes) =>
-                    prevNotes.map((note) =>
-                        note.id === noteId ? { ...note, note: editingNoteContent, date: formattedDate } : note
-                    )
-                );
-                // Kết thúc chỉnh sửa
-                setEditingNote(null);
-            })
-            .catch((error) => {
-                console.error('Lỗi khi chỉnh sửa ghi chú:', error);
-            });
-    };
-    const handleNewNoteEnter = async (e:any) => {
+    const handleNewNoteEnter = async (e: any) => {
         if (e.key === 'Enter') {
             e.preventDefault();
 
@@ -107,7 +87,7 @@ function NotesComponent() {
                     videoID: parsedVideoID,
                     note: newNoteContent,
                     date: formattedDate,
-                    uid: userId, // Include the user's ID
+                    uid: userId,
                 })
                     .then((response) => {
                         setNotes([response.data, ...notes]);
@@ -118,6 +98,49 @@ function NotesComponent() {
                     });
             }
         }
+    };
+
+    const handleSaveEdit = (noteId: any) => {
+        const noteToEdit = notes.find((note) => note.id === noteId);
+        const userId = user?.uid;
+        const vietnamTime = moment.tz('Asia/Ho_Chi_Minh');
+        const formattedDate = vietnamTime.format('YYYY-MM-DD');
+
+        axios.put(`http://localhost:3000/Notes/${noteId}`, {
+            videoID: noteToEdit.videoID,
+            note: editingNoteContent,
+            date: formattedDate,
+            uid: userId,
+        })
+            .then((response) => {
+                setNotes((prevNotes) =>
+                    prevNotes.map((note) =>
+                        note.id === noteId ? { ...note, note: editingNoteContent, date: formattedDate } : note
+                    )
+                );
+                setEditingNote(null);
+            })
+            .catch((error) => {
+                console.error('Error editing note:', error);
+            });
+    };
+
+    const handleExportNotes = () => {
+        setIsExporting(true);
+
+        const exportedNotes = notes.map((note) => `${note.date}\n${note.note}\n\n`).join('');
+
+        const blob = new Blob([exportedNotes], { type: 'text/plain;charset=utf-8' });
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = `${courseTitle}_notes.txt`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+
+        document.body.removeChild(downloadLink);
+        setIsExporting(false);
     };
 
     return (
@@ -150,7 +173,7 @@ function NotesComponent() {
                                 />
                             </div>
                         ) : (
-                            <p className="note-user-content-main">{note.note}</p> 
+                            <p className="note-user-content-main">{note.note}</p>
                         )}
                         <div className="btfornote">
                             {editingNote === note.id ? (
@@ -165,9 +188,11 @@ function NotesComponent() {
                 ))}
             </div>
             <div className="notepage-right">
-                <h2>Export your note</h2>
-                <p>Get your notes for this course which includes description, chapters, and timestamps</p>
-                <button>Download</button>
+                <h2>Xuất ghi chú của bạn</h2>
+                <p>Nhận ghi chú của bạn cho khóa học này bao gồm mô tả, tên khóa học và dấu thời gian</p>
+                <button onClick={handleExportNotes} disabled={isExporting}>
+                    {isExporting ? 'Đang xuất...' : 'Tải xuống'}
+                </button>
             </div>
         </div>
     );

@@ -1,8 +1,6 @@
 import { useParams } from 'react-router-dom';
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-
 
 const OverViewPage = () => {
     const { id } = useParams();
@@ -14,7 +12,6 @@ const OverViewPage = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
-                // Lưu thông tin sản phẩm vào state
                 console.log(response.data);
                 const productData = response.data;
                 setProduct(productData);
@@ -25,7 +22,6 @@ const OverViewPage = () => {
     }, [id]);
 
     useEffect(() => {
-        // Lấy tất cả sản phẩm có cùng categoryID
         if (product.categoryID) {
             const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
             axios.get(apiUrl)
@@ -58,48 +54,42 @@ const OverViewPage = () => {
             });
     }, []);
 
-    function findUserById(userID) {
-        return users.find((user) => user.id === userID);
-    }
+    const truncateProductName = (name: any, maxLength: any) => {
+        return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+    };
 
-
-    function calculateAverageRating(reviews: any) {
-        if (reviews && reviews.length > 0) {
-            const totalRating = reviews.reduce(
-                (accumulator: any, review: any) => accumulator + review.rating,
-                0
-            );
-            const averageRating = totalRating / reviews.length;
-            return averageRating.toFixed(1); // Giới hạn số thập phân
-        }
-        return 0;
-    }
-
-    function convertToStarRating(averageRating: string) {
-        const maxStars = 5;
-        const fullStars = Math.floor(parseFloat(averageRating));
-        const halfStar = parseFloat(averageRating) % 1 !== 0;
-        const emptyStars = maxStars - fullStars - (halfStar ? 1 : 0);
-
-        const starRating = [];
-        for (let i = 0; i < fullStars; i++) {
-            starRating.push('★'); // Ký tự sao đầy
-        }
-        if (halfStar) {
-            starRating.push('☆'); // Ký tự sao trống nếu có nửa sao
-        }
-        for (let i = 0; i < emptyStars; i++) {
-            starRating.push('☆'); // Ký tự sao trống
+    const [shuffledSimilarProducts, setShuffledSimilarProducts] = useState<any[]>([]);
+    const shuffleArray = (array: any) => {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
         }
 
-        return starRating.join(' '); // Chuyển mảng thành chuỗi
-    }
+        return array;
+    };
+    useEffect(() => {
+        setShuffledSimilarProducts(shuffleArray(similarProducts));
+    }, [similarProducts]);
 
-    const rateIDArray = Array.isArray(product.rateID) ? product.rateID : [];
-    const averageRating = calculateAverageRating(reviews);
-    const starRating = convertToStarRating(averageRating);
-
-
+    const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
+        <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
+            <div className="flex items-center shrink-0">
+                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
+            </div>
+            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
+                <h4 className='text-xs'>COURSE</h4>
+                <h4 className="text-base text-slate-700 font-medium">
+                    <a href={`/introduction/${similarProduct.id}`}>
+                        <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
+                    </a>
+                </h4>
+                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
+            </div>
+        </li>
+    ));
 
     if (!product) {
         return <div>Loading...</div>;
@@ -187,21 +177,7 @@ const OverViewPage = () => {
                 <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
 
                 <ul className="divide-y divide-slate-100">
-                    {similarProducts.map((similarProduct) => (
-                        <li key={similarProducts.id} className="flex items-start gap-4 px-4 py-3">
-                            <div className="flex items-center shrink-0">
-                                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
-                            </div>
-                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                                <h4 className='text-xs'>COURSE</h4>
-                                <h4 className="text-base text-slate-700 font-medium">
-                                    <Link to={`/introduction/${similarProduct.id}`}>
-                                        <p className="mt-1 text-base">{similarProduct.courseName}</p> </Link></h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
-                            </div>
-                        </li>
-                    ))}
+                    {renderedSimilarProducts}
                     <hr />
                 </ul>
             </div>
