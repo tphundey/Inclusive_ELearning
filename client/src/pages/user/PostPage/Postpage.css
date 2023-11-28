@@ -1,14 +1,26 @@
-.container-postpage{
+.container-postpage {
     width: 650px;
     padding: 0px;
     margin: 0px auto;
 }
 
-.comment_img{
+.comment_img {
     border-radius: 100%;
 }
 
-.cmt_flex{
+.cmt_flex {
     display: flex;
     align-items: center;
+}
+
+.img-post img {
+    width: 750px;
+    height: auto;
+    
+}
+
+.contaner-post-full{
+    width: 600px;
+    padding: 0px;
+    margin: 0px auto;
 }
