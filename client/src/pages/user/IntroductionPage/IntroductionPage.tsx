@@ -174,9 +174,13 @@ const IntroductionPage = () => {
 
 
     const handleBuyButtonClick = () => {
-        const { price } = product;
-        const paymentAmount = parseFloat(price);
-
+        // Kiểm tra xem userEmail và courseID có tồn tại không
+        if (!userEmail || !courseID) {
+            console.error('Invalid userEmail or courseID.');
+            // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
+            return;
+        }
+    
         // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
@@ -189,69 +193,62 @@ const IntroductionPage = () => {
             .then((userData) => {
                 const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
                 const userID = user.id;
-
+    
                 // Bước 2: Lấy danh sách khóa học đã mua của người dùng
                 const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
-
+    
                 // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
                 if (!registeredCourseIDs.includes(courseID)) {
                     registeredCourseIDs.push(courseID);
                 }
-
+    
                 // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
                 user.registeredCourseID = registeredCourseIDs;
-
+    
                 // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
-                fetch(`http://localhost:3000/googleAccount/${userID}`, {
+                return fetch(`http://localhost:3000/googleAccount/${userID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(user),
-                })
-                    .then((updateResponse) => {
-                        if (updateResponse.ok) {
-                            console.log('User data updated successfully');
-                        } else {
-                            throw new Error('Failed to update user data.');
-                        }
-                    })
-                    .catch((updateError) => {
-                        console.error('Error updating user data:', updateError);
-                    });
-
-                // Bước 5: Thực hiện thanh toán
-                const paymentData = {
-                    userID,
-                    courseID,
-                    coupon: "null",
-                    paymentAmount,
-                    date: "2023-09-29",
-                    payment_status: true
-                };
-
-                return fetch('http://localhost:3000/payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(paymentData),
                 });
+            })
+            .then((updateResponse) => {
+                if (updateResponse.ok) {
+                    console.log('User data updated successfully');
+                    // Bước 5: Thực hiện thanh toán
+                    const paymentData = {
+                        userID: userID,
+                        courseID: courseID,
+                        coupon: "null",
+                        paymentAmount: parseFloat(product.price),
+                        date: "2023-09-29",
+                        payment_status: true
+                    };
+    
+                    return fetch('http://localhost:3000/payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(paymentData),
+                    });
+                } else {
+                    throw new Error('Failed to update user data.');
+                }
             })
             .then((paymentResponse) => {
                 if (paymentResponse.ok) {
                     console.log('Payment successful');
-                    // Cập nhật trạng thái giao dịch hoặc thông báo cho người dùng
                 } else {
                     throw new Error('Payment failed.');
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             });
     };
-
 
     ////////////////////Thay đổi số rate////////////////////
     const handleRatingChange = (value: any) => {
