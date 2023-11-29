@@ -1,4 +1,4 @@
-import { CommentOutlined, HeartOutlined, LikeOutlined, ShareAltOutlined } from "@ant-design/icons";
+import { CommentOutlined, HeartOutlined, LikeOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Form, Input, Button, message } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
@@ -44,28 +44,25 @@ const Post = () => {
                 body: JSON.stringify({
                     ...postData,
                     author: user?.displayName || "Anonymous",
-                    photoURL: user?.photoURL || "", // Include the user's avatar in the post data
+                    photoURL: user?.photoURL || "",
                     date: new Date().toDateString(),
                     likes: 0,
+                    likedBy: [],
                     comments: [],
                 }),
             });
 
             if (response.ok) {
-                // Clear the form data
                 setPostData({
                     title: "",
                     content: "",
                     image: "",
                 });
 
-                // Fetch and update the posts data
+
                 const newPost = await response.json();
+                setAllPosts((prevPosts: any) => [newPost, ...prevPosts]);
 
-                // Update the local state with the new post
-                setAllPosts((prevPosts) => [newPost, ...prevPosts]);
-
-                // Display a success message
                 message.success("Post successful!");
             } else {
                 message.error("Error posting the data.");
@@ -74,11 +71,26 @@ const Post = () => {
             console.error("Error posting data:", error);
         }
     };
-
+    const generateUniqueId = () => {
+        return Math.random().toString(36).substr(2, 9);
+    };
     const handleCommentFormSubmit = async () => {
         try {
-            // Tìm bài viết hiện tại trong danh sách allPosts
+
             const currentPost = allPosts.find(post => post.id === selectedPostId);
+
+            const updatedComments = [
+                {
+                    id: generateUniqueId(),
+                    author: user?.displayName || "Anonymous",
+                    photoURL: user?.photoURL || "",
+                    text: commentData.text,
+                    time: new Date().toLocaleString(),
+                    likes: 0,
+                    replies: [],
+                },
+                ...currentPost.comments,
+            ];
 
             const response = await fetch(`http://localhost:3000/posts/${selectedPostId}`, {
                 method: 'PATCH',
@@ -86,33 +98,18 @@ const Post = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // Thêm mới comment vào mảng comments của bài viết
-                    comments: [
-                        ...currentPost.comments, // Sử dụng currentPost.comments thay vì post.comments
-                        {
-                            author: user?.displayName || "Anonymous",
-                            photoURL: user?.photoURL || "",
-                            text: commentData.text,
-                            time: new Date().toLocaleString(),
-                            likes: 0,
-                            replies: [],
-                        },
-                    ],
+                    comments: updatedComments,
+                    likedBy: [],
                 }),
             });
 
             if (response.ok) {
-                // Clear the comment form data
                 setCommentData({
                     text: "",
                 });
-
-                // Fetch and update the posts data
                 const updatedPost = await response.json();
-
-                // Update the local state with the updated post
-                setAllPosts((prevPosts) => {
-                    return prevPosts.map((post) => {
+                setAllPosts((prevPosts: any) => {
+                    return prevPosts.map((post: any) => {
                         if (post.id === selectedPostId) {
                             return updatedPost;
                         }
@@ -120,7 +117,6 @@ const Post = () => {
                     });
                 });
 
-                // Hiển thị thông báo thành công
                 message.success("Bình luận thành công!");
             } else {
                 message.error("Lỗi khi đăng bình luận.");
@@ -129,7 +125,56 @@ const Post = () => {
             console.error("Lỗi khi đăng bình luận:", error);
         }
     };
+    // const [showReplyForm, setShowReplyForm] = useState(false);
+    // const [selectedCommentId, setSelectedCommentId] = useState(null);
 
+    // const toggleReplyFormVisibility = (commentId) => {
+    //     setShowReplyForm((prevShowReplyForm) => !prevShowReplyForm);
+    //     setSelectedCommentId(commentId);
+    // };
+    // const handleReplyFormSubmit = async () => {
+    //     try {
+    //         // Truy xuất danh sách bài viết từ API và lọc ra bài viết cụ thể và comment
+    //         const response = await fetch(`http://localhost:3000/posts`);
+    //         const postData = await response.json();
+
+    //         const selectedPost = postData.find((post) => post.id === 10);
+
+    //         if (selectedPost) {
+    //             const selectedComment = selectedPost.comments.find((comment) => comment.id === 10);
+
+    //             if (selectedComment) {
+    //                 const replyResponse = await fetch(`http://localhost:3000/posts/${postId}/comments/${commentId}/replies`, {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                     body: JSON.stringify({
+    //                         id: generateUniqueId(),
+    //                         author: user?.displayName || "Anonymous",
+    //                         photoURL: user?.photoURL || "",
+    //                         text: commentData.text,
+    //                         time: new Date().toLocaleString(),
+    //                         likes: 0,
+    //                     }),
+    //                 });
+
+    //                 if (replyResponse.ok) {
+    //                     // Xử lý sau khi gửi phản hồi thành công
+    //                     // ...
+    //                 } else {
+    //                     console.error(`Lỗi khi gửi phản hồi. Mã lỗi: ${replyResponse.status}`);
+    //                 }
+    //             } else {
+    //                 console.error("Comment not found.");
+    //             }
+    //         } else {
+    //             console.error("Post not found.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Lỗi khi trả lời bình luận:", error);
+    //     }
+    // };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -157,35 +202,33 @@ const Post = () => {
         fetchData();
     }, []);
 
-    const handleLike = async (postId) => {
+    const handleLike = async (postId: any) => {
         try {
-
-            // Truy xuất danh sách bài viết từ API
+            if (!user?.uid) {
+                console.log("Người dùng chưa đăng nhập, không thể thực hiện thao tác like.");
+                return;
+            }
             const response = await fetch('http://localhost:3000/posts/');
             const allPosts = await response.json();
 
-            // Tìm bài viết cần cập nhật bằng ID
-            const postToUpdate = allPosts.find((post) => post.id === postId);
+            const postToUpdate = allPosts.find((post: any) => post.id === postId);
 
-            // Kiểm tra xem người dùng đã thích bài viết hay chưa
             const isLiked = postToUpdate.likedBy.includes(user?.uid);
 
-            // Cập nhật trạng thái thích trong bài viết
+
             if (isLiked) {
-                // Nếu đã thích, loại bỏ id người dùng khỏi mảng likedBy và giảm số lượt thích
-                postToUpdate.likedBy = postToUpdate.likedBy.filter((id) => id !== user?.uid);
+                postToUpdate.likedBy = postToUpdate.likedBy.filter((id: any) => id !== user?.uid);
                 postToUpdate.likes -= 1;
-                // Loại bỏ id bài viết khỏi mảng likedPosts
                 setLikedPosts((prevLikedPosts) => prevLikedPosts.filter((likedPost) => likedPost !== postId));
             } else {
-                // Nếu chưa thích, thêm id người dùng vào mảng likedBy và tăng số lượt thích
+
                 postToUpdate.likedBy.push(user?.uid);
                 postToUpdate.likes += 1;
-                // Thêm id bài viết vào mảng likedPosts
-                setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+
+                setLikedPosts((prevLikedPosts: any) => [...prevLikedPosts, postId]);
             }
 
-            // Gửi yêu cầu PATCH để cập nhật bài viết trên server
+
             const updateResponse = await fetch(`http://localhost:3000/posts/${postId}`, {
                 method: 'PATCH',
                 headers: {
@@ -195,12 +238,9 @@ const Post = () => {
             });
 
             if (updateResponse.ok) {
-                // Lấy và cập nhật dữ liệu bài viết
                 const updatedPost = await updateResponse.json();
-
-                // Cập nhật trạng thái local với bài viết đã cập nhật
-                setAllPosts((prevPosts) => {
-                    return prevPosts.map((post) => {
+                setAllPosts((prevPosts: any) => {
+                    return prevPosts.map((post: any) => {
                         if (post.id === postId) {
                             return {
                                 ...post,
@@ -212,14 +252,13 @@ const Post = () => {
                     });
                 });
 
-                // Cập nhật trạng thái like của bài viết trong trạng thái local
-                setLikedPosts((prevLikedPosts) => {
+                setLikedPosts((prevLikedPosts: any) => {
                     if (updatedPost.likedBy.includes(user?.uid)) {
-                        // Nếu người dùng đã thích, thêm postId vào mảng likedPosts
+
                         return [...prevLikedPosts, postId];
                     } else {
-                        // Nếu người dùng bỏ thích, loại bỏ postId khỏi mảng likedPosts
-                        return prevLikedPosts.filter((likedPost) => likedPost !== postId);
+
+                        return prevLikedPosts.filter((likedPost:any) => likedPost !== postId);
                     }
                 });
 
@@ -231,11 +270,10 @@ const Post = () => {
             console.error("Lỗi khi thích/bỏ thích bài viết:", error);
         }
     };
-    const isUserLiked = (postId) => {
+    const isUserLiked = (postId: any) => {
         const post = allPosts.find((post) => post.id === postId);
         const userId = user?.uid;
 
-        // Kiểm tra xem post và likedBy có tồn tại trước khi sử dụng includes
         return post?.likedBy && userId ? post.likedBy.includes(userId) : false;
     };
     return (
@@ -368,10 +406,20 @@ const Post = () => {
                                                 <div className="flex items-center">
                                                     <div className="text-sm text-gray-500 font-semibold">
 
-                                                        <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-3" onClick={() => handleLike(post.id)}>Like</button>
-                                                        <button className="inline-flex items-center px-1 -ml-1 flex-column mb-5">
-                                                            Phản hồi
-                                                        </button>
+                                                        {/* <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-3" onClick={() => handleLike(post.id)}>Like</button>
+                                                        <button onClick={() => toggleReplyFormVisibility(comment.id)}>Reply</button> */}
+                                                        {/* {showReplyForm && selectedCommentId === comment.id && (
+                                                            <Form onFinish={() => handleReplyFormSubmit(comment.id)}>
+                                                                <Form.Item name="reply" rules={[{ required: true, message: 'Please enter your reply!' }]}>
+                                                                    <Input placeholder="Your reply" value={commentData.text} onChange={(e) => setCommentData({ text: e.target.value })} />
+                                                                </Form.Item>
+                                                                <Form.Item>
+                                                                    <Button type="primary" htmlType="submit">
+                                                                        Reply
+                                                                    </Button>
+                                                                </Form.Item>
+                                                            </Form>
+                                                        )} */}
                                                     </div>
                                                 </div>
                                             </div>
