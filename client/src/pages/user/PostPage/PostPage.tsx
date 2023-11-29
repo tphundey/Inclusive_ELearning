@@ -10,6 +10,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const Post = () => {
+    const [likedPosts, setLikedPosts] = useState([]);
     const [user, setUser] = useState<User | null>(null);
     const [allPosts, setAllPosts] = useState([]);
     const [postData, setPostData] = useState({
@@ -144,7 +145,10 @@ const Post = () => {
             try {
                 const response = await fetch("http://localhost:3000/posts");
                 const data = await response.json();
-                setAllPosts(data);
+
+                // Đảo ngược mảng dữ liệu trước khi set vào state
+                const reversedData = data.reverse();
+                setAllPosts(reversedData);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -153,6 +157,87 @@ const Post = () => {
         fetchData();
     }, []);
 
+    const handleLike = async (postId) => {
+        try {
+
+            // Truy xuất danh sách bài viết từ API
+            const response = await fetch('http://localhost:3000/posts/');
+            const allPosts = await response.json();
+
+            // Tìm bài viết cần cập nhật bằng ID
+            const postToUpdate = allPosts.find((post) => post.id === postId);
+
+            // Kiểm tra xem người dùng đã thích bài viết hay chưa
+            const isLiked = postToUpdate.likedBy.includes(user?.uid);
+
+            // Cập nhật trạng thái thích trong bài viết
+            if (isLiked) {
+                // Nếu đã thích, loại bỏ id người dùng khỏi mảng likedBy và giảm số lượt thích
+                postToUpdate.likedBy = postToUpdate.likedBy.filter((id) => id !== user?.uid);
+                postToUpdate.likes -= 1;
+                // Loại bỏ id bài viết khỏi mảng likedPosts
+                setLikedPosts((prevLikedPosts) => prevLikedPosts.filter((likedPost) => likedPost !== postId));
+            } else {
+                // Nếu chưa thích, thêm id người dùng vào mảng likedBy và tăng số lượt thích
+                postToUpdate.likedBy.push(user?.uid);
+                postToUpdate.likes += 1;
+                // Thêm id bài viết vào mảng likedPosts
+                setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+            }
+
+            // Gửi yêu cầu PATCH để cập nhật bài viết trên server
+            const updateResponse = await fetch(`http://localhost:3000/posts/${postId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postToUpdate),
+            });
+
+            if (updateResponse.ok) {
+                // Lấy và cập nhật dữ liệu bài viết
+                const updatedPost = await updateResponse.json();
+
+                // Cập nhật trạng thái local với bài viết đã cập nhật
+                setAllPosts((prevPosts) => {
+                    return prevPosts.map((post) => {
+                        if (post.id === postId) {
+                            return {
+                                ...post,
+                                likes: updatedPost.likes,
+                                likedBy: updatedPost.likedBy,
+                            };
+                        }
+                        return post;
+                    });
+                });
+
+                // Cập nhật trạng thái like của bài viết trong trạng thái local
+                setLikedPosts((prevLikedPosts) => {
+                    if (updatedPost.likedBy.includes(user?.uid)) {
+                        // Nếu người dùng đã thích, thêm postId vào mảng likedPosts
+                        return [...prevLikedPosts, postId];
+                    } else {
+                        // Nếu người dùng bỏ thích, loại bỏ postId khỏi mảng likedPosts
+                        return prevLikedPosts.filter((likedPost) => likedPost !== postId);
+                    }
+                });
+
+                message.success("Đã thích!");
+            } else {
+                console.error(`Lỗi khi thích/bỏ thích bài viết. Mã lỗi: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Lỗi khi thích/bỏ thích bài viết:", error);
+        }
+    };
+    const isUserLiked = (postId) => {
+        const post = allPosts.find((post) => post.id === postId);
+        const userId = user?.uid;
+
+        // Kiểm tra xem post và likedBy có tồn tại trước khi sử dụng includes
+        return post?.likedBy && userId ? post.likedBy.includes(userId) : false;
+    };
     return (
         <>
             <div className="contaner-post-full">
@@ -188,7 +273,7 @@ const Post = () => {
                     )}
                 </div>
 
-                {allPosts.slice().reverse().map((post: any) => (
+                {allPosts.slice().map((post: any) => (
                     <div key={post.id}>
                         <main className="pt-8 lg:pt-16 bg-white dark:bg-gray-900 antialiased mb-10">
                             <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
@@ -220,14 +305,22 @@ const Post = () => {
                                     </div>
                                     <div className="mb-2 flex items-center">
                                         <div className="text-m text-gray-500 font-semibold">
-                                            <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-20 ml-20">
-                                                < LikeOutlined /> <span className="ml-2">Thích</span>
+                                            <button
+                                                onClick={() => handleLike(post.id)}
+                                                className={`inline-flex items-center px-1 pt-2 ml-1 flex-column mr-20 ml-20 ${isUserLiked(post.id) ? 'text-red-500' : 'text-black' // Sử dụng màu đỏ nếu đã thích
+                                                    }`}
+                                            >
+                                                <LikeOutlined /> <span className="ml-2">Thích</span>
                                             </button>
                                             <button className="inline-flex items-center px-1 -ml-1 flex-column mr-20">
-                                                <CommentOutlined /> <span className="ml-2">Bình luận</span>
+                                                <CommentOutlined className="mr-2" />
+                                                <Button onClick={() => {
+                                                    toggleCommentFormVisibility();
+                                                    setSelectedPostId(post.id);
+                                                }}> Bình Luận</Button>
                                             </button>
-                                            <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column">
-                                                <ShareAltOutlined /><span className="ml-2">Chia sẻ</span></button>
+                                            {/* <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column">
+                                                <ShareAltOutlined /><span className="ml-2">Chia sẻ</span></button> */}
                                         </div>
                                     </div>
                                     <hr className="shadow-lg text-red-500" />
@@ -236,10 +329,6 @@ const Post = () => {
                         </main>
 
                         <div className="container-postpage">
-                            <Button onClick={() => {
-                                toggleCommentFormVisibility();
-                                setSelectedPostId(post.id);
-                            }}>Hiển thị/Ẩn Form Bình Luận</Button>
 
                             {showCommentForm && selectedPostId === post.id && (
                                 <Form className="container-postpage" ref={formRef} onFinish={handleCommentFormSubmit}>
@@ -278,9 +367,8 @@ const Post = () => {
                                                 </p>
                                                 <div className="flex items-center">
                                                     <div className="text-sm text-gray-500 font-semibold">
-                                                        <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-3">
-                                                            Thích
-                                                        </button>
+
+                                                        <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-3" onClick={() => handleLike(post.id)}>Like</button>
                                                         <button className="inline-flex items-center px-1 -ml-1 flex-column mb-5">
                                                             Phản hồi
                                                         </button>

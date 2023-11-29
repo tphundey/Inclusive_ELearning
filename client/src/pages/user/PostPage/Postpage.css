@@ -24,3 +24,7 @@
     padding: 0px;
     margin: 0px auto;
 }
+
+.liked {
+    color: red; /* Hoặc màu khác tùy bạn chọn */
+  }
