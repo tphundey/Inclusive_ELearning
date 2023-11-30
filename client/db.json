@@ -98,6 +98,24 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 11
+    },
+    {
+      "userID": 2,
+      "courseID": 8,
+      "coupon": "null",
+      "paymentAmount": 50000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 12
+    },
+    {
+      "userID": 2,
+      "courseID": 2,
+      "coupon": "null",
+      "paymentAmount": 22500,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 13
     }
   ],
   "Reviews": [
@@ -160,7 +178,7 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/5430964912892733971/4790389324c2f39caad3.jpg",
       "enrollment": 100,
-      "isHidden": false
+      "isHidden": true
     },
     {
       "id": 3,
@@ -177,7 +195,7 @@
       "categoryID": 1,
       "courseIMG": "https://f11-zpcloud.zdn.vn/8197092077148497644/abfdd5fec9af1ef147be.jpg",
       "enrollment": 100,
-      "isHidden": true
+      "isHidden": false
     },
     {
       "id": 4,
@@ -376,6 +394,13 @@
       "note": "dưaưda",
       "date": "2023-11-28",
       "id": 10
+    },
+    {
+      "videoID": 2,
+      "note": "xin chào mọi người ",
+      "date": "2023-11-30",
+      "uid": "MyzKAEhTyeToR1vn2VOrio778CX2",
+      "id": 11
     }
   ],
   "Role": [
@@ -404,36 +429,18 @@
       "videoId": 2,
       "completionStatus": true,
       "id": 2
-    },
-    {
-      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
-      "videoId": 1,
-      "completionStatus": true,
-      "id": 3
-    },
-    {
-      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
-      "videoId": 1,
-      "completionStatus": true,
-      "id": 3
-    },
-    {
-      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
-      "videoId": 2,
-      "completionStatus": true,
-      "id": 4
     }
   ],
   "Videos": [
     {
-      "videoTitle": "tt1",
-      "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQHMLmWayjsorw/mp4-720p-30fp-crf28/0/1695066613300?e=1700729849&v=beta&t=p7gBLR7iUQv7XdU5OswGvRNmtAFLC3QklraRp_JMUE8",
+      "videoTitle": "Đoạn đường đi lên điểm trường",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQGnoq0mWWUFPQ/learning-original-video-vbr-720/0/1663881621219?e=1701336305&v=beta&t=JMezGZjI8wzGG7pLBqoEEgb-mZluA42SbcITSVzu5Fk",
       "courseId": 2,
       "id": 1
     },
     {
-      "videoTitle": "tt2",
-      "videoURL": "https://dms.licdn.com/playlist/vid/D4D0DAQHMLmWayjsorw/mp4-720p-30fp-crf28/0/1695066613300?e=1700729849&v=beta&t=p7gBLR7iUQv7XdU5OswGvRNmtAFLC3QklraRp_JMUE8",
+      "videoTitle": "Khánh thành điểm trường",
+      "videoURL": "https://dms.licdn.com/playlist/vid/C4E0DAQFrlwpwaqCtiA/learning-original-video-vbr-720/0/1632413153608?e=1701336372&v=beta&t=-gsyWalNzcHF9Rr7u7OQIYT6oy-CLIN_rBSzoTxIvaw",
       "courseId": 2,
       "id": 2
     }
@@ -446,14 +453,14 @@
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
       "id": 1,
       "registeredCourseID": [
-        2,
-        11
+        2
       ],
       "collectionCourseID": [
         10
       ],
       "historyCourseID": [
-        10
+        10,
+        11
       ],
       "courseSaved": [
         10
@@ -467,7 +474,8 @@
       "id": 2,
       "courseSaved": [],
       "registeredCourseID": [
-        11
+        8,
+        2
       ],
       "collectionCourseID": [],
       "historyCourseID": [
@@ -558,7 +566,20 @@
       "id": 8
     }
   ],
-  "userVideoProgress": [],
+  "userVideoProgress": [
+    {
+      "userId": "MyzKAEhTyeToR1vn2VOrio778CX2",
+      "videoId": "2",
+      "watchedTime": 0,
+      "id": 1
+    },
+    {
+      "userId": null,
+      "videoId": 1,
+      "watchedTime": 0,
+      "id": 2
+    }
+  ],
   "posts": [
     {
       "title": "Hương Linh",
@@ -567,9 +588,23 @@
       "author": "Tài Đinh Văn",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKJJ1paGWKCnHOGm3j3pONTOmT0LBwy4In8h06aQDkF=s96-c",
       "date": "Thu Nov 30 2023",
-      "likes": 2,
-      "likedBy": [],
+      "likes": 6,
+      "likedBy": [
+        "gFiPGD52BvSYYJl5NwQY2sxmbZl1",
+        "MyzKAEhTyeToR1vn2VOrio778CX2",
+        "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+        "NmBLJycJ19eKE8oh3sdEMUOGqAS2"
+      ],
       "comments": [
+        {
+          "id": "zoasrmvg1",
+          "author": "tai dinh",
+          "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKVsReHRAnBOqi2aZpuwuWgj8MKlT3yVmHctbrTjXel=s96-c",
+          "text": "wao wao ai lớp diu chụt chụt",
+          "time": "11/30/2023, 3:28:36 AM",
+          "likes": 0,
+          "replies": []
+        },
         {
           "id": "reitp9mcn",
           "author": "Mai Tranthi",
@@ -590,6 +625,22 @@
         }
       ],
       "id": 11
+    },
+    {
+      "title": "Lan Quế Phường",
+      "content": "Lượn hồ Tây nào 🥰",
+      "image": "https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/401550090_834866398645686_1795156130953380376_n.jpg?stp=dst-jpg_s960x960&_nc_cat=103&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeGjBfgDM6PRSm1Pcn6h-nDUSnLmjRiyWFxKcuaNGLJYXBq0jm2C9YhI55iRXL8TYxd-jakFmXgGOp1QJ2iO7A9d&_nc_ohc=g46C3HWeX6AAX8p_6xa&_nc_ht=scontent.fhan14-3.fna&oh=00_AfCQ97AIlCtak1TyvOVUe1f3gBktwkxRo-tXz3neZJFnqA&oe=656DBEB1",
+      "author": "Mai Tranthi",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJj_ott0VE1bH_RteiS4TZltYyQmbfZtyP7A3bsdip6=s96-c",
+      "date": "Thu Nov 30 2023",
+      "likes": 3,
+      "likedBy": [
+        "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2",
+        "MyzKAEhTyeToR1vn2VOrio778CX2",
+        "NmBLJycJ19eKE8oh3sdEMUOGqAS2"
+      ],
+      "comments": [],
+      "id": 12
     }
   ]
 }

@@ -53,7 +53,7 @@ let userRole: 0 | 1 = 0;
 
 const uid = getUidFromLocalStorage();
 
-if (uid === "2o2RPub7yJd9liwygYQJxTA98uV2") {
+if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2")   {
     userRole = 1;
 }
 
