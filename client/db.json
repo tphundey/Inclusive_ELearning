@@ -116,6 +116,33 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 13
+    },
+    {
+      "userID": 7,
+      "courseID": 11,
+      "coupon": "null",
+      "paymentAmount": 30000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 14
+    },
+    {
+      "userID": 7,
+      "courseID": 6,
+      "coupon": "null",
+      "paymentAmount": 25000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 15
+    },
+    {
+      "userID": 7,
+      "courseID": 10,
+      "coupon": "null",
+      "paymentAmount": 45000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 16
     }
   ],
   "Reviews": [
@@ -544,12 +571,16 @@
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocLfebCbqai7QugLRJ6gEUp1H_sKL_VGcy4M7MotlTpR=s96-c",
       "registeredCourseID": [],
       "collectionCourseID": [
-        2
+        2,
+        10
       ],
       "historyCourseID": [
+        10,
+        6
+      ],
+      "courseSaved": [
         2
       ],
-      "courseSaved": [],
       "id": 7
     },
     {

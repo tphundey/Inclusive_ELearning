@@ -31,7 +31,7 @@ const Creativepage = () => {
 
     return (
         <div className="containerCss-browepage  business">
-            <h2 className='h2-bsn'>Business</h2>
+            <h2 className='h2-bsn'>Creative</h2>
             <br />
             <h2 className='h2-bsn2'>Role Guides</h2>
             <span className='sp1-bsn'>Explore foundational content and tools to help you understand, learn, and improve at the skills involved in trending industry roles.</span>

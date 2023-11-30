@@ -99,7 +99,7 @@ const History = () => {
     return (
         <div className="listProgress">
             {savedCourses.length > 0 ? (
-                coursesToDisplay.map((course: any) => (
+                coursesToDisplay.reverse().map((course: any) => (
                     <div className='ty-contai'>
                         {/* Hiển thị thông tin khóa học */}
                         <div className="courseProgress">
