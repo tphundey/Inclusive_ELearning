@@ -1,20 +1,15 @@
 import mongoose from "mongoose";
 const noteSchema = new mongoose.Schema({
-    videoId : {
+    videoID : {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Video',
         required: true
     },
-    time : {
+    note : {
         type : String,
         required: true
     },
-    userId :{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    note : {
+    date : {
         type : String,
         required: true
     },

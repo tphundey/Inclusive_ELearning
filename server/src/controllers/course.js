@@ -24,32 +24,13 @@ export const getAllCourse = async (req, res) => {
   };
 
   try {
-    const courseData = await Course.paginate({}, option);
-    if (!courseData.docs || courseData.docs.length === 0) {
+    const courseData = await Course.find()
+    if (!courseData || courseData.length === 0) {
       return res.status(400).json({
         message: "Không tìm thấy sản phẩm!",
       });
     }
-
-    // Chuyển đổi _id thành id cho mỗi course
-    const convertedDocs = courseData.docs.map((doc) => {
-      const docObject = doc.toObject();
-      docObject.id = docObject._id.toString();
-      delete docObject._id;
-      return docObject;
-    });
-
-    const courseResponse = { ...courseData, docs: convertedDocs };
-
-    return res.status(200).json({
-      message: "Lấy khóa học thành công",
-      courseResponse,
-      pagination: {
-        currentPage: courseData.page,
-        totalPages: courseData.totalPages,
-        totalItems: courseData.totalDocs, // Đổi từ totalItems thành totalDocs
-      },
-    });
+    return res.status(200).json(courseData);
   } catch (err) {
     return res.status(500).json({
       message: err.message,
@@ -63,7 +44,6 @@ export const getCourseById = async (req, res) => {
       { path: "categoryId" },
       { path: "videoId" },
     ]);
-
     // const course = await Course.findById(req.params.id);
     // const category = await Category.findById(course.categoryId);
 

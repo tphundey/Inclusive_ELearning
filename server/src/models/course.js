@@ -1,62 +1,60 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import slug from "mongoose-slug-generator";
-
 const courseSchema = new mongoose.Schema(
   {
     courseName: {
       type: String,
-      required: true,
-    },
-    courseIMG: {
-      type: String,
-      required: true,
-    },
-    enrollment: {
-      type: Number,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    isHidden: {
-      type: Boolean,
-      required: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      required: true,
+      
     },
     description: {
       type: String,
-      required: true,
+      
     },
-    rate: {
+    price: {
       type: Number,
-      required: true,
+      
     },
     duration: {
       type: Number,
-      required: true,
+      
+    },
+    rateID: [{
+      type: mongoose.SchemaTypes.ObjectId,
+      ref:"Review"
+    }],
+    date: {
+      type: String,
+      
+    },
+    categoryID: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Category",
+      
+    },
+    courseIMG: {
+      type: String,
+      
+    },
+    enrollment: {
+      type: Number,
+      
+    },
+    isHidden: {
+      type: Boolean,
+      
+    },
+    isDeleted: {
+      type: Boolean,
+      
     },
     time: {
-      type: String,
-      required: true,
-    },
-    date: {
       type: String,
       required: true,
     },
     videoId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Video",
-      required: true,
-    },
-    categoryId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "Category",
-      required: true,
+      
     },
   },
   { collection: "Course", timestamps: true }
@@ -81,7 +79,6 @@ function idPlugin(schema) {
     },
   });
 }
-mongoose.plugin(slug);
 mongoose.plugin(idPlugin);
 courseSchema.plugin(mongoosePaginate);
 

@@ -1,47 +1,12 @@
-import dotenv from "dotenv";
 import User from '../models/user';
-dotenv.config();
 
 export const searchUser = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createAt",
-    _order = "asc",
-    _keywords = "",
-  } = req.query;
-
-  const option = {
-    page: _page,
-    limit: _limit,
-    sort: {
-      [_sort]: _order === "desc" ? 1 : -1,
-    },
-  };
   try {
-    const searchData = (users) => {
-      return users?.docs?.filter((item) =>
-        item?.name?.toLowerCase().includes(_keywords)
-      );
-    };
-    const users = await User.paginate({}, option);
-    if (!users.docs || users.docs.length == 0) {
-      return res.status(400).json({
-        message: "không tìm thấy tài khoản",
-      });
+    const users = await User.find();
+    if (!users || users.length == 0) {
+      return res.status(400).json();
     }
-    const searchDataUser = await searchData(users);
-    const userResponse = await { ...users, docs: searchDataUser };
-
-    res.status(200).json({
-      message: "Lấy thành công ",
-      userResponse,
-      pagination: {
-        currentPage: users.page,
-        totalPages: users.totalPages,
-        totalItems: users.totalDocs,
-      },
-    });
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -50,8 +15,7 @@ export const searchUser = async (req, res) => {
 };
 export const getAllUser = async (req, res) => {
   try {
-    const users = await User.findOne({});
-    console.log(users);
+    const users = await User.find();
     if (!users) {
       return res.status(401).json({
         message: "không tìm thấy tài khoản nào",
@@ -59,11 +23,7 @@ export const getAllUser = async (req, res) => {
     }
     const totalUser = await User.count();
 
-    return res.status(200).json({
-      success: true,
-      users,
-      totalUser,
-    });
+    return res.status(200).json(users);
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -80,10 +40,7 @@ export const getUserById = async (req, res) => {
         message: "Không tìm thấy tài khoản",
       });
     }
-    return res.status(200).json({
-      user,
-      message: "Lấy tài khoản thành công",
-    });
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json(error.message);
   }

@@ -1,41 +1,76 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      // required: true,
+    },
     email: {
-        type: String,
-        unique: true,
-        required: true,
+      type: String,
+      unique: true,
+      // required: true,
     },
-    courseId :{
-        type : String,
-        // required: true,
+    password: {
+      type: String,
+      // required: true,
     },
-    passWord: {
-        type: String,
-        required: true,
+    avatarIMG: {
+      type: String,
     },
-    name :{
-        type: String,
-        required: true,
+    address: {
+      type: String,
     },
-    avata : {
-        type : String
+    phone: {
+      type: String,
     },
-    location : {
-        type : String
+    roleID: {
+      type: Number,
+      // enum: ["student", "admin"],
+      // default: "student",
+      // require: true,
     },
-    courseSaved : {
-        type : String,
-        // required: true,
+    courseId: {
+      type: String,
+      // required: true,s
     },
-    role: {
-        type: String,
-        enum: ['student','admin'],
-        default: 'student',
-        require: true,
+    registeredCourseID: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Course",
+      },
+    ],
+    courseSaved: [{ type: Number }],
+    location: {
+      type: String,
     },
-},
-{ collection: "User", timestamps: true });
-userSchema.plugin(mongoosePaginate)
-const User =  mongoose.model("User", userSchema);
-export default User
+    registeredCourseID: {
+      type: Number,
+    },
+  },
+  { collection: "User", timestamps: true }
+);
+
+function idPlugin(schema) {
+  schema.set("toJSON", {
+    virtuals: true,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    },
+  });
+
+  schema.set("toObject", {
+    virtuals: true,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    },
+  });
+}
+mongoose.plugin(idPlugin);
+userSchema.plugin(mongoosePaginate);
+const User = mongoose.model("User", userSchema);
+export default User;
