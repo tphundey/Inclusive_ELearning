@@ -1,15 +1,21 @@
 import express from "express";
-import { getAllVideo,getVideoById,getVideoBySlug,create,deleteVideo,updateVideo,getVideoCourse } from '../controllers/video';
-import { authenticate } from "../Middlewares/authenticate";
-import { authorization } from "../Middlewares/authorization";
+import {
+  getAllVideo,
+  getVideoById,
+  getVideoBySlug,
+  create,
+  deleteVideo,
+  updateVideo,
+  getVideoCourse,
+} from "../controllers/video";
 
 const router = express.Router();
 router.get("/videos", getAllVideo);
-router.get("/videos/:id", getVideoById)
-router.get("/videos/:slug",getVideoBySlug);
-router.post("/videos", authenticate,authorization, create);
-router.patch("/videos/:id", authenticate,authorization, updateVideo);
-router.delete("/videos/:id", authenticate,authorization, deleteVideo);
-router.get("/videos/courseId/:id", authenticate,authorization, getVideoCourse)
+router.get("/videos/:id", getVideoById);
+router.get("/videos/:slug", getVideoBySlug);
+router.post("/videos", create);
+router.patch("/videos/:id", updateVideo);
+router.delete("/videos/:id", deleteVideo);
+router.get("/videos/courseId/:id", getVideoCourse);
 
-export default router
+export default router;

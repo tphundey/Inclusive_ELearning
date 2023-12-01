@@ -5,20 +5,20 @@ import { categorySchema, categoryUpdateSchema } from '../schemas/category';
 import slugify from "slugify";
 
 export const getAllcategory = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createAt",
-    _order = "asc",
-    _keywords = "",
-  } = req.query;
-  const option = {
-    page: _page,
-    limit: _limit,
-    sort: {
-      [_sort]: _order === "desc" ? 1 : -1,
-    },
-  };
+  // const {
+  //   _page = 1,
+  //   _limit = 10,
+  //   _sort = "createAt",
+  //   _order = "asc",
+  //   _keywords = "",
+  // } = req.query;
+  // const option = {
+  //   page: _page,
+  //   limit: _limit,
+  //   sort: {
+  //     [_sort]: _order === "desc" ? 1 : -1,
+  //   },
+  // };
   try {
     // Tìm kiếm dữ liệu
     const searchData = (categories) => {
@@ -26,25 +26,16 @@ export const getAllcategory = async (req, res) => {
         item?.name?.toLowerCase().includes(_keywords)
       );
     };
-    const categories = await Category.paginate({}, option);
-    if (!categories.docs || categories.docs.length === 0) {
+    const categories = await Category.find();
+    if (!categories|| categories.length === 0) {
       return res.status(400).json({
         message: "không tìm thấy danh mục",
       });
     }
-    const searchDataCate = await searchData(categories);
-    const CategoryResponse = await { ...categories, docs: searchDataCate };
-
-    res.status(200).json({
-      message: "Lấy danh mục thành công ",
-      categories,
-      CategoryResponse,
-      pagination: {
-        currentPage: categories.page,
-        totalPages: categories.totalPages,
-        totalItems: categories.totalDocs,
-      }
-    });
+    
+    // const searchDataCate = await searchData(categories);
+    // const CategoryResponse = await { ...categories, docs: searchDataCate };
+    res.status(200).json(categories);
   } catch (error) {
     return res.status(400).json({
       message: error,
@@ -59,7 +50,7 @@ export const getCategoryById = async (req, res) => {
         message: "không tìm thấy danh mục",
       });
     }
-    return res.json({ message: "lấy danh mục thành công", category });
+    return res.json(category);
   } catch (error) {
     return res.status(400).json({
       message: error.message,

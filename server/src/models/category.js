@@ -3,9 +3,12 @@ import mongoosePaginate from "mongoose-paginate-v2"
 import slug from "mongoose-slug-generator"
 
 const categorySchema = new mongoose.Schema({
-    name: {
+    categoryName: {
         type: String,
         required: true,
+    },
+    categoryDescription:{
+        type: String,
     },
     course : [
         {

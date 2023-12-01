@@ -10,11 +10,11 @@ const videoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    sectionid : {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'section',
-        required: true,
-    },
+    // sectionid : {
+    //     type: mongoose.SchemaTypes.ObjectId,
+    //     ref: 'section',
+    //     required: true,
+    // },
 }, { collection: "Video", timestamps: true })
 videoSchema.plugin(mongoosePaginate)
 const Video = mongoose.model('Video', videoSchema);

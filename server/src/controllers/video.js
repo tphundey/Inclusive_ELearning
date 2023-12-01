@@ -4,20 +4,20 @@ import { videoSchema, videoUpdateSchema } from '../schemas/video';
 import slugify from "slugify";
 dotenv.config
 export const getAllVideo = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createAt",
-    _order = "asc",
-    _keywords = "",
-  } = req.query;
-  const option = {
-    page: _page,
-    limit: _limit,
-    sort: {
-      [_sort]: _order === "desc" ? 1 : -1,
-    },
-  };
+  // const {
+  //   _page = 1,
+  //   _limit = 10,
+  //   _sort = "createAt",
+  //   _order = "asc",
+  //   _keywords = "",
+  // } = req.query;
+  // const option = {
+  //   page: _page,
+  //   limit: _limit,
+  //   sort: {
+  //     [_sort]: _order === "desc" ? 1 : -1,
+  //   },
+  // };
   try {
     // Tìm kiếm dữ liệu
     const searchVideoData = (videos) => {
@@ -25,24 +25,13 @@ export const getAllVideo = async (req, res) => {
         item?.videoTitle?.toLowerCase().includes(_keywords)
       );
     };
-    const videos = await Video.paginate({}, option);
-    if (!videos.docs || videos.docs.length == 0) {
+    const videos = await Video.find();
+    if (!videos || videos.length == 0) {
       return res.status(400).json({
         message: "không tìm thấy video",
       });
     }
-    const searchDatavideo = await searchVideoData(videos);
-    const videoResponse = await { ...videos, docs: searchDatavideo };
-
-    res.status(200).json({
-      message: "Lấy danh mục thành công ",
-      videoResponse,
-      pagination: {
-        currentPage: videos.page,
-        totalPages: videos.totalPages,
-        totalItems: videos.totalDocs,
-      },
-    });
+    res.status(200).json(videos);
   } catch (error) {
     return res.status(400).json({
       message: error.message,
