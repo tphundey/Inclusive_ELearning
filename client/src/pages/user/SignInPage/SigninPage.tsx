@@ -1,48 +1,60 @@
 import './SigninPage.css'
-import { useState } from 'react';
-import { Button, DatePicker, Form, Input, Select, Upload, UploadProps, message } from "antd";
-import { ILogin, Iuser } from '@/interfaces/user';
-import { loginUser, useAddUserMutation } from '@/api/user';
-import { useNavigate } from 'react-router';
-type FieldType = {
-    id?: number,
-    username?: string,
-    email?: string,
-    password?: string,
-    avatarIMG?: string,
-    address?: string,
-    phone?: number,
-    roleID?: number
-};
+import React, { useState, useEffect } from 'react';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { Form, Input, Button, message } from "antd";
+import { useNavigate } from 'react-router-dom';
+import { sendEmailVerification } from 'firebase/auth';
+import { applyActionCode } from 'firebase/auth';
 const SigninPage = () => {
-    const [form] = Form.useForm();
+    const auth = getAuth();
     const navigate = useNavigate();
-    const [addUser] = useAddUserMutation();
-    const [messageApi, contextHolder] = message.useMessage();
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-    const onFinish = async (values: ILogin) => {
+    const [emailSent, setEmailSent] = useState(false);
+    useEffect(() => {
+        // Đặt các logic hiệu quả (nếu cần) ở đây
+    }, []); // Rỗng để chỉ chạy một lần sau khi component mount
+    const sendEmailVerificationCustom = async (user, actionCodeSettings) => {
         try {
-          let checkLogin = await loginUser(values);
-          if (checkLogin) {
-            message.success('Đăng nhập thành công!');
-            setTimeout(() => {
-              navigate('/')
-            }, 1000);
-          } else {
-            throw new Error('Đăng nhập thất bại!');
-          }
-        } catch (error: any) {
-          message.error(error.message);
+            await sendEmailVerification(user, actionCodeSettings);
+        } catch (error) {
+            console.error('Lỗi gửi xác nhận email:', error.message);
+            throw error;
         }
-      }
+    };
+
+    const handleSignup = async () => {
+        try {
+            const actionCodeSettings = {
+                url: 'http://localhost:5173/confirm-email',
+                handleCodeInApp: true,
+            };
+
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerificationCustom(userCredential.user, actionCodeSettings);
+
+            console.log('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
+            message.success('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
+
+            // Set trạng thái đã gửi xác nhận email
+            setEmailSent(true);
+
+            // navigate('/confirm-email'); // Bạn có thể bỏ chuyển hướng ở đây
+        } catch (error) {
+            console.error('Lỗi đăng ký:', error.message);
+            message.error('Lỗi đăng ký: ' + error.message);
+        }
+    };
+    useEffect(() => {
+        if (emailSent) {
+            // Bạn có thể thực hiện chuyển hướng tại đây nếu email đã được gửi
+            navigate('/confirm-email');
+        }
+    }, [emailSent]);
     return (
         <div>
-            {contextHolder}
+
             <div className="loginpage">
                 <div className="login_bn">
                     <img src="https://f10-zpcloud.zdn.vn/1488129773092553661/6a7b44d847c0929ecbd1.jpg" alt="" />
@@ -52,52 +64,34 @@ const SigninPage = () => {
                     <div className='lg-ct2'>You can use the same email address and password that you use on LinkedIn.com</div>
                 </div>
                 <div className='login-input'>
-                    {/* <form action="">
-                        <input type="text" placeholder='Email or Phone' />
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder='Password'
-                            id="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <div className="password-toggle" onClick={togglePasswordVisibility}>
-                            {showPassword ? 'Hide' : 'Show'}
-                        </div>
-                        <button>Sign in</button>
-                    </form> */}
+
                     <Form
                         name="basic"
-                        onFinish={onFinish}
-                        // onFinishFailed={onFinishFailed}
+                        onFinish={handleSignup}
                         autoComplete="off"
                     >
-                        <Form.Item<FieldType>
+                        <Form.Item
+                            label="Email"
                             name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                         >
-                            <Input placeholder='Email or Phone'/>
+                            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </Form.Item>
 
-                        <Form.Item<FieldType>
+                        <Form.Item
+                            label="Password"
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                         >
-                            <Input 
-                            
-                                placeholder='Password'
-                                type={showPassword ? 'text' : 'password'}
-                                
-                                name="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            
+                            <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
                         </Form.Item>
-                        
-                        <button type='submit'>Agree & Join</button>
-                       
+
+
+
+                        <Button type="primary" htmlType="submit">
+                            Đăng ký
+                        </Button>
+
                     </Form>
                     <br />
                     <a href="">Forgot password?</a>
@@ -117,7 +111,7 @@ const SigninPage = () => {
                     </ul>
                 </div>
             </div>
-        </div>
+        </div >
     )
 
 };

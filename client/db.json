@@ -143,6 +143,15 @@
       "date": "2023-09-29",
       "payment_status": true,
       "id": 16
+    },
+    {
+      "userID": 3,
+      "courseID": 3,
+      "coupon": "null",
+      "paymentAmount": 500000,
+      "date": "2023-09-29",
+      "payment_status": true,
+      "id": 17
     }
   ],
   "Reviews": [
@@ -516,7 +525,8 @@
       "email": "bosstrum4x@gmail.com",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKVsReHRAnBOqi2aZpuwuWgj8MKlT3yVmHctbrTjXel=s96-c",
       "registeredCourseID": [
-        11
+        11,
+        3
       ],
       "collectionCourseID": [],
       "historyCourseID": [],
@@ -596,6 +606,7 @@
       "courseSaved": [],
       "id": 8
     }
+   
   ],
   "userVideoProgress": [
     {

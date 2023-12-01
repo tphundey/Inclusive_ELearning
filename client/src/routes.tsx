@@ -45,6 +45,7 @@ import Profile from "./pages/user/ProfilePage/ProfilePage";
 import React from 'react';
 import Chats from "./pages/user/ChatsPage/ChatsPage";
 import Post from "./pages/user/PostPage/PostPage";
+import ConfirmEmail from "./pages/user/ConfirmEmail/confirmEmail";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -53,7 +54,7 @@ let userRole: 0 | 1 = 0;
 
 const uid = getUidFromLocalStorage();
 
-if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2")   {
+if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
     userRole = 1;
 }
 
@@ -141,6 +142,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="signin" /> },
             { path: "signin", element: <SigninPage /> },
+            { path: "confirm-email", element: <ConfirmEmail /> },
             { path: "signup/404", element: <ErrorPage /> },
             {
                 path: "signup",

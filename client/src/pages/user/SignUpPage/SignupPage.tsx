@@ -138,7 +138,7 @@ const SignupPage = () => {
                     <br />
                     <div className="login-new">
                         <div>Already on LinkedIn? </div>
-                        <div><a href="">Sign in</a></div>
+                        <div><a href="http://localhost:5173/signin">Sign in</a></div>
                     </div>
                 </div>
                 <div className='login-footer'>
