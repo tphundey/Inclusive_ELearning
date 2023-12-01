@@ -1,5 +1,6 @@
 import categoryApi, { categoryReducer } from "@/api/category";
 import productApi, { productReducer } from "@/api/courses";
+import postpageApi, { PostpageReducer } from "@/api/postpage";
 import roleApi, { RoleReducer } from "@/api/role";
 import userApi, { UserReducer } from "@/api/user";
 import videoApi, { videoReducer } from "@/api/video";
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
     [videoApi.reducerPath]: videoReducer,
     [userApi.reducerPath]: UserReducer,
     [roleApi.reducerPath]: RoleReducer,
+    [postpageApi.reducerPath]: PostpageReducer
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -41,7 +43,8 @@ export const store = configureStore({
                 categoryApi.middleware, 
                 videoApi.middleware, 
                 userApi.middleware,
-                roleApi.middleware)
+                roleApi.middleware,
+                postpageApi.middleware)
 })
 
 export type AppDispatch = typeof store.dispatch

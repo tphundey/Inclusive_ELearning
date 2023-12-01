@@ -11,7 +11,8 @@ import {
     AiOutlineBook,
     AiOutlineBarChart,
     AiOutlineAlignLeft,
-    AiFillCloseCircle
+    AiFillCloseCircle,
+    AiOutlineFileText
 } from "react-icons/ai";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -106,6 +107,11 @@ const LayoutAdmin = () => {
                         },
                         {
                             key: "6",
+                            icon: <AiOutlineFileText  />,
+                            label: <Link to="/admin/postpage">Quản lý bài viết</Link>,
+                        },
+                        {
+                            key: "7",
                             icon: <AiFillCloseCircle />,
                             label: <Link to="http://localhost:5173/homepage">Thoát</Link>,
                         },

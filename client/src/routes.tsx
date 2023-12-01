@@ -46,6 +46,8 @@ import React from 'react';
 import Chats from "./pages/user/ChatsPage/ChatsPage";
 import Post from "./pages/user/PostPage/PostPage";
 import ConfirmEmail from "./pages/user/ConfirmEmail/confirmEmail";
+import AdminPostpage from "./pages/admin/postpage";
+import AdminPostAdd from "./pages/admin/postpage/add";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -54,7 +56,10 @@ let userRole: 0 | 1 = 0;
 
 const uid = getUidFromLocalStorage();
 
-if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
+// if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
+//     userRole = 1;
+// }
+if (uid === "2o2RPub7yJd9liwygYQJxTA98uV2") {
     userRole = 1;
 }
 
@@ -178,6 +183,8 @@ export const routers = createBrowserRouter([
             { path: "roles", element: <AdminRoleWithAuthorization /> },
             { path: "role/add", element: <AdminRoleAddWithAuthorization /> },
             { path: "role/:idRole/edit", element: <AdminRoleEditWithAuthorization /> },
+            { path: "postpage", element: <AdminPostpage /> },
+            { path: "post/add", element: <AdminPostAdd /> },
         ],
     },
 ]);

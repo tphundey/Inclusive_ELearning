@@ -13,10 +13,10 @@ const AdminUser = (props: any) => {
     const { data: usersData, isLoading: isProductLoading } = useGetUsersQuery();
     const [deactivateUser] = useUpdateUserMutation();
     const { data: RolesData } = useGetRolesQuery();
-    const roleSource = RolesData?.map((item: Irole) => ({
-        key: item.id,
-        role: item.role
-    }));
+    // const roleSource = RolesData?.map((item: Irole) => ({
+    //     key: item.id,
+    //     role: item.role
+    // }));
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 3;
     const handlePageChange = (page: any) => {
@@ -24,7 +24,7 @@ const AdminUser = (props: any) => {
     };
     
     const dataSource = usersData?.map((item: any) => {
-        const userRole = roleSource?.find(role => role.key === item.roleID);
+        // const userRole = roleSource?.find(role => role.key === item.roleID);
         return {
             key: item.id,
             username: item.displayName ? (
@@ -43,7 +43,7 @@ const AdminUser = (props: any) => {
             phone: item.phoneNumber? (
                 <span >{item.phoneNumber}</span>
             ) : (<p className="text-red-500 ">thiếu thông tin</p>),
-            roleID: userRole ? userRole.role : "",
+            // roleID: userRole ? userRole.role : "",
             registeredCourseID: item.registeredCourseID,
             courseSaved: item.courseSaved
         };
@@ -105,7 +105,7 @@ const AdminUser = (props: any) => {
             title: "Hành động",
             render: ({ key: id, roleID }: { key: number | string; roleID: string }) => (
                 <div className="flex space-x-2">
-                    {roleID == "Instructor" ? (
+                    {/* {roleID == "Instructor" ? (
                         <Popconfirm
                             placement="top"
                             title={"Remove course"}
@@ -127,7 +127,7 @@ const AdminUser = (props: any) => {
                         cancelText="No"
                     >
                         
-                    </Popconfirm>)}
+                    </Popconfirm>)} */}
                     <Button>
                         <Link to={`/admin/user/${id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
                     </Button>
