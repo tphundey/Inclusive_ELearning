@@ -31,10 +31,10 @@ const Certificate = () => {
 
 
     useEffect(() => {
-        // Sử dụng `id` để tạo URL yêu cầu
+        
         const apiUrl = `http://localhost:3000/Courses/${id}`;
 
-        // Gửi yêu cầu HTTP để lấy dữ liệu khóa học
+       
         axios.get(apiUrl)
             .then((response) => {
                 const course = response.data;
@@ -44,7 +44,7 @@ const Certificate = () => {
             .catch((error) => {
                 console.error('Error fetching course data:', error);
             });
-    }, [id]); // Khi `id` thay đổi, useEffect sẽ chạy lại
+    }, [id]); 
 
 
     const generateCertificate = () => {
@@ -52,9 +52,9 @@ const Certificate = () => {
         html2canvas(content)
             .then(canvas => {
                 const image = canvas.toDataURL('image/png');
-                // Bây giờ bạn có thể sử dụng hình ảnh để hiển thị hoặc lưu trữ
+                
                 console.log(image);
-                // Nếu bạn muốn hiển thị hình ảnh trên trang web
+                
                 const certificateImage = new Image();
                 certificateImage.src = image;
                 document.body.appendChild(certificateImage);
