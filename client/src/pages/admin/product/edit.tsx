@@ -33,7 +33,6 @@ const AdminProductEdit = () => {
     );
     const [updateProduct, { isLoading: isUpdateLoading }] = useUpdateProductMutation();
 
-    // Đồng bộ sản phẩm từ API vào form
     useEffect(() => {
         form.setFieldsValue(productData);
     }, [productData]);
@@ -105,11 +104,7 @@ const AdminProductEdit = () => {
                 >
                     <Input />
                 </Form.Item>
-                {/* <Form.Item
-                name="date"
-                label="DatePicker">
-                    <DatePicker  />
-                </Form.Item> */}
+                
                 <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
