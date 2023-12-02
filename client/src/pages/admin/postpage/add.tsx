@@ -81,7 +81,7 @@ const AdminPostAdd = () => {
                 const response = await fetch("http://localhost:3000/posts");
                 const data = await response.json();
 
-                // Đảo ngược mảng dữ liệu trước khi set vào state
+                
                 const reversedData = data.reverse();
                 setAllPosts(reversedData);
             } catch (error) {
@@ -93,27 +93,11 @@ const AdminPostAdd = () => {
     }, []);
     return (
         <>
-            {/* {contextHolder} */}
+           
             <header className="mb-4">
                 <h2 className="text-2xl">Thêm Post</h2>
             </header>
-            {/* <Form className="mt-6" ref={formRef} onFinish={handleFormSubmit}>
-                            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Please input the title!' }]}>
-                                <Input value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-                            </Form.Item>
-                            <Form.Item label="Nội dung" name="content" rules={[{ required: true, message: 'Please input the content!' }]}>
-                                <Input.TextArea value={postData.content} onChange={(e) => setPostData({ ...postData, content: e.target.value })} />
-                            </Form.Item>
-                            <Form.Item label="Hình ảnh (url)" name="image">
-                                <Input value={postData.image} onChange={(e) => setPostData({ ...postData, image: e.target.value })} />
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button className="w-96" type="dashed" htmlType="submit">
-                                    Post
-                                </Button>
-                            </Form.Item>
-                        </Form> */}
+            
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
