@@ -51,10 +51,10 @@ const AdminProduct = () => {
                                     return videoIDs.includes(video.id);
                                 });
 
-                                // Gán dữ liệu video vào biến selectedCourseVideos
+                               
                                 setSelectedCourseVideos(selectedVideos);
 
-                                // Hiển thị modal sau khi đã có dữ liệu
+                               
                                 setIsVideosModalVisible(true);
                             })
                             .catch((error) => {
@@ -70,7 +70,7 @@ const AdminProduct = () => {
 
 
     const showCourseReviews = (courseID: any) => {
-        // Gửi yêu cầu API để lấy danh sách đánh giá dựa trên courseID
+        
         axios.get(`http://localhost:3000/Reviews?courseID=${courseID}`)
             .then((response) => {
                 setSelectedCourseReviews(response.data);
@@ -181,7 +181,7 @@ const AdminProduct = () => {
         axios
             .patch(`http://localhost:3000/Courses/${productId}`, updatedHiddenState)
             .then((response: any) => {
-                // Xử lý thành công, cập nhật trạng thái ẩn/mở khóa học ở phía client ngay sau khi nhận phản hồi từ API
+                
                 const updatedProductsData = productsData.map((product) => {
                     if (product.id === productId) {
                         return { ...product, isHidden: isHidden };
