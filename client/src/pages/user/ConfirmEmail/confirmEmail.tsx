@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { applyActionCode, getAuth } from 'firebase/auth';
-
+import './confirmEmail.css'
+import { Input, Button, Form } from 'antd';
 const ConfirmEmail: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = getAuth();
-
   const [displayName, setDisplayName] = useState('');
   const [photoURL, setPhotoURL] = useState('');
 
@@ -32,22 +32,20 @@ const ConfirmEmail: React.FC = () => {
 
   const handleSendData = async () => {
     try {
-      // Dữ liệu để post
+
       const postData = {
         userId: auth.currentUser?.uid,
         displayName: displayName || auth.currentUser?.displayName,
         email: auth.currentUser?.email,
         photoURL: photoURL || auth.currentUser?.photoURL,
-
         courseSaved: [],
-        registeredCourseID: [8, 2],
+        registeredCourseID: [],
         collectionCourseID: [],
-        historyCourseID: [10, 10]
+        historyCourseID: []
       };
 
-      // Gửi request POST đến API
-      await axios.post('http://localhost:3000/googleAccount', postData);
 
+      await axios.post('http://localhost:3000/googleAccount', postData);
       navigate('/');
     } catch (error: any) {
       console.error('Lỗi khi gửi dữ liệu:', error.message);
@@ -55,29 +53,39 @@ const ConfirmEmail: React.FC = () => {
   };
 
   return (
-    <div>
-      <p>Xác nhận email...</p>
-      <div>
-        <label htmlFor="displayName">Tên:</label>
-        <input
-          type="text"
-          id="displayName"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="photoURL">URL hình ảnh:</label>
-        <input
-          type="text"
-          id="photoURL"
-          value={photoURL}
-          onChange={(e) => setPhotoURL(e.target.value)}
-        />
-      </div>
-      <div>
-        <button onClick={handleSendData}>Gửi</button>
-      </div>
+    <div className='confirm-container'>
+      <p>Email dã được xác nhận vui lòng nhập các thông tin để hoàn thành quá trình !</p>
+      <Form
+      name="basic"
+      onFinish={handleSendData}
+      autoComplete="off"
+    >
+      <Form.Item
+        label="Tên hiển thị"
+        name="displayName"
+        rules={[
+          { required: true, message: 'Vui lòng nhập tên hiển thị!' },
+        ]}
+      >
+        <Input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+      </Form.Item>
+
+      <Form.Item
+        label="URL hình ảnh"
+        name="photoURL"
+        rules={[
+          { required: true, message: 'Vui lòng nhập URL hình ảnh!' },
+        ]}
+      >
+        <Input type="text" value={photoURL} onChange={(e) => setPhotoURL(e.target.value)} />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Đăng ký
+        </Button>
+      </Form.Item>
+    </Form>
     </div>
   );
 };
