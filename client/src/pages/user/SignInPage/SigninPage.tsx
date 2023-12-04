@@ -1,5 +1,5 @@
 import './SigninPage.css'
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +10,13 @@ const SigninPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [emailSent, setEmailSent] = useState(false);
 
-    const sendEmailVerificationCustom = async (user:any, actionCodeSettings:any) => {
+    const sendEmailVerificationCustom = async (user: any, actionCodeSettings: any) => {
         try {
             await sendEmailVerification(user, actionCodeSettings);
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Lỗi gửi xác nhận email:', error.message);
             throw error;
         }
@@ -23,6 +24,9 @@ const SigninPage = () => {
 
     const handleSignup = async () => {
         try {
+            if (password !== confirmPassword) {
+                throw new Error('Mật khẩu và mật khẩu xác nhận không khớp!');
+            }
             const actionCodeSettings = {
                 url: 'http://localhost:5173/confirm-email',
                 handleCodeInApp: true,
@@ -34,19 +38,19 @@ const SigninPage = () => {
             console.log('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
             message.success('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
 
-        
+
             setEmailSent(true);
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Lỗi đăng ký:', error.message);
-            message.error('Lỗi đăng ký: ' + error.message);
+            message.error('Email đăng ký đã được sử dụng! ' + error.message);
         }
     };
     useEffect(() => {
         if (emailSent) {
-            // Bạn có thể thực hiện chuyển hướng tại đây nếu email đã được gửi
             navigate('/confirm-loading');
         }
     }, [emailSent]);
+
     return (
         <div>
 
@@ -66,6 +70,7 @@ const SigninPage = () => {
                         autoComplete="off"
                     >
                         <Form.Item
+
                             label="Email"
                             name="email"
                             rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
@@ -74,14 +79,32 @@ const SigninPage = () => {
                         </Form.Item>
 
                         <Form.Item
+                            className='tet mr-6'
                             label="Password"
                             name="password"
                             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                         >
-                            <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <Input.Password width={20} value={password} onChange={(e) => setPassword(e.target.value)} />
                         </Form.Item>
 
-
+                        <Form.Item
+                          className='tet2 mr-6'
+                            label="Password (*)"
+                            name="confirmPassword"
+                            rules={[
+                                { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                        </Form.Item>
 
                         <Button type="primary" htmlType="submit">
                             Đăng ký
@@ -90,11 +113,7 @@ const SigninPage = () => {
                     </Form>
                     <br />
                     <a href="">Forgot password?</a>
-                    <div className="login-new">
-                        <div>New to LinkedIn?</div>
-                        <div><a href="">Join now</a></div>
-                        <div>  <a href="">Become an Instructor</a></div>
-                    </div>
+
                 </div>
                 <div className='login-footer'>
                     <ul>
