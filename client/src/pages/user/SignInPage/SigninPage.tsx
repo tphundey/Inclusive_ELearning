@@ -1,24 +1,21 @@
 import './SigninPage.css'
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
-import { applyActionCode } from 'firebase/auth';
+
 const SigninPage = () => {
     const auth = getAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailSent, setEmailSent] = useState(false);
-    useEffect(() => {
-        // Đặt các logic hiệu quả (nếu cần) ở đây
-    }, []); // Rỗng để chỉ chạy một lần sau khi component mount
-    const sendEmailVerificationCustom = async (user, actionCodeSettings) => {
+
+    const sendEmailVerificationCustom = async (user:any, actionCodeSettings:any) => {
         try {
             await sendEmailVerification(user, actionCodeSettings);
-        } catch (error) {
+        } catch (error:any) {
             console.error('Lỗi gửi xác nhận email:', error.message);
             throw error;
         }
@@ -37,11 +34,9 @@ const SigninPage = () => {
             console.log('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
             message.success('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
 
-            // Set trạng thái đã gửi xác nhận email
+        
             setEmailSent(true);
-
-            // navigate('/confirm-email'); // Bạn có thể bỏ chuyển hướng ở đây
-        } catch (error) {
+        } catch (error:any) {
             console.error('Lỗi đăng ký:', error.message);
             message.error('Lỗi đăng ký: ' + error.message);
         }
@@ -49,7 +44,7 @@ const SigninPage = () => {
     useEffect(() => {
         if (emailSent) {
             // Bạn có thể thực hiện chuyển hướng tại đây nếu email đã được gửi
-            navigate('/confirm-email');
+            navigate('/confirm-loading');
         }
     }, [emailSent]);
     return (

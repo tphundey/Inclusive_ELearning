@@ -14,6 +14,8 @@ interface ITabs {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const MylearningPageLayout = () => {
+    const userCheck = auth.currentUser;
+    const [email, setEmail] = useState<User | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const tabs: ITabs[] = [
@@ -24,14 +26,44 @@ const MylearningPageLayout = () => {
     ];
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+        const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+
+            setEmail(currentUser?.email)
             setLoading(false);
         });
         return () => {
             unsubscribe();
         };
     }, [auth]);
+
+    useEffect(() => {
+        if (email) {
+            fetch(`http://localhost:3000/googleAccount?email=${email}`)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Lấy thông tin người dùng từ API thất bại.');
+                    }
+                })
+                .then((userDataArray) => {
+                    if (userDataArray.length > 0) {
+                        const userData = userDataArray[0];
+                        setUser(userData);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [email]);
+
+    if (userCheck && userCheck.emailVerified) {
+        console.log('Đã được xác thưck');
+
+    } else {
+        console.log('Chưa được xác thưck');
+    }
 
     if (loading) {
         return (
@@ -48,10 +80,10 @@ const MylearningPageLayout = () => {
                     message="Error"
                     description="Bạn chưa đăng nhập."
                     type="error"
-                    showIcon/>
+                    showIcon />
                 </Space>
                 <a className='link text-blue-500 text-sm ' href="/signup">Chuyển hướng đăng nhập</a>
-                </div>
+            </div>
         );
     }
     return (

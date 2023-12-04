@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Form, Input, message } from "antd";
 import { useNavigate } from 'react-router';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
-
+import { signInWithEmailAndPassword } from 'firebase/auth';
 // Khởi tạo ứng dụng Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -16,7 +16,18 @@ const SignupPage = () => {
     const [form] = Form.useForm();
     const [user, setUser] = useState(null);
     const [email, setEmail] = useState(null);
-
+    const handleLogin = async () => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+            // Handle successful login, navigate to the desired page, etc.
+            console.log('Đăng nhập thành công:', userCredential.user);
+    
+        } catch (error) {
+            console.error('Lỗi đăng nhập:', error.message);
+            message.error('Lỗi đăng nhập: ' + error.message);
+        }
+    };
     useEffect(() => {
         // Sử dụng onAuthStateChanged để kiểm tra trạng thái xác thực của người dùng
         const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {

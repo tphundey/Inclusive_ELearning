@@ -48,6 +48,7 @@ import Post from "./pages/user/PostPage/PostPage";
 import ConfirmEmail from "./pages/user/ConfirmEmail/confirmEmail";
 import AdminPostpage from "./pages/admin/postpage";
 import AdminPostAdd from "./pages/admin/postpage/add";
+import ConfirmLoading from "./pages/user/ConfirmLoading/confirmLoading";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -148,6 +149,7 @@ export const routers = createBrowserRouter([
             { index: true, element: <Navigate to="signin" /> },
             { path: "signin", element: <SigninPage /> },
             { path: "confirm-email", element: <ConfirmEmail /> },
+            { path: "confirm-loading", element: <ConfirmLoading /> },
             { path: "signup/404", element: <ErrorPage /> },
             {
                 path: "signup",
