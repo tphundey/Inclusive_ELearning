@@ -609,7 +609,6 @@
       "courseSaved": [],
       "id": 8
     },
-
     {
       "userId": "8eZ1lcfS31bZZGcArFqDNqeDEni2",
       "displayName": "ĐINH TÀI",
@@ -708,11 +707,19 @@
       "author": "dungntph 2 0 0 1 8 fplhn",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJVK_Gqpr9VkSWy_p-XOPKPm7bu_khlxKiMM0fXEiaW=s96-c",
       "date": "Fri Dec 01 2023",
-      "likes": 1,
-      "likedBy": [
-        "2o2RPub7yJd9liwygYQJxTA98uV2"
+      "likes": 2,
+      "likedBy": [],
+      "comments": [
+        {
+          "id": "z15vdsovq",
+          "author": "Anonymous",
+          "photoURL": "",
+          "text": "RƯ",
+          "time": "12/4/2023, 9:08:50 PM",
+          "likes": 0,
+          "replies": []
+        }
       ],
-      "comments": [],
       "id": 14
     },
     {
@@ -722,8 +729,10 @@
       "author": "dungntph 2 0 0 1 8 fplhn",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJVK_Gqpr9VkSWy_p-XOPKPm7bu_khlxKiMM0fXEiaW=s96-c",
       "date": "Fri Dec 01 2023",
-      "likes": 0,
-      "likedBy": [],
+      "likes": 1,
+      "likedBy": [
+        "8eZ1lcfS31bZZGcArFqDNqeDEni2"
+      ],
       "comments": [],
       "id": 15
     }

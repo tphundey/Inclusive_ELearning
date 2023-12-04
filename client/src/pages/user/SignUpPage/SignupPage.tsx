@@ -16,20 +16,24 @@ const SignupPage = () => {
     const [form] = Form.useForm();
     const [user, setUser] = useState(null);
     const [email, setEmail] = useState(null);
-    const handleLogin = async () => {
+
+    const handleLogin = async (values: any) => {
+        const { email, password } = values;
+
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
-            // Handle successful login, navigate to the desired page, etc.
-            console.log('Đăng nhập thành công:', userCredential.user);
-    
-        } catch (error) {
+            message.success('Đăng nhập thành công bạn sẽ được chuyển tới trang sản phẩm');
+            setTimeout(() => {
+                navigate('/')
+            }, 2000);
+
+        } catch (error: any) {
             console.error('Lỗi đăng nhập:', error.message);
-            message.error('Lỗi đăng nhập: ' + error.message);
+            message.error('Lỗi đăng nhập vui lòng kiểm tra lại tài khoản hoặc mật khẩu ' + error.message);
         }
     };
+
     useEffect(() => {
-        // Sử dụng onAuthStateChanged để kiểm tra trạng thái xác thực của người dùng
         const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
             if (currentUser) {
                 setUser(currentUser);
@@ -57,7 +61,7 @@ const SignupPage = () => {
 
                         if (response.data.length === 0) {
                             axios.post('http://localhost:3000/googleAccount', {
-                                userId: firebaseUserId, // Include Firebase user ID in the data
+                                userId: firebaseUserId,
                                 displayName: user.displayName,
                                 email: user.email,
                                 photoURL: user.photoURL,
@@ -108,13 +112,9 @@ const SignupPage = () => {
                         form={form}
                         name="basic"
                         autoComplete="off"
+                        onFinish={handleLogin}
                     >
-                        <Form.Item<any>
-                            name="username"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
-                        >
-                            <Input placeholder='Username' />
-                        </Form.Item>
+
                         <Form.Item<any>
                             name="email"
                             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -127,7 +127,7 @@ const SignupPage = () => {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
                             <Input
-                                placeholder='Password'
+                                placeholder='Password' type='password'
                             />
 
                         </Form.Item>
@@ -145,7 +145,7 @@ const SignupPage = () => {
                         <div className="icon"></div>
                         Đăng nhập bằng Google
                     </button>
-                    {/* <GoogleLogout>DƯA</GoogleLogout> */}
+
                     <br />
                     <div className="login-new">
                         <div>Already on LinkedIn? </div>
