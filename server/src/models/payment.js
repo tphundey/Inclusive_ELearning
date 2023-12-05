@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
-const paymentSchema = new mongoose.Schema({}, { collection: "Payment", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "Payment", timestamps: true, strict: false });
 
-export default mongoose.model("Payment", paymentSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
+
+const Payment = mongoose.model('Payment', dataSchema);
+
+export default Payment;
+

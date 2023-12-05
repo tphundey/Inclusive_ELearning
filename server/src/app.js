@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import express from "express";
-import routerApp from "./Routers";
 import cors from 'cors';
-
+import router from './controllers/course'
 const app = express();
 app.use(express.json());
 app.use(cors());
-routerApp(app);
+app.use("/", router);
+
 
 app.get("/", (req, res) => {
     res.send("Hello world");

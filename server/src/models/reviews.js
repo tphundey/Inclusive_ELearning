@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema({}, { collection: "Reviews", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "Reviews", timestamps: true, strict: false });
 
-export default mongoose.model('Reviews', reviewSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
+
+const Reviews = mongoose.model('Reviews', dataSchema);
+
+export default Reviews;
+

@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 
-const videoSchema = new mongoose.Schema({}, { collection: "Videos", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "Videos", timestamps: true, strict: false });
 
-const Video = mongoose.model('Videos', videoSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
 
-export default Video;
+const Videos = mongoose.model('Videos', dataSchema);
+
+export default Videos;
+

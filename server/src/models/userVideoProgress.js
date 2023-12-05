@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 
-const userVideoProgressSchema = new mongoose.Schema({}, { collection: "userVideoProgress", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "userVideoProgress", timestamps: true, strict: false });
 
-const UserVideoProgress = mongoose.model('userVideoProgress', userVideoProgressSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
 
-export default UserVideoProgress;
+const userVideoProgress = mongoose.model('userVideoProgress', dataSchema);
+
+export default userVideoProgress;
+

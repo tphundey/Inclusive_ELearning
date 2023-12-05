@@ -1,216 +1,70 @@
-import Course from "../models/course";
-import { courseSchema } from "../schemas/course";
-import slugify from "slugify";
-import Category from "../models/category";
-import dotenv from "dotenv";
-dotenv.config;
+// controllers/coursesController.js
+import express from "express";
+import Course from "../models/courses";
 
+const router = express.Router();
 
-export const getAllCourse = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createdAt", // Chú ý đến chính tả ở đây
-    _order = "asc", // Đổi "_oder" thành "_order"
-    _keyword = "",
-  } = req.query;
-
-  const option = {
-    page: parseInt(_page, 10),
-    limit: parseInt(_limit, 10),
-    sort: {
-      [_sort]: _order === "desc" ? -1 : 1, // Sửa ở đây, 1 cho asc, -1 cho desc
-    },
-  };
-
+// Create
+router.post("/", async (req, res) => {
   try {
-    const courseData = await Course.find()
-    if (!courseData || courseData.length === 0) {
-      return res.status(400).json({
-        message: "Không tìm thấy sản phẩm!",
-      });
-    }
-    return res.status(200).json(courseData);
-  } catch (err) {
-    return res.status(500).json({
-      message: err.message,
-    });
-  }
-};
-
-export const getCourseById = async (req, res) => {
-  try {
-    const course = await Course.findById(req.params.id).populate([
-      { path: "categoryId" },
-      { path: "videoId" },
-    ]);
-    // const course = await Course.findById(req.params.id);
-    // const category = await Category.findById(course.categoryId);
-
-    // course.categoryId = category;
-
-    if (!course || course.length == 0) {
-      return res.status(404).json({
-        message: "khong tim thay khoa hoc",
-      });
-    }
-    res.status(200).json({
-      message: "lay khoa hoc thanh cong",
-      course,
-    });
+    const newCourse = await Course.create(req.body);
+    return res.status(201).json(newCourse);
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    return res.status(500).json({ error: "Could not create course" });
   }
-};
-export const getCourseBySlug = async (req, res) => {
-  const slug = req.params.slug;
+});
+
+// Read all
+router.get("/", async (req, res) => {
   try {
-    const course = await Course.findOne({ slug });
-    if (!course || course.length === 0) {
-      return res.status(404).json({
-        message: "khong tim thay khoa hoc",
-      });
-    }
-    return res.status(200).json({
-      message: "lay khoa hoc thanh cong",
-    });
+    const courses = await Course.find();
+    return res.status(200).json(courses);
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    return res.status(500).json({ error: "Could not retrieve courses" });
   }
-};
-export const deleteCourse = async (req, res) => {
+});
+
+// Read by ID
+router.get("/:id", async (req, res) => {
   try {
-    const courseId = req.params.id;
-    // xoa khoa hoc
-    const course = await Course.findByIdAndDelete(courseId);
-
-    // Xoa khoa hoc khoi danh muc
-    await Category.findByIdAndUpdate(course.categoryId, {
-      $pull: { courseData: course._id },
-    });
-
-    return res.json({
-      message: "xoa khoa hoc thanh cong",
-      course,
-    });
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    return res.status(200).json(course);
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    return res.status(500).json({ error: "Could not retrieve course" });
   }
-};
-export const createCourse = async (req, res) => {
-  const { name } = req.body;
-  const formData = req.body;
+});
 
+// Update
+router.put("/:id", async (req, res) => {
   try {
-    const { error } = courseSchema.validate(formData);
-    if (error) {
-      return res.status(400).json({
-        message: error.details[0].message,
-      });
-    }
-    //kiem tra xem khoa hoc co hay chua
-    const data = await Course.findOne({ name });
-    if (data) {
-      return res.status(400).json({
-        message: "khoa hoc da ton tai trong he thong",
-      });
-    }
-    const course = await Course.create(formData);
-    if (!course || course.length == 0) {
-      return res.status(400).json({
-        message: "khong tim thay khoa hoc",
-      });
-    }
-    await Category.findByIdAndUpdate(course.categoryId, {
-      $addToSet: { courseData: course._id },
-    });
-
-    return res.status(201).json({
-      message: "them khoa hoc thanh cong",
-      course,
-    });
-  } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
-  }
-};
-export const updateCourse = async (req, res) => {
-  const formData = req.body;
-  const id = req.params.id;
-  const { name } = req.body;
-  try {
-    const { error } = courseSchema.validate(formData, { abortEarly: false });
-    if (error) {
-      return res.status(400).json({
-        message: error.details[0].message,
-      });
-    }
-    const newSlug = slugify(name, { lower: true });
-    //lay lai category cu
-    const oldData = await Course.findById(id);
-    const oldCategory = await oldData.categoryId;
-
-    //cap nhat khoa hoc
-    const course = await Course.findByIdAndUpdate(
-      id,
-      { ...formData, slug: newSlug },
+    const updatedCourse = await Course.findByIdAndUpdate(
+      req.params.id,
+      req.body,
       { new: true }
     );
-
-    //xoa khoa hoc o category cu
-    await Category.findByIdAndUpdate(
-      { _id: oldCategory },
-      { $pull: { courseData: course._id } },
-      { new: true }
-    );
-
-    await Category.findByIdAndUpdate(course.categoryId, {
-      $addToSet: { courseData: course._id },
-    });
-    if (!course || course.length == 0) {
-      return res.status(400).json({
-        message: "khong tim thay khoa hoc",
-      });
+    if (!updatedCourse) {
+      return res.status(404).json({ error: "Course not found" });
     }
-    res.status(200).json({
-      message: "cap nhat khoa hoc thanh cong",
-      course,
-    });
+    return res.status(200).json(updatedCourse);
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    return res.status(500).json({ error: "Could not update course" });
   }
-};
-export const getCourseByIdCategory = async (req, res) => {
+});
+
+// Delete
+router.delete("/:id", async (req, res) => {
   try {
-    const id = req.params.id;
-    const courseData = await Course.find({ categoryId: id });
-    if (!courseData)
-      return res.status(404).json({
-        message: "khong tim thay khoa hoc nam trong danh muc nay ",
-        success: false,
-      });
-    const courseResponse = await { docs: courseData };
-    return res.status(200).json({
-      message: "vai ca loz",
-      success: true,
-      courseResponse,
-      pagination: {
-        currentPage: courseData.page,
-        totalPages: courseData.totalPages,
-        totalItems: courseData.totalItems,
-      },
-    });
+    const deletedCourse = await Course.findByIdAndDelete(req.params.id);
+    if (!deletedCourse) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    return res.status(204).json();
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      mes: error?.message,
-    });
+    return res.status(500).json({ error: "Could not delete course" });
   }
-};
+});
+
+export default router;

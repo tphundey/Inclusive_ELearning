@@ -1,7 +1,16 @@
 import mongoose from "mongoose";
 
-const categorySchema = new mongoose.Schema({}, { collection: "Courses", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "Courses", timestamps: true, strict: false });
 
-const Courses = mongoose.model('Courses', categorySchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
+
+const Courses = mongoose.model('Courses', dataSchema);
 
 export default Courses;

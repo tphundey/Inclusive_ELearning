@@ -1,7 +1,16 @@
 import mongoose from "mongoose";
 
-const noteSchema = new mongoose.Schema({}, { collection: "Notes", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "Notes", timestamps: true, strict: false });
 
-const Note = mongoose.model('Notes', noteSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
 
-export default Note;
+const Notes = mongoose.model('Notes', dataSchema);
+
+export default Notes;

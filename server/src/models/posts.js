@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({}, { collection: "posts", timestamps: true, strict: false });
+const dataSchema = new mongoose.Schema({}, { collection: "posts", timestamps: true, strict: false });
 
-const Post = mongoose.model('posts', postSchema);
+dataSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+});
 
-export default Post;
+const posts = mongoose.model('posts', dataSchema);
+
+export default posts;
+
