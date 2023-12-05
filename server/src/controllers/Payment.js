@@ -1,19 +1,18 @@
 import PaymentMethod from "../models/payment_methods";
-import Payment from "../models/payments";
+import Payment from "../models/payment";
 import dotenv from "dotenv"
 import qs from "qs"
-dotenv.config();
 import moment from "moment";
 import dateFormat from "dateformat";
 import crypto from "crypto";
-// import { log } from "console";
-// import { registerMail } from "./Mailer";
 import { createTransport } from "nodemailer";
 import Mailgen from "mailgen";
 import { pagingnation } from "./Pagingnation";
-import Booking from "../models/course";
+import Booking from "../models/courses";
 
+dotenv.config();
 export const addPaymentMethod =async (req, res) =>{
+
   // const ngu = cryptyjs
   const { paymentname } = req.body;
   try {
