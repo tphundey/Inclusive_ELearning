@@ -16,7 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const { Option } = Select;
 
 type FieldType = {
-    id: number,
+    id: string,
     displayName: string,
     email: string,
     password: string,

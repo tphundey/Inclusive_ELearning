@@ -17,7 +17,7 @@ const AdminRole = (props: any) => {
     }));
     console.log(dataSource);
 
-    const confirm = (id: number | string) => {
+    const confirm = (id: string) => {
         removeRole(id)
             .unwrap()
             .then(() => {
@@ -42,7 +42,7 @@ const AdminRole = (props: any) => {
        
         {
             title: "Hành động",
-            render: ({ key: id }: { key: number | string }) => (
+            render: ({ key: id }: { key:string }) => (
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"

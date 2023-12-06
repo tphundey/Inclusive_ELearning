@@ -103,7 +103,9 @@ const AdminUser = (props: any) => {
         },
         {
             title: "Hành động",
-            render: ({ key: id, roleID }: { key: number | string; roleID: string }) => (
+            render: (
+                // { key: id, roleID }: { key: string; roleID: string }
+                ) => (
                 <div className="flex space-x-2">
                     {/* {roleID == "Instructor" ? (
                         <Popconfirm
@@ -128,9 +130,12 @@ const AdminUser = (props: any) => {
                     >
                         
                     </Popconfirm>)} */}
-                    <Button>
+                    {/* <Button>
                         <Link to={`/admin/user/${id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
-                    </Button>
+                    </Button> */}
+                    <Button type="primary" danger>
+                                deactivate
+                            </Button>
                 </div>
             ),
         },
