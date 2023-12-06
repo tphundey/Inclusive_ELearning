@@ -1,4 +1,4 @@
 export interface Irole {
-    id?: number|string;
+    id?:string;
     role?: string;
 }

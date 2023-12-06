@@ -13,7 +13,7 @@ const AdminPostpage = (props: any) => {
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
-    const confirm = (id: number | string) => {
+    const confirm = (id:string) => {
         removePostpage(id)
             .unwrap()
             .then(() => {
@@ -92,7 +92,7 @@ const AdminPostpage = (props: any) => {
         },
         {
             title: "Hành động",
-            render: ({ key: id }: { key: number | string }) => (
+            render: ({ key: id }: { key: string }) => (
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"

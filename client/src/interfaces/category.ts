@@ -1,5 +1,5 @@
 export interface Icategory {
-    id?: number | string,
+    id?:string,
     categoryName: string,
     categoryDescription : string,
 }

@@ -4,7 +4,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { Navigate, useNavigate } from "react-router-dom";
 
 type FieldType = {
-    id: number | string,
+    id:string,
     role: string
 };
 
