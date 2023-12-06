@@ -57,31 +57,36 @@ const IntroductionPage = () => {
 
     ////////////////////Lấy thông tin khóa học (videos) theo ID////////////////////
     useEffect(() => {
-        axios.get(`http://localhost:3000/Courses/${id}`)
-            .then((response) => {
-                const productData = response.data;
+        const fetchData = async () => {
+            try {
+                // Fetch course data
+                const courseResponse = await axios.get(`http://localhost:3000/Courses/${id}`);
+                const productData = courseResponse.data;
                 setProduct(productData);
-                axios.get(`http://localhost:3000/Videos`)
-                    .then((videoResponse) => {
-                        const allVideos = videoResponse.data;
-                        const videoIdsInCourse = productData.videoID;
-                        const filteredVideos = allVideos.filter((video: any) =>
-                            videoIdsInCourse.includes(video.id)
-                        );
-                        setVideos(filteredVideos);
-                        if (filteredVideos.length > 0) {
-                            setSelectedVideoUrl(filteredVideos[0].videoURL);
-                            setCurrentVideo(filteredVideos[0]);
-                        }
-                    })
-                    .catch((videoError) => {
-                        console.error('Error fetching video data:', videoError);
-                    });
-            })
-            .catch((error) => {
-                console.error('Error fetching product data:', error);
-            });
+
+                // Fetch all videos
+                const allVideosResponse = await axios.get(`http://localhost:3000/Videos`);
+                const allVideos = allVideosResponse.data;
+
+                const filteredVideos = allVideos.filter((video: any) => {
+                    return video.courseId === id;
+                });
+
+                setVideos(filteredVideos);
+
+                if (filteredVideos.length > 0) {
+                    setSelectedVideoUrl(filteredVideos[0].videoURL);
+                    setCurrentVideo(filteredVideos[0]);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, [id]);
+
+
 
 
     ///////////////////////// Láy thông tin danh mục///////////////////////////
@@ -180,7 +185,7 @@ const IntroductionPage = () => {
             // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             return;
         }
-    
+
         // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
@@ -193,18 +198,18 @@ const IntroductionPage = () => {
             .then((userData) => {
                 const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
                 const userID = user.id;
-    
+
                 // Bước 2: Lấy danh sách khóa học đã mua của người dùng
                 const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
-    
+
                 // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
                 if (!registeredCourseIDs.includes(courseID)) {
                     registeredCourseIDs.push(courseID);
                 }
-    
+
                 // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
                 user.registeredCourseID = registeredCourseIDs;
-    
+
                 // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
                 return fetch(`http://localhost:3000/googleAccount/${userID}`, {
                     method: 'PUT',
@@ -226,7 +231,7 @@ const IntroductionPage = () => {
                         date: "2023-09-29",
                         payment_status: true
                     };
-    
+
                     return fetch('http://localhost:3000/payment', {
                         method: 'POST',
                         headers: {
@@ -271,20 +276,28 @@ const IntroductionPage = () => {
     }, [id]);
 
 
-    ////////////////////Lấy thông tin khóa học cùng loại///////////////////
     useEffect(() => {
-        if (product.categoryID) {
-            const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
-            axios.get(apiUrl)
-                .then((response) => {
-                    setSimilarProducts(response.data);
+        const fetchData = async () => {
+            try {
+                const apiUrl = 'http://localhost:3000/Courses';
+                const response = await axios.get(apiUrl);
 
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
+                if (product.categoryID) {
+                    // Nếu có categoryID, lọc ra các sản phẩm có categoryID trùng khớp
+                    const filteredProducts = response.data.filter(course => course.categoryID === product.categoryID);
+                    setSimilarProducts(filteredProducts);
+                } else {
+                    // Nếu không có categoryID, hiển thị tất cả sản phẩm
+                    setSimilarProducts(response.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
     }, [product.categoryID]);
+
 
 
     useEffect(() => {
@@ -383,7 +396,7 @@ const IntroductionPage = () => {
                     if (typeof id === 'string') {
 
                         const hasUserReviewed = reviews.some(
-                            (review) => review.courseID === parseInt(id) && review.userID === javascriptUserID
+                            (review) => review.courseID === id && review.userID === javascriptUserID
                         );
 
                         if (hasUserReviewed) {
@@ -413,7 +426,7 @@ const IntroductionPage = () => {
                                 rating: review.rating,
                                 comment: review.comment,
                                 userID: javascriptUserID,
-                                courseID: parseInt(id),
+                                courseID: id,
                                 date: formattedDate,
                             };
 
