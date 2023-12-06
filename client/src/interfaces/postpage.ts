@@ -1,5 +1,5 @@
 export interface IPostpage{
-    id?: number | string;
+    id?:string;
     title: string;
     content: string;
     image: string;

@@ -1,5 +1,5 @@
 export interface Ivideo {
-    id?: number | string,
+    id?:string,
     videoTitle: string,
     videoURL : string,
 }
