@@ -13,6 +13,24 @@ routerGoogleAccounts.post("/", async (req, res) => {
   }
 });
 
+routerGoogleAccounts.get("/", async (req, res) => {
+  try {
+    // Kiểm tra xem tham số email có được cung cấp trong URL không
+    const userEmail = req.query.email;
+    if (userEmail) {
+      // Nếu email được cung cấp, lọc theo email
+      const courses = await GoogleAccount.find({ email: userEmail });
+      return res.status(200).json(courses);
+    } else {
+      // Nếu không có email nào được cung cấp, lấy tất cả các khóa học
+      const courses = await GoogleAccount.find();
+      return res.status(200).json(courses);
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Không thể lấy danh sách khóa học" });
+  }
+});
+
 // Read all
 routerGoogleAccounts.get("/", async (req, res) => {
   try {

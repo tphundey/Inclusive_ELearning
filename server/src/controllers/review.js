@@ -13,13 +13,18 @@ routerReviews.post("/", async (req, res) => {
   }
 });
 
-// Read all
 routerReviews.get("/", async (req, res) => {
   try {
-    const courses = await Reviews.find();
-    return res.status(200).json(courses);
+    const { courseID } = req.query;
+    if (courseID) {
+      const filteredReviews = await Reviews.find({ courseID });
+      return res.status(200).json(filteredReviews);
+    }
+
+    const allReviews = await Reviews.find();
+    return res.status(200).json(allReviews);
   } catch (error) {
-    return res.status(500).json({ error: "Could not retrieve courses" });
+    return res.status(500).json({ error: "Could not retrieve reviews" });
   }
 });
 

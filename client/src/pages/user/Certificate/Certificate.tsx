@@ -1,13 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
+import  { useRef, useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
-import './Certificate.css'
 import emailjs from '@emailjs/browser';
 import { useParams } from 'react-router-dom';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-
+import './Certificate.css'
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -30,11 +29,8 @@ const Certificate = () => {
     }, [auth]);
 
 
-    useEffect(() => {
-        
+    useEffect(() => {    
         const apiUrl = `http://localhost:3000/Courses/${id}`;
-
-       
         axios.get(apiUrl)
             .then((response) => {
                 const course = response.data;
@@ -63,7 +59,6 @@ const Certificate = () => {
 
     const sendEmail = (e: any) => {
         e.preventDefault();
-
         emailjs.sendForm('service_la6yzel', 'template_604npzp', e.target, 'lFDsvwdsjxYGi8aQ9')
             .then((result) => {
                 console.log(result.text);
@@ -72,18 +67,17 @@ const Certificate = () => {
             });
     };
 
- 
-
     if (courseData === null) {
         return <p>Loading...</p>;
     }
     if (!user) {
         return (
             <div className='notlogin mt-4 mb-4 text-center'>
-               deađuawa
+            Chưa đăng nhập 
                 </div>
         );
     }
+
     return (
         <div>
             <div style={{ display: 'flex', gap:'10px' }}>
