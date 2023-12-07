@@ -32,12 +32,28 @@ routerGoogleAccounts.get("/", async (req, res) => {
 });
 
 // Read all
-routerGoogleAccounts.get("/", async (req, res) => {
+routerGoogleAccounts.get('/:userId', async (req, res) => {
   try {
-    const courses = await GoogleAccount.find();
-    return res.status(200).json(courses);
+    const { userId } = req.params;
+    const user = await GoogleAccount.findOne({ userId: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.status(200).json(user);
   } catch (error) {
-    return res.status(500).json({ error: "Could not retrieve courses" });
+    return res.status(500).json({ error: 'Không thể lấy danh sách người dùng' });
+  }
+});
+
+// Read all
+routerGoogleAccounts.get('/', async (req, res) => {
+  try {
+    const users = await GoogleAccount.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ error: 'Không thể lấy danh sách người dùng' });
   }
 });
 
@@ -70,7 +86,31 @@ routerGoogleAccounts.put("/:id", async (req, res) => {
     return res.status(500).json({ error: "Could not update course" });
   }
 });
+routerGoogleAccounts.put("/:userID", async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const updatedUserData = req.body;
 
+    // Check if the user with the provided userID exists
+    const existingUser = await GoogleAccount.findById(userID);
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Perform the update
+    const updatedUser = await GoogleAccount.findByIdAndUpdate(
+      userID,
+      updatedUserData,
+      { new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Could not update user data" });
+  }
+});
 // Delete
 routerGoogleAccounts.delete("/:id", async (req, res) => {
   try {
