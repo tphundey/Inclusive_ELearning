@@ -38,7 +38,7 @@ routerCate.get("/:id", async (req, res) => {
 });
 
 // Update
-routerCate.put("/:id", async (req, res) => {
+routerCate.patch("/:id", async (req, res) => {
   try {
     const updatedCourse = await Categories.findByIdAndUpdate(
       req.params.id,
