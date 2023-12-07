@@ -124,4 +124,29 @@ routerGoogleAccounts.delete("/:id", async (req, res) => {
   }
 });
 
+routerGoogleAccounts.put("/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const updatedUserData = req.body;
+
+    // Check if the user with the provided userId exists
+    const existingUser = await GoogleAccount.findOne({ userId: userId });
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const updatedUser = await GoogleAccount.findOneAndUpdate(
+      { userId: userId },
+      updatedUserData,
+      { new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Could not update user data" });
+  }
+});
+
 export default routerGoogleAccounts;

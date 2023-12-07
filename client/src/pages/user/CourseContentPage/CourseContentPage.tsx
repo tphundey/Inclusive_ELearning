@@ -81,20 +81,20 @@ const CourseContentPage = () => {
                 const userProgressResponse = await axios.get('http://localhost:3000/UserProgress');
                 const userProgressData = userProgressResponse.data;
 
-                const currentUserProgress = userProgressData.filter((progress:any) => progress.userId === userIdfirebase);
+                const currentUserProgress = userProgressData.filter((progress: any) => progress.userId === userIdfirebase);
 
                 const completedVideoIds = currentUserProgress
-                    .filter((progress:any) => uniqueVideoIdsInCourse.includes(progress.videoId))
-                    .map((progress:any) => progress.videoId);
+                    .filter((progress: any) => uniqueVideoIdsInCourse.includes(progress.videoId))
+                    .map((progress: any) => progress.videoId);
 
                 const allVideosCompleted = uniqueVideoIdsInCourse.every((videoId) => completedVideoIds.includes(videoId));
                 setAllVideosCompleted(allVideosCompleted);
-           
+
 
                 const [completedVideosCount, setCompletedVideosCount] = useState<number>(0);
                 const [completionPercentage, setCompletionPercentage] = useState<number>(0);
                 // Lưu trữ số lượng video hoàn thành trong state
-                setCompletedVideosCount(completedVideosCount);           
+                setCompletedVideosCount(completedVideosCount);
                 setCompletionPercentage(completionPercentage);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -120,25 +120,25 @@ const CourseContentPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-               
+
                 const courseResponse = await axios.get(`http://localhost:3000/Courses/${id}`);
                 const productData = courseResponse.data;
                 setProduct(productData);
- 
+
                 const allVideosResponse = await axios.get(`http://localhost:3000/Videos`);
                 const allVideos = allVideosResponse.data;
-    
+
                 const filteredVideos = allVideos.filter((video: any) => {
                     return video.courseId === id;
                 });
-    
+
                 setVideos(filteredVideos);
-    
+
                 if (filteredVideos.length > 0) {
                     setSelectedVideoUrl(filteredVideos[0].videoURL);
                     setCurrentVideo(filteredVideos[0]);
                 }
-    
+
                 const allVideoIds = filteredVideos.map((video: { id: any; }) => video.id);
                 const userCompletedVideos = allVideoIds.every((videoId: string | number) => userVideoCompletionStatus[videoId]);
                 console.log('Trạng thái hoàn thành khóa học:', userCompletedVideos);
@@ -146,7 +146,7 @@ const CourseContentPage = () => {
                     setShowSuccessAlert(true);
                 }
                 setAllVideosCompleted(userCompletedVideos);
-    
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -160,7 +160,7 @@ const CourseContentPage = () => {
         return () => {
             unsubscribe();
         };
-    
+
     }, [id, auth, userVideoCompletionStatus, userIdfirebase, courseId]);
 
 
@@ -371,9 +371,7 @@ const CourseContentPage = () => {
         closeModal();
     };
 
-
     const handleBookmarkClick = () => {
-        // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
                 if (response.ok) {
@@ -383,26 +381,11 @@ const CourseContentPage = () => {
                 }
             })
             .then((userData) => {
-                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
+                const user = userData[0];
 
-                // Bước 2: Lấy danh sách khóa học đã lưu của người dùng
-                const savedCourses = user.courseSaved || []; // Danh sách khóa học đã lưu
+                if (!user.courseSaved.includes(id)) {
+                    user.courseSaved.push(id);
 
-                // Kiểm tra xem courseID đã tồn tại trong danh sách đã lưu chưa
-                if (!savedCourses.includes(courseId)) {
-                    // Nếu chưa tồn tại, thêm courseID vào danh sách đã lưu
-                    savedCourses.push(courseId);
-
-                    // Bước 3: Cập nhật danh sách khóa học đã lưu của người dùng
-                    user.courseSaved = savedCourses;
-
-                    // Kiểm tra xem user.id có phải là số hay không
-                    if (typeof user.id !== 'number') {
-                        // Chuyển đổi user.id thành số nếu nó không phải là số
-                        user.id = parseInt(user.id);
-                    }
-
-                    // Bước 4: Cập nhật dữ liệu người dùng sau khi lưu khóa học
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
                         method: 'PUT',
                         headers: {
@@ -412,7 +395,6 @@ const CourseContentPage = () => {
                     })
                         .then((updateResponse) => {
                             if (updateResponse.ok) {
-                                // Hiển thị thông báo thành công
                                 message.success('Lưu khóa học thành công !');
                             } else {
                                 throw new Error('Failed to update user data.');
@@ -429,10 +411,9 @@ const CourseContentPage = () => {
             })
             .catch((error) => {
                 console.error('Error:', error);
-                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
+                // Handle error or display an error message to the user
             });
     };
-
 
     if (!product) {
         return <div>Loading...</div>;
