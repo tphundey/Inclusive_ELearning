@@ -40,7 +40,6 @@ const CourseContentPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-
         axios.get('http://localhost:3000/UserProgress')
             .then((response) => {
                 const userProgressData = response.data;
@@ -49,9 +48,6 @@ const CourseContentPage = () => {
                 currentUserProgress.forEach((progress: any) => {
                     initialUserVideoCompletionStatus[progress.videoId] = progress.completionStatus;
                 });
-                // Log thông tin về trạng thái hoàn thành của video
-                console.log('Initial User Video Completion', initialUserVideoCompletionStatus);
-                // Lưu trạng thái hoàn thành của video vào state
                 setUserVideoCompletionStatus(initialUserVideoCompletionStatus);
             })
             .catch((error) => {
@@ -85,20 +81,21 @@ const CourseContentPage = () => {
                 const userProgressResponse = await axios.get('http://localhost:3000/UserProgress');
                 const userProgressData = userProgressResponse.data;
 
-                // Filter user progress based on current user
-                const currentUserProgress = userProgressData.filter((progress) => progress.userId === userIdfirebase);
+                const currentUserProgress = userProgressData.filter((progress:any) => progress.userId === userIdfirebase);
 
                 const completedVideoIds = currentUserProgress
-                    .filter((progress) => uniqueVideoIdsInCourse.includes(progress.videoId))
-                    .map((progress) => progress.videoId);
+                    .filter((progress:any) => uniqueVideoIdsInCourse.includes(progress.videoId))
+                    .map((progress:any) => progress.videoId);
 
                 const allVideosCompleted = uniqueVideoIdsInCourse.every((videoId) => completedVideoIds.includes(videoId));
                 setAllVideosCompleted(allVideosCompleted);
+           
 
-                console.log('Course Data:', productData);
-                console.log('Video IDs in Course:', uniqueVideoIdsInCourse);
-                console.log('Initial User Video Completion:', userVideoCompletionStatus);
-                console.log('All Videos Completed:', allVideosCompleted);
+                const [completedVideosCount, setCompletedVideosCount] = useState<number>(0);
+                const [completionPercentage, setCompletionPercentage] = useState<number>(0);
+                // Lưu trữ số lượng video hoàn thành trong state
+                setCompletedVideosCount(completedVideosCount);           
+                setCompletionPercentage(completionPercentage);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -114,46 +111,59 @@ const CourseContentPage = () => {
         };
     }, [id, auth, userVideoCompletionStatus, userIdfirebase]);
 
-    useEffect(() => {
-        if (allVideosCompleted) {
-            setShowSuccessAlert(true);
-        }
-    }, [allVideosCompleted]);
+
 
     const handleNavigate = () => {
         window.location.href = `http://localhost:5173/getcertificate/${id}`;
     };
 
-
     useEffect(() => {
-        // Fetch course details
-        axios.get(`http://localhost:3000/Courses/${id}`)
-            .then((response) => {
-                const productData = response.data;
+        const fetchData = async () => {
+            try {
+               
+                const courseResponse = await axios.get(`http://localhost:3000/Courses/${id}`);
+                const productData = courseResponse.data;
                 setProduct(productData);
-                axios.get(`http://localhost:3000/Videos`)
-                    .then((videoResponse) => {
-                        const allVideos = videoResponse.data;
-                        const videoIdsInCourse = productData.videoID;
+ 
+                const allVideosResponse = await axios.get(`http://localhost:3000/Videos`);
+                const allVideos = allVideosResponse.data;
+    
+                const filteredVideos = allVideos.filter((video: any) => {
+                    return video.courseId === id;
+                });
+    
+                setVideos(filteredVideos);
+    
+                if (filteredVideos.length > 0) {
+                    setSelectedVideoUrl(filteredVideos[0].videoURL);
+                    setCurrentVideo(filteredVideos[0]);
+                }
+    
+                const allVideoIds = filteredVideos.map((video: { id: any; }) => video.id);
+                const userCompletedVideos = allVideoIds.every((videoId: string | number) => userVideoCompletionStatus[videoId]);
+                console.log('Trạng thái hoàn thành khóa học:', userCompletedVideos);
+                if (userCompletedVideos === true) {
+                    setShowSuccessAlert(true);
+                }
+                setAllVideosCompleted(userCompletedVideos);
+    
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                setuserIdfirebase(currentUser.uid);
+            }
+        });
+        return () => {
+            unsubscribe();
+        };
+    
+    }, [id, auth, userVideoCompletionStatus, userIdfirebase, courseId]);
 
-                        // Filter videos based on video IDs in the course
-                        const filteredVideos = allVideos.filter((video) =>
-                            videoIdsInCourse.includes(video.id)
-                        );
-                        setVideos(filteredVideos);
-                        if (filteredVideos.length > 0) {
-                            setSelectedVideoUrl(filteredVideos[0].videoURL);
-                            setCurrentVideo(filteredVideos[0]);
-                        }
-                    })
-                    .catch((videoError) => {
-                        console.error('Error fetching video data:', videoError);
-                    });
-            })
-            .catch((error) => {
-                console.error('Error fetching product data:', error);
-            });
-    }, [id]);
+
 
     const handleVideoTitleClick = (videoURL: any, video: any) => {
         setHasChangedVideo(true); // Đã chuyển video
@@ -282,11 +292,8 @@ const CourseContentPage = () => {
             setWatchedTimeOnReturn(currentTime);
         }
 
-        // Kiểm tra xem người dùng đã chuyển video hay chưa
         if (hasChangedVideo) {
             setHasChangedVideo(false);
-
-            // Lưu thời gian đã xem video hiện tại sau khi chuyển video
             setWatchedTimeOnReturn(currentTime);
         }
     };
@@ -459,9 +466,8 @@ const CourseContentPage = () => {
         return false;
     });
 
-    // Số lượng video đã hoàn thành
-    const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
 
+    const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
     const calculatedCompletionPercentage = (numberOfCompletedVideos / uniqueVideoIdsInCourse.length) * 100;
 
     return (
