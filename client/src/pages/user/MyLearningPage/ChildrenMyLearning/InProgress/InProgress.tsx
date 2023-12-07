@@ -28,11 +28,13 @@ const InProgress = () => {
     }, [auth]);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
+                    console.log(user);
+
                     const savedCourseIds = user.registeredCourseID;
                     fetch(`http://localhost:3000/Courses`)
                         .then((response) => response.json())
@@ -50,15 +52,15 @@ const InProgress = () => {
             .catch((error) => {
                 console.error('Error fetching user data: ', error);
             });
-    }, [email]
+    }, [userId]
     );
 
     const handleRemoveCourse = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.registeredCourseID;
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
                     const updatedUserData = { ...user, registeredCourseID: updatedRegisteredCourseIds };
@@ -85,13 +87,13 @@ const InProgress = () => {
     };
 
     const handleMoveToHistory = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.registeredCourseID;
-                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id) => id !== courseId);
+                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id:any) => id !== courseId);
                     const updatedHistoryCourseIds = [...user.historyCourseID, courseId];
                     const updatedUserData = {
                         ...user,
@@ -108,7 +110,7 @@ const InProgress = () => {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                const updatedSavedCourses = savedCourses.filter((course) => course.id !== courseId);
+                                const updatedSavedCourses = savedCourses.filter((course:any) => course.id !== courseId);
                                 setSavedCourses(updatedSavedCourses);
                             } else {
                                 console.error('Failed to update user data:', response);
@@ -125,11 +127,11 @@ const InProgress = () => {
     };
 
     const handleAddToCollections = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const collectionCourseIds = user.collectionCourseID || [];
                     if (!collectionCourseIds.includes(courseId)) {
                         const updatedCollectionCourseIds = [...collectionCourseIds, courseId];

@@ -30,11 +30,11 @@ const History = () => {
     console.log(userId);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const savedCourseIds = user.historyCourseID;
                     fetch(`http://localhost:3000/Courses`)
                         .then((response) => response.json())
@@ -56,11 +56,11 @@ const History = () => {
     );
 
     const handleRemoveCourse = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.historyCourseID;
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
                     const updatedUserData = { ...user, historyCourseID: updatedRegisteredCourseIds };

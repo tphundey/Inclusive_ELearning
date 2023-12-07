@@ -138,7 +138,7 @@ const IntroductionPage = () => {
                 }
                 const data = await response.json();
                 if (data) {
-                    const payment = data.find((item: any) => item.courseID === courseID && item.userID === userID && item.payment_status === true);
+                    const payment = data.find((item: any) => item.courseID === id && item.userID === userID && item.payment_status === true);
                     if (payment) {
                         setCanDisplayForm(true);
                     }
@@ -180,7 +180,7 @@ const IntroductionPage = () => {
 
     const handleBuyButtonClick = () => {
         // Kiểm tra xem userEmail và courseID có tồn tại không
-        if (!userEmail || !courseID) {
+        if (!userEmail || !id) {
             console.error('Invalid userEmail or courseID.');
             // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             return;
@@ -203,8 +203,8 @@ const IntroductionPage = () => {
                 const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
 
                 // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
-                if (!registeredCourseIDs.includes(courseID)) {
-                    registeredCourseIDs.push(courseID);
+                if (!registeredCourseIDs.includes(id)) {
+                    registeredCourseIDs.push(id);
                 }
 
                 // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
@@ -225,7 +225,7 @@ const IntroductionPage = () => {
                     // Bước 5: Thực hiện thanh toán
                     const paymentData = {
                         userID: userID,
-                        courseID: courseID,
+                        courseID: id,
                         coupon: "null",
                         paymentAmount: parseFloat(product.price),
                         date: "2023-09-29",

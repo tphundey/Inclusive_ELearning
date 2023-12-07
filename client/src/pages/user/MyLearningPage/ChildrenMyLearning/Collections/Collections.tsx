@@ -30,11 +30,11 @@ const Collection = () => {
     console.log(userId);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const savedCourseIds = user.collectionCourseID;
                     fetch(`http://localhost:3000/Courses`)
                         .then((response) => response.json())
@@ -56,11 +56,11 @@ const Collection = () => {
     );
 
     const handleRemoveCourse = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.collectionCourseID;
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
                     const updatedUserData = { ...user, collectionCourseID: updatedRegisteredCourseIds };
@@ -87,29 +87,26 @@ const Collection = () => {
             }), [email]
     };
     const handleMoveToHistory = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.collectionCourseID;
 
-                    // Loại bỏ courseId khỏi danh sách registeredCourseIds
-                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id) => id !== courseId);
 
-                    // Thêm courseId vào danh sách history
+                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id:any) => id !== courseId);
+
                     const updatedHistoryCourseIds = [...user.historyCourseID, courseId];
 
-                    // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID và historyCourseID đã cập nhật
                     const updatedUserData = {
                         ...user,
                         collectionCourseID: updatedRegisteredCourseIds,
                         historyCourseID: updatedHistoryCourseIds,
                     };
 
-                    // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                        method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                        method: 'PUT', 
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -117,8 +114,8 @@ const Collection = () => {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                // Cập nhật lại danh sách khóa học đã đăng ký sau khi chuyển sang lịch sử
-                                const updatedSavedCourses = savedCourses.filter((course) => course.id !== courseId);
+
+                                const updatedSavedCourses = savedCourses.filter((course:any) => course.id !== courseId);
                                 setSavedCourses(updatedSavedCourses);
                             } else {
                                 console.error('Failed to update user data:', response);

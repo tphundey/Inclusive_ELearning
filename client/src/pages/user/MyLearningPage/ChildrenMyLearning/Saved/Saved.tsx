@@ -28,13 +28,13 @@ const Saved = () => {
         };
     }, [auth]);
     console.log(userId);
-    
+
     useEffect(() => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const savedCourseIds = user.courseSaved;
                     fetch(`http://localhost:3000/Courses`)
                         .then((response) => response.json())
@@ -56,16 +56,16 @@ const Saved = () => {
     );
 
     const handleRemoveCourse = (courseId: any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData: any) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.courseSaved;
                     const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
                     const updatedUserData = { ...user, courseSaved: updatedRegisteredCourseIds };
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                        method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                        method: 'PUT', 
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -73,7 +73,6 @@ const Saved = () => {
                     })
                         .then((response: any) => {
                             if (response.ok) {
-                                // Cập nhật lại danh sách khóa học đã đăng ký sau khi xóa
                                 const updatedSavedCourses = savedCourses.filter((course: any) => course.id !== courseId);
                                 setSavedCourses(updatedSavedCourses);
                             } else {
@@ -86,30 +85,27 @@ const Saved = () => {
                 }
             }), [email]
     };
-    const handleMoveToHistory = (courseId:any) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+
+    const handleMoveToHistory = (courseId: any) => {
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const registeredCourseIds = user.courseSaved;
-    
-                    // Loại bỏ courseId khỏi danh sách registeredCourseIds
-                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id) => id !== courseId);
-    
-                    // Thêm courseId vào danh sách history
+
+                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
+
                     const updatedHistoryCourseIds = [...user.historyCourseID, courseId];
-    
-                    // Tạo phiên bản mới của thông tin người dùng với trường registeredCourseID và historyCourseID đã cập nhật
+
                     const updatedUserData = {
                         ...user,
                         courseSaved: updatedRegisteredCourseIds,
                         historyCourseID: updatedHistoryCourseIds,
                     };
-    
-                    // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
+
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                        method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                        method: 'PUT', 
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -117,7 +113,7 @@ const Saved = () => {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                // Cập nhật lại danh sách khóa học đã đăng ký sau khi chuyển sang lịch sử
+                        
                                 const updatedSavedCourses = savedCourses.filter((course) => course.id !== courseId);
                                 setSavedCourses(updatedSavedCourses);
                             } else {
@@ -134,28 +130,26 @@ const Saved = () => {
             });
     };
 
-    const handleAddToCollections = (courseId) => {
-        fetch(`http://localhost:3000/googleAccount?userId=${userId}`)
+    const handleAddToCollections = (courseId: any) => {
+        fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
-                if (userData.length > 0) {
-                    const user = userData[0];
+                if (userData) {
+                    const user = userData;
                     const collectionCourseIds = user.collectionCourseID || [];
-    
-                    // Kiểm tra xem courseId đã tồn tại trong danh sách collections chưa
+
                     if (!collectionCourseIds.includes(courseId)) {
-                        // Thêm courseId vào danh sách collections
+
                         const updatedCollectionCourseIds = [...collectionCourseIds, courseId];
-    
-                        // Tạo phiên bản mới của thông tin người dùng với trường collectionCourseID đã cập nhật
+
                         const updatedUserData = {
                             ...user,
                             collectionCourseID: updatedCollectionCourseIds,
                         };
-    
-                        // Gửi yêu cầu PUT hoặc PATCH để cập nhật thông tin người dùng
+
+              
                         fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                            method: 'PUT', // Hoặc PATCH tùy thuộc vào cấu trúc của API
+                            method: 'PUT', 
                             headers: {
                                 'Content-Type': 'application/json',
                             },
@@ -216,7 +210,7 @@ const Saved = () => {
                             <div className="dropdown dropdown-right dropdown-end mt-5">
                                 <label tabIndex={0} className="btn m-1"><i className="fa-solid fa-ellipsis"></i></label>
                                 <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
-                                <li><a onClick={() => handleAddToCollections(course.id)}>Add to collections</a></li>
+                                    <li><a onClick={() => handleAddToCollections(course.id)}>Add to collections</a></li>
                                     <li><a onClick={() => handleMoveToHistory(course.id)}>Move to history</a></li>
                                     <li><a onClick={() => handleRemoveCourse(course.id)}>Remove</a></li> {/* Thêm hàm xử lý xóa */}
                                 </ul>
