@@ -93,7 +93,7 @@ const InProgress = () => {
                 if (userData) {
                     const user = userData;
                     const registeredCourseIds = user.registeredCourseID;
-                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id:any) => id !== courseId);
+                    const updatedRegisteredCourseIds = registeredCourseIds.filter((id: any) => id !== courseId);
                     const updatedHistoryCourseIds = [...user.historyCourseID, courseId];
                     const updatedUserData = {
                         ...user,
@@ -110,7 +110,7 @@ const InProgress = () => {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                const updatedSavedCourses = savedCourses.filter((course:any) => course.id !== courseId);
+                                const updatedSavedCourses = savedCourses.filter((course: any) => course.id !== courseId);
                                 setSavedCourses(updatedSavedCourses);
                             } else {
                                 console.error('Failed to update user data:', response);

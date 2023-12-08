@@ -45,13 +45,24 @@
 
 .courseProgress {
     display: flex;
-    gap: 25px;
+    gap: 5px;
     padding: 20px;
-    width: 70%;
+    width: 90%;
 }
 
 .imgCoureProgress img {
     width: 220px;
+    height: 120px
+}
+
+.imgCoureProgress {
+    width: 30%;
+    height: 120px;
+}
+
+.infoCourseProgress {
+    width: 70%;
+    height: 120px
 }
 
 .infoCourseProgress h3 {
@@ -95,8 +106,9 @@
     justify-content: space-between;
 }
 
-.notlogin{
+.notlogin {
     width: 220px;
     padding: 0px;
     margin: 0px auto;
 }
+
