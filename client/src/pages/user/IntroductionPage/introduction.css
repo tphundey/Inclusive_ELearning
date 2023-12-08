@@ -196,7 +196,7 @@
     font-size: 12px;
     padding: 1px 10px;
     position: relative;
-    top: -45px;
+    top: -20px;
     left: -37%;
 }
 
@@ -294,4 +294,9 @@
     z-index: 1;
     top: 2%;
     right: 2%;
+}
+
+.prosimi img {
+    width: 130px;
+    height: 70px;
 }

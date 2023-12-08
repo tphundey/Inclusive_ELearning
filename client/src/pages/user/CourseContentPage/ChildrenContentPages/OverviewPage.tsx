@@ -21,75 +21,40 @@ const OverViewPage = () => {
             });
     }, [id]);
 
-    useEffect(() => {
-        if (product.categoryID) {
-            const apiUrl = `http://localhost:3000/Courses?categoryID=${product.categoryID}`;
-            axios.get(apiUrl)
-                .then((response) => {
-                    setSimilarProducts(response.data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }, [product.categoryID]);
+
+    // ... other state variables ...
 
     useEffect(() => {
-        // Lấy tất cả đánh giá từ API
-        axios.get('http://localhost:3000/Reviews')
+        // Fetch the main product
+        axios.get(`http://localhost:3000/Courses/${id}`)
             .then((response) => {
-                setReviews(response.data);
+                const productData = response.data;
+                setProduct(productData);
+
+                // Check if product has categoryID
+                if (productData.categoryID) {
+                    // Fetch all courses
+                    axios.get(`http://localhost:3000/Courses`)
+                        .then((allCoursesResponse) => {
+                            // Filter courses with the same categoryID and exclude the current product
+                            const filteredSimilarProducts = allCoursesResponse.data.filter(course => course.categoryID === productData.categoryID && course.id !== id);
+                            setSimilarProducts(filteredSimilarProducts);
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching all courses:', error);
+                        });
+                }
             })
             .catch((error) => {
-                console.error(error);
+                console.error('Error fetching product data:', error);
             });
-        // Lấy tất cả người dùng từ API
-        axios
-            .get('http://localhost:3000/users')
-            .then((response) => {
-                setUsers(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+    }, [id]);
 
     const truncateProductName = (name: any, maxLength: any) => {
         return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
     };
 
-    const [shuffledSimilarProducts, setShuffledSimilarProducts] = useState<any[]>([]);
-    const shuffleArray = (array: any) => {
-        let currentIndex = array.length, randomIndex;
-        while (currentIndex !== 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-        }
 
-        return array;
-    };
-    useEffect(() => {
-        setShuffledSimilarProducts(shuffleArray(similarProducts));
-    }, [similarProducts]);
-
-    const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
-        <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
-            <div className="flex items-center shrink-0">
-                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
-            </div>
-            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
-                <h4 className='text-xs'>COURSE</h4>
-                <h4 className="text-base text-slate-700 font-medium">
-                    <a href={`/introduction/${similarProduct.id}`}>
-                        <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
-                    </a>
-                </h4>
-                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
-            </div>
-        </li>
-    ));
 
     if (!product) {
         return <div>Loading...</div>;
@@ -177,7 +142,23 @@ const OverViewPage = () => {
                 <h2 className='text-xl font-medium p-3 mt-5'>Related courses</h2>
 
                 <ul className="divide-y divide-slate-100">
-                    {renderedSimilarProducts}
+                    {similarProducts.slice(0, 7).map((similarProduct) => (
+                        <li key={similarProduct.id} className="producsimi flex items-start gap-4 px-4 py-3">
+                            <div className="flex items-center shrink-0">
+                                <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
+                            </div>
+                            <div className="flex flex-col gap-0 min-h-[2rem] items-start justify-center w-full min-w-0">
+                                <h4 className='text-xs'>COURSE</h4>
+                                <h4 className="text-base text-slate-700 font-medium">
+                                    <a href={`/introduction/${similarProduct.id}`}>
+                                        <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
+                                    </a>
+                                </h4>
+                                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                                <span className='timeforvideoIntro  ml-1'>{similarProduct.duration} m</span>
+                            </div>
+                        </li>
+                    ))}
                     <hr />
                 </ul>
             </div>

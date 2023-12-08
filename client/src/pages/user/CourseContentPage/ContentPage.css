@@ -341,7 +341,17 @@
     background-color: #e0ebf4;
 }
 
-.chungchi{
+.chungchi {
     color: black;
     border: 1px solid #0964C3;
+}
+
+.producsimi {
+    width: 100%;
+    height: 120px;
+}
+
+.producsimi img{
+    width: 130px;
+    height: 70px;
 }

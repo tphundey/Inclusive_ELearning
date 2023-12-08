@@ -598,7 +598,7 @@ const IntroductionPage = () => {
     }, [similarProducts]);
 
     const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
-        <li key={similarProduct.id} className="flex items-start gap-4 px-4 py-3">
+        <li key={similarProduct.id} className="prosimi flex items-start gap-4 px-4 py-3">
             <div className="flex items-center shrink-0">
                 <img src={similarProduct.courseIMG} alt="product image" className="w-32 rounded" />
             </div>
