@@ -32,30 +32,37 @@ function NotesComponent() {
         };
     }, [auth]);
 
-    useEffect(() => {
-        const userId = user?.uid;
+   useEffect(() => {
+    const userId = user?.uid;
 
-        if (userId) {
-            axios.get(`http://localhost:3000/Notes?videoID=${id}&uid=${userId}`)
-                .then((response) => {
-                    const notesData = response.data;
-                    const reversedNotesData = notesData.reverse();
-                    setNotes(reversedNotesData);
-
-                    axios.get(`http://localhost:3000/Courses/${id}`)
-                        .then((courseResponse) => {
-                            setCourseInfo(courseResponse.data);
-                            setCourseTitle(courseResponse.data.courseName);
-                        })
-                        .catch((courseError) => {
-                            console.error('Error loading course information:', courseError);
-                        });
-                })
-                .catch((error) => {
-                    console.error('Error loading notes:', error);
+    if (userId) {
+        axios.get(`http://localhost:3000/Notes?videoID=${id}&uid=${userId}`)
+            .then((response) => {
+                const notesData = response.data;
+                
+                // Lọc dữ liệu bằng logic if-else
+                const filteredNotesData = notesData.filter((note) => {
+                    // Thực hiện điều kiện lọc của bạn ở đây
+                    return note.videoID === id && note.uid === userId;
                 });
-        }
-    }, [id, user]);
+                
+                const reversedNotesData = filteredNotesData.reverse();
+                setNotes(reversedNotesData);
+
+                axios.get(`http://localhost:3000/Courses/${id}`)
+                    .then((courseResponse) => {
+                        setCourseInfo(courseResponse.data);
+                        setCourseTitle(courseResponse.data.courseName);
+                    })
+                    .catch((courseError) => {
+                        console.error('Error loading course information:', courseError);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error loading notes:', error);
+            });
+    }
+}, [id, user]);
 
     const handleDeleteNote = (noteId: any) => {
         axios.delete(`http://localhost:3000/Notes/${noteId}`)
@@ -84,7 +91,7 @@ function NotesComponent() {
                 const formattedDate = vietnamTime.format('YYYY-MM-DD');
 
                 axios.post('http://localhost:3000/Notes', {
-                    videoID: parsedVideoID,
+                    videoID: id,
                     note: newNoteContent,
                     date: formattedDate,
                     uid: userId,
