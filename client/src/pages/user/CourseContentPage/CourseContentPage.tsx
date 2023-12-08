@@ -435,21 +435,22 @@ const CourseContentPage = () => {
             console.log('UserID không hợp lệ');
             return;
         }
-
-        // Sử dụng URL truy vấn để sắp xếp theo ID giảm dần và lấy dữ liệu với ID lớn nhất
-        const API_URL = `http://localhost:3000/userVideoProgress?_sort=id&_order=desc&_limit=1`;
-
+        const API_URL = 'http://localhost:3000/userVideoProgress';
         axios
             .get(API_URL)
-            .then((response: any) => {
+            .then((response) => {
                 if (response.data.length > 0) {
-                    const latestRecord = response.data[0];
-                    const watchedTimeInSeconds = latestRecord.watchedTime; // Thời lượng video tính bằng giây
+                    const reversedData = response.data.reverse();
+
+                    const latestRecord = reversedData[0];
+
+                    const watchedTimeInSeconds = latestRecord.watchedTime;
                     const minutes = Math.floor(watchedTimeInSeconds / 60);
                     const seconds = watchedTimeInSeconds % 60;
                     const formattedDuration = `${minutes} phút ${seconds} giây`;
-                    setVideoDuration(formattedDuration); // Đặt thời lượng video vào state
-                    setIsModalOpen(true); // Mở modal sau khi lấy được thời lượng
+
+                    setVideoDuration(formattedDuration);
+                    setIsModalOpen(true);
                 } else {
                     console.log('Không tìm thấy bất kỳ dữ liệu nào.');
                 }
@@ -458,7 +459,6 @@ const CourseContentPage = () => {
                 console.error('Lỗi khi lấy thời lượng video từ API:', error);
             });
     };
-
     // Thêm hàm để đóng modal
     const closeModal = () => {
         setIsModalOpen(false);
@@ -470,6 +470,7 @@ const CourseContentPage = () => {
     };
 
     const handleBookmarkClick = () => {
+        // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
                 if (response.ok) {
@@ -479,11 +480,23 @@ const CourseContentPage = () => {
                 }
             })
             .then((userData) => {
-                const user = userData[0];
+                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
 
-                if (!user.courseSaved.includes(id)) {
-                    user.courseSaved.push(id);
+                // Bước 2: Lấy danh sách khóa học đã lưu của người dùng
+                const savedCourses = user.courseSaved || []; // Danh sách khóa học đã lưu
+                console.log(savedCourses, 'khoa hoc luu');
 
+                // Kiểm tra xem courseID đã tồn tại trong danh sách đã lưu chưa
+                if (!savedCourses.includes(id)) {
+                    // Nếu chưa tồn tại, thêm courseID vào danh sách đã lưu
+                    savedCourses.push(id);
+
+                    // Bước 3: Cập nhật danh sách khóa học đã lưu của người dùng
+                    user.courseSaved = savedCourses;
+
+
+
+                    // Bước 4: Cập nhật dữ liệu người dùng sau khi lưu khóa học
                     fetch(`http://localhost:3000/googleAccount/${user.id}`, {
                         method: 'PUT',
                         headers: {
@@ -493,6 +506,7 @@ const CourseContentPage = () => {
                     })
                         .then((updateResponse) => {
                             if (updateResponse.ok) {
+                                // Hiển thị thông báo thành công
                                 message.success('Lưu khóa học thành công !');
                             } else {
                                 throw new Error('Failed to update user data.');
@@ -509,7 +523,7 @@ const CourseContentPage = () => {
             })
             .catch((error) => {
                 console.error('Error:', error);
-                // Handle error or display an error message to the user
+                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             });
     };
 
@@ -545,6 +559,23 @@ const CourseContentPage = () => {
         return false;
     });
 
+    const handleCopyToClipboard = () => {
+        const currentURL = window.location.href;
+
+        // Create a temporary textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = currentURL;
+        document.body.appendChild(textarea);
+
+        // Select and copy the URL
+        textarea.select();
+        document.execCommand('copy');
+
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+        message.success('URL copied to clipboard!');
+ 
+    };
 
     const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
     const calculatedCompletionPercentage = (numberOfCompletedVideos / uniqueVideoIdsInCourse.length) * 100;
@@ -627,9 +658,9 @@ const CourseContentPage = () => {
                             <div className="content-info2">Module introduction</div>
                         </div>
                         <div className='fl-content-option'>
-                            <i className="fa-regular fa-thumbs-up"></i> <span>23</span>
-                            <i className="fa-regular fa-bookmark" onClick={handleBookmarkClick}></i> <span>2304</span> |
-                            <i className="fa-solid fa-share"></i>
+                            {/* <i className="fa-regular fa-thumbs-up"></i> <span>23</span> */}
+                            <i className="fa-regular fa-bookmark" onClick={handleBookmarkClick}></i> <span></span> |
+                            <i className="fa-solid fa-share" onClick={handleCopyToClipboard}></i>
                         </div>
                     </div>
                 </div>
