@@ -1,5 +1,5 @@
 import './ContentPage.css';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { message } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-
+import { useNavigate } from 'react-router-dom';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -38,7 +38,7 @@ const CourseContentPage = () => {
     const [userVideoCompletionStatus, setUserVideoCompletionStatus] = useState({});
     const [videoDuration, setVideoDuration] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const navigate = useNavigate(); // Hook để sử dụng điều hướng
     useEffect(() => {
         axios.get('http://localhost:3000/UserProgress')
             .then((response) => {
@@ -54,8 +54,98 @@ const CourseContentPage = () => {
                 console.error('Error fetching user progress data:', error);
             });
     }, [userIdfirebase]);
+    const [iduser, setIduser] = useState(0);
+    const [paymentData, setPaymentData] = useState([]);
+    const [paymentStatu2s, setPaymentStatus2] = useState(false);
+    const getUserIdByUid = async (uid) => {
+        try {
+            const response = await fetch(`http://localhost:3000/googleAccount?uid=${uid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+
+                // Assuming that the API returns an array of users
+                if (userData && userData.length > 0) {
+                    // Assuming that each user has an "id" property
+                    const userId = userData[0].id;
+                    return userId;
+                } else {
+                    console.log('User not found');
+                    return null;
+                }
+            } else {
+                throw new Error('Failed to fetch user data.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return null;
+        }
+    };
+
+    // Example usage
+    const uid = userIdfirebase;
+    getUserIdByUid(uid)
+        .then(userId => {
+            if (userId) {
+                setIduser(userId)
+                console.log('User ID:', userId);
+            } else {
+                console.log('User ID not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
 
+    console.log(id, 'khóa học id');
+    console.log(iduser, 'id người dùng');
+
+    useEffect(() => {
+        const checkPaymentStatus = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/payment', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const allPaymentData = await response.json();
+                    setPaymentData(allPaymentData);
+
+                    // Kiểm tra xem có bản ghi thanh toán tương ứng với courseId và userId không
+                    const isAnyPaymentRecord = allPaymentData.some(record => record.courseId === id && record.userId === iduser);
+                    console.log(isAnyPaymentRecord, 'testtttttttt');
+
+                    setPaymentStatus2(isAnyPaymentRecord); // Set trạng thái đã mua là true nếu có ít nhất một bản ghi, ngược lại là false
+                } else {
+                    throw new Error('Failed to fetch payment data.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        checkPaymentStatus();
+    }, [id, iduser]);
+
+    useEffect(() => {
+        if (!paymentStatu2s) {
+            navigate('/error');
+        } else {
+
+        }
+    }, [paymentStatu2s]);
+    // Kiểm tra xem có bản ghi thanh toán tương ứng với courseId và userId không
+    const paymentRecord = paymentData.find(record => record.courseId === courseId && record.userId === userId);
+    const paymentStatus = paymentRecord ? paymentRecord.paymentStatus : false;
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -508,6 +598,13 @@ const CourseContentPage = () => {
             <div className="contentpage-right">
                 <div className="content-infocourse">
                     <div className="content-info-fl">
+                        {/* <div>  <div>
+                            {paymentStatu2s ? (
+                                <p>Người dùng đã thanh toán khóa học.</p>
+                            ) : (
+                                <p>Người dùng chưa thanh toán khóa học.</p>
+                            )}
+                        </div> */}
                         <div>
                             <div className="content-info1">{product.courseName}</div>
                             <div className="content-info2">Module introduction</div>

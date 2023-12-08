@@ -107,6 +107,7 @@ export const routers = createBrowserRouter([
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
+            { path: "error", element: <ErrorPage /> },
             { path: "chats", element: <Chats /> },
             { path: "postpage", element: <Post /> },
             { path: "profile/:id", element: <Profile /> },
