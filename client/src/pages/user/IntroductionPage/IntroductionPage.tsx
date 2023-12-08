@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Input from 'antd/es/input/Input';
-import { Navigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { Timeline, Form, Button, notification, Skeleton } from 'antd';
@@ -40,20 +40,133 @@ const IntroductionPage = () => {
     const [categoryName, setCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
     const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-
+    const [userIdfirebase, setuserIdfirebase] = useState<any | null>(null);
+    const navigate = useNavigate();
     const handlePreviewClick = () => {
         setIsPreviewVisible(true);
     };
+    const [paymentData2, setPaymentData2] = useState([]);
+    const [numberOfMatchingPayments, setNumberOfMatchingPayments] = useState(0);
+    const existingCourseId = id;
 
+    useEffect(() => {
+        // Gọi API để lấy dữ liệu từ http://localhost:3000/Payment
+        fetch('http://localhost:3000/Payment')
+            .then(response => response.json())
+            .then(data => setPaymentData2(data))
+            .catch(error => console.error('Error fetching payment data:', error));
+    }, []);
+
+    useEffect(() => {
+        // Lọc ra các mảng có 'courseId' trùng với id đã có sẵn
+        const filtered = paymentData2.filter(payment => payment.courseId === existingCourseId);
+        setNumberOfMatchingPayments(filtered.length);
+    }, [existingCourseId, paymentData2]);
+
+    // Log tổng số mảng có 'courseId' trùng
+    useEffect(() => {
+        console.log('Tổng số mảng có courseId trùng:', numberOfMatchingPayments);
+    }, [numberOfMatchingPayments]);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setuserEmail(currentUser?.email)
+            setuserIdfirebase(currentUser?.uid)
         });
         return () => {
             unsubscribe();
         };
     }, [auth]);
+
+
+
+
+
+
+    const getUserIdByUid = async (uid) => {
+        try {
+            const response = await fetch(`http://localhost:3000/googleAccount?uid=${uid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+
+                // Assuming that the API returns an array of users
+                if (userData && userData.length > 0) {
+                    // Assuming that each user has an "id" property
+                    const userId = userData[0].id;
+                    return userId;
+                } else {
+                    console.log('User not found');
+                    return null;
+                }
+            } else {
+                throw new Error('Failed to fetch user data.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return null;
+        }
+    };
+
+    // Example usage
+    const uid = userIdfirebase;
+    getUserIdByUid(uid)
+        .then(userId => {
+            if (userId) {
+                setIduser(userId)
+                console.log('User ID:', userId);
+            } else {
+                console.log('User ID not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    const [iduser, setIduser] = useState(0);
+    const [paymentData, setPaymentData] = useState([]);
+    const [paymentStatu2s, setPaymentStatus2] = useState(false);
+    console.log(id, 'khóa học id');
+    console.log(iduser, 'id người dùng');
+
+    useEffect(() => {
+        const checkPaymentStatus = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/payment', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const allPaymentData = await response.json();
+                    setPaymentData(allPaymentData);
+
+                    // Kiểm tra xem có bản ghi thanh toán tương ứng với courseId và userId không
+                    const isAnyPaymentRecord = allPaymentData.some(record => record.courseId === id && record.userId === iduser);
+                    console.log(isAnyPaymentRecord, 'testtttttttt');
+
+                    setPaymentStatus2(isAnyPaymentRecord); // Set trạng thái đã mua là true nếu có ít nhất một bản ghi, ngược lại là false
+                } else {
+                    throw new Error('Failed to fetch payment data.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        checkPaymentStatus();
+    }, [id, iduser]);
+
+
+
+
+
 
 
     ////////////////////Lấy thông tin khóa học (videos) theo ID////////////////////
@@ -636,13 +749,13 @@ const IntroductionPage = () => {
                             <div className='mt-1'>{averageRating}</div>
                             <div className='starrev' id="starRating">{starRating}</div>
                             <div className='mt-1'>({reviews.length})</div>
-                            <div className='mt-1'><span>{paymentCount} learners</span></div>
+                            <div className='mt-1'><span>{numberOfMatchingPayments} learners</span></div>
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start your progress</button>
                             </Link>
-                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy for my team</button>
+                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{product.price}đ]</button>
                         </div>
                     </div>
                     <div className="courseRight">
@@ -738,26 +851,32 @@ const IntroductionPage = () => {
                                 </div>
                             </div>
                         </div>
-                        {canDisplayForm && (
-                            <Form className='mt-7 formReview' action="" method="post" >
-                                <div className="gap-2">
-                                    <div className='flex items-center gap-2'>
-                                        <Rating className='flex text-yellow-400'
-                                            value={review.rating}
-                                            onChange={handleRatingChange}
+                        {paymentStatu2s ? (
+                            <>
+                                <Form className='mt-7 formReview' action="" method="post" >
+                                    <div className="gap-2">
+                                        <div className='flex items-center gap-2'>
+                                            <Rating className='flex text-yellow-400'
+                                                value={review.rating}
+                                                onChange={handleRatingChange}
+                                            />
+                                            <Typography className="font-medium mb-4 text-yellow-400">
+                                                {rated}.0
+                                            </Typography>
+                                        </div>
+                                        <Input
+                                            value={review.comment}
+                                            onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                         />
-                                        <Typography className="font-medium mb-4 text-yellow-400">
-                                            {rated}.0
-                                        </Typography>
+                                        <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
                                     </div>
-                                    <Input
-                                        value={review.comment}
-                                        onChange={(e) => setReview({ ...review, comment: e.target.value })}
-                                    />
-                                    <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
-                                </div>
-                            </Form>
+                                </Form>
+
+                            </>
+                        ) : (
+                            <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
                         )}
+
                         <div className="listReviewIntro">
                             {reviews.map((review) => (
                                 <div key={review.id} className="reviewIntroChildren">
