@@ -12,6 +12,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
 import { generateTimelineItems } from '@/components/TimeLineItem/TimeLineItem';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -731,7 +732,7 @@ const IntroductionPage = () => {
     if (loading) {
         return <Skeleton active />;
     }
-
+    const formattedPrice = formatCurrency(product.price);
     return (
         <div className="containerCss">
             <div className="course-header-container">
@@ -755,7 +756,7 @@ const IntroductionPage = () => {
                             <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start your progress</button>
                             </Link>
-                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{product.price}đ]</button>
+                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
                         </div>
                     </div>
                     <div className="courseRight">
