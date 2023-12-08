@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Input from 'antd/es/input/Input';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { Timeline, Form, Button, notification, Skeleton } from 'antd';
@@ -35,6 +35,7 @@ const IntroductionPage = () => {
     const timelineItems = generateTimelineItems(videos);
     const [userReviews, setUserReviews] = useState<any[]>([]);
     const [totalReviews, setTotalReviews] = useState(0);
+    const [amount, setAmount] = useState(0);
     const [paymentCount, setPaymentCount] = useState(0);
     const [categoryName, setCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
@@ -62,6 +63,7 @@ const IntroductionPage = () => {
                 // Fetch course data
                 const courseResponse = await axios.get(`http://localhost:3000/Courses/${id}`);
                 const productData = courseResponse.data;
+                setAmount(courseResponse.data.price)
                 setProduct(productData);
 
                 // Fetch all videos
@@ -177,6 +179,97 @@ const IntroductionPage = () => {
         setRatingCounts(counts);
     }, [reviews]);
 
+    // const handleBuyButtonClick = () => {
+    //     // // Kiểm tra xem userEmail và courseID có tồn tại không
+    //     if (!userEmail || !id) {
+    //         console.error('Invalid userEmail or courseID.');
+    //         // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
+    //         return;
+    //     }
+
+    //     // Bước 1: Lấy thông tin người dùng từ API
+    //     fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.json();
+    //             } else {
+    //                 throw new Error('Failed to retrieve user data from the API.');
+    //             }
+    //         })
+    //         .then((userData) => {
+    //             const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
+    //             const userID = user.id;
+
+
+    //             // Bước 2: Lấy danh sách khóa học đã mua của người dùng
+    //             const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
+
+    //             // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
+    //             if (!registeredCourseIDs.includes(id)) {
+    //                 registeredCourseIDs.push(id);
+    //             }
+
+    //             // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
+    //             user.registeredCourseID = registeredCourseIDs;
+
+    //             // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
+    //             return fetch(`http://localhost:3000/googleAccount/${userID}`, {
+    //                 method: 'PUT',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify(user),
+    //             });
+    //         })
+    //         .then((updateResponse) => {
+    //             if (updateResponse.ok) {
+    //                 console.log('User data updated successfully');
+    //                 // Bước 5: Thực hiện thanh toán
+    //                 const paymentData = {
+    //                     userID: userID,
+    //                     courseID: id,
+    //                     coupon: "null",
+    //                     paymentAmount: parseFloat(product.price),
+    //                     date: "2023-09-29",
+    //                     payment_status: true
+    //                 };
+
+    //                 return fetch('http://localhost:3000/payment', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                     body: JSON.stringify(paymentData),
+    //                 });
+    //             } else {
+    //                 throw new Error('Failed to update user data.');
+    //             }
+    //         })
+    //         .then((paymentResponse) => {
+    //             if (paymentResponse.ok) {
+    //                 console.log('Payment successful');
+
+
+    //                 axios.post('http://localhost:3000/saveOrder', { amount, id, userID })
+    //                     .then(response => {
+    //                         console.log(response.data);
+    //                         window.location.href = 'http://localhost:3000/order'
+    //                     })
+    //                     .catch(error => {
+    //                         console.error(error);
+    //                     });
+
+
+    //             } else {
+    //                 throw new Error('Payment failed.');
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error:', error);
+    //         });
+
+
+    // };
 
     const handleBuyButtonClick = () => {
         // Kiểm tra xem userEmail và courseID có tồn tại không
@@ -196,11 +289,11 @@ const IntroductionPage = () => {
                 }
             })
             .then((userData) => {
-                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
+                const user = userData[0];
                 const userID = user.id;
 
                 // Bước 2: Lấy danh sách khóa học đã mua của người dùng
-                const registeredCourseIDs = user.registeredCourseID || []; // Danh sách khóa học đã mua
+                const registeredCourseIDs = user.registeredCourseID || [];
 
                 // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
                 if (!registeredCourseIDs.includes(id)) {
@@ -222,32 +315,20 @@ const IntroductionPage = () => {
             .then((updateResponse) => {
                 if (updateResponse.ok) {
                     console.log('User data updated successfully');
-                    // Bước 5: Thực hiện thanh toán
-                    const paymentData = {
-                        userID: userID,
-                        courseID: id,
-                        coupon: "null",
-                        paymentAmount: parseFloat(product.price),
-                        date: "2023-09-29",
-                        payment_status: true
-                    };
 
-                    return fetch('http://localhost:3000/payment', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(paymentData),
-                    });
+                    // Bạn đã loại bỏ dữ liệu thanh toán ở đây
+
+                    // Tiếp tục với việc lưu order
+                    axios.post('http://localhost:3000/saveOrder', { amount, id, userID })
+                        .then(response => {
+                            console.log(response.data);
+                            window.location.href = 'http://localhost:3000/order';
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
                 } else {
                     throw new Error('Failed to update user data.');
-                }
-            })
-            .then((paymentResponse) => {
-                if (paymentResponse.ok) {
-                    console.log('Payment successful');
-                } else {
-                    throw new Error('Payment failed.');
                 }
             })
             .catch((error) => {

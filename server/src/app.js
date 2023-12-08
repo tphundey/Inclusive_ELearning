@@ -1,30 +1,30 @@
 import mongoose from "mongoose";
 import express from "express";
 import cors from 'cors';
-import router from "./controllers/course"
-import routerCate from "./controllers/categories";
-import routerGoogleAccounts from "./controllers/googleAccount";
-import routerNotes from "./controllers/note";
-import routerPayments from "./controllers/payment";
-import routerPosts from "./controllers/posts";
-import routerReviews from "./controllers/review";
-import routerUserProgress from "./controllers/userProgress";
-import routerVideoProgress from "./controllers/userVideoProgress";
-import routerVideo from "./controllers/video";
+const coursesController = require("./controllers/coursesController");
+const categoriesController = require("./controllers/categoriesController");
+const googleAccountController = require("./controllers/googleAccountController");
+const paymentController = require("./controllers/paymentController");
+const postsController = require("./controllers/postsController");
+const reviewsController = require("./controllers/reviewsController");
+const userProgressController = require("./controllers/userProgressController");
+const userVideoProgressController = require("./controllers/userVideoProgressController");
+const videoController = require("./controllers/videoController");
+const notesController = require("./controllers/notesController");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/Courses", router);
-app.use("/Categories", routerCate);
-app.use("/googleAccount", routerGoogleAccounts);
-app.use("/Payment", routerPayments);
-app.use("/posts", routerPosts);
-app.use("/Reviews", routerReviews);
-app.use("/UserProgress", routerUserProgress);
-app.use("/userVideoProgress", routerVideoProgress);
-app.use("/Videos", routerVideo);
-app.use("/Notes", routerNotes);
+app.use("/Courses", coursesController);
+app.use("/Categories", categoriesController);
+app.use("/googleAccount", googleAccountController);
+app.use("/Payment", paymentController);
+app.use("/posts", postsController);
+app.use("/Reviews", reviewsController);
+app.use("/UserProgress", userProgressController);
+app.use("/userVideoProgress", userVideoProgressController);
+app.use("/Videos", videoController);
+app.use("/Notes", notesController);
 
 app.get("/", (req, res) => {
     res.send("Hello world");
