@@ -136,13 +136,13 @@ const CourseContentPage = () => {
         checkPaymentStatus();
     }, [id, iduser]);
 
-    useEffect(() => {
-        if (!paymentStatu2s) {
-            navigate('/error');
-        } else {
+    // useEffect(() => {
+    //     if (!paymentStatu2s) {
+    //         navigate('/error');
+    //     } else {
 
-        }
-    }, [paymentStatu2s]);
+    //     }
+    // }, [paymentStatu2s]);
     // Kiểm tra xem có bản ghi thanh toán tương ứng với courseId và userId không
     const paymentRecord = paymentData.find(record => record.courseId === courseId && record.userId === userId);
     const paymentStatus = paymentRecord ? paymentRecord.paymentStatus : false;
@@ -551,47 +551,55 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div>
-                    {videos.map((video: any) => {
-                        const isVideoCompleted = userVideoCompletionStatus[video.id] || false;
+                    {paymentStatu2s ? (
+                        <>
+                            {videos.map((video: any) => {
+                                const isVideoCompleted = userVideoCompletionStatus[video.id] || false;
 
-                        return (
-                            <div className="content-left-title-course" key={video.id}>
-                                <div className="checkbox-container">
-                                    {isVideoCompleted ? (
-                                        <i className="fa-solid fa-check"></i>
-                                    ) : (
-                                        <i className="fa-regular fa-circle"></i>
-                                    )}
-                                </div>
-                                <div className="content-list-u">
-                                    <div
-                                        className='cursor-pointer'
-                                        onClick={() => handleVideoTitleClick(video.videoURL, video)}
-                                    >
-                                        {video.videoTitle}
+                                return (
+                                    <div className="content-left-title-course" key={video.id}>
+                                        <div className="checkbox-container">
+                                            {isVideoCompleted ? (
+                                                <i className="fa-solid fa-check"></i>
+                                            ) : (
+                                                <i className="fa-regular fa-circle"></i>
+                                            )}
+                                        </div>
+                                        <div className="content-list-u">
+                                            <div
+                                                className='cursor-pointer'
+                                                onClick={() => handleVideoTitleClick(video.videoURL, video)}
+                                            >
+                                                {video.videoTitle}
+                                            </div>
+                                            <div>
+                                                <i className="fa-regular fa-bookmark hi"></i>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <i className="fa-regular fa-bookmark hi"></i>
-                                    </div>
-                                </div>
+                                );
+                            })}
+                            <div>
+                                <br />
+                                {showSuccessAlert && (
+                                    <Alert
+                                        message="Bạn đã hoàn thành chứng chỉ!"
+                                        type="success"
+                                        showIcon
+                                        description={
+                                            <Button className='chungchi' type="primary" onClick={handleNavigate}>
+                                                Nhận chứng chỉ
+                                            </Button>
+                                        }
+                                    />
+                                )}
                             </div>
-                        );
-                    })}
-                    <div>
-                        <br />
-                        {showSuccessAlert && (
-                            <Alert
-                                message="Bạn đã hoàn thành chứng chỉ!"
-                                type="success"
-                                showIcon
-                                description={
-                                    <Button className='chungchi' type="primary" onClick={handleNavigate}>
-                                        Nhận chứng chỉ
-                                    </Button>
-                                }
-                            />
-                        )}
-                    </div>
+                        </>
+                    ) : (
+                        <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
+                    )}
+
+
                 </div>
             </div>
 
@@ -606,6 +614,7 @@ const CourseContentPage = () => {
                             )}
                         </div> */}
                         <div>
+
                             <div className="content-info1">{product.courseName}</div>
                             <div className="content-info2">Module introduction</div>
                         </div>
@@ -617,11 +626,14 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    <video controls autoPlay src={selectedVideoUrl}
-                        onEnded={handleVideoEnded}
-                        onTimeUpdate={handleVideoTimeUpdate}
-                    ></video>
-
+                    {paymentStatu2s ? (
+                        <video controls autoPlay src={selectedVideoUrl}
+                            onEnded={handleVideoEnded}
+                            onTimeUpdate={handleVideoTimeUpdate}
+                        ></video>
+                    ) : (
+                        <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
+                    )}
                 </div>
 
                 <div className="content-container-bottom">
