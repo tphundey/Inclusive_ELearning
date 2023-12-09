@@ -1,5 +1,5 @@
 import "./dashboard.css";
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Line } from "@ant-design/plots";
 import axios from "axios";
 import { formatCurrency } from "@/components/FormatCurency/formatCurency";
@@ -16,14 +16,16 @@ const Dashboard = () => {
         setPaymentData(data);
         const monthlyTotalAmount = {};
         data.forEach((payment) => {
-          const date = new Date(payment.date);
-          const year = date.getFullYear();
-          const month = date.getMonth() + 1;
-          const key = `${year}-${month}`;
+          const createdAt = new Date(payment.createdAt);
+          const year = createdAt.getFullYear();
+          const month = createdAt.getMonth() + 1;
+          const day = createdAt.getDate();
+          const key = `${year}-${month}-${day}`;
+
           if (monthlyTotalAmount[key]) {
-            monthlyTotalAmount[key] += payment.paymentAmount;
+            monthlyTotalAmount[key] += payment.amount; // Thay đổi thành payment.amount
           } else {
-            monthlyTotalAmount[key] = payment.paymentAmount;
+            monthlyTotalAmount[key] = payment.amount; // Thay đổi thành payment.amount
           }
         });
 

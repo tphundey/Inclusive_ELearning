@@ -72,7 +72,7 @@ const AdminProductAdd = () => {
                 autoComplete="off"
                 initialValues={initialValues}
             >
-                <Form.Item<any>
+               <Form.Item
                     label="Tên khóa học"
                     name="courseName"
                     rules={[
@@ -80,39 +80,59 @@ const AdminProductAdd = () => {
                         { min: 3, message: "Tên khóa học ít nhất phải 3 ký tự" },
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
-                <Form.Item<any>
-                    label="Giá khóa học"
+                <Form.Item
+                    label="Giá khóa học (vnd)"
                     name="price"
-                    rules={[{ required: true, message: "Phải nhập giá tiền" }]}
+                    rules={[
+                        { required: true, message: "Phải nhập giá tiền" },
+                    ]}
                 >
-                    <Input />
+                    <Input type="number" />
                 </Form.Item>
 
-                <Form.Item<any>
+                <Form.Item
                     label="Hình ảnh"
                     name="courseIMG"
+                    rules={[{ type: 'url', message: 'Hình ảnh không hợp lệ' }]}
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item<any>
+
+                <Form.Item
                     label="Thời lượng (m)"
                     name="duration"
+                    rules={[
+                        { required: true, message: "Phải nhập thời lượng" },
+                    ]}
+                >
+                    <Input type="number" />
+                </Form.Item>
+
+                <Form.Item
+                    name="date"
+                    label="Thời gian tạo"
+                    rules={[{ required: true, message: 'Vui lòng chọn thời gian tạo' }]}
+                >
+                    <DatePicker />
+                </Form.Item>
+
+                <Form.Item
+                    name="intro"
+                    label="Video giới thiệu"
+                    rules={[{ required: true, message: 'Vui lòng nhập video giới thiệu' }]}
                 >
                     <Input />
                 </Form.Item>
+
                 <Form.Item
-                    name="date"
-                    label="Thời gian tạo">
-                    <DatePicker />
-                </Form.Item>
-                <Form.Item name="intro" label="Video giới thiệu" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
-                    <Select
+                    name="categoryID"
+                    label="Danh mục"
+                    rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
+                >
+                  <Select
                         placeholder="pick a category"
                         allowClear
                     >
@@ -125,8 +145,11 @@ const AdminProductAdd = () => {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item label="Mô tả"
+
+                <Form.Item
+                    label="Mô tả"
                     name="description"
+                    rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
                 >
                     <TextArea rows={4} />
                 </Form.Item>
