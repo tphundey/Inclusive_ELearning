@@ -89,7 +89,7 @@ const Businesspage = () => {
 
             <div className="bsn-flex-h2">
                 <div> <h2 className='h2-bsn2'>Learning Paths</h2></div>
-                <div><a href="#" className='text-blue-800 font-medium show-all'>Show All</a></div>
+                <div><a href="http://localhost:5173/listcourse/6570bb822c2775b9466373fd" className='text-blue-800 font-medium show-all'>Show All</a></div>
             </div>
             <hr />
             <div className="product-slider2 business-slider">

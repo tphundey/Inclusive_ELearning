@@ -165,3 +165,13 @@ const ListCourse = () => {
 };
 
 export default ListCourse;
+
+
+<div className="listbsn">
+{mappedCategoryNames.map((name, index) => (
+    <div key={index} className="bsn-children">
+        <a href="http://localhost:5173/listcourse/{id}">{name}</a>
+    </div>
+))}
+
+</div>
