@@ -1,0 +1,172 @@
+.browsepage {
+    display: flex;
+    padding: 0px;
+    margin: 0px auto;
+    width: 100%;
+}
+
+.browseleft {
+    padding-top: 20px;
+    width: 25%;
+}
+
+.containerCss-browepage {
+    width: 1100px;
+}
+
+.browseright {
+    width: 75%;
+}
+
+.browseleft ul li {
+    padding: 15px;
+    font-weight: 500;
+    color: rgb(85, 83, 83);
+    border-left: 4px solid #0000;
+}
+
+.browseleft ul li a {
+    padding: 15px;
+    font-weight: 500;
+    color: rgb(85, 83, 83);
+    border-left: 4px solid #0000;
+}
+
+.browseleft i {
+    padding: 5px;
+    font-size: 20px;
+}
+
+
+.browseleft ul li a.active {
+    border-left: 4px solid #0964C3;
+    color: #0964C3;
+}
+
+.business {
+    margin-top: 30px;
+}
+
+.business .h2-bsn {
+    font-size: 31px;
+}
+
+.business .h2-bsn2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.business .sp1-bsn {
+    font-size: 14px;
+    color: gray;
+}
+
+.business hr {
+    width: 76%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.listbsn {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.bsn-children {
+    padding: 20px 70px 20px 20px;
+    border-radius: 2px;
+    border: 1px solid rgb(195, 195, 195);
+    background-color: #F4E8BC;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.business-slider {
+    height: 300px;
+}
+
+.bsn-flex-h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 74%;
+}
+
+.show-all:hover {
+    text-decoration: underline;
+}
+
+.list-software {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 60px;
+    text-align: center;
+    width: 76%;
+    margin-top: 30px;
+}
+
+.list-software .list-softchi:hover {
+    border: 1px solid rgb(80, 79, 79);
+}
+
+.list-softchi {
+    border: 1px solid rgb(181, 181, 181);
+    padding: 5px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    color: gray;
+}
+
+/* slider products */
+
+.product-slider2 {
+    width: 76%;
+    height: 300px;
+    margin-top: 30px;
+}
+
+.product-slider2 .product-slide2 {
+    height: 130px;
+    width: 260px;
+}
+
+.product-slider2 .slick-slide2 {
+    min-width: 200px;
+    padding: 0 10px;
+}
+
+.product-slider2 .slick-prev,
+.product-slider2 .slick-next {
+    border-radius: 100px;
+    background-color: rgb(181, 178, 178);
+    position: absolute;
+    top: 70px;
+}
+
+.product-slider2 .slick-prev:hover,
+.product-slider2 .slick-next:hover {
+    border-radius: 100px;
+    background-color: rgb(161, 219, 204);
+}
+
+.containerCss-browepage2 {
+    width: 1000px;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.listpro-one {
+    width: 1000px;
+}
+
+.show-more-button{
+    width: 1000px;
+    text-align: center;
+    border: 1px solid #0964C3 ;
+    color: #0964C3;
+    padding: 5px;
+}

@@ -5,13 +5,15 @@ import 'slick-carousel/slick/slick-theme.css';
 import Axios from 'axios';
 import { useState, useEffect } from 'react';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
-
+import axios from 'axios';
 const Businesspage = () => {
     const [courses, setCourses] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const fetchCourses = () => Axios.get('http://localhost:3000/Courses');
     const fetchCategories = () => Axios.get('http://localhost:3000/Categories');
-
+    const [categories2, setCategories2] = useState<any[]>([]);
+    const [categories3, setCategories3] = useState<any[]>([]);
+    const [mappedCategoryNames, setMappedCategoryNames] = useState<any[]>([]);
     const settings: any = {
         arrows: true,
         infinite: true,
@@ -29,6 +31,45 @@ const Businesspage = () => {
             .catch(error => console.error(error));
     }, []);
 
+    useEffect(() => {
+        axios.get('http://localhost:3000/categories')
+            .then(response => {
+                setCategories2(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+    }, []);
+
+    const categoryIdsToMap = ['6570915fe04745af0164e622', '6570916be04745af0164e625', '6571e7a4900b07f0abe9b752'];
+
+    useEffect(() => {
+        const mappedNames = categoryIdsToMap.map(categoryId => {
+            const category = categories.find(c => c.id === categoryId);
+            return category ? category.categoryName : 'Unknown Category';
+        });
+
+        setMappedCategoryNames(mappedNames);
+    }, [categories2]);
+
+    useEffect(() => {
+        // Fetch categories from your API
+        axios.get('http://localhost:3000/categories')
+            .then(response => {
+                setCategories3(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+    }, []);
+
+    const renderCategories = () => {
+        return categories3.map(category => (
+            <div key={category.id}>
+                <div className='list-softchi'><a href="">{category.categoryName}</a></div>
+            </div>
+        ));
+    };
     return (
         <div className="containerCss-browepage  business">
             <h2 className='h2-bsn'>Business</h2>
@@ -38,18 +79,12 @@ const Businesspage = () => {
             <hr />
 
             <div className="listbsn">
-                <div className="bsn-children">
-                    <a href="">Project Manager</a>
-                </div>
-                <div className="bsn-children bg-yellow-200">
-                    <a href="">Project Manager</a>
-                </div>
-                <div className="bsn-children bg-green-200">
-                    <a href="">Project Manager</a>
-                </div>
-                <div className="bsn-children bg-lime-300">
-                    <a href="">Project Manager</a>
-                </div>
+                {mappedCategoryNames.map((name, index) => (
+                    <div key={index} className="bsn-children">
+                        <a href="">{name}</a>
+                    </div>
+                ))}
+
             </div>
 
             <div className="bsn-flex-h2">
@@ -63,7 +98,7 @@ const Businesspage = () => {
                     {courses
                         .filter((course: any) => {
                             const category = categories.find((cat: any) => cat.id === course.categoryID);
-                            return category && category.id === 1;
+                            return category && category.id === "6570915fe04745af0164e622";
                         })
                         .map((course: any, index: number) => (
 
@@ -93,20 +128,8 @@ const Businesspage = () => {
             <h2 className='h2-bsn2'>Software</h2>
             <hr />
             <div className="list-software">
-                <div className='list-softchi'><a href="">Photoshop</a></div>
-                <div className='list-softchi'><a href="">Illustrator</a> </div>
-                <div className='list-softchi'><a href="">InDesign</a></div>
-                <div className='list-softchi'><a href="">Revit</a></div>
-                <div className='list-softchi'><a href="">AutoCAD</a> </div>
-                <div className='list-softchi'><a href="">SOLIDWORKS</a></div>
-                <div className='list-softchi'><a href="">3ds Max</a></div>
-                <div className='list-softchi'><a href="">SketchUp</a></div>
-                <div className='list-softchi'><a href="">PowerPoint</a> </div>
-                <div className='list-softchi'><a href="">Canva</a></div>
-                <div className='list-softchi'><a href="">After Effects</a></div>
-                <div className='list-softchi'><a href="">AutoCAD</a> </div>
-                <div className='list-softchi'><a href="">SOLIDWORKS</a></div>
-                <div className='list-softchi'><a href="">Premiere Pro</a></div>
+                {renderCategories()}
+
             </div>
         </div>
     )
