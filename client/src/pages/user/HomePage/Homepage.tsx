@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
+import { Spin } from 'antd';
 
 const fetchCategoryData = async (productId: number): Promise<string | null> => {
     try {
@@ -23,19 +24,35 @@ const fetchCategoryData = async (productId: number): Promise<string | null> => {
 };
 
 const Homepage: React.FC = () => {
+    const [loading, setLoading] = useState(false);
     const { data: productsData } = useGetProductsQuery();
     const [visibleProducts, setVisibleProducts] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            if (productsData) {
-                const updatedVisibleProducts = await Promise.all(
-                    productsData.map(async (product) => {
-                        const categoryName = await fetchCategoryData(product.categoryID);
-                        return { ...product, categoryName };
-                    })
-                );
-                setVisibleProducts(updatedVisibleProducts);
+            try {
+                setLoading(true); // Bắt đầu loading
+
+                if (productsData) {
+                    const updatedVisibleProducts = await Promise.all(
+                        productsData.map(async (product) => {
+                            const categoryName = await fetchCategoryData(product.categoryID);
+
+                            if (!product.isHidden) {
+                                return { ...product, categoryName };
+                            } else {
+                                return null;
+                            }
+                        })
+                    );
+                    const filteredVisibleProducts = updatedVisibleProducts.filter(product => product !== null);
+
+                    setVisibleProducts(filteredVisibleProducts);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false); // Kết thúc loading dù có lỗi hay không
             }
         };
 
@@ -49,15 +66,20 @@ const Homepage: React.FC = () => {
                 const updatedVisibleProducts = await Promise.all(
                     productsData.map(async (product) => {
                         const categoryName = await fetchCategoryData(product.categoryID);
-                        return { ...product, categoryName };
+
+                        // Kiểm tra trường isHidden
+                        if (!product.isHidden) {
+                            return { ...product, categoryName };
+                        } else {
+                            return null;
+                        }
                     })
                 );
-                // Shuffle the array to display products randomly
-                const shuffledProducts = shuffleArray(updatedVisibleProducts);
+                const filteredVisibleProducts = updatedVisibleProducts.filter(product => product !== null);
+                const shuffledProducts = shuffleArray(filteredVisibleProducts);
                 setVisibleProducts2(shuffledProducts);
             }
         };
-
         fetchData();
     }, [productsData]);
 
@@ -78,6 +100,7 @@ const Homepage: React.FC = () => {
         slidesToShow: 4,
         slidesToScroll: 4,
     };
+
     return (
         <div className='homepage containerCss'>
             <div className="height-banner">
@@ -113,33 +136,39 @@ const Homepage: React.FC = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Top picks for you</h2>
 
                         <div className="product-slider">
+                            {loading ? (
+                                <Spin size="large" />
+                            ) : (
+                                <>
+                                    <Slider {...settings}>
+                                        {visibleProducts?.map((product: any, index: any) => {
 
-                            <Slider {...settings}>
-                                {visibleProducts?.map((product: any, index: any) => {
+                                            const formattedPrice = formatCurrency(product.price);
 
-                                    const formattedPrice = formatCurrency(product.price);
-
-                                    return (
-                                        <div className="group relative">
-                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                <img src={product.courseIMG} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div>
-                                                    <h3 className="text-xs text-gray-700">
-                                                        <span className="absolute inset-2 popular">COURSE</span>
-                                                        {product.categoryName}
-                                                    </h3>
-                                                    <a href={`/introduction/${product.id}`} key={index}>
-                                                        <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
-                                                    </a>
+                                            return (
+                                                <div className="group relative">
+                                                    <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                        <img src={product.courseIMG} alt="" />
+                                                    </div>
+                                                    <div className="mt-2">
+                                                        <div>
+                                                            <h3 className="text-xs text-gray-700">
+                                                                <span className="absolute inset-2 popular">COURSE</span>
+                                                                {product.categoryName}
+                                                            </h3>
+                                                            <a href={`/introduction/${product.id}`} key={index}>
+                                                                <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
+                                                            </a>
+                                                        </div>
+                                                        <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                    </div>
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                                            );
+                                        })}
+                                    </Slider>
+                                </>
+                            )}
+
 
                         </div>
                     </div>
@@ -152,32 +181,39 @@ const Homepage: React.FC = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">This week’s top courses</h2>
 
                         <div className="product-slider">
-                            <Slider {...settings}>
-                                {visibleProducts2?.map((product: any, index: any) => {
+                            {loading ? (
+                                <Spin size="large" />
+                            ) : (
+                                <>
+                                    <Slider {...settings}>
+                                        {visibleProducts2?.map((product: any, index: any) => {
 
-                                    const formattedPrice = formatCurrency(product.price);
+                                            const formattedPrice = formatCurrency(product.price);
 
-                                    return (
-                                        <div className="group relative">
-                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                <img src={product.courseIMG} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div>
-                                                    <h3 className="text-xs text-gray-700">
-                                                        <span className="absolute inset-2 popular">COURSE</span>
-                                                        {product.categoryName}
-                                                    </h3>
-                                                    <a href={`/introduction/${product.id}`} key={index}>
-                                                        <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
-                                                    </a>
+                                            return (
+                                                <div className="group relative">
+                                                    <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                        <img src={product.courseIMG} alt="" />
+                                                    </div>
+                                                    <div className="mt-2">
+                                                        <div>
+                                                            <h3 className="text-xs text-gray-700">
+                                                                <span className="absolute inset-2 popular">COURSE</span>
+                                                                {product.categoryName}
+                                                            </h3>
+                                                            <a href={`/introduction/${product.id}`} key={index}>
+                                                                <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
+                                                            </a>
+                                                        </div>
+                                                        <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                    </div>
                                                 </div>
-                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                                            );
+                                        })}
+                                    </Slider>
+                                </>
+                            )}
+
 
                         </div>
                     </div>
