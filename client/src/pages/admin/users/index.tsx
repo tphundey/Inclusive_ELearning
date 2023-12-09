@@ -1,28 +1,43 @@
-import { useGetCategorysQuery, useRemoveCategoryMutation } from "@/api/category";
-import { useGetRolesQuery } from "@/api/role";
-import { useGetUsersQuery, useUpdateUserMutation } from "@/api/user";
-import { Icategory } from "@/interfaces/category";
-import { Irole } from "@/interfaces/role";
-import { Iuser } from "@/interfaces/user";
-import { Button, Table, Skeleton, Popconfirm, message, Select, Pagination } from "antd";
+import { useGetUsersQuery } from "@/api/user";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-const { Option } = Select;
-const AdminUser = (props: any) => {
+
+const AdminUser = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: usersData, isLoading: isProductLoading } = useGetUsersQuery();
-    const [deactivateUser] = useUpdateUserMutation();
-    const { data: RolesData } = useGetRolesQuery();
-    // const roleSource = RolesData?.map((item: Irole) => ({
-    //     key: item.id,
-    //     role: item.role
-    // }));
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 3;
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
-    
+
+    const updateUserState = (record: any) => {
+        const currentLockState = record.locked || false;
+        const updatedState = { lock: !currentLockState };
+        const updatedUsersData = usersData?.map((user) => {
+            if (user.id === record.key) {
+                return { ...user, locked: !currentLockState };
+            }
+            return user;
+        });
+
+        setUsersData2(updatedUsersData);
+
+        axios
+            .patch(`http://localhost:3000/googleAccount/${record.key}`, updatedState)
+            .then(() => {
+                messageApi.success('Cập nhật trạng thái thành công');
+            })
+            .catch((error) => {
+                console.error('Lỗi cập nhật trạng thái người dùng: ', error);
+                messageApi.error('Có lỗi xảy ra khi cập nhật trạng thái');
+            });
+    };
+    const handleConfirm = (record) => {
+        updateUserState(record);
+    };
+
     const dataSource = usersData?.map((item: any) => {
         // const userRole = roleSource?.find(role => role.key === item.roleID);
         return {
@@ -38,41 +53,22 @@ const AdminUser = (props: any) => {
                 </div>
             </div>) : (<p className="text-red-500 ">chưa có ảnh</p>),
             address: item.address ? (
-            <span >{item.address}</span>
-        ) : (<><p className="text-red-500 ">thiếu thông tin</p></>),
-            phone: item.phoneNumber? (
+                <span >{item.address}</span>
+            ) : (<><p className="text-red-500 ">thiếu thông tin</p></>),
+            phone: item.phoneNumber ? (
                 <span >{item.phoneNumber}</span>
             ) : (<p className="text-red-500 ">thiếu thông tin</p>),
             // roleID: userRole ? userRole.role : "",
             registeredCourseID: item.registeredCourseID,
-            courseSaved: item.courseSaved
+            courseSaved: item.courseSaved,
+            locked: item.lock || false,
         };
     });
+
     const startItem = (currentPage - 1) * pageSize;
     const endItem = currentPage * pageSize;
     const currentData = dataSource?.slice(startItem, endItem);
-    console.log(dataSource);
-
-    const confirm = (id: any) => {
-        deactivateUser({ id: id, roleID: 1 })
-            .unwrap()
-            .then(() => {
-                messageApi.open({
-                    type: "success",
-                    content: "deactivate successfully!",
-                });
-            });
-    };
-    const confirmupgrade = (id: any) => {
-        deactivateUser({ id: id, roleID: 2 })
-            .unwrap()
-            .then(() => {
-                messageApi.open({
-                    type: "success",
-                    content: "deactivate successfully!",
-                });
-            });
-    };
+    const [usersData2, setUsersData2] = useState([]);
 
     const columns = [
         {
@@ -102,52 +98,33 @@ const AdminUser = (props: any) => {
             key: "phone",
         },
         {
-            title: "Hành động",
-            render: (
-                // { key: id, roleID }: { key: string; roleID: string }
-                ) => (
-                <div className="flex space-x-2">
-                    {/* {roleID == "Instructor" ? (
+            title: 'Trạng thái',
+            dataIndex: 'locked',
+            key: 'lock',
+            render: (lock, record) => {
+                const hiddenButtonClass = lock ? 'hidden-button' : '';
+
+                return (
+                    <>
                         <Popconfirm
-                            placement="top"
-                            title={"Remove course"}
-                            description={"Are you sure you want to remove this???"}
-                            onConfirm={() => confirm(id)}
-                            okText="Yes"
-                            cancelText="No"
+                            title={lock ? 'Mở ẩn người dùng?' : 'Ẩn người dùng?'}
+                            onConfirm={() => handleConfirm(record)}
                         >
-                            <Button type="primary" danger>
-                                deactivate
+                            <Button type={lock ? 'dashed' : 'default'} className={hiddenButtonClass}>
+                                {lock ? 'Mở ẩn' : 'Ẩn'}
                             </Button>
                         </Popconfirm>
-                    ) : (<Popconfirm
-                        placement="top"
-                        title={"Remove course"}
-                        description={"Are you sure you want to remove this???"}
-                        onConfirm={() => confirmupgrade(id)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        
-                    </Popconfirm>)} */}
-                    {/* <Button>
-                        <Link to={`/admin/user/${id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
-                    </Button> */}
-                    <Button type="primary" danger>
-                                deactivate
-                            </Button>
-                </div>
-            ),
-        },
+                        {/* Các nút khác */}
+                    </>
+                );
+            },
+        }
     ];
 
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Quản lý người dùng</h2>
-                {/* <Button type="primary" danger>
-                    <Link to="/admin/user/add">Thêm User</Link>
-                </Button> */}
             </header>
             {contextHolder}
             {/* {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />} */}
@@ -157,7 +134,7 @@ const AdminUser = (props: any) => {
                 <>
                     <Table
                         pagination={false}
-                        dataSource={currentData}
+                        dataSource={currentData}  // Sử dụng currentData thay vì dataSource
                         columns={columns}
                     />
                     <Pagination
