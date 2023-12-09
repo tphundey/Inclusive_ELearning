@@ -1,5 +1,5 @@
 import "./dashboard.css";
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Line } from "@ant-design/plots";
 import axios from "axios";
 import { formatCurrency } from "@/components/FormatCurency/formatCurency";
@@ -7,6 +7,12 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
   const [monthlyTotal, setMonthlyTotal] = useState({});
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentMonthKey = `${currentYear}-${currentMonth}`;
+  const [currentMonthRevenue, setCurrentMonthRevenue] = useState(0);
+  const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
     axios
@@ -81,18 +87,10 @@ const Dashboard = () => {
     },
   };
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentMonthKey = `${currentYear}-${currentMonth}`;
-
-  const currentMonthRevenue = monthlyTotal[currentMonthKey] || 0;
-
-  const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/users")
+      .get("http://localhost:3000/googleAccount")
       .then((response) => {
         const users = response.data;
         // Tính số lượng thành viên
@@ -152,8 +150,40 @@ const Dashboard = () => {
       });
   }, []);
   const targetRevenue = 4000000;
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/Payment")
+      .then((response) => {
+        const data = response.data;
 
+        // Lọc dữ liệu theo tháng hiện tại
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const currentMonthPayments = data.filter((payment: any) => {
+          const paymentDate = new Date(payment.createdAt);
+          return (
+            paymentDate.getFullYear() === currentYear &&
+            paymentDate.getMonth() + 1 === currentMonth
+          );
+        });
+
+        // Tính tổng doanh thu của tháng hiện tại
+        const currentMonthTotalRevenue = currentMonthPayments.reduce(
+          (total: any, payment: any) => total + parseFloat(payment.amount || 0),
+          0
+        );
+
+        setCurrentMonthRevenue(currentMonthTotalRevenue);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gửi yêu cầu API: ", error);
+      });
+  }, []);
+  const formattedPrice2 = formatCurrency(currentMonthRevenue);
   const percentageAchieved = (currentMonthRevenue / targetRevenue) * 100;
+
   return (
     <div>
       <div className="mockup-code">
@@ -182,7 +212,7 @@ const Dashboard = () => {
                 </svg>
               </div>
               <div className="stat-title">Tổng doanh thu /tháng</div>
-              <div className="stat-value text-primary">{formattedPrice}</div>
+              <div className="stat-value text-primary">{formattedPrice2}</div>
             </div>
 
             <div className="stat">
