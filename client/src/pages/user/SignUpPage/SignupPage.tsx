@@ -79,23 +79,30 @@ const SignupPage = () => {
                                     console.error('Error sending user information to API:', error);
                                     alert('Không thành công');
                                 });
-                        } else {
-                            console.log('Email already exists:', user.email);
-                            localStorage.setItem('uid', firebaseUserId);
-                            navigate('/')
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error checking email existence:', error);
-                        alert('Không thành công');
-                    });
-            })
-            .catch((error) => {
-                console.error('Authentication failed:', error);
-                alert('Không thành công');
-            });
-    };
-
+                            } else {
+                                // User exists, check if the account is locked
+                                const existingUser = response.data[0];
+                                if (existingUser.lock) {
+                                    console.log('User is locked:', user.email);
+                                    alert('Không thể đăng nhập. Tài khoản của bạn đã bị khóa.');
+                                } else {
+                                    console.log('User logged in successfully:', user.email);
+                                    localStorage.setItem('uid', firebaseUserId);
+                                    navigate('/');
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error checking email existence:', error);
+                            alert('Không thành công');
+                        });
+                })
+                .catch((error) => {
+                    console.error('Authentication failed:', error);
+                    alert('Không thành công');
+                });
+        };
+    
     return (
         <div>
 
