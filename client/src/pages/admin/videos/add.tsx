@@ -16,10 +16,10 @@ const AdminVideoAdd = () => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [addVideo, { isLoading: isAddProductLoading }] = useAddVideoMutation();
-    const [courses, setCourses] = useState([]); // State to store the course list
+    const [courses, setCourses] = useState([]);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
 
-    // Fetch the list of courses from the API
+
     useEffect(() => {
         fetch("http://localhost:3000/Courses")
             .then((response) => response.json())
@@ -31,7 +31,7 @@ const AdminVideoAdd = () => {
             });
     }, []);
 
-    const onFinish = (values: FieldType) => {
+    const onFinish = (values: any) => {
         // Create the video object to be added
         const videoData = {
             videoTitle: values.videoTitle,
@@ -39,22 +39,17 @@ const AdminVideoAdd = () => {
         };
 
         if (selectedCourseId) {
-            videoData.courseId = selectedCourseId; // Include the selected course ID
+            videoData.courseId = selectedCourseId;
         }
 
-        // Add the video to the API
         addVideo(videoData)
             .unwrap()
-            .then((newVideo) => {
-                // Now that we have the new video's ID, update the course's videoID array
+            .then(() => {
                 const courseId = selectedCourseId;
-                const updatedCourse = courses.find((course) => course.id === courseId);
+                const updatedCourse = courses.find((course: any) => course.id === courseId);
                 if (updatedCourse) {
-                    updatedCourse.videoID.push(newVideo.id);
-
-                    // Send a PUT request to update the course with the modified videoID array
                     fetch(`http://localhost:3000/Courses/${courseId}`, {
-                        method: "PUT",
+                        method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
