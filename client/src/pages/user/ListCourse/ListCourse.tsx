@@ -116,7 +116,7 @@ const ListCourse = () => {
         const handleCategoryClick = (categoryId) => {
             window.location.href = `http://localhost:5173/listcourse/${categoryId}`;
         };
-    
+
         return categories3.map(category => (
             <div key={category.id} className="bsn-children">
                 <a
@@ -137,17 +137,17 @@ const ListCourse = () => {
                     range
                     min={0}
                     max={1000000}
-                    defaultValue={[0, 10000]}
+                    defaultValue={[0, 1000]}
                     onChange={handlePriceChange}
                 />
             </div>
             <div>
-                <h3>Duration Range:</h3>
+                <h3>Duration Range: (m)</h3>
                 <Slider
                     range
                     min={0}
                     max={3000}
-                    defaultValue={[0, 100]}
+                    defaultValue={[0, 1000]}
                     onChange={handleDurationChange}
                 />
             </div>
@@ -156,10 +156,10 @@ const ListCourse = () => {
             <span className='sp1-bsn'>Explore foundational content and tools to help you understand, learn, and improve at the skills involved in trending industry roles.</span>
             <hr />
 
-        
+
             <div className="listbsn">
-            {renderCategories()}
-               
+                {renderCategories()}
+
             </div>
             <div className="bsn-flex-h2">
                 <div> <h2 className='h2-bsn2'>Learning Paths</h2></div>
@@ -180,8 +180,8 @@ const ListCourse = () => {
                                     <a href={`/introduction/${course.id}`}>
                                         <h2>{course.courseName}</h2>
                                     </a>
-                                    <div>{formatCurrency(course.price)}</div>
-                                    <div className="fl-info-progress">
+                                    <div className='mt-4'>{formatCurrency(course.price)}</div>
+                                    <div className="fl-info-progress mt-2">
                                         <div className="fl1-info-progress">
                                             <img
                                                 className='mt-1'
