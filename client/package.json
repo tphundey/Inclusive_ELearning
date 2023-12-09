@@ -18,6 +18,7 @@
         "@types/react-slick": "^0.23.10",
         "antd": "^5.8.2",
         "axios": "^1.4.0",
+        "cloudinary-react": "^1.8.1",
         "concurrently": "^8.2.0",
         "daisyui": "^3.9.4",
         "firebase": "^10.6.0",
