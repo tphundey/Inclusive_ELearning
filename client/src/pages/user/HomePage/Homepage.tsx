@@ -1,23 +1,67 @@
-import './HomePage.css'
+import './HomePage.css';
 import { useEffect, useState } from 'react';
 import { useGetProductsQuery } from "@/api/courses";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
-import { fetchCategoryData } from '@/api/course';
 
-const Homepage = () => {
+const fetchCategoryData = async (productId: number): Promise<string | null> => {
+    try {
+        const response = await fetch(`http://localhost:3000/categories/${productId}`);
+        if (response.ok) {
+            const category = await response.json();
+            return category.categoryName;
+        } else {
+            console.error('Error fetching category data:', response.status, response.statusText);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching category data:', error);
+        return null;
+    }
+};
+
+const Homepage: React.FC = () => {
     const { data: productsData } = useGetProductsQuery();
-    const [categoryData, setCategoryData] = useState<any[]>([]);
-    const visibleProducts = productsData?.filter((product: any) => !product.isHidden);
-    const [isCategoryLoading, setIsCategoryLoading] = useState(true);
+    const [visibleProducts, setVisibleProducts] = useState<any[]>([]);
 
     useEffect(() => {
-        fetchCategoryData(productsData, setCategoryData, setIsCategoryLoading);
+        const fetchData = async () => {
+            if (productsData) {
+                const updatedVisibleProducts = await Promise.all(
+                    productsData.map(async (product) => {
+                        const categoryName = await fetchCategoryData(product.categoryID);
+                        return { ...product, categoryName };
+                    })
+                );
+                setVisibleProducts(updatedVisibleProducts);
+            }
+        };
+
+        fetchData();
     }, [productsData]);
 
-    const shuffleArray = (array: any) => {
+    const [visibleProducts2, setVisibleProducts2] = useState<any[]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (productsData) {
+                const updatedVisibleProducts = await Promise.all(
+                    productsData.map(async (product) => {
+                        const categoryName = await fetchCategoryData(product.categoryID);
+                        return { ...product, categoryName };
+                    })
+                );
+                // Shuffle the array to display products randomly
+                const shuffledProducts = shuffleArray(updatedVisibleProducts);
+                setVisibleProducts2(shuffledProducts);
+            }
+        };
+
+        fetchData();
+    }, [productsData]);
+
+    const shuffleArray = (array: any[]) => {
         let currentIndex = array.length, randomIndex;
         while (currentIndex !== 0) {
             randomIndex = Math.floor(Math.random() * currentIndex);
@@ -69,38 +113,34 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Top picks for you</h2>
 
                         <div className="product-slider">
-                            {isCategoryLoading ? (
-                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
-                            ) : (
-                                <Slider {...settings}>
-                                    {visibleProducts?.map((product: any, index: any) => {
-                                        const category = categoryData[index];
-                                        const formattedPrice = formatCurrency(product.price);
-                                        const categoryContent = category ? category.categoryName : (
-                                            <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
-                                        );
-                                        return (
-                                            <div className="group relative">
-                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                    <img src={product.courseIMG} alt="" />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <div>
-                                                        <h3 className="text-xs text-gray-700">
-                                                            <span className="absolute inset-2 popular">COURSE</span>
-                                                            {categoryContent}
-                                                        </h3>
-                                                        <a href={`/introduction/${product.id}`} key={index}>
-                                                            <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
-                                                        </a>
-                                                    </div>
-                                                    <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
-                                                </div>
+
+                            <Slider {...settings}>
+                                {visibleProducts?.map((product: any, index: any) => {
+
+                                    const formattedPrice = formatCurrency(product.price);
+
+                                    return (
+                                        <div className="group relative">
+                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                <img src={product.courseIMG} alt="" />
                                             </div>
-                                        );
-                                    })}
-                                </Slider>
-                            )}
+                                            <div className="mt-2">
+                                                <div>
+                                                    <h3 className="text-xs text-gray-700">
+                                                        <span className="absolute inset-2 popular">COURSE</span>
+                                                        {product.categoryName}
+                                                    </h3>
+                                                    <a href={`/introduction/${product.id}`} key={index}>
+                                                        <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
+                                                    </a>
+                                                </div>
+                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </Slider>
+
                         </div>
                     </div>
                 </div>
@@ -112,37 +152,33 @@ const Homepage = () => {
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">This week’s top courses</h2>
 
                         <div className="product-slider">
-                            {isCategoryLoading ? (
-                                <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
-                            ) : (
-                                <Slider {...settings}>
-                                    {shuffleArray(visibleProducts)?.map((product: any, index: any) => {
-                                        const category = categoryData[index];
-                                        const categoryContent = category ? category.categoryName : (
-                                            <span className="loading loading-spinner text-info" style={{ display: "block", margin: "0 auto" }}></span>
-                                        );
-                                        return (
-                                            <div className="group relative" key={index}>
-                                                <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
-                                                    <img src={product.courseIMG} alt="" />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <div>
-                                                        <h3 className="text-xs text-gray-700">
-                                                            <span className="absolute inset-2 popular">COURSE</span>
-                                                            {categoryContent}
-                                                        </h3>
-                                                        <a href={`/introduction/${product.id}`} key={index}>
-                                                            <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
-                                                        </a>
-                                                    </div>
-                                                    <p className=" mt-1 text-xs text-gray">{formatCurrency(product.price)}</p>
-                                                </div>
+                            <Slider {...settings}>
+                                {visibleProducts2?.map((product: any, index: any) => {
+
+                                    const formattedPrice = formatCurrency(product.price);
+
+                                    return (
+                                        <div className="group relative">
+                                            <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
+                                                <img src={product.courseIMG} alt="" />
                                             </div>
-                                        );
-                                    })}
-                                </Slider>
-                            )}
+                                            <div className="mt-2">
+                                                <div>
+                                                    <h3 className="text-xs text-gray-700">
+                                                        <span className="absolute inset-2 popular">COURSE</span>
+                                                        {product.categoryName}
+                                                    </h3>
+                                                    <a href={`/introduction/${product.id}`} key={index}>
+                                                        <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
+                                                    </a>
+                                                </div>
+                                                <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </Slider>
+
                         </div>
                     </div>
                 </div>
