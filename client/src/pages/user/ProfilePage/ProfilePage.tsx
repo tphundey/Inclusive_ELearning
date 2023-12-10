@@ -87,7 +87,11 @@ const Profile = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const { data: userInfo } = useGetUserByIdQuery(1)
+    const getUidFromLocalStorage = () => {
+        return localStorage.getItem('uid');
+    };
+    const uid = getUidFromLocalStorage();
+    const { data: userInfo } = useGetUserByIdQuery(uid)
 
     return <>
         <div className="flex space-x-8 h-full bg-gray-200 p-8 pl-20 pr-20" >
@@ -154,19 +158,22 @@ const Profile = () => {
                             <ul className="mt-2 text-gray-700">
                                 <li className="flex border-y py-2">
                                     <span className="font-bold w-24">Full name:</span>
-                                    <span className="text-gray-700">{userInfo?.username}</span>
+                                    <span className="text-gray-700">{userInfo?.displayName}</span>
                                 </li>
                                 <li className="flex border-b py-2">
                                     <span className="font-bold w-24">Birthday:</span>
                                     <span className="text-gray-700">24 Jul, 1991</span>
                                 </li>
                                 <li className="flex border-b py-2">
-                                    <span className="font-bold w-24">address:</span>
-                                    <span className="text-gray-700">{userInfo?.address}</span>
+                                    <span className="font-bold w-24">Address:</span>
+                                    <span className="text-gray-700">{
+                                    userInfo?.address ? (userInfo?.address): ( <> 
+                                    <p className="text-red-500">thiếu địa chỉ</p></>)
+                                }</span>
                                 </li>
                                 <li className="flex border-b py-2">
-                                    <span className="font-bold w-24">Mobile:</span>
-                                    <span className="text-gray-700">{userInfo?.phone}</span>
+                                    <span className="font-bold w-24">Phone</span>
+                                    <span className="text-gray-700">{userInfo?.phone ? (userInfo?.phone): (<> <p className="text-red-500">thiếu số điện thoại</p></>)}</span>
                                 </li>
                                 <li className="flex border-b py-2">
                                     <span className="font-bold w-24">Email:</span>

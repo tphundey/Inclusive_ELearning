@@ -13,7 +13,8 @@ const AdminVideo = (props: Props) => {
     const [deleteVideoId, setDeleteVideoId] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [coursesData, setCoursesData] = useState([]);
-    const dataSource = productsData?.map((item: Ivideo) => ({
+    const dataSource = productsData?.map((item: Ivideo, index: number) => ({
+        stt : (index + 1).toString(),
         key: item.id,
         videoTitle: item.videoTitle,
         courseName: coursesData[item.courseId] || "Unknown Course", // Look up courseName
@@ -94,9 +95,9 @@ const AdminVideo = (props: Props) => {
 
     const columns = [
         {
-            title: "id",
-            dataIndex: "key",
-            key: "id",
+            title: "STT",
+            dataIndex: "stt",
+            key: "stt",
         },
         {
             title: "Tiêu đề video",
@@ -108,6 +109,7 @@ const AdminVideo = (props: Props) => {
             title: "Khóa học",
             dataIndex: "courseName",
             key: "courseName",
+            width : "250px"
         },
         {
             title: "Url Video",

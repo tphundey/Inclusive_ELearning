@@ -20,6 +20,7 @@ type FieldType = {
     videoID : Number;
     categoryID : Number;
     courseIMG : Number;
+    duration : number;
 };
 
 const AdminProductEdit = () => {
@@ -109,6 +110,20 @@ const AdminProductEdit = () => {
                 label="DatePicker">	
                     <DatePicker  />	
                 </Form.Item> */}
+                <Form.Item
+                    name="intro"
+                    label="Video giới thiệu"
+                    rules={[{ required: true, message: 'Vui lòng nhập video giới thiệu' }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item<FieldType>
+                    label="thời lượng"
+                    name="duration"
+                    rules={[{ required: true, message: "Phải nhập thời lượng" }]}
+                >
+                    <Input />
+                </Form.Item>
                 <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
@@ -123,6 +138,8 @@ const AdminProductEdit = () => {
                         }
                     </Select>
                 </Form.Item>
+                
+                
                 <Form.Item label="Mô tả khóa học"
                 name="description"
                 >

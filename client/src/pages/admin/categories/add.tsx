@@ -22,7 +22,7 @@ const AdminCategoryAdd = () => {
             .then(() => {
                 messageApi.open({
                     type: "success",
-                    content: "Bạn đã thêm sản phẩm thành công. Chờ 3s để quay về quản trị",
+                    content: "Bạn đã thêm danh mục thành công. Chờ 3s để quay về quản trị",
                 });
                 form.resetFields();
                 setTimeout(() => {
@@ -55,8 +55,8 @@ const AdminCategoryAdd = () => {
                     label="Tên danh mục"
                     name="categoryName"
                     rules={[
-                        { required: true, message: "Tên sản phẩm không được để trống!" },
-                        { min: 3, message: "Tên sản phẩm ít nhất phải 3 ký tự" },
+                        { required: true, message: "Tên danh mục không được để trống!" },
+                        { min: 3, message: "Tên danh mục ít nhất phải 3 ký tự" },
                     ]}
                 >
                     <Input />
@@ -65,7 +65,7 @@ const AdminCategoryAdd = () => {
                 <Form.Item<FieldType>
                     label="Mô tả danh mục"
                     name="categoryDescription"
-                    rules={[{ required: true, message: "Phải nhập giá tiền" }]}
+                    rules={[{ required: true, message: "Phải nhập mô tả" }]}
                 >
                     <Input />
                 </Form.Item>
