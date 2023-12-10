@@ -5,7 +5,6 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { formatCurrency } from '../../../components/FormatCurency/formatCurency';
-import { Spin } from 'antd';
 
 const fetchCategoryData = async (productId: number): Promise<string | null> => {
     try {
@@ -24,20 +23,18 @@ const fetchCategoryData = async (productId: number): Promise<string | null> => {
 };
 
 const Homepage: React.FC = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const { data: productsData } = useGetProductsQuery();
     const [visibleProducts, setVisibleProducts] = useState<any[]>([]);
+    const [visibleProducts2, setVisibleProducts2] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(true); // Bắt đầu loading
-
                 if (productsData) {
                     const updatedVisibleProducts = await Promise.all(
                         productsData.map(async (product) => {
                             const categoryName = await fetchCategoryData(product.categoryID);
-
                             if (!product.isHidden) {
                                 return { ...product, categoryName };
                             } else {
@@ -46,28 +43,26 @@ const Homepage: React.FC = () => {
                         })
                     );
                     const filteredVisibleProducts = updatedVisibleProducts.filter(product => product !== null);
-
                     setVisibleProducts(filteredVisibleProducts);
+                    setLoading(false)
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false); // Kết thúc loading dù có lỗi hay không
             }
+
         };
 
         fetchData();
     }, [productsData]);
 
-    const [visibleProducts2, setVisibleProducts2] = useState<any[]>([]);
+
+
     useEffect(() => {
         const fetchData = async () => {
             if (productsData) {
                 const updatedVisibleProducts = await Promise.all(
                     productsData.map(async (product) => {
                         const categoryName = await fetchCategoryData(product.categoryID);
-
-                        // Kiểm tra trường isHidden
                         if (!product.isHidden) {
                             return { ...product, categoryName };
                         } else {
@@ -78,6 +73,7 @@ const Homepage: React.FC = () => {
                 const filteredVisibleProducts = updatedVisibleProducts.filter(product => product !== null);
                 const shuffledProducts = shuffleArray(filteredVisibleProducts);
                 setVisibleProducts2(shuffledProducts);
+                setLoading(false)
             }
         };
         fetchData();
@@ -112,7 +108,7 @@ const Homepage: React.FC = () => {
                     </div>
                     <div className="fl-button">
                         <button className="btn btn-active btn-ghost">Start your progress</button>
-                        <button className="btn btn-outline btn-accent">Buy for my team</button>
+                        <button className="btn btn-outline btn-accent">grow your skills</button>
                     </div>
                 </div>
                 <div className="bannerBosu">
@@ -137,7 +133,7 @@ const Homepage: React.FC = () => {
 
                         <div className="product-slider">
                             {loading ? (
-                                <Spin size="large" />
+                                <span className="loading loading-spinner text-info home-loading"></span>
                             ) : (
                                 <>
                                     <Slider {...settings}>
@@ -168,8 +164,6 @@ const Homepage: React.FC = () => {
                                     </Slider>
                                 </>
                             )}
-
-
                         </div>
                     </div>
                 </div>
@@ -182,14 +176,12 @@ const Homepage: React.FC = () => {
 
                         <div className="product-slider">
                             {loading ? (
-                                <Spin size="large" />
+                                <span className="loading loading-spinner text-info home-loading"></span>
                             ) : (
                                 <>
                                     <Slider {...settings}>
                                         {visibleProducts2?.map((product: any, index: any) => {
-
                                             const formattedPrice = formatCurrency(product.price);
-
                                             return (
                                                 <div className="group relative">
                                                     <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -213,8 +205,6 @@ const Homepage: React.FC = () => {
                                     </Slider>
                                 </>
                             )}
-
-
                         </div>
                     </div>
                 </div>

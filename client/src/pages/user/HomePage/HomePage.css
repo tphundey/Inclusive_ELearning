@@ -159,3 +159,8 @@
   /* Điều chỉnh theo yêu cầu */
 }
 
+.home-loading {
+  position: relative;
+  margin-left: 50%;
+  margin-top: 5%;
+}

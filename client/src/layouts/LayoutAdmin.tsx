@@ -64,14 +64,14 @@ const LayoutAdmin = () => {
         </li>
     )
     const text = <>
-    <span>Xin chào</span> <br />
-    <span>{user?.displayName}</span>
+        <span>Xin chào</span> <br />
+        <span>{user?.displayName}</span>
     </>
     return (
-        
-        
-            <Layout className="h-screen">
-            
+
+
+        <Layout className="h-screen">
+
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
@@ -107,7 +107,7 @@ const LayoutAdmin = () => {
                         },
                         {
                             key: "6",
-                            icon: <AiOutlineFileText  />,
+                            icon: <AiOutlineFileText />,
                             label: <Link to="/admin/postpage">Quản lý bài viết</Link>,
                         },
                         {
@@ -135,7 +135,7 @@ const LayoutAdmin = () => {
                         </div>
                         <div className="max-w-screen pr-4">
                             <div className="flex items-center sm:justify-between sm:gap-4">
-                                <div className="relative hidden sm:block">
+                                {/* <div className="relative hidden sm:block">
                                     <label className="sr-only"> Search </label>
 
                                     <input
@@ -165,7 +165,7 @@ const LayoutAdmin = () => {
                                             />
                                         </svg>
                                     </button>
-                                </div>
+                                </div> */}
 
                                 <div
                                     className="flex flex-1 items-center justify-between gap-8 sm:justify-end"
@@ -220,7 +220,7 @@ const LayoutAdmin = () => {
                 </Content>
             </Layout>
         </Layout>
-        
+
     );
 };
 
