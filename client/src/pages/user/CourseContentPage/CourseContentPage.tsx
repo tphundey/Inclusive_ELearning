@@ -586,7 +586,7 @@ const CourseContentPage = () => {
             <div className="contentpage-left">
                 <div className='content-intro'>
                     <div className="content-left-title">
-                        <i className="fa-solid fa-list"></i> <div>Contents</div> {calculatedCompletionPercentage}%
+                        <i className="fa-solid fa-list"></i> <div>Contents</div>
                     </div>
                 </div>
                 <div>

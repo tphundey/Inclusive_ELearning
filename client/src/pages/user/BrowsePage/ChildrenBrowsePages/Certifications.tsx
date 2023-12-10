@@ -63,7 +63,7 @@ const Creativepage = () => {
                     {courses
                         .filter((course: any) => {
                             const category = categories.find((cat: any) => cat.id === course.categoryID);
-                            return category && category.id === 1;
+                            return category && category.id === "6575b618f7bb58843117e0ed";
                         })
                         .map((course: any, index: number) => (
 

@@ -1,9 +1,10 @@
 import './SigninPage.css'
 import { useState, useEffect } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const SigninPage = () => {
     const auth = getAuth();
@@ -21,6 +22,15 @@ const SigninPage = () => {
             throw error;
         }
     };
+    const handleForgotPassword = async () => {
+        try {
+            await sendPasswordResetEmail(auth, email);
+            message.success('Một email khôi phục mật khẩu đã được gửi đến địa chỉ email của bạn.');
+        } catch (error) {
+            console.error('Lỗi khôi phục mật khẩu:', error.message);
+            message.error('Lỗi khôi phục mật khẩu: ' + error.message);
+        }
+    };
 
     const handleSignup = async () => {
         try {
@@ -32,9 +42,13 @@ const SigninPage = () => {
                 handleCodeInApp: true,
             };
 
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, 'temporary-password');
             await sendEmailVerificationCustom(userCredential.user, actionCodeSettings);
-
+            try {
+                await signInWithEmailAndPassword(auth, email, 'temporary-password');
+            } catch (error) {
+                console.error('Lỗi đăng nhập:', error.message);
+            }
             console.log('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
             message.success('Đăng ký thành công. Mã xác nhận đã được gửi đến email của bạn.');
 
@@ -78,33 +92,7 @@ const SigninPage = () => {
                             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </Form.Item>
 
-                        <Form.Item
-                            className='tet mr-6'
-                            label="Password"
-                            name="password"
-                            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-                        >
-                            <Input.Password width={20} value={password} onChange={(e) => setPassword(e.target.value)} />
-                        </Form.Item>
 
-                        <Form.Item
-                          className='tet2 mr-6'
-                            label="Password (*)"
-                            name="confirmPassword"
-                            rules={[
-                                { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('password') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                        </Form.Item>
 
                         <Button type="primary" htmlType="submit">
                             Đăng ký
@@ -112,7 +100,7 @@ const SigninPage = () => {
 
                     </Form>
                     <br />
-                    <a href="">Forgot password?</a>
+                    <a onClick={handleForgotPassword}>Forgot password?</a>
 
                 </div>
                 <div className='login-footer'>
