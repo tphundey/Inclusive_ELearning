@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -11,8 +11,6 @@ const AdminProduct = () => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [selectedCourseVideos, setSelectedCourseVideos] = useState([]);
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
-    const [selectedCourseReviews, setSelectedCourseReviews] = useState([]);
-    const [isReviewsModalVisible, setIsReviewsModalVisible] = useState(false);
     const pageSize = 4;
 
 
@@ -38,49 +36,17 @@ const AdminProduct = () => {
     }, []);
 
     const showCourseVideos = (courseID: any) => {
-        axios.get('http://localhost:3000/Courses')
+        axios.get('http://localhost:3000/videos')
             .then((response) => {
-                const selectedCourse = response.data.find((course) => course.id === courseID);
-
-                if (selectedCourse) {
-                    const videoIDs = selectedCourse.videoID;
-                    if (videoIDs && videoIDs.length > 0) {
-                        axios.get('http://localhost:3000/videos')
-                            .then((videoResponse) => {
-                                const selectedVideos = videoResponse.data.filter((video) => {
-                                    return videoIDs.includes(video.id);
-                                });
-
-                               
-                                setSelectedCourseVideos(selectedVideos);
-
-                               
-                                setIsVideosModalVisible(true);
-                            })
-                            .catch((error) => {
-                                console.error('Lỗi khi lấy danh sách video: ', error);
-                            });
-                    }
-                }
+                const allVideos = response.data;
+                const videosForCourse = allVideos.filter((video:any) => video.courseId === courseID);
+                setSelectedCourseVideos(videosForCourse);
+                setIsVideosModalVisible(true);
             })
             .catch((error) => {
-                console.error('Lỗi khi lấy danh sách khóa học: ', error);
+                console.error('Error fetching videos: ', error);
             });
-    };
-
-
-    const showCourseReviews = (courseID: any) => {
-        
-        axios.get(`http://localhost:3000/Reviews?courseID=${courseID}`)
-            .then((response) => {
-                setSelectedCourseReviews(response.data);
-                setIsReviewsModalVisible(true);
-            })
-            .catch((error) => {
-                console.error('Lỗi khi lấy danh sách đánh giá: ', error);
-            });
-    };
-
+    }
     const columns = [
         {
             title: 'Tên khóa học',
@@ -160,7 +126,7 @@ const AdminProduct = () => {
                         <Button className='ml-2'>
                             <Link to={`/admin/product/${record.id}/edit`}><i className="fa-solid fa-wrench"></i></Link>
                         </Button>
-                        <Button className='ml-2' onClick={() => showCourseVideos(record.id, showCourseReviews(record.id))}>
+                        <Button className='ml-2' onClick={() => showCourseVideos(record.id)}>
                             <i className="fa-solid fa-bars"></i>
                         </Button>
                     </>
@@ -182,7 +148,7 @@ const AdminProduct = () => {
             .patch(`http://localhost:3000/Courses/${productId}`, updatedHiddenState)
             .then((response: any) => {
                 
-                const updatedProductsData = productsData.map((product) => {
+                const updatedProductsData = productsData.map((product:any) => {
                     if (product.id === productId) {
                         return { ...product, isHidden: isHidden };
                     }
@@ -206,26 +172,12 @@ const AdminProduct = () => {
                 onCancel={() => setIsVideosModalVisible(false)}
             >
                 <ul>
-                    {selectedCourseVideos.map((video, index) => (
+                    {selectedCourseVideos.map((video:any, index:any) => (
                         <li key={index}>
                             <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
                                 {video.videoTitle}
                             </a>
                         </li>
-                    ))}
-                </ul>
-                <br />
-                <hr />
-                <br />
-                <ul>
-                    {selectedCourseReviews.map((review) => (
-                        <li key={review.id}>
-                            <div>Rate: {review.rating} <i class="fa-regular fa-star"></i></div>
-                            <div>Bình luận: {review.comment}</div>
-                            <div>Ngày: {review.date}</div>
-                            <br />
-                        </li>
-
                     ))}
                 </ul>
             </Modal>
