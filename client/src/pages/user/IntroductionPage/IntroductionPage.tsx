@@ -83,51 +83,55 @@ const IntroductionPage = () => {
 
 
 
+    if (userIdfirebase) {
+        const getUserIdByUid = async (uid) => {
+            try {
+                const response = await fetch(`http://localhost:3000/googleAccount`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
 
-    const getUserIdByUid = async (uid) => {
-        try {
-            const response = await fetch(`http://localhost:3000/googleAccount?uid=${uid}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+                if (response.ok) {
+                    const userData = await response.json();
 
-            if (response.ok) {
-                const userData = await response.json();
+                    // Lọc ra tất cả các tài khoản có uid trùng với uid được chỉ định
+                    const matchingUsers = userData.filter(user => user.userId === uid);
+                    console.log(matchingUsers);
 
-                // Assuming that the API returns an array of users
-                if (userData && userData.length > 0) {
-                    // Assuming that each user has an "id" property
-                    const userId = userData[0].id;
-                    return userId;
+                    if (matchingUsers.length > 0) {
+                        // Chọn tài khoản đầu tiên trong danh sách (nếu có nhiều tài khoản trùng uid)
+                        const userId = matchingUsers[0].id;
+                        return userId;
+                    } else {
+                        console.log('User not found');
+                        return null;
+                    }
                 } else {
-                    console.log('User not found');
-                    return null;
+                    throw new Error('Failed to fetch user data.');
                 }
-            } else {
-                throw new Error('Failed to fetch user data.');
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
             }
-        } catch (error) {
-            console.error('Error:', error);
-            return null;
-        }
-    };
+        };
+        // Example usage
+        const uid = userIdfirebase;
+        getUserIdByUid(uid)
+            .then(userId => {
+                if (userId) {
+                    setIduser(userId)
+                    console.log('User ID:', userId);
+                } else {
+                    console.log('User ID not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
-    // Example usage
-    const uid = userIdfirebase;
-    getUserIdByUid(uid)
-        .then(userId => {
-            if (userId) {
-                setIduser(userId)
-                console.log('User ID:', userId);
-            } else {
-                console.log('User ID not found');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
     const [iduser, setIduser] = useState(0);
     const [paymentData, setPaymentData] = useState([]);
     const [paymentStatu2s, setPaymentStatus2] = useState(false);
@@ -756,7 +760,15 @@ const IntroductionPage = () => {
                             <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start your progress</button>
                             </Link>
-                            <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
+                            {!paymentStatu2s ? (
+                                <>
+                                    <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
+                                </>
+                            ) : (
+                                <>
+                                </>
+                            )}
+
                         </div>
                     </div>
                     <div className="courseRight">
