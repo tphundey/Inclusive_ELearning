@@ -9,7 +9,8 @@ const AdminCategory = (props: any) => {
     const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
     const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveCategoryMutation();
 
-    const dataSource = productsData?.map((item: Icategory) => ({
+    const dataSource = productsData?.map((item: Icategory, index: number) => ({
+        stt : (index + 1).toString(),
         key: item.id,
         categoryName: item.categoryName,
         categoryDescription: item.categoryDescription
@@ -60,9 +61,9 @@ const AdminCategory = (props: any) => {
 
     const columns = [
         {
-            title: "id",
-            dataIndex: "key",
-            key: "id",
+            title: "STT",
+            dataIndex: "stt",
+            key: "stt",
         },
         {
             title: "Tên danh mục",
