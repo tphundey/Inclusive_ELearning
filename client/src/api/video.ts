@@ -20,13 +20,14 @@ const videoApi = createApi({
             providesTags: ['Videos'],
             transformResponse: (response: any) => {
                 console.log(response);
-
-                return response.map((item: any) => ({
+                const reversedResponse = response.reverse();
+                return reversedResponse.map((item: any) => ({
                     ...item,
                     id: item.id
                 }));
             },
         }),
+
 
         getVideoById: builder.query<Ivideo, number | string>({
             query: (id) => `/Videos/${id}`,

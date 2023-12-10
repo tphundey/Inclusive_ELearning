@@ -17,9 +17,8 @@ const categoryApi = createApi({
             query: () => `/Categories`,
             providesTags: ['Categories'],
             transformResponse: (response: any) => {
-                console.log(response);
-
-                return response.map((item: any) => ({
+                const reversedResponse = response.reverse();
+                return reversedResponse.map((item: any) => ({
                     ...item,
                     id: item.id
                 }));

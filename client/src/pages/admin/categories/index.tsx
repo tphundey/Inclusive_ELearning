@@ -9,14 +9,11 @@ const AdminCategory = (props: any) => {
     const { data: productsData, isLoading: isProductLoading } = useGetCategorysQuery();
     const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveCategoryMutation();
 
-
     const dataSource = productsData?.map((item: Icategory) => ({
         key: item.id,
         categoryName: item.categoryName,
         categoryDescription: item.categoryDescription
     }));
-
-
 
     const checkCoursesInCategory = async (categoryId: string) => {
         try {

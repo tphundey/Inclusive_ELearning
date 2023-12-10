@@ -22,7 +22,7 @@ const AdminProduct = () => {
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
             .then((data) => {
-                setProductsData(data);
+                setProductsData(data.reverse());
                 setIsProductLoading(false);
             })
             .catch((error) => {

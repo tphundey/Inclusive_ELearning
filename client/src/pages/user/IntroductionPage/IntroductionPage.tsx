@@ -459,6 +459,7 @@ const IntroductionPage = () => {
         setReview({ ...review, rating: value });
         setRated(value);
     };
+    const [iframeUrl, setIframeUrl] = useState(''); 
     useEffect(() => {
         if (id) {
             const stringId = id.toString();
@@ -467,6 +468,9 @@ const IntroductionPage = () => {
                 .get(apiUrl)
                 .then((response) => {
                     setProduct(response.data);
+                    console.log(response.data.intro);
+                    setIframeUrl(response.data.intro)
+                    
                 })
                 .catch((error) => {
                     console.error(error);
@@ -774,7 +778,7 @@ const IntroductionPage = () => {
                     <div className="courseRight">
                         {isPreviewVisible ? (
                             <div className="overlay">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/bh_iIIVIfW0?si=EN3YdY1xIRbuKCLg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                <iframe title="myIframe" src={iframeUrl} width="600" height="400" />
                                 <button className='intro_close' onClick={() => setIsPreviewVisible(false)}>Close</button>
                             </div>
                         ) : (
