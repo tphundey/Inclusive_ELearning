@@ -1,39 +1,62 @@
 import { useAddCategoryMutation } from "@/api/category";
-import { useAddProductMutation } from "@/api/courses";
-import { Button, DatePicker, Form, Input, Select, message } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { Button, Form, Input, message } from "antd";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Navigate, useNavigate } from "react-router-dom";
-const { Option } = Select;
-
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 type FieldType = {
     categoryName: string,
-    categoryDescription : string,
+    categoryDescription: string,
 };
-
 const AdminCategoryAdd = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [addProduct, { isLoading: isAddProductLoading }] = useAddCategoryMutation();
-    const onFinish = (values: any) => {
+    const [existingCategories, setExistingCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/categories');
+                const categories = response.data;
+                const categoryNames = categories.map((category: any) => category.categoryName);
+                setExistingCategories(categoryNames);
+
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const onFinish = (values: FieldType) => {
+        const { categoryName } = values;
+        if (existingCategories.includes(categoryName)) {
+            messageApi.error({
+                content: 'Tên danh mục đã tồn tại. Vui lòng chọn một tên khác.',
+            });
+            return;
+        }
+
         addProduct(values)
             .unwrap()
             .then(() => {
                 messageApi.open({
-                    type: "success",
-                    content: "Bạn đã thêm danh mục thành công. Chờ 3s để quay về quản trị",
+                    type: 'success',
+                    content: 'Bạn đã thêm danh mục thành công. Chờ 2s để quay về quản trị',
                 });
                 form.resetFields();
                 setTimeout(() => {
-                    navigate("/admin/categorys");
-                }, 3000);
+                    navigate('/admin/categorys');
+                }, 2000);
             });
     };
 
     const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
+        console.log('Failed:', errorInfo);
     };
+
 
     return (
         <>
@@ -56,7 +79,7 @@ const AdminCategoryAdd = () => {
                     name="categoryName"
                     rules={[
                         { required: true, message: "Tên danh mục không được để trống!" },
-                        { min: 3, message: "Tên danh mục ít nhất phải 3 ký tự" },
+                        { min: 5, message: "Tên danh mục ít nhất phải 5 ký tự" },
                     ]}
                 >
                     <Input />
@@ -65,7 +88,6 @@ const AdminCategoryAdd = () => {
                 <Form.Item<FieldType>
                     label="Mô tả danh mục"
                     name="categoryDescription"
-                    rules={[{ required: true, message: "Phải nhập mô tả" }]}
                 >
                     <Input />
                 </Form.Item>
