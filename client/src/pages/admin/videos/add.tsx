@@ -15,12 +15,12 @@ const AdminVideoAdd = () => {
     const [courses, setCourses] = useState([]);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
+    const [videoDuration, setVideoDuration] = useState(null);
     const onDrop = useCallback((acceptedFiles: any[]) => {
-
         form.setFieldsValue({ videoFile: acceptedFiles[0] });
     }, []);
-    const cloudName = 'your_cloud_name'; // Thay thế bằng tên cloud của bạn trên Cloudinary
-    const uploadPreset = 'your_upload_preset'; // Thay thế bằng upload preset của bạn trên Cloudinary
+
+    const cloudName = 'dsk9jrxzf';
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     useEffect(() => {
         // Fetch courses
@@ -46,31 +46,40 @@ const AdminVideoAdd = () => {
                 }
             );
             const responseData = await response.json();
-            console.log(responseData);
             const uploadedVideoUrl = responseData.secure_url;
-
             setVideoUrl(uploadedVideoUrl);
+            const durationInSeconds = responseData.duration;
 
-            // Create the video object to be added
+            // Lưu trữ thông tin thời lượng vào state
+            setVideoDuration(durationInSeconds);
+            const durationInMinutes = (durationInSeconds / 60).toFixed(2);
+            setVideoDuration(durationInMinutes);
             const videoData = {
                 videoTitle: values.videoTitle,
                 videoURL: uploadedVideoUrl,
+                duration: durationInMinutes,
             };
 
             if (selectedCourseId) {
                 videoData.courseId = selectedCourseId;
             }
 
-            // Add video to your database or API
             addVideo(videoData)
                 .unwrap()
                 .then(() => {
                     const courseId = selectedCourseId;
                     const updatedCourse = courses.find((course: any) => course.id === courseId);
                     if (updatedCourse) {
-                        // Update course on your server
+                        updatedCourse.duration += parseFloat(durationInMinutes);
                         fetch(`http://localhost:3000/Courses/${courseId}`, {
                             method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(updatedCourse),
+                        })
+                        fetch(`http://localhost:3000/Courses/${courseId}`, {
+                            method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
@@ -130,7 +139,16 @@ const AdminVideoAdd = () => {
                     <Input />
                 </Form.Item>
 
+                {/* <Form.Item
+                    label="Duration"
+                    name="duration"
+                    rules={[
+                        { required: true, message: 'Please enter the duration' },
 
+                    ]}
+                >
+                    <Input type="number" />
+                </Form.Item> */}
                 <Form.Item
                     label="Video File"
                     name="videoFile"
@@ -164,7 +182,6 @@ const AdminVideoAdd = () => {
                         ))}
                     </Select>
                 </Form.Item>
-
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" danger htmlType="submit">
                         {isAddProductLoading ? (
@@ -173,6 +190,7 @@ const AdminVideoAdd = () => {
                             'Add'
                         )}
                     </Button>
+                    {videoDuration && <p>Video Duration: {videoDuration} seconds</p>}
                 </Form.Item>
 
                 {videoUrl && (

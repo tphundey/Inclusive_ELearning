@@ -29,7 +29,7 @@ const AdminProductAdd = () => {
     const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
 
 
-    const onDrop = async (acceptedFiles) => {
+    const onDrop = async (acceptedFiles: any) => {
         try {
             const formData = new FormData();
             formData.append("file", acceptedFiles[0]);
@@ -59,6 +59,7 @@ const AdminProductAdd = () => {
     const onFinish = (values: any) => {
         const dateValue = values.date.format('YYYY-MM-DD');
         values.date = dateValue;
+        values.duration = parseInt(values.duration, 10);
         addProduct(values)
             .unwrap()
             .then(() => {
