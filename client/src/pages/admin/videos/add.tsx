@@ -57,7 +57,7 @@ const AdminVideoAdd = () => {
             const videoData = {
                 videoTitle: values.videoTitle,
                 videoURL: uploadedVideoUrl,
-                duration: durationInMinutes,
+                duration: parseFloat(durationInMinutes),
             };
 
             if (selectedCourseId) {

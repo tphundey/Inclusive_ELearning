@@ -13,13 +13,15 @@ const AdminVideo = (props: Props) => {
     const [deleteVideoId, setDeleteVideoId] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [coursesData, setCoursesData] = useState([]);
+    const [coursesData2, setCoursesData2] = useState([]);
     const dataSource = productsData?.map((item: Ivideo, index: number) => ({
-        stt : (index + 1).toString(),
+        stt: (index + 1).toString(),
         key: item.id,
         videoTitle: item.videoTitle,
         courseName: coursesData[item.courseId] || "Unknown Course", // Look up courseName
         videoURL: item.videoURL,
     }));
+    console.log(coursesData);
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 4;
@@ -45,6 +47,23 @@ const AdminVideo = (props: Props) => {
                 console.error('Error fetching courses:', error);
             });
     }, []);
+    useEffect(() => {
+        // Fetch data from 'http://localhost:3000/Courses'
+        fetch('http://localhost:3000/Courses')
+            .then((response) => response.json())
+            .then((data) => {
+                // Process and update the coursesData state as an array of objects
+                const coursesInfo = data.map((course: any) => ({
+                    id: course.id,
+                    courseName: course.courseName,
+                    duration: course.duration
+                }));
+                setCoursesData2(coursesInfo);
+            })
+            .catch((error) => {
+                console.error('Error fetching courses:', error);
+            });
+    }, []);
 
     const showDeleteModal = (id: number | string) => {
         setDeleteVideoId(id);
@@ -54,41 +73,64 @@ const AdminVideo = (props: Props) => {
     };
     const handleVideoDelete = () => {
         if (deleteVideoId) {
+            const videoToDelete = productsData.find((video) => video.id === deleteVideoId);
+            const courseIdToDelete = videoToDelete?.courseId;
+            const videoDuration = videoToDelete?.duration || 0;
+
+            // Lấy thông tin về khóa học từ danh sách coursesData2
+            const courseToDelete = coursesData2.find((course) => course.id === courseIdToDelete);
+            const initialCourseDuration = courseToDelete?.duration || 0;
+
+            console.log("Before deletion:");
+            console.log("Initial Course Duration:", initialCourseDuration);
+            console.log("Video Duration:", videoDuration);
+
             removeCategory(deleteVideoId)
                 .unwrap()
                 .then(() => {
-                    const updatedCourses = coursesData.map((course: any) => ({
-                        ...course,
-                        videoID: course.videoID.filter((videoId: any) => videoId !== deleteVideoId),
-                    }));
-
-
-                    const updateCoursePromises = updatedCourses.map((updatedCourse) => {
-                        return fetch(`http://localhost:3000/Courses/${updatedCourse.id}`, {
-                            method: "PUT",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(updatedCourse),
+                    // Kiểm tra xem coursesData có phải là mảng không trước khi sử dụng map
+                    if (Array.isArray(coursesData2)) {
+                        const updatedCourses = coursesData2.map((course) => {
+                            if (course.id === courseIdToDelete) {
+                                // Trừ thời lượng của video bị xóa khỏi thời lượng của khóa học
+                                course.duration = Math.max(0, course.duration - videoDuration);
+                            }
+                            return course;
                         });
 
-                    });
-                    setIsModalVisible(false);
-                    setDeleteVideoId(null);
-                    Promise.all(updateCoursePromises)
-                        .then(() => {
-                            messageApi.open({
-                                type: "success",
-                                content: "Deleted successfully!",
+                        console.log("After deletion:");
+                        console.log("Updated Courses:", updatedCourses);
+
+                        const updateCoursePromises = updatedCourses.map((updatedCourse) => {
+                            return fetch(`http://localhost:3000/Courses/${updatedCourse.id}`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(updatedCourse),
                             });
-                            setIsModalVisible(false);
-                            setDeleteVideoId(null);
-
-                        })
-                        .catch((error) => {
-                            setIsModalVisible(false);
-                            console.error("Error deleting video:", error);
                         });
+
+                        setIsModalVisible(false);
+                        setDeleteVideoId(null);
+
+                        Promise.all(updateCoursePromises)
+                            .then(() => {
+                                messageApi.open({
+                                    type: "success",
+                                    content: "Đã xóa thành công!",
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Lỗi khi cập nhật thời lượng khóa học:", error);
+                            });
+                    } else {
+                        console.error("coursesData không phải là một mảng.");
+                    }
+                })
+                .catch((error) => {
+                    setIsModalVisible(false);
+                    console.error("Lỗi khi xóa video:", error);
                 });
         }
     };
@@ -109,7 +151,7 @@ const AdminVideo = (props: Props) => {
             title: "Khóa học",
             dataIndex: "courseName",
             key: "courseName",
-            width : "250px"
+            width: "250px"
         },
         {
             title: "Url Video",
