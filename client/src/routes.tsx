@@ -52,6 +52,7 @@ import ConfirmLoading from "./pages/user/ConfirmLoading/confirmLoading";
 import ListCourse from "./pages/user/ListCourse/ListCourse";
 import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
+  import TestPage from "./pages/admin/dashboard/testtt"
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -112,6 +113,7 @@ export const routers = createBrowserRouter([
             { path: "introduction/:id", element: <IntroductionPage /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "error", element: <ErrorPage /> },
+            { path: "test", element: <TestPage /> },
             { path: "chats", element: <Chats /> },
             { path: "postpage", element: <Post /> },
             { path: "profile/:id", element: <Profile /> },
