@@ -50,6 +50,8 @@ import AdminPostpage from "./pages/admin/postpage";
 import AdminPostAdd from "./pages/admin/postpage/add";
 import ConfirmLoading from "./pages/user/ConfirmLoading/confirmLoading";
 import ListCourse from "./pages/user/ListCourse/ListCourse";
+import AdminPayment from "./pages/admin/payment";
+import AdminReview from "./pages/admin/reviews";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -58,12 +60,12 @@ let userRole: 0 | 1 = 0;
 
 const uid = getUidFromLocalStorage();
 
-if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
-    userRole = 1;
-}
-// if (uid === "2o2RPub7yJd9liwygYQJxTA98uV2") {
+// if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
 //     userRole = 1;
 // }
+if (uid === "2o2RPub7yJd9liwygYQJxTA98uV2") {
+    userRole = 1;
+}
 
 const withAuthorization = (allowedRoles: number[], WrappedComponent: React.ComponentType) => {
     return class WithAuthorization extends React.Component {
@@ -190,6 +192,9 @@ export const routers = createBrowserRouter([
             { path: "role/:idRole/edit", element: <AdminRoleEditWithAuthorization /> },
             { path: "postpage", element: <AdminPostpage /> },
             { path: "post/add", element: <AdminPostAdd /> },
+            { path: "payment", element: <AdminPayment /> },
+            { path: "reviews", element: <AdminReview /> },
+            { path: "reviews/:id", element: <AdminPostAdd /> },
         ],
     },
 ]);
