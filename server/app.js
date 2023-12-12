@@ -237,10 +237,16 @@ async function vnpayReturnHandler(req, res, next) {
             if (responseCode === '00') {
                 const courseIdFilePath = 'course.txt';
                 const userIdFilePath = 'user.txt';
-                const amountFilePath  = 'amount.txt'
+                const amountFilePath = 'amount.txt'
+            
+                // Đọc dữ liệu từ file và chuyển đổi thành số
                 const courseId = fs.readFileSync(courseIdFilePath, 'utf-8').trim();
                 const userId = fs.readFileSync(userIdFilePath, 'utf-8').trim();
-                const amount = fs.readFileSync(amountFilePath, 'utf-8').trim();
+                const rawAmount = fs.readFileSync(amountFilePath, 'utf-8').trim();
+                
+                // Chuyển đổi giá trị amount thành số
+                const numericAmount = parseFloat(rawAmount.replace(/[^0-9.-]+/g, '')) || 0;
+            
                 try {
                     const updateResponse = await fetch(`http://localhost:3000/Payment`, {
                         method: 'POST',
@@ -251,10 +257,10 @@ async function vnpayReturnHandler(req, res, next) {
                             paymentStatus: true,
                             courseId: courseId,
                             userId: userId,
-                            amount: amount
+                            amount: numericAmount
                         }),
                     });
-
+            
                     if (updateResponse) {
                         res.render('success', { code: responseCode });
                     } else {
