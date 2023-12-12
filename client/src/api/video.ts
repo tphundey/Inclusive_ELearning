@@ -56,10 +56,10 @@ const videoApi = createApi({
         }),
 
         updateVideo: builder.mutation<Ivideo, Partial<Ivideo>>({
-            query: (category) => ({
-                url: `/Videos/${category.id}`,
+            query: (Courses) => ({
+                url: `/Videos/${Courses.id}`,
                 method: "PATCH",
-                body: category
+                body: Courses
             }),
             invalidatesTags: ['Videos'],
         }),

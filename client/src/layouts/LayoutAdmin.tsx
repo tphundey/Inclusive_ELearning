@@ -112,6 +112,16 @@ const LayoutAdmin = () => {
                         },
                         {
                             key: "7",
+                            icon: <AiOutlineFileText />,
+                            label: <Link to="/admin/payment">Quản lý thanh toán</Link>,
+                        },
+                        {
+                            key: "8",
+                            icon: <AiOutlineFileText />,
+                            label: <Link to="/admin/reviews">Quản lý coment</Link>,
+                        },
+                        {
+                            key: "9",
                             icon: <AiFillCloseCircle />,
                             label: <Link to="http://localhost:5173/homepage">Thoát</Link>,
                         },
