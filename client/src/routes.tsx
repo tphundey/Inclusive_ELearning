@@ -64,7 +64,7 @@ const uid = getUidFromLocalStorage();
 // if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
 //     userRole = 1;
 // }
-if (uid === "2o2RPub7yJd9liwygYQJxTA98uV2") {
+if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
     userRole = 1;
 }
 

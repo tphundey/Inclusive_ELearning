@@ -49,14 +49,7 @@ const HeaderUser: React.FC = () => {
             });
     }, []);
 
-    const handleSearch = () => {
-        const firstChar = searchTerm.charAt(0);
-        const filtered = products.filter((product) =>
-            product.courseName.toLowerCase().startsWith(firstChar.toLowerCase())
-        );
-        setFilteredProducts(filtered.slice(0, 5));
-        setListVisible(true);
-    };
+
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
@@ -64,10 +57,19 @@ const HeaderUser: React.FC = () => {
         handleSearch();
     };
 
-    const handleClearInput = () => {
-        setSearchTerm('');
+    const handleClearSearch = (e) => {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        setListVisible(false);
+        setSearchTerm(''); // Xóa dữ liệu trong input
     };
-
+    const handleSearch = () => {
+        const firstChar = searchTerm.charAt(0);
+        const filtered = products.filter((product) =>
+            product.courseName.toLowerCase().startsWith(firstChar.toLowerCase()) && !product.isHidden
+        );
+        setFilteredProducts(filtered.slice(0, 5));
+        setListVisible(filtered.length > 0);
+    };
     const handleItemClick = (product: any) => {
         navigate(`/introduction/${product.id}`);
     };
@@ -76,26 +78,26 @@ const HeaderUser: React.FC = () => {
     const handleLabelClick = () => {
         setIsBackgroundChanged(!isBackgroundChanged);
         setIsSwapOn(!isSwapOn);
-    
+
         // Thay đổi màu của body
         document.body.style.backgroundColor = isBackgroundChanged ? 'black' : 'white';
         document.body.style.color = isBackgroundChanged ? 'white' : 'black';
-    
+
         // Thay đổi màu của các phần tử có class cụ thể
         const elementsToChange = document.querySelectorAll('.header-static, .containerCss, .bg-white');
-        
+
         elementsToChange.forEach(element => {
             element.style.backgroundColor = isBackgroundChanged ? 'black' : 'white';
             element.style.color = isBackgroundChanged ? 'white' : 'black';
         });
     };
-    
+
 
     useEffect(() => {
         const elementsToChange = document.querySelectorAll('.header-static, .other-class-1, .other-class-2');
-    
+
         elementsToChange.forEach(element => {
-          
+
         });
     }, [isBackgroundChanged]);
     return (
@@ -118,21 +120,29 @@ const HeaderUser: React.FC = () => {
                                         value={searchTerm}
                                         onInput={handleInputChange}
                                     />
-                                    {searchTerm && ( // Hiển thị nút xóa chỉ khi có giá trị trong input
-                                        <button onClick={handleClearInput} className="clear-button">
+                                    {searchTerm && (
+                                        <button onClick={(e) => handleClearSearch(e)} className="clear-button">
                                             <i className="fa-solid fa-xmark"></i>
                                         </button>
                                     )}
                                     <button onClick={handleSearch}>
                                         <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
-                                    {isListVisible && ( // Sử dụng trạng thái để kiểm tra hiển thị danh sách
+                                    {isListVisible && (
                                         <div className="search-results">
                                             {filteredProducts.length > 0 ? (
                                                 filteredProducts.map((product) => (
-                                                    <a href={`/introduction/${product.id}`} key={product.id}>
-                                                        <div className='flex search-list'><div> <img className='w-5' src={product.courseIMG} alt="" /></div><div className='search-blue' onClick={() => handleItemClick(product)}>{product.courseName}</div></div>
-                                                    </a>
+                                                    // Kiểm tra điều kiện isHidden trước khi hiển thị
+                                                    !product.isHidden && (
+                                                        <a href={`/introduction/${product.id}`} key={product.id}>
+                                                            <div className='flex search-list'>
+                                                                <div> <img className='w-5' src={product.courseIMG} alt="" /></div>
+                                                                <div className='search-blue' onClick={() => handleItemClick(product)}>
+                                                                    {product.courseName}
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    )
                                                 ))
                                             ) : (
                                                 <div className="empty-result">Không tìm thấy!</div>
