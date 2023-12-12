@@ -7,9 +7,11 @@ import {
 import { Icategory } from "@/interfaces/category";
 import { Button, DatePicker, Form, Input, Select, Skeleton, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
 const { Option } = Select;
 
 type FieldType = {
@@ -60,7 +62,24 @@ const AdminProductEdit = () => {
         categoryName: item.categoryName,
         categoryDescription : item.categoryDescription
     }));
+    const onDrop = async (acceptedFiles: any) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", acceptedFiles[0]);
+            formData.append("upload_preset", "your_cloudinary_upload_preset");
 
+            const response = await axios.post(
+                "https://api.cloudinary.com/v1_1/dsk9jrxzf/image/upload?upload_preset=movies",
+                formData
+            );
+
+            const imageUrl = response.data.secure_url;
+            form.setFieldsValue({ courseIMG: imageUrl });
+        } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+        }
+    };
+    const { getRootProps, getInputProps } = useDropzone({ onDrop });
     return (
         <>
             {contextHolder}
@@ -99,17 +118,17 @@ const AdminProductEdit = () => {
                         <Input />
                     </Form.Item>
                     
-                <Form.Item<FieldType>
+                    <Form.Item
                     label="Hình ảnh"
                     name="courseIMG"
+                    rules={[{ type: 'url', message: 'Hình ảnh không hợp lệ', required: true }]}
                 >
-                    <Input />
+                    <div {...getRootProps()} style={{ border: '1px dashed #d9d9d9', padding: '20px', textAlign: 'center' }}>
+                        <input {...getInputProps()} />
+                        <p>Thả hình ảnh vào đây hoặc click để chọn hình</p>
+                    </div>
+                    <img src={form.getFieldValue("courseIMG")} alt="Preview" style={{ marginTop: '10px', width: 100, height: 100 }} />
                 </Form.Item>
-                {/* <Form.Item	
-                name="date"	
-                label="DatePicker">	
-                    <DatePicker  />	
-                </Form.Item> */}
                 <Form.Item
                     name="intro"
                     label="Video giới thiệu"
