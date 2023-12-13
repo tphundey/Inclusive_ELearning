@@ -246,7 +246,42 @@ const IntroductionPage = () => {
         .catch((error) => {
             console.error(error);
         });
-
+        console.log(userID,'ddddddddddddd');
+        
+        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to retrieve user information from the API.');
+            }
+        })
+        .then((userData) => {
+            if (userData) {
+                console.log(userData[0].lock);
+                
+                const  lock  = userData[0].lock;
+    
+                // Kiểm tra trường lock và đăng xuất tài khoản nếu lock là true
+                if (lock == true) {
+                    // Thực hiện đăng xuất tài khoản
+                    auth.signOut().then(() => {
+                        console.log('Tài khoản đã bị khóa. Đăng xuất người dùng.');
+                        navigate('/')
+                    }).catch((error) => {
+                        console.error('Lỗi khi đăng xuất:', error);
+                    });
+                } else {
+                    // Nếu lock không phải là true, có thể tiếp tục thực hiện các thao tác khác
+                    console.log('Tài khoản không bị khóa. Tiếp tục thực hiện các thao tác khác.');
+                }
+            } else {
+                console.error('Không tìm thấy thông tin tài khoản với ID đã cung cấp.');
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
     ////////////////////Lấy thông tin thanh toán////////////////////
     useEffect(() => {

@@ -143,15 +143,11 @@ routerGoogleAccounts.delete("/:id", async (req, res) => {
 routerGoogleAccounts.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { lock } = req.body;
-
-    if (lock === undefined) {
-      return res.status(400).json({ error: "Lock field is required" });
-    }
+    const { lock, role } = req.body;
 
     const updatedUser = await GoogleAccount.findByIdAndUpdate(
       id,
-      { $set: { lock: lock } },
+      { $set: { lock: lock, role: role } },
       { new: true }
     );
 
@@ -164,6 +160,5 @@ routerGoogleAccounts.patch("/:id", async (req, res) => {
     return res.status(500).json({ error: "Could not update user" });
   }
 });
-
 
 module.exports = routerGoogleAccounts;

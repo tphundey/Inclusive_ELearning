@@ -52,7 +52,7 @@ import ConfirmLoading from "./pages/user/ConfirmLoading/confirmLoading";
 import ListCourse from "./pages/user/ListCourse/ListCourse";
 import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
-  import TestPage from "./pages/admin/dashboard/testtt"
+import TestPage from "./pages/admin/dashboard/testtt"
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
