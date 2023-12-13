@@ -100,7 +100,7 @@ const SigninPage = () => {
 
                     </Form>
                     <br />
-                    <a onClick={handleForgotPassword}>Forgot password?</a>
+                    <a className='cursor-pointer' onClick={handleForgotPassword}>Forgot password?</a>
 
                 </div>
                 <div className='login-footer'>

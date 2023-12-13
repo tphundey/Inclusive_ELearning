@@ -53,6 +53,7 @@ import ListCourse from "./pages/user/ListCourse/ListCourse";
 import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
 import TestPage from "./pages/admin/dashboard/testtt"
+import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
@@ -111,6 +112,7 @@ export const routers = createBrowserRouter([
             { path: "getcertificate/:id", element: <Certificate /> },
             { path: "learningpath", element: <LearningPathpage /> },
             { path: "introduction/:id", element: <IntroductionPage /> },
+            { path: "confirm-email", element: <ResetPasswordConfirmation /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "error", element: <ErrorPage /> },
             { path: "test", element: <TestPage /> },
@@ -155,7 +157,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="signin" /> },
             { path: "signin", element: <SigninPage /> },
-            { path: "confirm-email", element: <ConfirmEmail /> },
+            { path: "", element: <ConfirmEmail /> },
             { path: "confirm-loading", element: <ConfirmLoading /> },
             { path: "signup/404", element: <ErrorPage /> },
             {
