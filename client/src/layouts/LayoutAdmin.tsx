@@ -69,7 +69,7 @@ const LayoutAdmin = () => {
     </>
     return (
 
-        <Layout style={{height:950}}>
+        <Layout style={{height:850}}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu

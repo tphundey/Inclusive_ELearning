@@ -8,11 +8,45 @@ const AdminProduct = () => {
     const [productsData, setProductsData] = useState([]);
     const [isProductLoading, setIsProductLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showFullDescription, setShowFullDescription] = useState(false);
+    const [, setShowFullDescription] = useState(false);
     const [selectedCourseVideos, setSelectedCourseVideos] = useState([]);
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
     const pageSize = 4;
-
+    const showFullDescription = (courseID: any) => {
+        const selectedCourse = productsData.find((product: any) => product.id === courseID);
+    
+        let isFullDescriptionVisible = true;
+    
+        const toggleDescription = () => {
+            isFullDescriptionVisible = !isFullDescriptionVisible;
+        };
+    
+        const modalContent = (
+            <div>
+                <p>{isFullDescriptionVisible ? selectedCourse.description : selectedCourse.description.slice(0, 100) + '...'}</p>
+                {selectedCourse.description.length > 100 && (
+                    <Button type="link" onClick={toggleDescription}>
+                        {isFullDescriptionVisible ? 'Rút gọn' : 'Xem thêm'}
+                    </Button>
+                )}
+                <ul>
+                    {selectedCourseVideos.map((video: any, index: any) => (
+                        <li key={index}>
+                            <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
+                                {video.videoTitle}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    
+        Modal.info({
+            title: selectedCourse.courseName,
+            content: modalContent,
+            onOk() {},
+        });
+    };
     const toggleDescription = (courseID) => {
         setShowFullDescription(showFullDescription === courseID ? null : courseID);
     };
@@ -72,31 +106,20 @@ const AdminProduct = () => {
             },
         },
         {
-            title: 'Mô tả khóa học',
-            dataIndex: 'description',
-            key: 'desc',
-            width: '450px',
-            render: (description: string, record: any) => {
-                const isCurrentCourse = showFullDescription === record.id;
-        
-                const shortDescription = isCurrentCourse
-                    ? description
-                    : description.length > 100
-                        ? `${description.slice(0, 100)}...`
-                        : description;
-        
+            title: ' Chi tiết',
+            dataIndex: 'isHidden',
+            key: 'isHidden',
+            render: (isHidden: any, record: any) => {
                 return (
                     <>
-                        <p>{shortDescription}</p>
-                        {description.length > 100 && (
-                            <Button type="link" onClick={() => toggleDescription(record.id)}>
-                                {isCurrentCourse ? 'Rút gọn' : 'Xem thêm'}
-                            </Button>
-                        )}
+                        <Button className='ml-2' onClick={() => showFullDescription(record.id)}>
+                            Chi tiết
+                        </Button>
                     </>
                 );
             },
         },
+        
         {
             title: 'Ngày phát hành',
             dataIndex: 'date',
