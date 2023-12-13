@@ -13,7 +13,10 @@ const AdminProduct = () => {
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
     const pageSize = 4;
 
-
+    const toggleDescription = (courseID) => {
+        setShowFullDescription(showFullDescription === courseID ? null : courseID);
+    };
+    
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
@@ -73,19 +76,21 @@ const AdminProduct = () => {
             dataIndex: 'description',
             key: 'desc',
             width: '450px',
-            render: (description: string) => {
-                const shortDescription = showFullDescription
+            render: (description: string, record: any) => {
+                const isCurrentCourse = showFullDescription === record.id;
+        
+                const shortDescription = isCurrentCourse
                     ? description
                     : description.length > 100
                         ? `${description.slice(0, 100)}...`
                         : description;
-
+        
                 return (
                     <>
                         <p>{shortDescription}</p>
                         {description.length > 100 && (
-                            <Button type="link" onClick={() => setShowFullDescription(!showFullDescription)}>
-                                {showFullDescription ? 'Rút gọn' : 'Xem thêm'}
+                            <Button type="link" onClick={() => toggleDescription(record.id)}>
+                                {isCurrentCourse ? 'Rút gọn' : 'Xem thêm'}
                             </Button>
                         )}
                     </>
