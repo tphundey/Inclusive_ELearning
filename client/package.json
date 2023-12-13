@@ -21,6 +21,7 @@
         "cloudinary-react": "^1.8.1",
         "concurrently": "^8.2.0",
         "daisyui": "^3.9.4",
+        "file-saver": "^2.0.5",
         "firebase": "^10.7.1",
         "fuse.js": "^6.6.2",
         "gapi-script": "^1.2.0",

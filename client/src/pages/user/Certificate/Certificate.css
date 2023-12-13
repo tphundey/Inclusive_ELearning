@@ -6,13 +6,16 @@
     margin: 0 auto;
     border: 10px solid #476A69;
 }
-
+.cer-layout{
+    width: 600px;
+    padding: 0px;
+    margin: 0px auto;
+}
 .cer-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 200px;
-
+    margin-bottom: 240px;
 }
 
 .cer-top img {
@@ -71,10 +74,10 @@
 .course {
     position: absolute;
     top: 51%;
+    width: 530px;
     left: 37%;
     font-family: cursive;
 }
-
 .hudk {
     opacity: 0.0;
     position: absolute;

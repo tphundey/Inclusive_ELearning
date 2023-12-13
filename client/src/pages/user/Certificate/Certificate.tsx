@@ -1,4 +1,4 @@
-import  { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+
 import './Certificate.css'
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -29,7 +30,7 @@ const Certificate = () => {
     }, [auth]);
 
 
-    useEffect(() => {    
+    useEffect(() => {
         const apiUrl = `http://localhost:3000/Courses/${id}`;
         axios.get(apiUrl)
             .then((response) => {
@@ -40,20 +41,26 @@ const Certificate = () => {
             .catch((error) => {
                 console.error('Error fetching course data:', error);
             });
-    }, [id]); 
+    }, [id]);
 
 
     const generateCertificate = () => {
         const content = contentRef.current;
+
         html2canvas(content)
             .then(canvas => {
                 const image = canvas.toDataURL('image/png');
-                
                 console.log(image);
-                
-                const certificateImage = new Image();
-                certificateImage.src = image;
-                document.body.appendChild(certificateImage);
+
+                const blob = canvas.toBlob((blob) => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'certificate.png'; // Set the desired file name
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+
             });
     };
 
@@ -73,14 +80,14 @@ const Certificate = () => {
     if (!user) {
         return (
             <div className='notlogin mt-4 mb-4 text-center'>
-            Chưa đăng nhập 
-                </div>
+                Chưa đăng nhập
+            </div>
         );
     }
 
     return (
-        <div>
-            <div style={{ display: 'flex', gap:'10px' }}>
+        <div className='cer-layout'>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: 10 }}>
                 <button style={{
                     backgroundColor: '#476A69',
                     color: 'white',
@@ -88,14 +95,14 @@ const Certificate = () => {
                     padding: '10px 20px',
                     fontSize: '16px',
                     cursor: 'pointer',
-                }} onClick={generateCertificate}>Tạo chứng chỉ</button>
+                }} onClick={generateCertificate}>Dowload</button>
                 <form ref={form} onSubmit={sendEmail}>
                     <input className='hudk' readOnly type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                     <input className='hudk' readOnly type="email" name="user_email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
                     <input
                         className="bt-hu"
                         type="submit"
-                        value="Gửi thông tin tới Email"
+                        value="Nhận thông tin"
                         style={{
                             backgroundColor: '#476A69',
                             color: 'white',
@@ -129,3 +136,4 @@ const Certificate = () => {
 }
 
 export default Certificate;
+
