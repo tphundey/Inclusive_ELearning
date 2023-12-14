@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import { CloudinaryContext, Video } from 'cloudinary-react';
 const { Option } = Select;
 
 type FieldType = {
@@ -23,6 +24,7 @@ type FieldType = {
     categoryID : Number;
     courseIMG : Number;
     duration : number;
+    intro: string;
 };
 
 const AdminProductEdit = () => {
@@ -74,7 +76,7 @@ const AdminProductEdit = () => {
             );
 
             const imageUrl = response.data.secure_url;
-            form.setFieldsValue({ courseIMG: imageUrl });
+            form.setFieldsValue({ courseIMG: imageUrl, videoFile: acceptedFiles[0] });
         } catch (error) {
             console.error("Error uploading image to Cloudinary:", error);
         }
@@ -132,9 +134,8 @@ const AdminProductEdit = () => {
                 <Form.Item
                     name="intro"
                     label="Video giới thiệu"
-                    rules={[{ required: true, message: 'Vui lòng nhập video giới thiệu' }]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item<FieldType>
                     label="thời lượng"
