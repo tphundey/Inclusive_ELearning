@@ -157,9 +157,9 @@ const AdminProductAdd = () => {
                 <Form.Item
                     name="intro"
                     label="Video giới thiệu"
-                    rules={[{ required: true, message: 'Vui lòng nhập video giới thiệu' }]}
+                    
                 >
-                    <Input />
+                    <Input placeholder="link"/>
                 </Form.Item>
 
                 <Form.Item
