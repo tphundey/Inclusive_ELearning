@@ -37,7 +37,27 @@ routerPosts.get("/:id", async (req, res) => {
     return res.status(500).json({ error: "Could not retrieve course" });
   }
 });
+// Update Likes, LikedBy, and Comments
+routerPosts.patch("/:id", async (req, res) => {
+  try {
+    const { likes, likedBy, comments } = req.body;
 
+    // Update likes, likedBy, and comments for the post
+    const updatedPost = await posts.findByIdAndUpdate(
+      req.params.id,
+      { likes, likedBy, comments },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.status(500).json({ error: "Could not update post" });
+  }
+});
 // Update
 routerPosts.put("/:id", async (req, res) => {
   try {

@@ -1,37 +1,69 @@
 import { CommentOutlined, HeartOutlined, LikeOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { Form, Input, Button, message } from 'antd';
+import { useEffect, useId, useState } from "react";
+import { Form, Input, Button, message, Modal } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useRef } from "react";
 import './Postpage.css'
+import axios from "axios";
+import { useDropzone } from "react-dropzone";
+import { v4 as uuidv4 } from 'uuid';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const Post = () => {
+
     const [likedPosts, setLikedPosts] = useState([]);
     const [user, setUser] = useState<User | null>(null);
+    const [userID, setUserID] = useState<User | null>(null);
     const [allPosts, setAllPosts] = useState([]);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const formRef = useRef(null);
+    const [showCommentForm, setShowCommentForm] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState(null);
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
     const [postData, setPostData] = useState({
         title: "",
         content: "",
         image: "",
+        likes: 0,
+        likedBy: [],  // Initialize likedBy as an array
     });
-    const [commentData, setCommentData] = useState({
-        text: "",
-    });
-    const formRef = useRef(null);
-    const [showCommentForm, setShowCommentForm] = useState(false);
-    const [showForm, setShowForm] = useState(false);
-    const [selectedPostId, setSelectedPostId] = useState(null);
+
+
+    const onDrop = async (acceptedFiles: any) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", acceptedFiles[0]);
+            formData.append("upload_preset", "your_cloudinary_upload_preset");
+
+            const response = await axios.post(
+                "https://api.cloudinary.com/v1_1/dsk9jrxzf/image/upload?upload_preset=movies",
+                formData
+            );
+
+            const imageUrl = response.data.secure_url;
+            console.log("Image uploaded successfully:", imageUrl);
+
+            setPostData({ ...postData, image: imageUrl });
+            setImagePreviewUrl(imageUrl);
+        } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+            console.error("Cloudinary response:", error);
+        }
+    };
+
+    const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
     const toggleCommentFormVisibility = () => {
         setShowCommentForm((prevShowCommentForm) => !prevShowCommentForm);
-    };
-
-    const toggleFormVisibility = () => {
-        setShowForm((prevShowForm) => !prevShowForm);
     };
 
     const handleFormSubmit = async () => {
@@ -53,12 +85,11 @@ const Post = () => {
             });
 
             if (response.ok) {
-                setPostData({
-                    title: "",
-                    content: "",
-                    image: "",
-                });
+                // Reset the form fields using the formRef
+                formRef.current.resetFields();
 
+                // Clear the image preview URL
+                setImagePreviewUrl("");
 
                 const newPost = await response.json();
                 setAllPosts((prevPosts: any) => [newPost, ...prevPosts]);
@@ -71,114 +102,11 @@ const Post = () => {
             console.error("Error posting data:", error);
         }
     };
-    const generateUniqueId = () => {
-        return Math.random().toString(36).substr(2, 9);
-    };
-    const handleCommentFormSubmit = async () => {
-        try {
-
-            const currentPost = allPosts.find(post => post.id === selectedPostId);
-
-            const updatedComments = [
-                {
-                    id: generateUniqueId(),
-                    author: user?.displayName || "Anonymous",
-                    photoURL: user?.photoURL || "",
-                    text: commentData.text,
-                    time: new Date().toLocaleString(),
-                    likes: 0,
-                    replies: [],
-                },
-                ...currentPost.comments,
-            ];
-
-            const response = await fetch(`http://localhost:3000/posts/${selectedPostId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    comments: updatedComments,
-                    likedBy: [],
-                }),
-            });
-
-            if (response.ok) {
-                setCommentData({
-                    text: "",
-                });
-                const updatedPost = await response.json();
-                setAllPosts((prevPosts: any) => {
-                    return prevPosts.map((post: any) => {
-                        if (post.id === selectedPostId) {
-                            return updatedPost;
-                        }
-                        return post;
-                    });
-                });
-
-                message.success("Bình luận thành công!");
-            } else {
-                message.error("Lỗi khi đăng bình luận.");
-            }
-        } catch (error) {
-            console.error("Lỗi khi đăng bình luận:", error);
-        }
-    };
-    // const [showReplyForm, setShowReplyForm] = useState(false);
-    // const [selectedCommentId, setSelectedCommentId] = useState(null);
-
-    // const toggleReplyFormVisibility = (commentId) => {
-    //     setShowReplyForm((prevShowReplyForm) => !prevShowReplyForm);
-    //     setSelectedCommentId(commentId);
-    // };
-    // const handleReplyFormSubmit = async () => {
-    //     try {
-    //         // Truy xuất danh sách bài viết từ API và lọc ra bài viết cụ thể và comment
-    //         const response = await fetch(`http://localhost:3000/posts`);
-    //         const postData = await response.json();
-
-    //         const selectedPost = postData.find((post) => post.id === 10);
-
-    //         if (selectedPost) {
-    //             const selectedComment = selectedPost.comments.find((comment) => comment.id === 10);
-
-    //             if (selectedComment) {
-    //                 const replyResponse = await fetch(`http://localhost:3000/posts/${postId}/comments/${commentId}/replies`, {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                     },
-    //                     body: JSON.stringify({
-    //                         id: generateUniqueId(),
-    //                         author: user?.displayName || "Anonymous",
-    //                         photoURL: user?.photoURL || "",
-    //                         text: commentData.text,
-    //                         time: new Date().toLocaleString(),
-    //                         likes: 0,
-    //                     }),
-    //                 });
-
-    //                 if (replyResponse.ok) {
-    //                     // Xử lý sau khi gửi phản hồi thành công
-    //                     // ...
-    //                 } else {
-    //                     console.error(`Lỗi khi gửi phản hồi. Mã lỗi: ${replyResponse.status}`);
-    //                 }
-    //             } else {
-    //                 console.error("Comment not found.");
-    //             }
-    //         } else {
-    //             console.error("Post not found.");
-    //         }
-    //     } catch (error) {
-    //         console.error("Lỗi khi trả lời bình luận:", error);
-    //     }
-    // };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
+            setUserID(currentUser.uid)
         });
         return () => {
             unsubscribe();
@@ -191,90 +119,113 @@ const Post = () => {
                 const response = await fetch("http://localhost:3000/posts");
                 const data = await response.json();
 
-                // Đảo ngược mảng dữ liệu trước khi set vào state
-                const reversedData = data.reverse();
-                setAllPosts(reversedData);
+                // Assuming you have a function to check if the current user has liked a post
+                const userLikedPosts = data.filter(post => post.likedBy.includes(user?.uid));
+
+                setLikedPosts(userLikedPosts.map(post => post.id));
+                setAllPosts(data.reverse());
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
-    }, []);
-
-    const handleLike = async (postId: any) => {
+    }, [user?.uid]);
+    const [likedPostIds, setLikedPostIds] = useState([]);
+    const [likedPostStatus, setLikedPostStatus] = useState({});
+    const generateUniqueId = () => {
+        return uuidv4();
+    };
+    const handleLike = async (postId) => {
         try {
-            if (!user?.uid) {
-                console.log("Người dùng chưa đăng nhập, không thể thực hiện thao tác like.");
-                return;
-            }
-            const response = await fetch('http://localhost:3000/posts/');
-            const allPosts = await response.json();
+            const updatedPosts = allPosts.map((post) => {
+                if (post.id === postId) {
+                    const liked = post.likedBy.includes(user?.uid);
+                    const updatedLikedBy = liked
+                        ? post.likedBy.filter((id) => id !== user?.uid)
+                        : [...post.likedBy, user?.uid];
 
-            const postToUpdate = allPosts.find((post: any) => post.id === postId);
-
-            const isLiked = postToUpdate.likedBy.includes(user?.uid);
-
-
-            if (isLiked) {
-                postToUpdate.likedBy = postToUpdate.likedBy.filter((id: any) => id !== user?.uid);
-                postToUpdate.likes -= 1;
-                setLikedPosts((prevLikedPosts) => prevLikedPosts.filter((likedPost) => likedPost !== postId));
-            } else {
-
-                postToUpdate.likedBy.push(user?.uid);
-                postToUpdate.likes += 1;
-
-                setLikedPosts((prevLikedPosts: any) => [...prevLikedPosts, postId]);
-            }
-
-
-            const updateResponse = await fetch(`http://localhost:3000/posts/${postId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(postToUpdate),
+                    return {
+                        ...post,
+                        likes: liked ? post.likes - 1 : post.likes + 1,
+                        likedBy: updatedLikedBy,
+                    };
+                }
+                return post;
             });
 
-            if (updateResponse.ok) {
-                const updatedPost = await updateResponse.json();
-                setAllPosts((prevPosts: any) => {
-                    return prevPosts.map((post: any) => {
-                        if (post.id === postId) {
-                            return {
-                                ...post,
-                                likes: updatedPost.likes,
-                                likedBy: updatedPost.likedBy,
-                            };
-                        }
-                        return post;
-                    });
-                });
+            const response = await axios.patch(`http://localhost:3000/posts/${postId}`, {
+                likes: updatedPosts.find((post) => post.id === postId)?.likes,
+                likedBy: updatedPosts.find((post) => post.id === postId)?.likedBy,
+            });
 
-                setLikedPosts((prevLikedPosts: any) => {
-                    if (updatedPost.likedBy.includes(user?.uid)) {
+            if (response) {
+                setAllPosts(updatedPosts);
 
-                        return [...prevLikedPosts, postId];
-                    } else {
+                // Cập nhật danh sách ID đã like và trạng thái đã like
+                const updatedLikedPostIds = updatedPosts
+                    .filter((post) => post.likedBy.includes(user?.uid))
+                    .map((post) => post.id);
 
-                        return prevLikedPosts.filter((likedPost:any) => likedPost !== postId);
-                    }
-                });
+                setLikedPostIds(updatedLikedPostIds);
 
-                message.success("Đã thích!");
+                const updatedLikedPostStatus = updatedPosts.reduce((status, post) => {
+                    status[post.id] = post.likedBy.includes(user?.uid);
+                    return status;
+                }, {});
+
+                setLikedPostStatus(updatedLikedPostStatus);
             } else {
-                console.error(`Lỗi khi thích/bỏ thích bài viết. Mã lỗi: ${response.status}`);
+                message.error("Error updating like status.");
             }
         } catch (error) {
-            console.error("Lỗi khi thích/bỏ thích bài viết:", error);
+            console.error("Error updating like status:", error);
         }
     };
-    const isUserLiked = (postId: any) => {
-        const post = allPosts.find((post) => post.id === postId);
-        const userId = user?.uid;
+    const [commentData, setCommentData] = useState({
+        text: "",
+    });
 
-        return post?.likedBy && userId ? post.likedBy.includes(userId) : false;
+    const handleCommentSubmit = async (postId) => {
+        try {
+            if (!commentData.text) {
+                message.warning("Please enter your comment.");
+                return;
+            }
+
+            const response = await axios.patch(`http://localhost:3000/posts/${postId}`, {
+                comments: [
+                    ...allPosts.find((post) => post.id === postId)?.comments || [],
+                    {
+                        id: generateUniqueId(),
+                        author: user?.displayName || "Anonymous",
+                        photoURL: user?.photoURL || "",
+                        text: commentData.text,
+                        time: new Date().toDateString(),
+                    },
+                ],
+            });
+
+            if (response) {
+                const updatedPosts = allPosts.map((post: any) => {
+                    if (post.id === postId) {
+                        return {
+                            ...post,
+                            comments: response.data.comments,
+                        };
+                    }
+                    return post;
+                });
+
+                setAllPosts(updatedPosts);
+                setCommentData({ text: "" }); // Reset trường nhập comment
+                message.success("Comment added successfully!");
+            } else {
+                message.error("Error updating comment.");
+            }
+        } catch (error) {
+            console.error("Error updating comment:", error);
+        }
     };
     return (
         <>
@@ -285,12 +236,15 @@ const Post = () => {
                             <img className="comment_img mt-7" width={40} src={user?.photoURL} alt="" />
                         </div>
                         <div className="mt-6 w-64">
-                            <Button className="mt-2 new-post" onClick={toggleFormVisibility}>Bạn muốn chia sẻ điều gì ?</Button>
+                            <Button className="mt-2 new-post" onClick={showModal}>Bạn muốn chia sẻ điều gì ?</Button>
                         </div>
                     </div>
-
-
-                    {showForm && (
+                    <Modal
+                        title="Tạo bài viết mới"
+                        visible={isModalVisible}
+                        onCancel={handleCancel}
+                        footer={null}
+                    >
                         <Form className="mt-6" ref={formRef} onFinish={handleFormSubmit}>
                             <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Please input the title!' }]}>
                                 <Input value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
@@ -298,17 +252,28 @@ const Post = () => {
                             <Form.Item label="Nội dung" name="content" rules={[{ required: true, message: 'Please input the content!' }]}>
                                 <Input.TextArea value={postData.content} onChange={(e) => setPostData({ ...postData, content: e.target.value })} />
                             </Form.Item>
-                            <Form.Item label="Hình ảnh (url)" name="image">
-                                <Input value={postData.image} onChange={(e) => setPostData({ ...postData, image: e.target.value })} />
-                            </Form.Item>
 
+                            <Form.Item
+                                label="Hình ảnh"
+                                name="image"
+                            >
+                                <div {...getRootProps()} style={{ border: '1px dashed #d9d9d9', padding: '20px', textAlign: 'center' }}>
+                                    <input {...getInputProps()} />
+                                    <p>Thả hình ảnh vào đây hoặc click để chọn hình</p>
+                                </div>
+                                {imagePreviewUrl && (
+                                    <img src={imagePreviewUrl} alt="Preview" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+                                )}
+                            </Form.Item>
                             <Form.Item>
                                 <Button className="w-96" type="dashed" htmlType="submit">
                                     Post
                                 </Button>
                             </Form.Item>
                         </Form>
-                    )}
+                    </Modal>
+
+
                 </div>
 
                 {allPosts.slice().map((post: any) => (
@@ -344,11 +309,11 @@ const Post = () => {
                                     <div className="mb-2 flex items-center">
                                         <div className="text-m text-gray-500 font-semibold">
                                             <button
+                                                className={`inline-flex items-center px-1 pt-2 ml-1 flex-column}`}
                                                 onClick={() => handleLike(post.id)}
-                                                className={`inline-flex items-center px-1 pt-2 ml-1 flex-column mr-20 ml-20 ${isUserLiked(post.id) ? 'text-red-500' : 'text-black' // Sử dụng màu đỏ nếu đã thích
-                                                    }`}
+                                            // Thay đổi màu sắc tùy thuộc vào trạng thái đã like
                                             >
-                                                <LikeOutlined /> <span className="ml-2">Thích</span>
+                                                <LikeOutlined /> <span className="ml-2">Like</span>
                                             </button>
                                             <button className="inline-flex items-center px-1 -ml-1 flex-column mr-20">
                                                 <CommentOutlined className="mr-2" />
@@ -369,7 +334,7 @@ const Post = () => {
                         <div className="container-postpage">
 
                             {showCommentForm && selectedPostId === post.id && (
-                                <Form className="container-postpage" ref={formRef} onFinish={handleCommentFormSubmit}>
+                                <Form className="container-postpage" ref={formRef} onFinish={() => handleCommentSubmit(post.id)}>
                                     <div className="cmt_flex gap-3 items-center">
                                         <div>
                                             <img className="comment_img" width={40} src={user?.photoURL} alt="" />
@@ -426,28 +391,26 @@ const Post = () => {
                                         </div>
 
                                         <div className="space-y-4 mt-2">
-                                            {comment.replies.map((reply: any) => (
-                                                <div key={reply.id} className="flex ml-6">
-                                                    <div className="flex">
-                                                        <div className="flex-shrink-0 mr-3">
-                                                            <img className="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src={reply.photoURL} alt="" />
-                                                        </div>
-                                                        <div className="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                                                            <strong>{reply.author}</strong> <span className="text-xs text-gray-400">{reply.time}</span>
-                                                            <p className="text-sm">
-                                                                {reply.text}
-                                                            </p>
-                                                            <div className="flex items-center">
-                                                                <div className="text-sm text-gray-500 font-semibold">
-                                                                    <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column mr-3">
-                                                                        Thích
-                                                                    </button>
+                                            {comment.replies > 0 && (
+                                                <div className="space-y-4 mt-2">
+                                                    {comment.replies.map((reply: any) => (
+                                                        <div key={reply.id} className="flex ml-6">
+                                                            <div className="flex">
+                                                                <div className="flex-shrink-0 mr-3">
+                                                                    <img className="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src={reply.photoURL} alt="" />
+                                                                </div>
+                                                                <div className="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                                                                    <strong>{reply.author}</strong> <span className="text-xs text-gray-400">{reply.time}</span>
+                                                                    <p className="text-sm">
+                                                                        {reply.text}
+                                                                    </p>
+                                                                    {/* Thêm các chức năng khác cho câu trả lời nếu cần */}
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    ))}
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
                                     </div>
                                 ))}
