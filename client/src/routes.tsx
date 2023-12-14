@@ -54,6 +54,7 @@ import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
 import TestPage from "./pages/admin/dashboard/testtt"
 import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
+import Quiz from "./pages/admin/dashboard/testtt";
 
 const getUidFromLocalStorage = () => {
     return localStorage.getItem('uid');
