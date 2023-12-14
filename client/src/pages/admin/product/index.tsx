@@ -1,5 +1,5 @@
-import  { useState, useEffect } from 'react';
-import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal } from 'antd';
+import { useState, useEffect } from 'react';
+import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
@@ -12,15 +12,16 @@ const AdminProduct = () => {
     const [selectedCourseVideos, setSelectedCourseVideos] = useState([]);
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
     const pageSize = 4;
+    const [searchTerm, setSearchTerm] = useState("");
     const showFullDescription = (courseID: any) => {
         const selectedCourse = productsData.find((product: any) => product.id === courseID);
-    
+
         let isFullDescriptionVisible = true;
-    
+
         const toggleDescription = () => {
             isFullDescriptionVisible = !isFullDescriptionVisible;
         };
-    
+
         const modalContent = (
             <div>
                 <p>{isFullDescriptionVisible ? selectedCourse.description : selectedCourse.description.slice(0, 100) + '...'}</p>
@@ -40,43 +41,57 @@ const AdminProduct = () => {
                 </ul>
             </div>
         );
-    
+
         Modal.info({
             title: selectedCourse.courseName,
             content: modalContent,
-            onOk() {},
+            onOk() { },
         });
     };
     const toggleDescription = (courseID) => {
         setShowFullDescription(showFullDescription === courseID ? null : courseID);
     };
-    
+
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
-
     const fetchData = () => {
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
             .then((data) => {
-                setProductsData(data.reverse());
+                // Ghi thông tin phản hồi toàn bộ từ API để gỡ lỗi
+                console.log('Phản hồi từ API:', data);
+
+                // Lọc dữ liệu dựa trên từ khóa tìm kiếm
+                const lowerCaseSearchTerm = searchTerm.toLowerCase();
+                const filteredData = data.filter((product) =>
+                    product.courseName.toLowerCase().includes(lowerCaseSearchTerm)
+                );
+
+                // Ghi thông tin về dữ liệu đã được lọc để gỡ lỗi
+                console.log('Dữ liệu đã được lọc:', filteredData);
+
+                // Đảm bảo hành vi dự kiến của việc đảo ngược dữ liệu đã được lọc
+                setProductsData(filteredData.reverse());
                 setIsProductLoading(false);
             })
             .catch((error) => {
-                console.error('Error fetching data: ', error);
+                console.error('Lỗi khi lấy dữ liệu: ', error);
                 setIsProductLoading(false);
             });
     };
-
     useEffect(() => {
         fetchData();
     }, []);
 
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+    };
     const showCourseVideos = (courseID: any) => {
         axios.get('http://localhost:3000/videos')
             .then((response) => {
                 const allVideos = response.data;
-                const videosForCourse = allVideos.filter((video:any) => video.courseId === courseID);
+                const videosForCourse = allVideos.filter((video: any) => video.courseId === courseID);
                 setSelectedCourseVideos(videosForCourse);
                 setIsVideosModalVisible(true);
             })
@@ -84,6 +99,13 @@ const AdminProduct = () => {
                 console.error('Error fetching videos: ', error);
             });
     }
+    useEffect(() => {
+        fetchData();
+    }, [searchTerm]);
+    const handleResetSearch = () => {
+        setSearchTerm("");
+    };
+
     const columns = [
         {
             title: 'Tên khóa học',
@@ -119,7 +141,7 @@ const AdminProduct = () => {
                 );
             },
         },
-        
+
         {
             title: 'Ngày phát hành',
             dataIndex: 'date',
@@ -175,8 +197,8 @@ const AdminProduct = () => {
         axios
             .patch(`http://localhost:3000/Courses/${productId}`, updatedHiddenState)
             .then((response: any) => {
-                
-                const updatedProductsData = productsData.map((product:any) => {
+
+                const updatedProductsData = productsData.map((product: any) => {
                     if (product.id === productId) {
                         return { ...product, isHidden: isHidden };
                     }
@@ -200,7 +222,7 @@ const AdminProduct = () => {
                 onCancel={() => setIsVideosModalVisible(false)}
             >
                 <ul>
-                    {selectedCourseVideos.map((video:any, index:any) => (
+                    {selectedCourseVideos.map((video: any, index: any) => (
                         <li key={index}>
                             <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
                                 {video.videoTitle}
@@ -214,8 +236,15 @@ const AdminProduct = () => {
                 <Button type="primary" danger>
                     <Link to="/admin/product/add">Thêm khóa học</Link>
                 </Button>
+
             </header>
             {contextHolder}
+            <Input.Search
+                placeholder="Search by product name"
+                onSearch={handleSearch}
+                style={{ width: 200 }}
+            />
+            <Button onClick={handleResetSearch}>Reset Search</Button>
             {isProductLoading ? (
                 <Skeleton />
             ) : (

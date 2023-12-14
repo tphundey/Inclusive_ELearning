@@ -53,6 +53,11 @@ const AdminPayment = (props: any) => {
             title: "Trạng thái",
             dataIndex: "paymentStatus",
             key: "paymentStatus",
+            render: (paymentStatus:any) => (
+                <span style={{ color: paymentStatus ? "green" : "red" }}>
+                    {paymentStatus ? "Thành công" : "Thất bại"}
+                </span>
+            ),
         },
         {
             title: "tên người dùng",

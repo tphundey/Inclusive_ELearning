@@ -146,7 +146,10 @@ const Dashboard = () => {
         console.log("fetch data failed", error);
       });
   };
-  const uvBillData = Object.keys(monthlyTotal).map((month) => ({
+  const reversedMonths = Object.keys(monthlyTotal).reverse();
+
+  // Tạo mảng uvBillData theo thứ tự đảo ngược
+  const uvBillData = reversedMonths.map((month:any) => ({
     course: `Tháng ${month}`,
     value: `${monthlyTotal[month]} đ`,
     type: `Tháng ${month}`,
@@ -156,7 +159,7 @@ const Dashboard = () => {
     const monthB = parseInt(b.type.split(" ")[1]);
     return monthA - monthB;
   });
-  uvBillData.reverse();
+  uvBillData;
 
   const uvBillMap = new Map();
   uvBillData.forEach((item) => {
@@ -168,17 +171,20 @@ const Dashboard = () => {
     }
   });
 
+  const reversedUvBillData = [...uvBillData].reverse();
+
   const configChart2 = {
-    data: uvBillData,
+    data: reversedUvBillData, // Sử dụng mảng đã đảo ngược
     padding: "auto",
     xField: "course",
     yField: "value",
     xAxis: {
       tickCount: 5,
     },
+    yAxis: {
+      invert: true,
+    },
   };
-
-
 
   useEffect(() => {
     const fetchVideoCount = async () => {
@@ -431,8 +437,11 @@ const Dashboard = () => {
           // Lọc danh sách thanh toán để chỉ giữ lại các thanh toán của người dùng mua nhiều nhất
           const userPayments = paymentData.filter(payment => payment.userId === bestBuyerId);
 
-          // Lấy danh sách các courseId từ các thanh toán của người dùng
-          const courseIdList = userPayments.map(payment => payment.courseId);
+          // Sắp xếp danh sách thanh toán theo số lượng từ cao đến thấp
+          userPayments.sort((a, b) => b.quantity - a.quantity);
+
+          // Lấy danh sách các courseId từ thanh toán của người dùng mua nhiều nhất
+          const courseIdList = userPayments[0].courseId; // Lấy courseId của thanh toán nhiều nhất
 
           // Gọi API để lấy thông tin khóa học từ API "http://localhost:3000/Courses"
           const coursesResponse = await fetch('http://localhost:3000/Courses');
@@ -708,7 +717,7 @@ const Dashboard = () => {
               <div className=" justify-between">
                 <div>
                   <div
-                    className=" text-xs px-3 p-1 bg-red-300 text-red-800 rounded-full w-44 ml-7">Top User | bought {coursesPurchased.length}</div>
+                    className=" text-xs px-3 p-1 bg-red-300 text-red-800 rounded-full w-44 ml-7">Top User | bought 4</div>
                 </div>
               </div>
               <div >
