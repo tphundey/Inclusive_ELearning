@@ -37,7 +37,7 @@ Dưới đây là hướng dẫn để bạn có thể chạy dự án trên má
 
 1. **Clone Repository**: Sao chép repository bằng lệnh sau:
 
-git clone https://github.com/bunbonhieuhanh/LinkedIn_Learning.git
+git clone https://github.com/tphundey/Inclusive_ELearning.git
 
 
 2. **Cài Đặt Các Phụ Thuộc**: Di chuyển vào thư mục dự án và cài đặt các phụ thuộc bằng lệnh:
