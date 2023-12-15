@@ -3,6 +3,7 @@ import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal, Input 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
+
 const AdminProduct = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [productsData, setProductsData] = useState([]);
@@ -18,19 +19,19 @@ const AdminProduct = () => {
 
         let isFullDescriptionVisible = true;
 
-        const toggleDescription = () => {
-            isFullDescriptionVisible = !isFullDescriptionVisible;
-        };
+        // const toggleDescription = () => {
+        //     isFullDescriptionVisible = !isFullDescriptionVisible;
+        // };
 
         const modalContent = (
             <div>
                 <p>{isFullDescriptionVisible ? selectedCourse.description : selectedCourse.description.slice(0, 100) + '...'}</p>
-                {selectedCourse.description.length > 100 && (
+                {/* {selectedCourse.description.length > 100 && (
                     <Button type="link" onClick={toggleDescription}>
                         {isFullDescriptionVisible ? 'Rút gọn' : 'Xem thêm'}
                     </Button>
-                )}
-                <ul>
+                )} */}
+                {/* <ul>
                     {selectedCourseVideos.map((video: any, index: any) => (
                         <li key={index}>
                             <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
@@ -38,16 +39,22 @@ const AdminProduct = () => {
                             </a>
                         </li>
                     ))}
-                </ul>
+                </ul> */}
             </div>
         );
-
         Modal.info({
             title: selectedCourse.courseName,
             content: modalContent,
             onOk() { },
+            okButtonProps: {
+                style: {
+                    backgroundColor: 'green',
+                    color: 'white',
+                },
+            },
         });
     };
+
     const toggleDescription = (courseID) => {
         setShowFullDescription(showFullDescription === courseID ? null : courseID);
     };
@@ -59,19 +66,12 @@ const AdminProduct = () => {
         fetch('http://localhost:3000/Courses')
             .then((response) => response.json())
             .then((data) => {
-                // Ghi thông tin phản hồi toàn bộ từ API để gỡ lỗi
-                console.log('Phản hồi từ API:', data);
 
-                // Lọc dữ liệu dựa trên từ khóa tìm kiếm
                 const lowerCaseSearchTerm = searchTerm.toLowerCase();
                 const filteredData = data.filter((product) =>
                     product.courseName.toLowerCase().includes(lowerCaseSearchTerm)
                 );
 
-                // Ghi thông tin về dữ liệu đã được lọc để gỡ lỗi
-                console.log('Dữ liệu đã được lọc:', filteredData);
-
-                // Đảm bảo hành vi dự kiến của việc đảo ngược dữ liệu đã được lọc
                 setProductsData(filteredData.reverse());
                 setIsProductLoading(false);
             })
@@ -108,6 +108,12 @@ const AdminProduct = () => {
 
     const columns = [
         {
+            title: 'ID khóa học',
+            dataIndex: 'id',
+            key: 'id',
+            width: '200px',
+        },
+        {
             title: 'Tên khóa học',
             dataIndex: 'courseName',
             key: 'name',
@@ -131,11 +137,12 @@ const AdminProduct = () => {
             title: ' Chi tiết',
             dataIndex: 'isHidden',
             key: 'isHidden',
+            width: 100,
             render: (isHidden: any, record: any) => {
                 return (
                     <>
                         <Button className='ml-2' onClick={() => showFullDescription(record.id)}>
-                            Chi tiết
+                            Mô tả chi tiết
                         </Button>
                     </>
                 );
@@ -153,7 +160,7 @@ const AdminProduct = () => {
             dataIndex: 'courseIMG',
             key: 'courseIMG',
             render: (courseIMG: any) => (
-                <img src={courseIMG} alt="Hình ảnh khóa học" style={{ width: '100px' }} />
+                <img width={100} src={courseIMG} alt="Hình ảnh khóa học" />
             ),
         },
         {
@@ -212,22 +219,52 @@ const AdminProduct = () => {
             });
     };
 
+    const handleEditVideo = (videoId: any) => {
+        window.open(`http://localhost:5173/admin/video/${videoId}/edit`, '_blank');
+    };
 
     return (
         <div>
             <Modal
-                title="Chi tiết khóa học"
+                title={`Chi tiết khóa học`}
                 visible={isVideosModalVisible}
                 onOk={() => setIsVideosModalVisible(false)}
                 onCancel={() => setIsVideosModalVisible(false)}
+                width={700}
+                okButtonProps={{
+                    style: {
+                        backgroundColor: 'green',
+                        color: 'white',
+                    },
+                }}
             >
+                <h3 className='text-red-700 font-bold'>Danh sách video của khóa học !</h3>
                 <ul>
+
                     {selectedCourseVideos.map((video: any, index: any) => (
-                        <li key={index}>
-                            <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
-                                {video.videoTitle}
-                            </a>
-                        </li>
+                        <ul key={index} className='flex gap-7 p-5 items-center'>
+                            <li>
+                                {index + 1}
+                            </li>
+                            <li style={{ width: 120 }}>
+                                <a className='font-bold' href={video.videoURL} target="_blank" rel="noopener noreferrer">
+                                    {video.videoTitle}
+                                </a>
+                            </li>
+                            <li>
+                                <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
+                                    <video controls width="300" height="200">
+                                        <source src={video.videoURL} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </a>
+                            </li>
+                            <li>
+                                <Button className='bg-blue-800; text-black' type="primary" onClick={() => handleEditVideo(video.id)}>
+                                    <i className="fa-solid fa-wrench"></i>
+                                </Button>
+                            </li>
+                        </ul>
                     ))}
                 </ul>
             </Modal>
