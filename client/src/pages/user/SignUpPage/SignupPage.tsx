@@ -7,7 +7,9 @@ import { Form, Input, message } from "antd";
 import { useNavigate } from 'react-router';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-// Khởi tạo ứng dụng Firebase
+import { setCookie } from '../../../components/Cookie/cookieUtils';
+import Cookies from 'js-cookie';
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -17,12 +19,21 @@ const SignupPage = () => {
     const [user, setUser] = useState(null);
     const [email, setEmail] = useState(null);
 
+    const roleCookie = Cookies.get('role');
+
+    if (roleCookie) {
+        console.log('Role Cookie:', roleCookie);
+    } else {
+        console.log('Role Cookie not found');
+    }
     const handleLogin = async (values: any) => {
         const { email, password } = values;
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            message.success('Đăng nhập thành công bạn sẽ được chuyển tới trang sản phẩm');
+            const userRole = '0';
+            setCookie('role', userRole);
+            message.success('Đăng nhập thành công bạn sẽ được chuyển tới trang chủ');
             setTimeout(() => {
                 navigate('/')
             }, 2000);
@@ -73,36 +84,43 @@ const SignupPage = () => {
                                 .then((response) => {
                                     console.log('User information sent to API:', response.data);
                                     localStorage.setItem('uid', firebaseUserId);
-                                    navigate('/')
+                                     navigate('/')
                                 })
                                 .catch((error) => {
                                     console.error('Error sending user information to API:', error);
                                     alert('Không thành công');
                                 });
+                        } else {
+                           
+                            // User exists, check if the account is locked
+                            const existingUser = response.data[0];
+                            const role = response.data[0].role
+                            console.log(role, 'dea');
+                            
+                            if (existingUser.lock) {
+                                console.log('User is locked:', user.email);
+                                alert('Không thể đăng nhập. Tài khoản của bạn đã bị khóa.');
                             } else {
-                                // User exists, check if the account is locked
-                                const existingUser = response.data[0];
-                                if (existingUser.lock) {
-                                    console.log('User is locked:', user.email);
-                                    alert('Không thể đăng nhập. Tài khoản của bạn đã bị khóa.');
-                                } else {
-                                    console.log('User logged in successfully:', user.email);
-                                    localStorage.setItem('uid', firebaseUserId);
-                                    navigate('/');
-                                }
+                                const userRole = role;
+                                setCookie('role', userRole);
+                                console.log('User logged in successfully:', user.email);
+                                localStorage.setItem('uid', firebaseUserId);
+                                console.log('Role Cookie:', roleCookie);
+                                 navigate('/');
                             }
-                        })
-                        .catch((error) => {
-                            console.error('Error checking email existence:', error);
-                            alert('Không thành công');
-                        });
-                })
-                .catch((error) => {
-                    console.error('Authentication failed:', error);
-                    alert('Không thành công');
-                });
-        };
-    
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error checking email existence:', error);
+                        alert('Không thành công');
+                    });
+            })
+            .catch((error) => {
+                console.error('Authentication failed:', error);
+                alert('Không thành công');
+            });
+    };
+
     return (
         <div>
 
@@ -174,3 +192,7 @@ const SignupPage = () => {
 };
 
 export default SignupPage;
+function fetchUserRole(email: any) {
+    throw new Error('Function not implemented.');
+}
+

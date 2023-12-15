@@ -6,7 +6,7 @@ import Input from 'antd/es/input/Input';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
-import { Timeline, Form, Button, notification, Skeleton } from 'antd';
+import { Timeline, Form, Button, notification, Skeleton,message } from 'antd';
 import { Rating, Typography } from "@material-tailwind/react";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
@@ -49,7 +49,7 @@ const IntroductionPage = () => {
     const [paymentData2, setPaymentData2] = useState([]);
     const [numberOfMatchingPayments, setNumberOfMatchingPayments] = useState(0);
     const existingCourseId = id;
-
+    const [messageApi, contextHolder] = message.useMessage();
     useEffect(() => {
         // Gọi API để lấy dữ liệu từ http://localhost:3000/Payment
         fetch('http://localhost:3000/Payment')
@@ -266,7 +266,10 @@ const IntroductionPage = () => {
                 if (lock == true) {
                     // Thực hiện đăng xuất tài khoản
                     auth.signOut().then(() => {
-                        console.log('Tài khoản đã bị khóa. Đăng xuất người dùng.');
+                        messageApi.open({
+                            type: "error",
+                            content: "Bạn đã bị chặn tài khoản ! Vui lòng chú ý hơn",
+                        });
                         navigate('/')
                     }).catch((error) => {
                         console.error('Lỗi khi đăng xuất:', error);

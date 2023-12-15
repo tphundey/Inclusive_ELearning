@@ -1,21 +1,20 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
-import { Button, Grid } from 'antd';
+import { Button } from 'antd';
 import { useNavigate } from 'react-router';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import './HeaderUser.css'
 import { Link } from 'react-router-dom';
-const getUidFromLocalStorage = () => {
-    return localStorage.getItem('uid');
-};
-let userRole: 0 | 1 = 0;
+import { getCookie } from '@/components/Cookie/cookieUtils';
 
-const uid = getUidFromLocalStorage();
 
-if (uid === "z6pdJJzcVoZM8RX5ZrQFqh6UDWL2") {
-    userRole = 1;
+let userRole = 0
+const roleCookie = getCookie('role');
+if (roleCookie) {
+    userRole = parseInt(roleCookie, 10);
 }
+console.log(userRole);
 
 
 const app = initializeApp(firebaseConfig);
@@ -57,7 +56,7 @@ const HeaderUser: React.FC = () => {
         handleSearch();
     };
 
-    const handleClearSearch = (e) => {
+    const handleClearSearch = (e: any) => {
         e.preventDefault(); // Ngăn chặn hành vi mặc định của form
         setListVisible(false);
         setSearchTerm(''); // Xóa dữ liệu trong input
@@ -79,11 +78,9 @@ const HeaderUser: React.FC = () => {
         setIsBackgroundChanged(!isBackgroundChanged);
         setIsSwapOn(!isSwapOn);
 
-        // Thay đổi màu của body
         document.body.style.backgroundColor = isBackgroundChanged ? 'black' : 'white';
         document.body.style.color = isBackgroundChanged ? 'white' : 'black';
 
-        // Thay đổi màu của các phần tử có class cụ thể
         const elementsToChange = document.querySelectorAll('.header-static, .containerCss, .bg-white');
 
         elementsToChange.forEach(element => {
@@ -92,14 +89,14 @@ const HeaderUser: React.FC = () => {
         });
     };
 
-
     useEffect(() => {
         const elementsToChange = document.querySelectorAll('.header-static, .other-class-1, .other-class-2');
-
-        elementsToChange.forEach(element => {
-
-        });
+        elementsToChange.forEach(element => { });
     }, [isBackgroundChanged]);
+
+    const deleteCookie = (name: any) => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+    };
     return (
         <div className='header-static'>
             <header>
@@ -219,8 +216,10 @@ const HeaderUser: React.FC = () => {
                                                                 </li>
                                                                 <li>
                                                                     <Button style={{ width: 170 }} onClick={() => {
-                                                                        localStorage.clear();
+                                                                        deleteCookie('role');
                                                                         auth.signOut();
+                                                                        console.log('Xóa thành công');
+
                                                                         navigate('/')
                                                                     }}><i className="fa-solid fa-right-from-bracket ml-14"></i></Button>
                                                                 </li>

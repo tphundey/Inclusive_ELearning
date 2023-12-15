@@ -52,22 +52,14 @@ import ConfirmLoading from "./pages/user/ConfirmLoading/confirmLoading";
 import ListCourse from "./pages/user/ListCourse/ListCourse";
 import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
-import TestPage from "./pages/admin/dashboard/testtt"
 import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
 import Quiz from "./pages/admin/dashboard/testtt";
+import { getCookie } from "./components/Cookie/cookieUtils";
 
-const getUidFromLocalStorage = () => {
-    return localStorage.getItem('uid');
-};
-let userRole: 0 | 1 = 0;
-
-const uid = getUidFromLocalStorage();
-
-// if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
-//     userRole = 1;
-// }
-if (uid === "MyzKAEhTyeToR1vn2VOrio778CX2") {
-    userRole = 1;
+let userRole = 0
+const roleCookie = getCookie('role');
+if (roleCookie) {
+    userRole = parseInt(roleCookie, 10);
 }
 
 const withAuthorization = (allowedRoles: number[], WrappedComponent: React.ComponentType) => {
@@ -75,13 +67,13 @@ const withAuthorization = (allowedRoles: number[], WrappedComponent: React.Compo
         hasPermission = () => {
             return allowedRoles.includes(userRole);
         };
-
         render() {
             const isAuthorized = this.hasPermission();
             return isAuthorized ? <WrappedComponent {...this.props} /> : <Navigate to="/signup/404" />;
         }
     };
 };
+
 const AdminDashboardWithAuthorization = withAuthorization([1], Dashboard);
 const AdminProductWithAuthorization = withAuthorization([1], AdminProduct);
 const AdminProductEditWithAuthorization = withAuthorization([1], AdminProductEdit);
@@ -116,7 +108,7 @@ export const routers = createBrowserRouter([
             { path: "confirm-email", element: <ResetPasswordConfirmation /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "error", element: <ErrorPage /> },
-            { path: "test", element: <TestPage /> },
+            { path: "test", element: <Quiz /> },
             { path: "chats", element: <Chats /> },
             { path: "postpage", element: <Post /> },
             { path: "profile/:id", element: <Profile /> },
