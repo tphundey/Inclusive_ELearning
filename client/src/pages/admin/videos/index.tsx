@@ -1,6 +1,6 @@
 import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
 import { Ivideo } from "@/interfaces/video";
-import { Button, Table, Skeleton, message, Pagination } from "antd";
+import { Button, Table, Skeleton, message, Pagination, Input } from "antd";
 import { Link } from "react-router-dom";
 import { Modal } from "antd";
 import { useEffect, useState, useCallback } from "react";
@@ -14,17 +14,24 @@ const AdminVideo = (props: Props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [coursesData, setCoursesData] = useState([]);
     const [coursesData2, setCoursesData2] = useState([]);
-    const dataSource = productsData?.map((item: Ivideo, index: number) => ({
-        stt: (index + 1).toString(),
-        key: item.id,
-        videoTitle: item.videoTitle,
-        courseName: coursesData[item.courseId] || "Unknown Course", // Look up courseName
-        videoURL: item.videoURL,
-    }));
+    const [selectedCourseId, setSelectedCourseId] = useState(null);
+    const handleCourseIdChange = (event) => {
+        setSelectedCourseId(event.target.value);
+    };
+
+    const dataSource = productsData
+        ?.filter((item: Ivideo) => selectedCourseId ? item.courseId === selectedCourseId : true)
+        .map((item: Ivideo, index: number) => ({
+            stt: (index + 1).toString(),
+            key: item.id,
+            videoTitle: item.videoTitle,
+            courseName: coursesData[item.courseId] || "Unknown Course", // Look up courseName
+            videoURL: item.videoURL,
+        }));
     console.log(coursesData);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4;
+    const pageSize = 6;
     const startItem = (currentPage - 1) * pageSize;
     const endItem = currentPage * pageSize;
     const currentData = dataSource?.slice(startItem, endItem);
@@ -63,8 +70,7 @@ const AdminVideo = (props: Props) => {
             .catch((error) => {
                 console.error('Error fetching courses:', error);
             });
-    }, []);
-
+    }, [selectedCourseId]);
     const showDeleteModal = (id: number | string) => {
         setDeleteVideoId(id);
         if (!isModalVisible) {
@@ -186,9 +192,13 @@ const AdminVideo = (props: Props) => {
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Quản lý Video</h2>
-                <Button type="primary" danger>
-                    <Link to="/admin/video/add">Thêm video</Link>
-                </Button>
+                <div>
+                    <Input style={{ width: 300, marginRight: 20 }} type="text" value={selectedCourseId} onChange={handleCourseIdChange} placeholder="Nhập ID khóa học" />
+                    <Button type="primary" danger>
+                        <Link to="/admin/video/add">Thêm video</Link>
+                    </Button>
+                </div>
+
             </header>
             {contextHolder}
             {/* {isProductLoading ? <Skeleton /> : <Table dataSource={dataSource} columns={columns} />} */}
@@ -200,10 +210,11 @@ const AdminVideo = (props: Props) => {
                         pagination={false}
                         dataSource={currentData}
                         columns={columns}
+                        style={{ marginBottom: 10 }}
                     />
                     <Pagination
                         current={currentPage}
-                        total={productsData?.length}
+                        total={dataSource?.length}
                         pageSize={pageSize}
                         onChange={handlePageChange}
                     />

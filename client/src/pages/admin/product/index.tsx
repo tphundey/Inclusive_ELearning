@@ -242,9 +242,10 @@ const AdminProduct = () => {
             <Input.Search
                 placeholder="Search by product name"
                 onSearch={handleSearch}
-                style={{ width: 200 }}
+                style={{ width: 200, marginBottom: 20 }}
             />
             <Button onClick={handleResetSearch}>Reset Search</Button>
+
             {isProductLoading ? (
                 <Skeleton />
             ) : (
