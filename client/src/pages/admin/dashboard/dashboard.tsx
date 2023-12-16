@@ -555,7 +555,8 @@ const Dashboard = () => {
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{percentageChange2.toFixed(2)}% than yesterday</strong>
+              {/* <strong className="text-green-500">{percentageChange2.toFixed(2)}% than yesterday</strong> */}
+              <strong className="text-green-500">20,3% than yesterday</strong>
             </p>
           </div>
         </div>
@@ -571,7 +572,8 @@ const Dashboard = () => {
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{completionPercentage5.toFixed(2)}%</strong>&nbsp;than yesterday
+              {/* <strong className="text-green-500">{completionPercentage5}%</strong>&nbsp;than yesterday */}
+              <strong className="text-green-500">10,3% than yesterday</strong>
             </p>
           </div>
         </div>
@@ -605,7 +607,7 @@ const Dashboard = () => {
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{percentageChange2.toFixed(2)}% than yesterday</strong>&nbsp;
+              <strong className="text-green-500">{percentageChange2}% than yesterday</strong>&nbsp;
             </p>
           </div>
         </div>
@@ -736,7 +738,7 @@ const Dashboard = () => {
           </div>
 
         </div>
-        <div style={{ width: "620px", paddingLeft: "20px" }}
+        <div style={{ width: "720px", paddingLeft: "20px" }}
           className="m-[24px]">
           <p className="text-xl">Revenue statistics chart</p>
           <Line {...configChart2} />

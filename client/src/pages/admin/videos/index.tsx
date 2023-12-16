@@ -31,7 +31,7 @@ const AdminVideo = (props: Props) => {
     console.log(coursesData);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 6;
+    const pageSize = 3;
     const startItem = (currentPage - 1) * pageSize;
     const endItem = currentPage * pageSize;
     const currentData = dataSource?.slice(startItem, endItem);
@@ -157,13 +157,19 @@ const AdminVideo = (props: Props) => {
             title: "Khóa học",
             dataIndex: "courseName",
             key: "courseName",
-            width: "250px"
+            width: "450px"
         },
         {
-            title: "Url Video",
-            dataIndex: "videoURL",
-            key: "videoURL",
-        },
+            title: 'Video',
+            dataIndex: 'videoURL',
+            key: 'videoURL',
+            render: (videoURL:any) => (
+              <video controls width="300" height="200">
+                <source src={videoURL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ),
+          },
         {
             title: "Hành động",
             render: ({ key: id }: { key: number | string }) => (

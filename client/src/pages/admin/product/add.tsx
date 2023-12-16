@@ -65,7 +65,7 @@ const AdminProductAdd = () => {
             .then(() => {
                 messageApi.open({
                     type: "success",
-                    content: "Bạn đã thêm sản phẩm thành công. Chờ 3s để quay về quản trị",
+                    content: "Bạn đã thêm khóa học mới thành công. Chờ 3s để quay về quản trị",
                 });
                 form.resetFields();
                 setTimeout(() => {
@@ -134,7 +134,7 @@ const AdminProductAdd = () => {
                         <input {...getInputProps()} />
                         <p>Thả hình ảnh vào đây hoặc click để chọn hình</p>
                     </div>
-                    <img src={form.getFieldValue("courseIMG")} alt="Preview" style={{ marginTop: '10px', width: 100, height: 100 }} />
+                    <img src={form.getFieldValue("courseIMG")} alt="Bạn chưa upload hình ảnh" style={{ marginTop: '10px', width: 100, height: 100 }} />
                 </Form.Item>
                 <Form.Item
                     label="Thời lượng (m)"

@@ -108,7 +108,7 @@ const HeaderUser: React.FC = () => {
                     </div>
                     <div className="box2">
                         <div className="left">
-                            <a href="http://localhost:5173/browsepage/business"><i className="fa-solid fa-list lups"></i></a>
+                            <a href="http://localhost:5173/listcourse/6575eaf0f0d61b5b5e9da38d"><i className="fa-solid fa-list lups"></i></a>
                             <div className="bolder-css">
                                 <form action="">
                                     <input

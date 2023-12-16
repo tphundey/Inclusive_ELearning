@@ -53,6 +53,20 @@ const AdminUser = () => {
             title: 'Tên người dùng',
             dataIndex: 'displayName',
             key: 'username',
+            width: 170
+        },
+        {
+            title: 'Ảnh',
+            dataIndex: 'photoURL',
+            key: 'photoURL',
+            render: (photoURL: string) => (
+                <img
+                    src={photoURL || 'https://i.ytimg.com/vi/rHfyF0HxKTw/hq720.jpg?sqp=-oaymwE2CNAFEJQDSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARh_IBooGDAP&rs=AOn4CLCg0XPfUQpq_KYBMAPUbyvKc77rWw'} // Thay 'link_to_default_image' bằng đường dẫn hình mặc định của bạn
+                    alt="user avatar"
+                    className="user-avatar"
+                    width={60}
+                />
+            ),
         },
         {
             title: 'Email',
@@ -85,12 +99,12 @@ const AdminUser = () => {
                                     title={lock ? 'Mở ẩn người dùng?' : 'Ẩn người dùng?'}
                                     onConfirm={() => updateUserState(record.id, !lock)}
                                 >
-                                    <Button type={lock ? 'dashed' : 'default'} className={hiddenButtonClass}>
-                                        {lock ? 'Mở ẩn' : 'Ẩn'}
+                                    <Button className={`${lock ? 'bg-blue-500 text-white' : 'bg-red-500 text-white'} ${hiddenButtonClass}`}>
+                                        {lock ? 'Mở khóa' : 'Khóa'}
                                     </Button>
                                 </Popconfirm>
-                                <Button className='ml-3 bg-success' onClick={() => transferUserRole(record.id, 1)}>Chuyển Admin</Button>
-                                <Button className='ml-3 bg-success' onClick={() => transferUserRole1(record.id, 0)}>Chuyển Người dùng</Button>
+                                <Button className='ml-3 bg-success text-white' onClick={() => transferUserRole(record.id, 1)}>Chuyển Admin</Button>
+                                <Button className='ml-3 bg-success text-white' onClick={() => transferUserRole1(record.id, 0)}>Chuyển Người dùng</Button>
                             </>
                         )}
                     </>
@@ -145,7 +159,7 @@ const AdminUser = () => {
                 messageApi.error('Có lỗi xảy ra khi chuyển nhượng');
             });
     };
-    
+
     const updateUserState = (userId: any, lock: any) => {
         console.log(userId, 'eeê');
         const updatedState = { lock: lock };

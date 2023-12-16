@@ -130,7 +130,7 @@ const ListCourse = () => {
     };
     return (
         <div className="containerCss-browepage2  business mt-3">
-            <h2 className='h2-bsn'>Business</h2>
+            <h2 className='h2-bsn'>List course</h2>
             <div>
                 <h3>Price Range: (vnd)</h3>
                 <Slider

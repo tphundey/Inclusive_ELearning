@@ -21,8 +21,11 @@ const PaymentApi = createApi({
             providesTags: ['payment'],
             transformResponse: (response: any) => {
                 console.log(response);
-
-                return response.map((item: any) => ({
+    
+                // Đảo ngược mảng dữ liệu
+                const reversedData = response.reverse();
+    
+                return reversedData.map((item: any) => ({
                     ...item,
                     id: item.id
                 }));

@@ -69,7 +69,7 @@ const LayoutAdmin = () => {
     </>
     return (
 
-        <Layout style={{height:850}}>
+        <Layout style={{height:880}}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
@@ -109,14 +109,14 @@ const LayoutAdmin = () => {
                             label: <Link to="/admin/postpage">Quản lý bài viết</Link>,
                         },
                         {
-                            key: "7",
-                            icon: <AiOutlineFileText />,
-                            label: <Link to="/admin/payment">Quản lý thanh toán</Link>,
-                        },
-                        {
                             key: "8",
                             icon: <AiOutlineFileText />,
-                            label: <Link to="/admin/reviews">Quản lý coment</Link>,
+                            label: <Link to="/admin/reviews">Quản lý comment</Link>,
+                        },
+                        {
+                            key: "7",
+                            icon: <AiOutlineFileText />,
+                            label: <Link to="/admin/payment">Lịch sử thanh toán</Link>,
                         },
                         {
                             key: "9",
