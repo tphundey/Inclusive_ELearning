@@ -756,7 +756,7 @@ const IntroductionPage = () => {
     useEffect(() => {
         setShuffledSimilarProducts(shuffleArray(similarProducts));
     }, [similarProducts]);
-
+   
     const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
         <li key={similarProduct.id} className="prosimi flex items-start gap-4 px-4 py-3">
             <div className="flex items-center shrink-0">
@@ -770,7 +770,7 @@ const IntroductionPage = () => {
                     </a>
                 </h4>
                 <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
+                <span className='timeforvideoIntro'>{similarProduct.duration.toFixed(1)} m</span>
             </div>
         </li>
     ));
@@ -779,6 +779,7 @@ const IntroductionPage = () => {
         return <Skeleton active />;
     }
     const formattedPrice = formatCurrency(product.price);
+    const truncatedDuration = product.duration.toFixed(1);
     return (
         <div className="containerCss">
             <div className="course-header-container">
@@ -788,7 +789,7 @@ const IntroductionPage = () => {
                         <div className="course-span-left mt-3">
                             <span>{categoryName}</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>{product.duration} m</span>
+                            <span>{truncatedDuration} m</span>
                             <span className='mb-1 font-bold'>.</span>
                             <span>Released: {product.date}</span>
                         </div>

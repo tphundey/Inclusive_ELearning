@@ -54,7 +54,13 @@ const OverViewPage = () => {
         return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
     };
 
+    const truncateDuration = (value:any) => {
 
+        const isNumber = typeof value === 'number';
+        const truncatedValue = isNumber ? value.toFixed(1) : parseFloat(value).toFixed(1);
+
+        return truncatedValue;
+    };
 
     if (!product) {
         return <div>Loading...</div>;
@@ -83,7 +89,7 @@ const OverViewPage = () => {
                 <div className="coursedetails">
                     <div className="text-xl font-medium mt-6">Course details</div>
                     <div className="info-details">
-                        <div className="info15">{product.duration} m</div>
+                        <div className="info15">{truncateDuration(product.duration)} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
                         <div className="info15">Newbie</div>
                         <div><i className="fa-solid fa-circle"></i></div>
@@ -155,7 +161,7 @@ const OverViewPage = () => {
                                     </a>
                                 </h4>
                                 <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                                <span className='timeforvideoIntro  ml-1'>{similarProduct.duration} m</span>
+                                <span className='timeforvideoIntro  ml-1'>{truncateDuration(similarProduct.duration)} m</span>
                             </div>
                         </li>
                     ))}
