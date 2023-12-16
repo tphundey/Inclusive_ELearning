@@ -3,12 +3,13 @@ import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal, Input 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
-
+import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
 const AdminProduct = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [productsData, setProductsData] = useState([]);
     const [isProductLoading, setIsProductLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedVideoId, setSelectedVideoId] = useState(null);
     const [, setShowFullDescription] = useState(false);
     const [selectedCourseVideos, setSelectedCourseVideos] = useState([]);
     const [isVideosModalVisible, setIsVideosModalVisible] = useState(false);
@@ -223,6 +224,147 @@ const AdminProduct = () => {
         window.open(`http://localhost:5173/admin/video/${videoId}/edit`, '_blank');
     };
 
+    /////////////////////////////////////////////////////////////////
+
+
+
+    const [removeCategory, { isLoading: isRemoveLoading }] = useRemoveVideoMutation();
+    const [deleteVideoId, setDeleteVideoId] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [coursesData, setCoursesData] = useState([]);
+    const [coursesData2, setCoursesData2] = useState([]);
+    const [selectedCourseId, setSelectedCourseId] = useState(null);
+    const handleCourseIdChange = (event) => {
+        setSelectedCourseId(event.target.value);
+    };
+
+    const dataSource = productsData
+        ?.filter((item: Ivideo) => selectedCourseId ? item.courseId === selectedCourseId : true)
+        .map((item: Ivideo, index: number) => ({
+            stt: (index + 1).toString(),
+            key: item.id,
+            videoTitle: item.videoTitle,
+            courseName: coursesData[item.courseId] || "Unknown Course", // Look up courseName
+            videoURL: item.videoURL,
+        }));
+    console.log(coursesData);
+
+
+
+
+    useEffect(() => {
+        fetch('http://localhost:3000/Courses')
+            .then((response) => response.json())
+            .then((data) => {
+                const coursesInfo = {};
+                data.forEach((course: any) => {
+                    coursesInfo[course.id] = course.courseName;
+                });
+                setCoursesData(coursesInfo);
+            })
+            .catch((error) => {
+                console.error('Error fetching courses:', error);
+            });
+    }, []);
+    useEffect(() => {
+        // Fetch data from 'http://localhost:3000/Courses'
+        fetch('http://localhost:3000/Courses')
+            .then((response) => response.json())
+            .then((data) => {
+                // Process and update the coursesData state as an array of objects
+                const coursesInfo = data.map((course: any) => ({
+                    id: course.id,
+                    courseName: course.courseName,
+                    duration: course.duration
+                }));
+                setCoursesData2(coursesInfo);
+            })
+            .catch((error) => {
+                console.error('Error fetching courses:', error);
+            });
+    }, [selectedCourseId]);
+    const showDeleteModal = (id: number | string) => {
+        setDeleteVideoId(id);
+        if (!isModalVisible) {
+            setIsModalVisible(true);
+        }
+    };
+    const fetchVideoDataById = async (videoId) => {
+        try {
+          const response = await axios.get(`http://localhost:3000/videos/${videoId}`);
+          return response.data;
+         
+          
+        } catch (error) {
+          console.error('Error fetching video data:', error);
+          throw error; // Rethrow the error to handle it at a higher level
+        }
+      };
+ 
+    
+      const handleVideoDelete = async () => {
+        if (deleteVideoId) {
+            try {
+                // Sử dụng giá trị trả về từ fetchVideoDataById
+                const videoData = await fetchVideoDataById(deleteVideoId);
+                console.log('Video Data from API:', videoData);
+    
+                const courseIdToDelete = videoData?.courseId;
+                const videoDuration = videoData?.duration || 0;
+    
+                // Lấy thông tin về khóa học từ danh sách coursesData2
+                const courseToDelete = coursesData2.find((course) => course.id === courseIdToDelete);
+                const initialCourseDuration = courseToDelete?.duration || 0;
+    
+                console.log("Before deletion:");
+                console.log("Initial Course Duration:", initialCourseDuration);
+                console.log("Video Duration:", videoDuration);
+    
+                // Kiểm tra giá trị trả về từ removeCategory
+                await removeCategory(deleteVideoId);
+    
+                // Kiểm tra xem coursesData2 có phải là mảng không trước khi sử dụng map
+                if (Array.isArray(coursesData2)) {
+                    const updatedCourses = coursesData2.map((course) => {
+                        if (course.id === courseIdToDelete) {
+                            // Trừ thời lượng của video bị xóa khỏi thời lượng của khóa học
+                            course.duration = Math.max(0, course.duration - videoDuration);
+                        }
+                        return course;
+                    });
+    
+                    console.log("After deletion:");
+                    console.log("Updated Courses:", updatedCourses);
+    
+                    const updateCoursePromises = updatedCourses.map((updatedCourse) => {
+                        return fetch(`http://localhost:3000/Courses/${updatedCourse.id}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(updatedCourse),
+                        });
+                    });
+    
+                    setIsModalVisible(false);
+                    setDeleteVideoId(null);
+    
+                    await Promise.all(updateCoursePromises);
+                    messageApi.open({
+                        type: "success",
+                        content: "Đã xóa thành công!",
+                    });
+                    setIsVideosModalVisible(false);
+                } else {
+                    console.error("coursesData2 không phải là một mảng.");
+                }
+            } catch (error) {
+                setIsModalVisible(false);
+                console.error("Lỗi khi xóa video hoặc cập nhật khóa học:", error);
+            }
+        }
+    };
+    
     return (
         <div>
             <Modal
@@ -259,9 +401,23 @@ const AdminProduct = () => {
                                     </video>
                                 </a>
                             </li>
-                            <li>
+                            <li >
                                 <Button className='bg-blue-800; text-black' type="primary" onClick={() => handleEditVideo(video.id)}>
                                     <i className="fa-solid fa-wrench"></i>
+                                </Button>
+                                <Modal
+                                    title="Xác nhận xóa video"
+                                    visible={isModalVisible}
+                                    onOk={handleVideoDelete}
+                                    onCancel={() => setIsModalVisible(false)}
+                                >
+                                    Bạn có chắc chắn muốn xóa video này không?
+                                </Modal>
+                                <Button type="default" onClick={() => {
+                                    setSelectedVideoId(video.id);
+                                    showDeleteModal(video.id);
+                                }}>
+                                    <i className="fa-solid fa-trash"></i>
                                 </Button>
                             </li>
                         </ul>
