@@ -26,6 +26,16 @@ routerVideo.get("/", async (req, res) => {
   }
 });
 
+routerVideo.get("/course/:courseId", async (req, res) => {
+  const { courseId } = req.params;
+
+  try {
+    const videos = await Videos.find({ courseId });
+    return res.status(200).json(videos);
+  } catch (error) {
+    return res.status(500).json({ error: "Could not retrieve videos" });
+  }
+});
 // Read by ID
 routerVideo.get("/:id", async (req, res) => {
   try {

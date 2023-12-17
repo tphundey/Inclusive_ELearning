@@ -3,7 +3,7 @@ import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Alert, Button } from 'antd';
+import { Alert, Button, Progress } from 'antd';
 import { Modal } from 'antd';
 import { message } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
@@ -21,9 +21,9 @@ const CourseContentPage = () => {
     const [videoWatched, setVideoWatched] = useState(false);
     const [currentVideo, setCurrentVideo] = useState(null);
     const [UserProgress, setUserProgress] = useState([]);
-    const [userId, setUserId] = useState(null);
     const [videoCompletionStatus, setVideoCompletionStatus] = useState({});
     const [isVideoCompleted, setIsVideoCompleted] = useState(false);
+    const [userId, setUserId] = useState(null);
     const courseId = parseInt(id, 10);
     const [allVideosCompleted, setAllVideosCompleted] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -48,6 +48,60 @@ const CourseContentPage = () => {
             unsubscribe();
         };
     }, [auth]);
+
+    const [numberOfCompletedVideos2, setNumberOfCompletedVideos] = useState(0);
+    const [totalNumberOfVideos, setTotalNumberOfVideos] = useState(0);
+
+
+    const currentUrl = window.location.href;
+    const match = currentUrl.match(/\/content\/([^\/]+)\/overview/);
+    const courseId2 = match ? match[1] : null;
+    console.log(courseId2, 'rfsffâd');
+    // Thay đổi thành ID thực tế của khóa học
+    // Thay đổi thành ID thực tế của người dùng
+
+    // Step 1: Lấy toàn bộ video của một khóa học
+    fetch(`http://localhost:3000/videos/course/${courseId2}`)
+        .then(response => response.json())
+        .then(videoData => {
+            // Lấy danh sách video và số lượng video
+            const videos = videoData; // Thay đổi tùy thuộc vào cấu trúc thực tế của dữ liệu
+
+            // Lấy danh sách video IDs
+            const videoIds = videos.map(video => video.id);
+
+            // Step 2: Lấy thông tin về tiến trình hoàn thành của người dùng
+            fetch(`http://localhost:3000/UserProgress?userId=${userIdfirebase}`)
+                .then(response => response.json())
+                .then(userProgressData => {
+                    // Lấy danh sách tiến trình hoàn thành
+                    const userProgress = userProgressData;
+
+                    // Lọc video đã hoàn thành
+                    const completedVideos = videos.filter(video =>
+                        userProgress.some(progress => progress.completionStatus && progress.videoId === video.id)
+                    );
+
+                    // Tính số lượng video đã hoàn thành và tổng số video
+                    const numberOfCompletedVideos = completedVideos.length;
+                    const totalNumberOfVideos = videos.length;
+
+
+                    setNumberOfCompletedVideos(numberOfCompletedVideos)
+                    setTotalNumberOfVideos(totalNumberOfVideos)
+                    // Log ra số lượng video đã hoàn thành của người dùng và tổng số video trong khóa học
+                    console.log(`Số video đã hoàn thành của người dùng: ${numberOfCompletedVideos}`);
+                    console.log(`Tổng số video trong khóa học: ${totalNumberOfVideos}`);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy dữ liệu UserProgress:', error);
+                });
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu videos:', error);
+        });
+    const progressPercentage = (numberOfCompletedVideos2 / totalNumberOfVideos) * 100;
+
     console.log(userIdfirebase, 'userIdfirebaseeeeeeeeeeeeeeeeeeee');
 
     useEffect(() => {
@@ -574,7 +628,7 @@ const CourseContentPage = () => {
         // Remove the temporary textarea
         document.body.removeChild(textarea);
         message.success('URL copied to clipboard!');
- 
+
     };
 
     const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
@@ -588,6 +642,7 @@ const CourseContentPage = () => {
                     <div className="content-left-title">
                         <i className="fa-solid fa-list"></i> <div>Contents</div>
                     </div>
+                    <Progress percent={progressPercentage} status="success" />
                 </div>
                 <div>
                     {paymentStatu2s ? (
