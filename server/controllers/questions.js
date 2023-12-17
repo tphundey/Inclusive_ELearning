@@ -4,9 +4,10 @@ const routerQuestions = express.Router();
 
 routerQuestions.post('/', async (req, res) => {
   try {
-    const { title, options, correctAnswerIndex } = req.body;
+    const { courseId, title, options, correctAnswerIndex } = req.body;
 
     const newQuestion = new Question({
+      courseId,
       title,
       options, // Đảm bảo model Question của bạn có trường options để lưu mảng các lựa chọn
       correctAnswerIndex,

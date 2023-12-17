@@ -109,7 +109,7 @@ export const routers = createBrowserRouter([
             { path: "confirm-email", element: <ResetPasswordConfirmation /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "error", element: <ErrorPage /> },
-            { path: "test", element: <Quiz /> },
+            { path: "test/:id", element: <Quiz /> },
             { path: "chats", element: <Chats /> },
             { path: "uploadtest", element: <Uploadtest /> },
             { path: "postpage", element: <Post /> },
