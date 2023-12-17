@@ -25,8 +25,17 @@ routerQuestions.post('/', async (req, res) => {
 
 routerQuestions.get('/', async (req, res) => {
   try {
-    const questions = await Question.find();
-    res.json(questions);
+    const { courseId } = req.query;
+
+    if (courseId) {
+      // If courseId is provided, filter questions based on courseId
+      const questions = await Question.find({ courseId });
+      res.json(questions);
+    } else {
+      // If courseId is not provided, fetch all questions
+      const questions = await Question.find();
+      res.json(questions);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

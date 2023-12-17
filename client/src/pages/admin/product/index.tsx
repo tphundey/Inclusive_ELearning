@@ -165,6 +165,15 @@ const AdminProduct = () => {
             ),
         },
         {
+            title: 'Quiz',
+            dataIndex: 'Quiz',
+            key: 'Quiz',
+            width: '200px',
+            render: (text: any, record: any) => (
+                <Button type='default' className='bg-gray-200'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
+            ),
+        },
+        {
             title: 'Trạng thái',
             dataIndex: 'isHidden',
             key: 'isHidden',
@@ -291,38 +300,38 @@ const AdminProduct = () => {
     };
     const fetchVideoDataById = async (videoId) => {
         try {
-          const response = await axios.get(`http://localhost:3000/videos/${videoId}`);
-          return response.data;
-         
-          
+            const response = await axios.get(`http://localhost:3000/videos/${videoId}`);
+            return response.data;
+
+
         } catch (error) {
-          console.error('Error fetching video data:', error);
-          throw error; // Rethrow the error to handle it at a higher level
+            console.error('Error fetching video data:', error);
+            throw error; // Rethrow the error to handle it at a higher level
         }
-      };
- 
-    
-      const handleVideoDelete = async () => {
+    };
+
+
+    const handleVideoDelete = async () => {
         if (deleteVideoId) {
             try {
                 // Sử dụng giá trị trả về từ fetchVideoDataById
                 const videoData = await fetchVideoDataById(deleteVideoId);
                 console.log('Video Data from API:', videoData);
-    
+
                 const courseIdToDelete = videoData?.courseId;
                 const videoDuration = videoData?.duration || 0;
-    
+
                 // Lấy thông tin về khóa học từ danh sách coursesData2
                 const courseToDelete = coursesData2.find((course) => course.id === courseIdToDelete);
                 const initialCourseDuration = courseToDelete?.duration || 0;
-    
+
                 console.log("Before deletion:");
                 console.log("Initial Course Duration:", initialCourseDuration);
                 console.log("Video Duration:", videoDuration);
-    
+
                 // Kiểm tra giá trị trả về từ removeCategory
                 await removeCategory(deleteVideoId);
-    
+
                 // Kiểm tra xem coursesData2 có phải là mảng không trước khi sử dụng map
                 if (Array.isArray(coursesData2)) {
                     const updatedCourses = coursesData2.map((course) => {
@@ -332,10 +341,10 @@ const AdminProduct = () => {
                         }
                         return course;
                     });
-    
+
                     console.log("After deletion:");
                     console.log("Updated Courses:", updatedCourses);
-    
+
                     const updateCoursePromises = updatedCourses.map((updatedCourse) => {
                         return fetch(`http://localhost:3000/Courses/${updatedCourse.id}`, {
                             method: "PUT",
@@ -345,10 +354,10 @@ const AdminProduct = () => {
                             body: JSON.stringify(updatedCourse),
                         });
                     });
-    
+
                     setIsModalVisible(false);
                     setDeleteVideoId(null);
-    
+
                     await Promise.all(updateCoursePromises);
                     messageApi.open({
                         type: "success",
@@ -364,7 +373,7 @@ const AdminProduct = () => {
             }
         }
     };
-    
+
     return (
         <div>
             <Modal
@@ -435,7 +444,7 @@ const AdminProduct = () => {
             <Input.Search
                 placeholder="Search by product name"
                 onSearch={handleSearch}
-                style={{ width: 200, marginBottom: 20 }}
+                style={{ width: 250, marginBottom: 20, marginRight: 10 }}
             />
             <Button onClick={handleResetSearch}>Reset Search</Button>
 

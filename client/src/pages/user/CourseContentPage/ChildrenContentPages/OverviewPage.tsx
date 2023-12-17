@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -80,14 +80,13 @@ const OverViewPage = () => {
                             <div className='children-structor-main-name'>
                                 Trần Phùng
                             </div>
-                            <div>
-                                <button>Show all course</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
                 <div className="coursedetails">
                     <div className="text-xl font-medium mt-6">Course details</div>
+
                     <div className="info-details">
                         <div className="info15">{truncateDuration(product.duration)} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
@@ -110,6 +109,7 @@ const OverViewPage = () => {
                             <div className="instruc-right">
                                 {/* <h1>Trần Phùng</h1>
                                 <h2>Fpoly</h2> */}
+                                <div className='text-blue-700 font-bold'> <Link to={`/quizfor/${product.id}`}>Link to quiz of course</Link></div>
                                 <h3> <a href={product.docs} target="_blank" rel="noopener noreferrer">Xem tài liệu khóa học</a></h3>
                             </div>
                         </div>

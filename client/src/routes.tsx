@@ -53,9 +53,10 @@ import ListCourse from "./pages/user/ListCourse/ListCourse";
 import AdminPayment from "./pages/admin/payment";
 import AdminReview from "./pages/admin/reviews";
 import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
-import Quiz from "./pages/admin/dashboard/testtt";
+import Quiz from "./pages/admin/quizmanager/quiz";
 import { getCookie } from "./components/Cookie/cookieUtils";
 import Uploadtest from "./pages/Uploadtest";
+import Quizfor from "./pages/user/QuizPage/quiz";
 
 let userRole = 0
 const roleCookie = getCookie('role');
@@ -109,7 +110,7 @@ export const routers = createBrowserRouter([
             { path: "confirm-email", element: <ResetPasswordConfirmation /> },
             { path: "content/:id", element: <CourseContentPage /> },
             { path: "error", element: <ErrorPage /> },
-            { path: "test/:id", element: <Quiz /> },
+            { path: "quizfor/:id", element: <Quizfor /> },
             { path: "chats", element: <Chats /> },
             { path: "uploadtest", element: <Uploadtest /> },
             { path: "postpage", element: <Post /> },
@@ -174,6 +175,7 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
             { path: "dashboard", element: <AdminDashboardWithAuthorization /> },
+            { path: "quiz/:id", element: <Quiz /> },
             { path: "product", element: <AdminProductWithAuthorization /> },
             { path: "product/:idProduct/edit", element: <AdminProductEditWithAuthorization /> },
             { path: "product/add", element: <AdminProductAddWithAuthorization /> },

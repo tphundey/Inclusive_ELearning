@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Form, Input, Radio, Button, Card, message, Upload, Table, Tabs } from 'antd';
-import './test.css'
+import './quiz.css'
 import * as XLSX from 'xlsx';
 import { UploadOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ const TestPage = () => {
   const [excelData, setExcelData] = useState(null);
   const { id } = useParams(); // Get the ID from the URL
   const apiUrl = `http://localhost:3000/questions/${id}`;
-  console.log(id);
+  console.log(id, 'id trên url');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -56,21 +56,19 @@ const TestPage = () => {
   };
 
 
-
   useEffect(() => {
-    // Gửi yêu cầu đến API câu hỏi khi component được tạo
-    axios.get('http://localhost:3000/questions')
-      .then(response => {
-        // Lấy ra một số câu hỏi từ API
-        const fakeQuestions = response.data.slice(0, 5);
-        setQuestions(fakeQuestions);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        // Gửi yêu cầu đến API để lấy câu hỏi với courseId trùng với id trên URL
+        const response = await axios.get(`http://localhost:3000/questions?courseId=${id}`);
+        setQuestions(response.data);
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu câu hỏi:', error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const handleAddQuestion = (values) => {
     // Kiểm tra xem values.options có tồn tại và không rỗng không
@@ -122,60 +120,57 @@ const TestPage = () => {
   return (
     <div className='quiz-container'>
       <h1>Trang Làm Bài Kiểm Tra</h1>
-      {loading ? (
-        <p>Đang tải...</p>
-      ) : (
-        <div>
-          <Upload
-            customRequest={({ onSuccess }) => onSuccess('ok')}
-            onChange={handleExcelUpload}
-            showUploadList={false}
-          >
-            <Button icon={<UploadOutlined />}>Import Excel</Button>
-          </Upload>
+      <div>
+        <Upload
+          customRequest={({ onSuccess }) => onSuccess('ok')}
+          onChange={handleExcelUpload}
+          showUploadList={false}
+        >
+          <Button icon={<UploadOutlined />}>Import Excel</Button>
+        </Upload>
 
 
-          {excelData && excelData.map((item, index) => (
-            <div key={index}>
-              {/* <p>Tiêu đề: {item.title}</p>
+        {excelData && excelData.map((item, index) => (
+          <div key={index}>
+            {/* <p>Tiêu đề: {item.title}</p>
               <p>Option1: {item.option1}</p>
               <p>Option2: {item.option2}</p>
               <p>Option3: {item.option3}</p>
               <p>Kết quả: {item.result}</p> */}
 
-              <Form onFinish={handleAddQuestion} initialValues={item} ref={formRef} >
-                <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Lựa chọn 2" name={['options', '1']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Lựa chọn 3" name={['options', '2']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
-                  <Radio.Group>
-                    <Radio value={0}>Lựa chọn 1</Radio>
-                    <Radio value={1}>Lựa chọn 2</Radio>
-                    <Radio value={2}>Lựa chọn 3</Radio>
-                  </Radio.Group>
-                </Form.Item>
-                <Form.Item>
-                  <Button className='bg-blue-500' type="primary" htmlType="submit">
-                    Thêm Câu Hỏi
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
+            <Form onFinish={handleAddQuestion} initialValues={item} ref={formRef} >
+              <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label="Lựa chọn 2" name={['options', '1']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label="Lựa chọn 3" name={['options', '2']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
+                <Radio.Group>
+                  <Radio value={0}>Lựa chọn 1</Radio>
+                  <Radio value={1}>Lựa chọn 2</Radio>
+                  <Radio value={2}>Lựa chọn 3</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item>
+                <Button className='bg-blue-500' type="primary" htmlType="submit">
+                  Thêm Câu Hỏi
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
 
 
 
-          ))}
-          <Form onFinish={handleAddQuestion} initialValues={formData} ref={formRef} >
-            {/* <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
+        ))}
+        <Form onFinish={handleAddQuestion} initialValues={formData} ref={formRef} >
+          {/* <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
               <Input />
             </Form.Item>
             <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
@@ -199,11 +194,8 @@ const TestPage = () => {
                 Thêm Câu Hỏi
               </Button>
             </Form.Item> */}
-          </Form>
-
-
-        </div>
-      )}
+        </Form>
+      </div>
       {questions.map(question => (
         <Card key={question.id} title={question.title}>
           <Radio.Group
