@@ -5,9 +5,12 @@ import { Button, DatePicker, Form, Input, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import useDrivePicker from 'react-google-drive-picker'
+
 const { Option } = Select;
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+import { useState } from "react";
 const initialValues: any = {
     courseName: '',
     price: 0,
@@ -18,12 +21,42 @@ const initialValues: any = {
     courseIMG: '',
     enrollment: 0,
     duration: 0,
+    docs: '',
     isHidden: false,
 };
 
 const AdminProductAdd = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const [uploadedFileUrl, setUploadedFileUrl] = useState('');
+    const [openPicker, authResponse] = useDrivePicker();
+    // const customViewsArray = [new google.picker.DocsView()]; // custom view
+    const handleOpenPicker = () => {
+        openPicker({
+            clientId: "1010783738532-3s27nq10o6belplvsp6omrcvcsqfigjt.apps.googleusercontent.com",
+            developerKey: "AIzaSyABKJezgqFMe3mkchPJejZuK005AbP2Cgc",
+            viewId: "DOCS",
+            token: "ya29.a0AfB_byAmBPr8B-6Pcs5_cWj-fgErqFA_zQwrENaZ3GAS58mpKDb5km15NJj-p2AD4wuZQfvB5vfJ1ZHJFAZDaJfpqeoy8iX9oDpvVEBlHsK_fhD9lbFraaZVNg-p8YZyfqT-y3uLKORoz8cOYWnXdkmE9QpP6af5MF-3aCgYKAf0SARMSFQHGX2Mim40aL6izlLmeLkP8g5Mbxw0171",
+            showUploadView: true,
+            showUploadFolders: true,
+            supportDrives: true,
+            multiselect: true,
+            // customViews: customViewsArray, // custom view
+            callbackFunction: (data) => {
+                if (data.action === 'cancel') {
+                    console.log('Người dùng đã nhấp vào nút hủy/bỏ');
+                } else {
+                    console.log(data);
+                    const selectedFiles = data.docs; // Mảng các tệp đã chọn
+                    // Lấy URL của tệp tin đầu tiên (nếu có)
+                    const firstFileUrl = selectedFiles.length > 0 ? selectedFiles[0].url : '';
+                    setUploadedFileUrl(firstFileUrl);
+                    // Thực hiện các hành động khác nếu cần
+                }
+            },
+        })
+    }
+
     const { data: categorysData } = useGetCategorysQuery();
     const [messageApi, contextHolder] = message.useMessage();
     const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
@@ -59,7 +92,8 @@ const AdminProductAdd = () => {
     const onFinish = (values: any) => {
         const dateValue = values.date.format('YYYY-MM-DD');
         values.date = dateValue;
-        values.duration = parseInt(values.duration, 10);
+        values.duration = 0;
+        values.docs = uploadedFileUrl;
         addProduct(values)
             .unwrap()
             .then(() => {
@@ -68,6 +102,7 @@ const AdminProductAdd = () => {
                     content: "Bạn đã thêm khóa học mới thành công. Chờ 3s để quay về quản trị",
                 });
                 form.resetFields();
+                setUploadedFileUrl('');
                 setTimeout(() => {
                     navigate("/admin/product");
                 }, 3000);
@@ -106,6 +141,15 @@ const AdminProductAdd = () => {
                 >
                     <Input />
                 </Form.Item>
+                <Form.Item
+                    label="Tài liệu khóa học"
+                >
+                    <Button onClick={() => handleOpenPicker()}>Upload tài liệu</Button>
+                    {uploadedFileUrl && (
+                        <span className="text-blue-900  font-bold ml-52"><a href={uploadedFileUrl} target="_blank" rel="noopener noreferrer">Open PDF</a></span>
+                    )}
+                </Form.Item>
+
 
                 <Form.Item
                     label="Giá khóa học (vnd)"
@@ -134,17 +178,15 @@ const AdminProductAdd = () => {
                         <input {...getInputProps()} />
                         <p>Thả hình ảnh vào đây hoặc click để chọn hình</p>
                     </div>
-                    <img src={form.getFieldValue("courseIMG")} alt="Bạn chưa upload hình ảnh" style={{ marginTop: '10px', width: 100, height: 100 }} />
+                    {form.getFieldValue("courseIMG") && (
+                        <img
+                            src={form.getFieldValue("courseIMG")}
+                            alt="Hình ảnh đã upload"
+                            style={{ marginTop: '10px', width: 100, height: 100 }}
+                        />
+                    )}
                 </Form.Item>
-                <Form.Item
-                    label="Thời lượng (m)"
-                    name="duration"
-                    rules={[
-                        { required: true, message: "Phải nhập thời lượng" },
-                    ]}
-                >
-                    <Input type="number" />
-                </Form.Item>
+
 
                 <Form.Item
                     name="date"
@@ -157,9 +199,9 @@ const AdminProductAdd = () => {
                 <Form.Item
                     name="intro"
                     label="Video giới thiệu"
-                    
+
                 >
-                    <Input placeholder="link"/>
+                    <Input placeholder="link" />
                 </Form.Item>
 
                 <Form.Item

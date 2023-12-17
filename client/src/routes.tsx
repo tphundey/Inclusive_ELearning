@@ -55,6 +55,7 @@ import AdminReview from "./pages/admin/reviews";
 import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
 import Quiz from "./pages/admin/dashboard/testtt";
 import { getCookie } from "./components/Cookie/cookieUtils";
+import Uploadtest from "./pages/Uploadtest";
 
 let userRole = 0
 const roleCookie = getCookie('role');
@@ -110,6 +111,7 @@ export const routers = createBrowserRouter([
             { path: "error", element: <ErrorPage /> },
             { path: "test", element: <Quiz /> },
             { path: "chats", element: <Chats /> },
+            { path: "uploadtest", element: <Uploadtest /> },
             { path: "postpage", element: <Post /> },
             { path: "profile/:id", element: <Profile /> },
             {

@@ -32,6 +32,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-dropzone": "^14.2.3",
+        "react-google-drive-picker": "^1.2.2",
         "react-google-login": "^5.2.2",
         "react-hook-form": "^7.49.2",
         "react-icons": "^4.10.1",
