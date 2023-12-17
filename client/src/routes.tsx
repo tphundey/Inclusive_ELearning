@@ -55,8 +55,9 @@ import AdminReview from "./pages/admin/reviews";
 import ResetPasswordConfirmation from "./pages/user/ConfirmEmail/resetpass";
 import Quiz from "./pages/admin/quizmanager/quiz";
 import { getCookie } from "./components/Cookie/cookieUtils";
-import Uploadtest from "./pages/Uploadtest";
+import Uploadtest from "./pages/404/Uploadtest";
 import Quizfor from "./pages/user/QuizPage/quiz";
+import AdminVideoAddINcourse from "./pages/admin/videos/addincourse";
 
 let userRole = 0
 const roleCookie = getCookie('role');
@@ -184,6 +185,7 @@ export const routers = createBrowserRouter([
             { path: "category/:idCategory/edit", element: <AdminCategoryEditWithAuthorization /> },
             { path: "videos", element: <AdminVideoWithAuthorization /> },
             { path: "video/add", element: <AdminVideoAddWithAuthorization /> },
+            { path: "video/add/:id", element: <AdminVideoAddINcourse /> },
             { path: "video/:idVideo/edit", element: <AdminVideoEditWithAuthorization /> },
             { path: "users", element: <AdminUserWithAuthorization /> },
             { path: "user/add", element: <AdminUserAddWithAuthorization /> },

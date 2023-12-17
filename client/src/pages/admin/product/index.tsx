@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Table, Skeleton, Popconfirm, message, Pagination, Modal, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
@@ -169,8 +169,16 @@ const AdminProduct = () => {
             dataIndex: 'Quiz',
             key: 'Quiz',
             width: '200px',
-            render: (text: any, record: any) => (
-                <Button type='default' className='bg-gray-200'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
+            render: (text: any, record: any, id: any) => (
+                <div className="flex items-center gap-2">
+                    <Button type='default' className='bg-gray-200'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
+                    <Button
+                        type="default"
+                        onClick={() => window.open(`/admin/video/add/${id}`, '_blank')}
+                    >
+                        Thêm Video
+                    </Button>
+                </div>
             ),
         },
         {
@@ -233,6 +241,7 @@ const AdminProduct = () => {
         window.open(`http://localhost:5173/admin/video/${videoId}/edit`, '_blank');
     };
 
+
     /////////////////////////////////////////////////////////////////
 
 
@@ -257,9 +266,6 @@ const AdminProduct = () => {
             videoURL: item.videoURL,
         }));
     console.log(coursesData);
-
-
-
 
     useEffect(() => {
         fetch('http://localhost:3000/Courses')
@@ -309,7 +315,6 @@ const AdminProduct = () => {
             throw error; // Rethrow the error to handle it at a higher level
         }
     };
-
 
     const handleVideoDelete = async () => {
         if (deleteVideoId) {
@@ -389,6 +394,7 @@ const AdminProduct = () => {
                     },
                 }}
             >
+
                 <h3 className='text-red-700 font-bold'>Danh sách video của khóa học !</h3>
                 <ul>
 
