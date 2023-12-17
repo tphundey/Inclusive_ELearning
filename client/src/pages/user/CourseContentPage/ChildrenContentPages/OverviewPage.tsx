@@ -54,7 +54,7 @@ const OverViewPage = () => {
         return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
     };
 
-    const truncateDuration = (value:any) => {
+    const truncateDuration = (value: any) => {
 
         const isNumber = typeof value === 'number';
         const truncatedValue = isNumber ? value.toFixed(1) : parseFloat(value).toFixed(1);
@@ -100,17 +100,17 @@ const OverViewPage = () => {
                         {product.description}
                     </div>
                     <div className='font-medium text-xl mt-6'>
-                        Instructors
+                        Tài liệu của khóa học
                     </div>
                     <div className="instructors">
-                        <div className="instructors-children">
+                        <div className="instructors-children flex items-center">
                             <div className="instruc-left">
-                                <img src='https://avatars.githubusercontent.com/u/140551332?s=64&v=4' alt="" />
+                                <img src='https://tse4.mm.bing.net/th?id=OIP.ZgeAS2PDvWQPHvgXNeSiCQHaEK&pid=Api&P=0&h=180' alt="" />
                             </div>
                             <div className="instruc-right">
-                                <h1>Trần Phùng</h1>
-                                <h2>Fpoly</h2>
-                                <h3><a href="https://github.com/tphun999">Follow on Github</a></h3>
+                                {/* <h1>Trần Phùng</h1>
+                                <h2>Fpoly</h2> */}
+                                <h3> <a href={product.docs} target="_blank" rel="noopener noreferrer">Xem tài liệu khóa học</a></h3>
                             </div>
                         </div>
                     </div>
