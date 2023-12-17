@@ -46,7 +46,8 @@
         "redux-thunk": "^2.4.2",
         "slick-carousel": "^1.8.1",
         "ts-ignore": "^0.0.3",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "@types/react": "^18.0.37",

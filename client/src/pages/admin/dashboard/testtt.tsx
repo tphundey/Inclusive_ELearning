@@ -1,11 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Form, Input, Radio, Button, Card, message } from 'antd';
+import { Form, Input, Radio, Button, Card, message, Upload, Table, Tabs } from 'antd';
 import './test.css'
+import * as XLSX from 'xlsx';
+import { UploadOutlined } from '@ant-design/icons';
+
 const TestPage = () => {
+  const formRef = useRef(null);
   const [questions, setQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [excelData, setExcelData] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    options: ['', '', ''],
+    correctAnswerIndex: 0,
+  });
+  const handleExcelUpload = (info) => {
+    if (info.file.status === 'done') {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+  
+        const sheetNames = workbook.SheetNames;
+        sheetNames.forEach(sheetName => {
+          const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+  
+          const processedData = sheetData.map(row => ({
+            title: row['Title'],
+            options: [row['Option1'], row['Option2'], row['Option3']],
+            correctAnswerIndex: row['Kết quả'],
+          }));
+  
+          const { title, options, correctAnswerIndex } = processedData[0];
+          // Use setFieldsValue to set the form values
+          formRef.current.setFieldsValue({
+            title: title || '',
+            options: options || ['', '', ''],
+            correctAnswerIndex: correctAnswerIndex || 0,
+          });
+  
+          setExcelData(processedData);
+        });
+      };
+      reader.readAsArrayBuffer(info.file.originFileObj);
+    } else if (info.file.status === 'error') {
+      message.error('File upload failed.');
+    }
+  };
+
+
 
   useEffect(() => {
     // Gửi yêu cầu đến API câu hỏi khi component được tạo
@@ -31,18 +76,18 @@ const TestPage = () => {
         options: Object.values(values.options),
         correctAnswerIndex: values.correctAnswerIndex,
       })
-      .then(response => {
-        // Cập nhật danh sách câu hỏi sau khi thêm thành công
-        setQuestions([...questions, response.data]);
-      })
-      .catch(error => {
-        console.error('Error adding question:', error);
-      });
+        .then(response => {
+          // Cập nhật danh sách câu hỏi sau khi thêm thành công
+          setQuestions([...questions, response.data]);
+        })
+        .catch(error => {
+          console.error('Error adding question:', error);
+        });
     } else {
       console.error('Options are missing or empty in the form values');
     }
   };
-  
+
 
   const handleSelectAnswer = (questionId, answerIndex) => {
     setUserAnswers({
@@ -71,32 +116,50 @@ const TestPage = () => {
         <p>Đang tải...</p>
       ) : (
         <div>
-      <Form onFinish={handleAddQuestion}>
-  <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
-    <Input />
-  </Form.Item>
-  <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
-    <Input />
-  </Form.Item>
-  <Form.Item label="Lựa chọn 2" name={['options', '1']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
-    <Input />
-  </Form.Item>
-  <Form.Item label="Lựa chọn 3" name={['options', '2']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
-    <Input />
-  </Form.Item>
-  <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
-    <Radio.Group>
-      <Radio value={0}>Lựa chọn 1</Radio>
-      <Radio value={1}>Lựa chọn 2</Radio>
-      <Radio value={2}>Lựa chọn 3</Radio>
-    </Radio.Group>
-  </Form.Item>
-  <Form.Item>
-    <Button className='bg-blue-500' type="primary" htmlType="submit">
-      Thêm Câu Hỏi
-    </Button>
-  </Form.Item>
-</Form>
+          <Upload
+            customRequest={({ onSuccess }) => onSuccess('ok')}
+            onChange={handleExcelUpload}
+            showUploadList={false}
+          >
+            <Button icon={<UploadOutlined />}>Import Excel</Button>
+          </Upload>
+
+
+          {excelData && excelData.map((item, index) => (
+            <div key={index}>
+              <p>Tiêu đề: {item.title}</p>
+              <p>Option1: {item.option1}</p>
+              <p>Option2: {item.option2}</p>
+              <p>Option3: {item.option3}</p>
+              <p>Kết quả: {item.result}</p>
+            </div>
+          ))}
+          <Form onFinish={handleAddQuestion} initialValues={formData} ref={formRef} >
+            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Lựa chọn 2" name={['options', '1']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Lựa chọn 3" name={['options', '2']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
+              <Radio.Group>
+                <Radio value={0}>Lựa chọn 1</Radio>
+                <Radio value={1}>Lựa chọn 2</Radio>
+                <Radio value={2}>Lựa chọn 3</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item>
+              <Button className='bg-blue-500' type="primary" htmlType="submit">
+                Thêm Câu Hỏi
+              </Button>
+            </Form.Item>
+          </Form>
 
 
         </div>
@@ -118,7 +181,7 @@ const TestPage = () => {
         </Card>
       ))}
 
-      <Button  className='bg-blue-500' type="primary" onClick={handleSubmitAnswers}>
+      <Button className='bg-blue-500' type="primary" onClick={handleSubmitAnswers}>
         Xác Nhận Đáp Án
       </Button>
     </div>
