@@ -8,7 +8,7 @@ routerQuestions.post('/', async (req, res) => {
 
     const newQuestion = new Question({
       title,
-      options,
+      options, // Đảm bảo model Question của bạn có trường options để lưu mảng các lựa chọn
       correctAnswerIndex,
     });
 
@@ -20,6 +20,7 @@ routerQuestions.post('/', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 routerQuestions.get('/', async (req, res) => {
   try {

@@ -23,8 +23,14 @@ const TestPage = () => {
   }, []);
 
   const handleAddQuestion = (values) => {
-    // Gửi câu hỏi lên API
-    axios.post('http://localhost:3000/questions', values)
+    // Kiểm tra xem values.options có tồn tại và không rỗng không
+    if (values.options && Object.values(values.options).length > 0) {
+      // Gửi câu hỏi lên API
+      axios.post('http://localhost:3000/questions', {
+        title: values.title,
+        options: Object.values(values.options),
+        correctAnswerIndex: values.correctAnswerIndex,
+      })
       .then(response => {
         // Cập nhật danh sách câu hỏi sau khi thêm thành công
         setQuestions([...questions, response.data]);
@@ -32,7 +38,11 @@ const TestPage = () => {
       .catch(error => {
         console.error('Error adding question:', error);
       });
+    } else {
+      console.error('Options are missing or empty in the form values');
+    }
   };
+  
 
   const handleSelectAnswer = (questionId, answerIndex) => {
     setUserAnswers({
@@ -61,54 +71,56 @@ const TestPage = () => {
         <p>Đang tải...</p>
       ) : (
         <div>
-          <Form onFinish={handleAddQuestion}>
-            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Lựa chọn 1" name="options[0]" rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Lựa chọn 2" name="options[1]" rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Lựa chọn 3" name="options[2]" rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
-              <Radio.Group>
-                <Radio value={0}>Lựa chọn 1</Radio>
-                <Radio value={1}>Lựa chọn 2</Radio>
-                <Radio value={2}>Lựa chọn 3</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">Thêm Câu Hỏi</Button>
-            </Form.Item>
-          </Form>
-          
-         
+      <Form onFinish={handleAddQuestion}>
+  <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
+    <Input />
+  </Form.Item>
+  <Form.Item label="Lựa chọn 1" name={['options', '0']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 1!' }]}>
+    <Input />
+  </Form.Item>
+  <Form.Item label="Lựa chọn 2" name={['options', '1']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 2!' }]}>
+    <Input />
+  </Form.Item>
+  <Form.Item label="Lựa chọn 3" name={['options', '2']} rules={[{ required: true, message: 'Vui lòng nhập lựa chọn 3!' }]}>
+    <Input />
+  </Form.Item>
+  <Form.Item label="Đáp án đúng" name="correctAnswerIndex" rules={[{ required: true, message: 'Vui lòng chọn đáp án đúng!' }]}>
+    <Radio.Group>
+      <Radio value={0}>Lựa chọn 1</Radio>
+      <Radio value={1}>Lựa chọn 2</Radio>
+      <Radio value={2}>Lựa chọn 3</Radio>
+    </Radio.Group>
+  </Form.Item>
+  <Form.Item>
+    <Button className='bg-blue-500' type="primary" htmlType="submit">
+      Thêm Câu Hỏi
+    </Button>
+  </Form.Item>
+</Form>
+
+
         </div>
       )}
-    {questions.map(question => (
-            <Card key={question.id} title={question.title}>
-              <Radio.Group
-                onChange={(e) => handleSelectAnswer(question.id, e.target.value)}
-                value={userAnswers[question.id]}
-              >
-                {question.options ? (
-                  question.options.map((option, index) => (
-                    <Radio key={index} value={index}>{option}</Radio>
-                  ))
-                ) : (
-                  <p>No options available for this question.</p>
-                )}
-              </Radio.Group>
-            </Card>
-          ))}
+      {questions.map(question => (
+        <Card key={question.id} title={question.title}>
+          <Radio.Group
+            onChange={(e) => handleSelectAnswer(question.id, e.target.value)}
+            value={userAnswers[question.id]}
+          >
+            {question.options ? (
+              question.options.map((option, index) => (
+                <Radio key={index} value={index}>{option}</Radio>
+              ))
+            ) : (
+              <p>No options available for this question.</p>
+            )}
+          </Radio.Group>
+        </Card>
+      ))}
 
-<Button type="primary" onClick={handleSubmitAnswers}>
-            Xác Nhận Đáp Án
-          </Button>
+      <Button  className='bg-blue-500' type="primary" onClick={handleSubmitAnswers}>
+        Xác Nhận Đáp Án
+      </Button>
     </div>
   );
 };
