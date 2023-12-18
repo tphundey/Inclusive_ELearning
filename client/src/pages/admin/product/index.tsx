@@ -464,6 +464,7 @@ const AdminProduct = () => {
                         columns={columns}
                     />
                     <Pagination
+                        className='mt-2'
                         current={currentPage}
                         total={productsData.length}
                         pageSize={pageSize}

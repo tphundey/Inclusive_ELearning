@@ -41,6 +41,7 @@ const AdminProductEdit = () => {
     useEffect(() => {
         form.setFieldsValue(productData);
     }, [productData]);
+
     const onFinish = (values: any) => {
         updateProduct({ ...values, id: idProduct, isDeleted: true})
             .unwrap()
@@ -102,7 +103,7 @@ const AdminProductEdit = () => {
                     autoComplete="off"
                 >
                     <Form.Item<FieldType>
-                        label="Tên khóa học"
+                        label="Tiêu đề khóa học"
                         name="courseName"
                         rules={[
                             { required: true, message: "Tên sản khóa học được để trống!" },
@@ -137,13 +138,13 @@ const AdminProductEdit = () => {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item<FieldType>
+                {/* <Form.Item<FieldType>
                     label="thời lượng"
                     name="duration"
                     rules={[{ required: true, message: "Phải nhập thời lượng" }]}
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item name="categoryID" label="Danh mục" rules={[{ required: true }]}>
                     <Select
                         placeholder="pick a category"
@@ -158,7 +159,6 @@ const AdminProductEdit = () => {
                         }
                     </Select>
                 </Form.Item>
-                
                 
                 <Form.Item label="Mô tả khóa học"
                 name="description"

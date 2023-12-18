@@ -141,18 +141,9 @@ const AdminProductAdd = () => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
-                    label="Tài liệu khóa học"
-                >
-                    <Button onClick={() => handleOpenPicker()}>Upload tài liệu</Button>
-                    {uploadedFileUrl && (
-                        <span className="text-blue-900  font-bold ml-52"><a href={uploadedFileUrl} target="_blank" rel="noopener noreferrer">Open PDF</a></span>
-                    )}
-                </Form.Item>
-
 
                 <Form.Item
-                    label="Giá khóa học (vnd)"
+                    label="Giá khóa học (VND)"
                     name="price"
                     rules={[
                         { required: true, message: "Phải nhập giá tiền" },
@@ -160,14 +151,6 @@ const AdminProductAdd = () => {
                 >
                     <Input type="number" />
                 </Form.Item>
-
-                {/* <Form.Item
-                    label="Hình ảnh"
-                    name="courseIMG"
-                    rules={[{ type: 'url', message: 'Hình ảnh không hợp lệ' }]}
-                >
-                    <Input />
-                </Form.Item> */}
 
                 <Form.Item
                     label="Hình ảnh"
@@ -190,7 +173,7 @@ const AdminProductAdd = () => {
 
                 <Form.Item
                     name="date"
-                    label="Thời gian tạo"
+                    label="Thời gian xuất bản"
                     rules={[{ required: true, message: 'Vui lòng chọn thời gian tạo' }]}
                 >
                     <DatePicker />
@@ -199,9 +182,8 @@ const AdminProductAdd = () => {
                 <Form.Item
                     name="intro"
                     label="Video giới thiệu"
-
                 >
-                    <Input placeholder="link" />
+                    <Input placeholder="Video giới thiệu" />
                 </Form.Item>
 
                 <Form.Item
@@ -210,7 +192,7 @@ const AdminProductAdd = () => {
                     rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
                     <Select
-                        placeholder="pick a category"
+                        placeholder="Vui lòng chọn danh mục"
                         allowClear
                     >
                         {
@@ -224,7 +206,16 @@ const AdminProductAdd = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Mô tả"
+                    label="Tài liệu khóa học"
+                >
+                    <Button onClick={() => handleOpenPicker()}>Upload tài liệu</Button>
+                    {uploadedFileUrl && (
+                        <span className="text-blue-900  font-bold ml-52"><a href={uploadedFileUrl} target="_blank" rel="noopener noreferrer">Open PDF</a></span>
+                    )}
+                </Form.Item>
+
+                <Form.Item
+                    label="Mô tả khóa học"
                     name="description"
                     rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
                 >
