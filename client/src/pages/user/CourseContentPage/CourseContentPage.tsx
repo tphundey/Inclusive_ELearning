@@ -524,63 +524,20 @@ const CourseContentPage = () => {
         closeModal();
     };
 
-    const handleBookmarkClick = () => {
-        // Bước 1: Lấy thông tin người dùng từ API
-        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to retrieve user data from the API.');
-                }
-            })
-            .then((userData) => {
-                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
-
-                // Bước 2: Lấy danh sách khóa học đã lưu của người dùng
-                const savedCourses = user.courseSaved || []; // Danh sách khóa học đã lưu
-                console.log(savedCourses, 'khoa hoc luu');
-
-                // Kiểm tra xem courseID đã tồn tại trong danh sách đã lưu chưa
-                if (!savedCourses.includes(id)) {
-                    // Nếu chưa tồn tại, thêm courseID vào danh sách đã lưu
-                    savedCourses.push(id);
-
-                    // Bước 3: Cập nhật danh sách khóa học đã lưu của người dùng
-                    user.courseSaved = savedCourses;
-
-
-
-                    // Bước 4: Cập nhật dữ liệu người dùng sau khi lưu khóa học
-                    fetch(`http://localhost:3000/googleAccount/${user.id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(user),
-                    })
-                        .then((updateResponse) => {
-                            if (updateResponse.ok) {
-                                // Hiển thị thông báo thành công
-                                message.success('Lưu khóa học thành công !');
-                            } else {
-                                throw new Error('Failed to update user data.');
-                            }
-                        })
-                        .catch((updateError) => {
-                            console.error('Error updating user data:', updateError);
-                            message.error('Failed to update user data.');
-                        });
-                } else {
-                    console.log('Khóa học đã được lưu.');
-                    message.error('Khóa học đã được lưu.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
-            });
+    const handleResize = () => {
+        if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
+            window.location.href = '/signup/404';
+        }
     };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
 
     if (!product) {
         return <div>Loading...</div>;
@@ -637,7 +594,7 @@ const CourseContentPage = () => {
 
     const minutes = Math.floor(watchedTimeOnReturn / 60);
     const seconds = watchedTimeOnReturn % 60;
-    
+
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -713,7 +670,7 @@ const CourseContentPage = () => {
                         </div>
                         <div className='fl-content-option'>
                             {/* <i className="fa-regular fa-thumbs-up"></i> <span>23</span> */}
-                            <i className="fa-regular fa-bookmark" onClick={handleBookmarkClick}></i> <span></span> |
+                            |
                             <i className="fa-solid fa-share" onClick={handleCopyToClipboard}></i>
                         </div>
                     </div>
