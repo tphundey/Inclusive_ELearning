@@ -138,9 +138,8 @@ const Homepage: React.FC = () => {
                                 <>
                                     <Slider {...settings}>
                                         {visibleProducts?.map((product: any, index: any) => {
-
-                                            const formattedPrice = formatCurrency(product.price);
-
+                                            const formattedPrice = product.price !== 0 ? formatCurrency(product.price) : 'Free';
+                                            const textColorClass = product.price !== 0 ? 'text-blue-400' : 'text-green-500';
                                             return (
                                                 <div className="group relative">
                                                     <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -156,7 +155,7 @@ const Homepage: React.FC = () => {
                                                                 <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
                                                             </a>
                                                         </div>
-                                                        <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                        <p className={`mt-1 text-xs ${textColorClass}`}>{formattedPrice}</p>
                                                     </div>
                                                 </div>
                                             );
@@ -181,7 +180,8 @@ const Homepage: React.FC = () => {
                                 <>
                                     <Slider {...settings}>
                                         {visibleProducts2?.map((product: any, index: any) => {
-                                            const formattedPrice = formatCurrency(product.price);
+                                            const formattedPrice = product.price !== 0 ? formatCurrency(product.price) : 'Free';
+                                            const textColorClass = product.price !== 0 ? 'text-blue-400' : 'text-green-500';
                                             return (
                                                 <div className="group relative">
                                                     <div className="aspect-h-1 product-hp aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 product-slide">
@@ -197,7 +197,7 @@ const Homepage: React.FC = () => {
                                                                 <p className="mt-1 text-base">{product.courseName.substring(0, 70)}...</p>
                                                             </a>
                                                         </div>
-                                                        <p className=" mt-1 text-xs text-gray">{formattedPrice}</p>
+                                                        <p className={`mt-1 text-xs ${textColorClass}`}>{formattedPrice}</p>
                                                     </div>
                                                 </div>
                                             );

@@ -6,7 +6,7 @@ import Input from 'antd/es/input/Input';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
-import { Timeline, Form, Button, notification, Skeleton,message } from 'antd';
+import { Timeline, Form, Button, notification, Skeleton, message } from 'antd';
 import { Rating, Typography } from "@material-tailwind/react";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
@@ -218,7 +218,9 @@ const IntroductionPage = () => {
                     const matchedCategory = categories.find((category: any) => category.id === product.categoryID);
                     if (matchedCategory) {
                         setCategoryName(matchedCategory.categoryName);
-                        setLoading(false);
+                        setTimeout(() => {
+                            setLoading(false);
+                        }, 1000);
                     }
                 }
             })
@@ -246,9 +248,9 @@ const IntroductionPage = () => {
         .catch((error) => {
             console.error(error);
         });
-        console.log(userID,'ddddddddddddd');
-        
-        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+    console.log(userID, 'ddddddddddddd');
+
+    fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
         .then((response) => {
             if (response.ok) {
                 return response.json();
@@ -259,9 +261,9 @@ const IntroductionPage = () => {
         .then((userData) => {
             if (userData) {
                 console.log(userData[0].lock);
-                
-                const  lock  = userData[0].lock;
-    
+
+                const lock = userData[0].lock;
+
                 // Kiểm tra trường lock và đăng xuất tài khoản nếu lock là true
                 if (lock == true) {
                     // Thực hiện đăng xuất tài khoản
@@ -497,7 +499,7 @@ const IntroductionPage = () => {
         setReview({ ...review, rating: value });
         setRated(value);
     };
-    const [iframeUrl, setIframeUrl] = useState(''); 
+    const [iframeUrl, setIframeUrl] = useState('');
     useEffect(() => {
         if (id) {
             const stringId = id.toString();
@@ -508,7 +510,7 @@ const IntroductionPage = () => {
                     setProduct(response.data);
                     console.log(response.data.intro);
                     setIframeUrl(response.data.intro)
-                    
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -756,7 +758,7 @@ const IntroductionPage = () => {
     useEffect(() => {
         setShuffledSimilarProducts(shuffleArray(similarProducts));
     }, [similarProducts]);
-   
+
     const renderedSimilarProducts = shuffledSimilarProducts.slice(0, 7).map((similarProduct: any) => (
         <li key={similarProduct.id} className="prosimi flex items-start gap-4 px-4 py-3">
             <div className="flex items-center shrink-0">
