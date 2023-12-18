@@ -6,7 +6,14 @@ import { useState, useEffect } from 'react';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import { Slider } from 'antd';
+import { Button, Slider, message } from 'antd';
+import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 const ListCourse = () => {
     const [courses, setCourses] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
@@ -15,12 +22,21 @@ const ListCourse = () => {
     const [categories2, setCategories2] = useState<any[]>([]);
     const [categories3, setCategories3] = useState<any[]>([]);
     const [mappedCategoryNames, setMappedCategoryNames] = useState<any[]>([]);
-    const [visibleCourses, setVisibleCourses] = useState(4); // Initially show 4 courses
+    const [visibleCourses, setVisibleCourses] = useState(4);
     const [priceRange, setPriceRange] = useState([0, 100]);
     const [filteredCourses, setFilteredCourses] = useState<any[]>([]);
-    const [durationRange, setDurationRange] = useState([0, 100]); // Default duration range in minutes
+    const [userEmail, setuserEmail] = useState<any | null>(null);
+    const [durationRange, setDurationRange] = useState([0, 100]);
     const { id } = useParams();
-    console.log(id);
+    const [selectedCategoryName, setSelectedCategoryName] = useState("")
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setuserEmail(currentUser?.email)
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [auth]);
 
     useEffect(() => {
         fetchCourses()
@@ -128,16 +144,80 @@ const ListCourse = () => {
             </div>
         ));
     };
+    useEffect(() => {
+        if (id) {
+            axios.get(`http://localhost:3000/categories/${id}`)
+                .then(response => {
+                    const category = response.data;
+                    setSelectedCategoryName(category.categoryName);
+                })
+                .catch(error => {
+                    console.error('Error fetching category:', error);
+                });
+        }
+    }, [id]);
+    const handleBookmarkClick = (courseId) => {
+        // Bước 1: Lấy thông tin người dùng từ API
+        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to retrieve user data from the API.');
+                }
+            })
+            .then((userData) => {
+                const user = userData[0]; // Lấy người dùng đầu tiên, bạn có thể xác định người dùng một cách cụ thể
+
+                // Bước 2: Lấy danh sách khóa học đã lưu của người dùng
+                const savedCourses = user.courseSaved || []; // Danh sách khóa học đã lưu
+                console.log(savedCourses, 'khoa hoc luu');
+
+                // Kiểm tra xem courseID đã tồn tại trong danh sách đã lưu chưa
+                if (!savedCourses.includes(courseId)) {
+                    // Nếu chưa tồn tại, thêm courseID vào danh sách đã lưu
+                    savedCourses.push(courseId);
+
+                    // Bước 3: Cập nhật danh sách khóa học đã lưu của người dùng
+                    user.courseSaved = savedCourses;
+
+                    fetch(`http://localhost:3000/googleAccount/${user.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(user),
+                    })
+                        .then((updateResponse) => {
+                            if (updateResponse.ok) {
+                                message.success('Lưu khóa học thành công !');
+                            } else {
+                                throw new Error('Failed to update user data.');
+                            }
+                        })
+                        .catch((updateError) => {
+                            console.error('Error updating user data:', updateError);
+                            message.error('Failed to update user data.');
+                        });
+                } else {
+                    console.log('Khóa học đã được lưu.');
+                    message.error('Khóa học đã được lưu.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
     return (
         <div className="containerCss-browepage2  business mt-3">
-            <h2 className='h2-bsn'>List course</h2>
+            <Button className='w-auto p-4 h-14 font-bold text-xl bg-blue-500 text-white mb-3'>{selectedCategoryName}</Button>
             <div>
                 <h3>Price Range: (vnd)</h3>
                 <Slider
                     range
                     min={0}
                     max={1000000}
-                    defaultValue={[0, 1000]}
+                    defaultValue={[0, 100000]}
                     onChange={handlePriceChange}
                 />
             </div>
@@ -146,8 +226,8 @@ const ListCourse = () => {
                 <Slider
                     range
                     min={0}
-                    max={3000}
-                    defaultValue={[0, 1000]}
+                    max={200}
+                    defaultValue={[0, 100]}
                     onChange={handleDurationChange}
                 />
             </div>
@@ -202,9 +282,7 @@ const ListCourse = () => {
                                         tabIndex={0}
                                         className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8"
                                     >
-                                        {/* <li><a onClick={() => handleAddToCollections(course.id)}>Add to collections</a></li>
-                                    <li><a onClick={() => handleMoveToHistory(course.id)}>Move to history</a></li>
-                                    <li><a onClick={() => handleRemoveCourse(course.id)}>Remove</a></li>  */}
+                                        <Button onClick={() => handleBookmarkClick(course.id)}>Lưu khóa học</Button>
                                     </ul>
                                 </div>
                             </div>
