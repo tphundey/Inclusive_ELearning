@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 const OverViewPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState({});
@@ -90,7 +90,7 @@ const OverViewPage = () => {
                     <div className="info-details">
                         <div className="info15">{truncateDuration(product.duration)} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">Newbie</div>
+                        <div className="info15">Khóa học</div>
                         <div><i className="fa-solid fa-circle"></i></div>
                         <div className="info15">Released: {product.date}</div>
                     </div>
@@ -160,7 +160,7 @@ const OverViewPage = () => {
                                         <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
                                     </a>
                                 </h4>
-                                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
+                                <p className="w-full text-xs text-slate-500 mt-3"> {formatCurrency(similarProduct.price)}</p>
                                 <span className='timeforvideoIntro  ml-1'>{truncateDuration(similarProduct.duration)} m</span>
                             </div>
                         </li>

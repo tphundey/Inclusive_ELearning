@@ -9,6 +9,7 @@ import { message } from 'antd';
 import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { EyeOutlined } from '@ant-design/icons';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -634,9 +635,15 @@ const CourseContentPage = () => {
     const numberOfCompletedVideos = userProgressForCurrentCourse.filter(progress => progress.completionStatus).length;
     const calculatedCompletionPercentage = (numberOfCompletedVideos / uniqueVideoIdsInCourse.length) * 100;
 
+    const minutes = Math.floor(watchedTimeOnReturn / 60);
+    const seconds = watchedTimeOnReturn % 60;
+    
+    const handleContextMenu = (e) => {
+        e.preventDefault();
+    };
+    const formattedTime = `${minutes} phút ${seconds.toFixed(0)} giây`;
     return (
-
-        <div className='container-content-page'>
+        <div onContextMenu={handleContextMenu} className='container-content-page '>
             <div className="contentpage-left">
                 <div className='content-intro'>
                     <div className="content-left-title">
@@ -667,7 +674,7 @@ const CourseContentPage = () => {
                                                 {video.videoTitle}
                                             </div>
                                             <div>
-                                                <i className="fa-regular fa-bookmark hi"></i>
+                                                <EyeOutlined />
                                             </div>
                                         </div>
                                     </div>
@@ -681,7 +688,7 @@ const CourseContentPage = () => {
                                         type="success"
                                         showIcon
                                         description={
-                                            <Button className='chungchi' type="primary" onClick={handleNavigate}>
+                                            <Button type="dashed" onClick={handleNavigate}>
                                                 Nhận chứng chỉ
                                             </Button>
                                         }
@@ -700,15 +707,7 @@ const CourseContentPage = () => {
             <div className="contentpage-right">
                 <div className="content-infocourse">
                     <div className="content-info-fl">
-                        {/* <div>  <div>
-                            {paymentStatu2s ? (
-                                <p>Người dùng đã thanh toán khóa học.</p>
-                            ) : (
-                                <p>Người dùng chưa thanh toán khóa học.</p>
-                            )}
-                        </div> */}
                         <div>
-
                             <div className="content-info1">{product.courseName}</div>
                             <div className="content-info2">Module introduction</div>
                         </div>
@@ -721,10 +720,18 @@ const CourseContentPage = () => {
                 </div>
                 <div className="content-container-video">
                     {paymentStatu2s ? (
-                        <video controls autoPlay src={selectedVideoUrl}
-                            onEnded={handleVideoEnded}
-                            onTimeUpdate={handleVideoTimeUpdate}
-                        ></video>
+                        <div className="video-container">
+                            <video
+                                controls
+                                autoPlay
+                                src={selectedVideoUrl}
+                                onEnded={handleVideoEnded}
+                                onTimeUpdate={handleVideoTimeUpdate}
+                                onContextMenu={(e) => e.preventDefault()}
+                                controlsList="nodownload"
+                            ></video>
+                            <div className="watermark"><img src="https://res-console.cloudinary.com/dsk9jrxzf/media_explorer_thumbnails/7e95ab28f227ce57b95d20e1ad99a579/detailed" alt="" /></div>
+                        </div>
                     ) : (
                         <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
                     )}
@@ -758,7 +765,7 @@ const CourseContentPage = () => {
                         </Modal>
                         {/* Modal hiển thị thời lượng video */}
                         <Modal open={isModalOpen} onCancel={handleModalClose}>
-                            <p>Thời lượng video: {videoDuration}</p>
+                            <p>Thời lượng video: {formattedTime}</p>
                         </Modal>
                         <Outlet />
                     </div>

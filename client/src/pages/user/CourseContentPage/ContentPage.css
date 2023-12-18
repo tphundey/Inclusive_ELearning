@@ -115,6 +115,7 @@
     color: white;
     padding: 9.5px;
     width: 100%;
+    z-index: 1;
     background-color: black;
     opacity: 0.8;
     border-bottom: 1px solid gray;
@@ -351,7 +352,27 @@
     height: 120px;
 }
 
-.producsimi img{
+.producsimi img {
     width: 130px;
     height: 70px;
+}
+
+.video-container {
+    position: relative;
+    max-width: 100%;
+}
+
+.video-container video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.watermark {
+    position: absolute;
+    bottom: 320px;
+    right: 700px;
+    padding: 5px;
+    width: 120px;
+    border-radius: 5px;
 }
