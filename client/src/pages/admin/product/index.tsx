@@ -4,6 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 import { useGetVideosQuery, useRemoveVideoMutation } from "@/api/video";
+
 const AdminProduct = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [productsData, setProductsData] = useState([]);
@@ -27,6 +28,7 @@ const AdminProduct = () => {
         const modalContent = (
             <div>
                 <p>{isFullDescriptionVisible ? selectedCourse.description : selectedCourse.description.slice(0, 100) + '...'}</p>
+                <p>Course ID: {selectedCourse.id}</p>
                 {/* {selectedCourse.description.length > 100 && (
                     <Button type="link" onClick={toggleDescription}>
                         {isFullDescriptionVisible ? 'Rút gọn' : 'Xem thêm'}
@@ -109,13 +111,13 @@ const AdminProduct = () => {
 
     const columns = [
         {
-            title: 'ID khóa học',
-            dataIndex: 'id',
-            key: 'id',
-            width: '200px',
+            title: 'Stt',
+            dataIndex: 'stt',
+            key: 'stt',
+            width: '100px',
         },
         {
-            title: 'Tên khóa học',
+            title: 'Tiêu đề khóa học',
             dataIndex: 'courseName',
             key: 'name',
             width: '200px',
@@ -135,7 +137,7 @@ const AdminProduct = () => {
             },
         },
         {
-            title: ' Chi tiết',
+            title: ' Chi tiết khóa học',
             dataIndex: 'isHidden',
             key: 'isHidden',
             width: 100,
@@ -161,20 +163,20 @@ const AdminProduct = () => {
             dataIndex: 'courseIMG',
             key: 'courseIMG',
             render: (courseIMG: any) => (
-                <img width={100} src={courseIMG} alt="Hình ảnh khóa học" />
+                <img width={110} style={{ height: 60 }} src={courseIMG} alt="Hình ảnh khóa học" />
             ),
         },
         {
-            title: 'Quiz',
+            title: 'Tính năng',
             dataIndex: 'Quiz',
             key: 'Quiz',
             width: '200px',
             render: (text: any, record: any, id: any) => (
                 <div className="flex items-center gap-2">
-                    <Button type='default' className='bg-gray-200'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
+                    <Button type='default' className='bg-gray-100'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
                     <Button
                         type="default"
-                        onClick={() => window.open(`/admin/video/add/${id}`, '_blank')}
+                        onClick={() => window.open(`/admin/video/add/${record.id}`, '_blank')}
                     >
                         Thêm Video
                     </Button>
@@ -382,7 +384,7 @@ const AdminProduct = () => {
     return (
         <div>
             <Modal
-                title={`Chi tiết khóa học`}
+                title={`Danh sách video của khóa học !`}
                 visible={isVideosModalVisible}
                 onOk={() => setIsVideosModalVisible(false)}
                 onCancel={() => setIsVideosModalVisible(false)}
@@ -394,8 +396,6 @@ const AdminProduct = () => {
                     },
                 }}
             >
-
-                <h3 className='text-red-700 font-bold'>Danh sách video của khóa học !</h3>
                 <ul>
 
                     {selectedCourseVideos.map((video: any, index: any) => (
@@ -410,14 +410,14 @@ const AdminProduct = () => {
                             </li>
                             <li>
                                 <a href={video.videoURL} target="_blank" rel="noopener noreferrer">
-                                    <video controls width="300" height="200">
+                                    <video controls width="250" height="120">
                                         <source src={video.videoURL} type="video/mp4" />
                                         Your browser does not support the video tag.
                                     </video>
                                 </a>
                             </li>
                             <li >
-                                <Button className='bg-blue-800; text-black' type="primary" onClick={() => handleEditVideo(video.id)}>
+                                <Button className='bg-blue-800; text-black mr-3' type="primary" onClick={() => handleEditVideo(video.id)}>
                                     <i className="fa-solid fa-wrench"></i>
                                 </Button>
                                 <Modal
@@ -428,7 +428,7 @@ const AdminProduct = () => {
                                 >
                                     Bạn có chắc chắn muốn xóa video này không?
                                 </Modal>
-                                <Button type="default" onClick={() => {
+                                <Button className='text-black ' type="primary" onClick={() => {
                                     setSelectedVideoId(video.id);
                                     showDeleteModal(video.id);
                                 }}>
@@ -460,7 +460,7 @@ const AdminProduct = () => {
                 <>
                     <Table
                         pagination={false}
-                        dataSource={currentData}
+                        dataSource={currentData.map((item, index) => ({ ...item, stt: (startItem + index + 1).toString() }))}
                         columns={columns}
                     />
                     <Pagination
