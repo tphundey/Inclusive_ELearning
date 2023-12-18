@@ -771,8 +771,8 @@ const IntroductionPage = () => {
                         <p className="mt-1 text-base">{truncateProductName(similarProduct.courseName, 41)}</p>
                     </a>
                 </h4>
-                <p className="w-full text-xs text-slate-500 mt-3">{similarProduct.enrollment} learners</p>
-                <span className='timeforvideoIntro'>{similarProduct.duration} m</span>
+                <p className="w-full text-xs text-slate-500 mt-3">{formatCurrency(similarProduct.price)}</p>
+                <span className='timeforvideoIntro'>{similarProduct.duration.toFixed(1)} m</span>
             </div>
         </li>
     ));
@@ -781,7 +781,7 @@ const IntroductionPage = () => {
         return <Skeleton active />;
     }
     const formattedPrice = formatCurrency(product.price);
-    const truncatedDuration = product.duration.toFixed(0);
+    const truncatedDuration = product.duration.toFixed(1);
     return (
         <div className="containerCss">
             <div className="course-header-container">
