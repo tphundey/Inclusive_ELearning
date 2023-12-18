@@ -24,6 +24,50 @@ const Dashboard = () => {
   const [percentageChange, setPercentageChange] = useState(0);
 
   useEffect(() => {
+    asyncFetch();
+  }, []);
+
+  const asyncFetch = () => {
+    fetch('http://localhost:3000/Payment')
+      .then((response) => response.json())
+      .then((json) => setPaymentData(json))
+      .catch((error) => {
+        console.log('fetch data failed', error);
+      });
+  };
+
+  useEffect(() => {
+    const sortedData = [...paymentData].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    const groupedData = sortedData.reduce((acc, entry) => {
+      const month = moment(entry.createdAt).format('MM/YYYY');
+      if (!acc[month]) {
+        acc[month] = [];
+      }
+      acc[month].push(entry);
+      return acc;
+    }, {});
+
+    const calculateMonthlyTotal = () => {
+      const monthlyTotalResult = Object.entries(groupedData).reduce((acc, [month, entries]) => {
+        acc[month] = entries.reduce((total, entry) => total + entry.amount, 0);
+        return acc;
+      }, {});
+      setMonthlyTotal(monthlyTotalResult);
+    };
+
+    calculateMonthlyTotal();
+  }, [paymentData]);
+
+  // Chuyển đổi dữ liệu thành định dạng phù hợp cho Line chart
+  const chartData = Object.entries(monthlyTotal).map(([month, total]) => ({
+    month,
+    total,
+  }));
+
+  ////////////////////////////////////////////////////////////////////////////
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         // Lấy dữ liệu từ API
@@ -130,62 +174,6 @@ const Dashboard = () => {
   }, []);
   const formattedPrice4 = formatCurrency(yearlyEarnings);
 
-
-  useEffect(() => {
-    asyncFetch();
-  }, []);
-  const asyncFetch = () => {
-    fetch(
-      "https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json"
-    )
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
-  };
-  const reversedMonths = Object.keys(monthlyTotal).reverse();
-
-  // Tạo mảng uvBillData theo thứ tự đảo ngược
-  const uvBillData = reversedMonths.map((month: any) => ({
-    course: `Tháng ${month}`,
-    value: `${monthlyTotal[month]} đ`,
-    type: `Tháng ${month}`,
-  }));
-  uvBillData.sort((a, b) => {
-    const monthA = parseInt(a.type.split(" ")[1]);
-    const monthB = parseInt(b.type.split(" ")[1]);
-    return monthA - monthB;
-  });
-  uvBillData;
-
-  const uvBillMap = new Map();
-  uvBillData.forEach((item) => {
-    const type = item.type;
-    if (uvBillMap.has(type)) {
-      uvBillMap.set(type, uvBillMap.get(type) + item.value);
-    } else {
-      uvBillMap.set(type, item.value);
-    }
-  });
-
-  const reversedUvBillData = [...uvBillData].reverse();
-
-  const configChart2 = {
-    data: reversedUvBillData, // Sử dụng mảng đã đảo ngược
-    padding: "auto",
-    xField: "course",
-    yField: "value",
-    xAxis: {
-      tickCount: 5,
-    },
-    yAxis: {
-      invert: true,
-    },
-  };
-
-
-  
   useEffect(() => {
     const fetchVideoCount = async () => {
       try {
@@ -604,11 +592,11 @@ const Dashboard = () => {
           </div>
           <div className="p-4 text-right">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Doanh thu hôm nay</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dailyEarnings2}</h4>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{formattedPrice12}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{percentageChange2}%</strong> so với hôm qua
+              <strong className="text-green-500">{percentageChange2.toFixed(0)}%</strong> so với hôm qua
             </p>
           </div>
         </div>
@@ -624,7 +612,7 @@ const Dashboard = () => {
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{completionPercentage5}%</strong> so với hôm qua
+              <strong className="text-green-500">{completionPercentage5.toFixed(0)}%</strong> so với hôm qua
             </p>
           </div>
         </div>
@@ -784,7 +772,15 @@ const Dashboard = () => {
         <div style={{ width: "720px", paddingLeft: "20px" }}
           className="m-[24px]">
           <p className="text-xl">Biểu đồ thống kê doanh thu</p>
-          <Line {...configChart2} />
+          <Line
+            width={600}
+            height={400}
+            data={chartData}
+            xField="month"
+            yField="total"
+            seriesField="total"
+            yAxis={{ label: { formatter: (val) => formatCurrency(val) } }}
+          />
         </div>
       </div>
 
