@@ -6,7 +6,7 @@ import { useGetUsersQuery } from "@/api/user";
 import { Icategory } from "@/interfaces/category";
 import { Irole } from "@/interfaces/role";
 import { Iuser } from "@/interfaces/user";
-import { Button, Table, Skeleton, Popconfirm, message, Pagination, DatePicker } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination, DatePicker, Input } from "antd";
 import moment from "moment-timezone";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -17,6 +17,7 @@ const AdminPayment = (props: any) => {
     const { data: usersData } = useGetUsersQuery();
     const { data: paymentsData, isLoading: isProductLoading } = useGetPaymentsQuery();
     const { data: courseData } = useGetProductsQuery();
+    const [searchedUserName, setSearchedUserName] = useState<string>("");
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const dataSource = paymentsData?.map((item: any, index: number) => ({
         key: item.id,
@@ -27,6 +28,10 @@ const AdminPayment = (props: any) => {
         createdAt: moment(item.createdAt).format('DD/MM/YYYY'),
         paymentStatus: item.paymentStatus === true ? ('đã thanh toán') : ('chưa thanh toán')
     }));
+
+    const handleUserNameSearch = (value: string) => {
+        setSearchedUserName(value);
+    };
     const userMap = new Map(usersData?.map((item: any) => [item.id, item.displayName]));
     const categoryMap = new Map(courseData?.map((item: any) => [item.id, item.courseName]));
     console.log(dataSource);
@@ -34,20 +39,30 @@ const AdminPayment = (props: any) => {
         setSelectedDate(dateString);
     };
     const filteredData = dataSource?.filter((item) => {
-        if (!selectedDate) {
-            return true; // Không có ngày lọc, hiển thị tất cả
+        const userName = userMap.get(item.userId) || "";
+        const isMatch = userName.toLowerCase().includes(searchedUserName.toLowerCase());
+
+        if (!isMatch) {
+            return false; // Nếu không có ký tự trùng khớp, loại bỏ
         }
 
-        const itemDate = moment(item.createdAt, 'DD/MM/YYYY');
-        const selectedMoment = moment(selectedDate, 'YYYY-MM-DD');
+        if (selectedDate) {
+            const itemDate = moment(item.createdAt, 'DD/MM/YYYY');
+            const selectedMoment = moment(selectedDate, 'YYYY-MM-DD');
 
-        return itemDate.isSame(selectedMoment, 'day');
+            if (!itemDate.isSame(selectedMoment, 'day')) {
+                return false;
+            }
+        }
+        return true;
     });
     const pageSize = 7;
     const [currentPage, setCurrentPage] = useState(1);
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
+
+
     const startItem = (currentPage - 1) * pageSize;
     const endItem = currentPage * pageSize;
     const currentData = dataSource?.slice(startItem, endItem);
@@ -126,7 +141,14 @@ const AdminPayment = (props: any) => {
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Lịch sử thanh toán</h2>
-                <DatePicker onChange={handleDatePickerChange} />
+                <div>
+                    <DatePicker onChange={handleDatePickerChange} />
+                    <Input
+                        style={{ width: 250, marginLeft: 10 }}
+                        placeholder="Tìm kiếm theo tên người dùng"
+                        onChange={(e) => handleUserNameSearch(e.target.value)}
+                    />
+                </div>
             </header>
             {contextHolder}
             {isProductLoading ? <Skeleton /> : <>
