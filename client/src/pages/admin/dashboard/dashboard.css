@@ -3,23 +3,8 @@ h4 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.bestsellpro {
-    position: absolute;
-    left: 14%;
-    top: 69%;
-    height: 110px;
-    border: none;
-    width: 150px;
-}
 
-.bestsellpro2 {
-    position: absolute;
-    left: 26%;
-    top: 69%;
-    height: 110px;
-    width: 150px;
-    border: none;
-}
+
 
 .bestsellpro2 img {
     border-radius: 100%;

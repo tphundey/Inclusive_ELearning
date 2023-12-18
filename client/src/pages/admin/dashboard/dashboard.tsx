@@ -23,8 +23,6 @@ const Dashboard = () => {
   const [dailyEarnings, setDailyEarnings] = useState(0);
   const [percentageChange, setPercentageChange] = useState(0);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -149,7 +147,7 @@ const Dashboard = () => {
   const reversedMonths = Object.keys(monthlyTotal).reverse();
 
   // Tạo mảng uvBillData theo thứ tự đảo ngược
-  const uvBillData = reversedMonths.map((month:any) => ({
+  const uvBillData = reversedMonths.map((month: any) => ({
     course: `Tháng ${month}`,
     value: `${monthlyTotal[month]} đ`,
     type: `Tháng ${month}`,
@@ -186,6 +184,8 @@ const Dashboard = () => {
     },
   };
 
+
+  
   useEffect(() => {
     const fetchVideoCount = async () => {
       try {
@@ -353,23 +353,27 @@ const Dashboard = () => {
         const paymentResponse = await fetch('http://localhost:3000/Payment');
         const paymentData = await paymentResponse.json();
 
-        // Tìm khóa học bán chạy nhất
-        const bestSellingPayment = paymentData.reduce((maxPayment, payment) => {
-          return payment.amount > maxPayment.amount ? payment : maxPayment;
-        }, { amount: 0 });
+        // Tính số lần xuất hiện của mỗi courseId
+        const courseIdCounts = paymentData.reduce((counts, payment) => {
+          const courseId = payment.courseId;
+          counts[courseId] = (counts[courseId] || 0) + 1;
+          return counts;
+        }, {});
 
-        // Lấy id khóa học từ khóa học bán chạy nhất
-        const bestSellingCourseId = bestSellingPayment.courseId;
+        // Tìm courseId có số lần xuất hiện nhiều nhất
+        const bestSellingCourseId = Object.keys(courseIdCounts).reduce((maxCourseId, courseId) => {
+          return courseIdCounts[courseId] > courseIdCounts[maxCourseId] ? courseId : maxCourseId;
+        }, Object.keys(courseIdCounts)[0]);
 
         // Gọi API để lấy thông tin khóa học
         const coursesResponse = await fetch('http://localhost:3000/Courses');
         const coursesData = await coursesResponse.json();
 
-        // Tìm thông tin khóa học bán chạy nhất
+        // Tìm thông tin khóa học có bestSellingCourseId
         const bestSellingCourse = coursesData.find(course => course.id === bestSellingCourseId);
 
         // Đếm số lần bán của khóa học bán chạy nhất
-        const salesCount = paymentData.filter(payment => payment.courseId === bestSellingCourseId).length;
+        const salesCount = courseIdCounts[bestSellingCourseId] || 0;
 
         setBestSellingCourse(bestSellingCourse);
         setSalesCount(salesCount);
@@ -459,40 +463,37 @@ const Dashboard = () => {
 
     fetchCoursesPurchased();
   }, [bestBuyerId]);
+
+
   const [dailyEarnings2, setDailyEarnings2] = useState(0);
   const [percentageChange2, setPercentageChange2] = useState(0);
-
-
+  // Sử dụng useEffect để gọi fetchData khi component được render lần đầu tiên
   useEffect(() => {
+    const apiUrl = 'http://localhost:3000/Payment';  // Thay thế 'URL_API' bằng URL thực tế của API
     const fetchData = async () => {
       try {
         // Lấy dữ liệu từ API
         const response = await axios.get(apiUrl);
         const payments = response.data;
 
-        // Lọc các thanh toán trong ngày hiện tại
+        // Lấy ngày hiện tại và ngày hôm qua
         const currentDate = moment().format('YYYY-MM-DD');
-        const todaysPayments = payments.filter(payment => moment(payment.createdAt).isSame(currentDate, 'day'));
-
-        // Tính tổng số tiền kiếm được trong ngày
-        const totalEarnings = todaysPayments.reduce((acc, payment) => {
-          const amount = parseFloat(payment.amount);
-          return isNaN(amount) ? acc : acc + amount;
-        }, 0);
-
-        // Lấy dữ liệu của ngày hôm trước
         const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
-        const yesterdaysPayments = payments.filter(payment => moment(payment.createdAt).isSame(yesterdayDate, 'day'));
-        const totalEarningsYesterday = yesterdaysPayments.reduce((acc, payment) => {
-          const amount = parseFloat(payment.amount);
-          return isNaN(amount) ? acc : acc + amount;
-        }, 0);
 
-        // Kiểm tra trước khi tính phần trăm thay đổi
+        // Lọc ra thanh toán của ngày hiện tại và ngày hôm qua
+        const todaysPayments = payments.filter(payment => moment(payment.createdAt).isSame(currentDate, 'day'));
+        const yesterdaysPayments = payments.filter(payment => moment(payment.createdAt).isSame(yesterdayDate, 'day'));
+
+        // Tính tổng doanh thu của ngày hiện tại và ngày hôm qua
+        const totalEarnings = todaysPayments.reduce((acc, payment) => acc + payment.amount, 0);
+        const totalEarningsYesterday = yesterdaysPayments.reduce((acc, payment) => acc + payment.amount, 0);
+
+        // Tính phần trăm thay đổi
         const changePercentage = totalEarningsYesterday !== 0
           ? ((totalEarnings - totalEarningsYesterday) / Math.abs(totalEarningsYesterday)) * 100
           : 0;
 
+        // Cập nhật state
         setDailyEarnings2(totalEarnings);
         setPercentageChange2(changePercentage);
       } catch (error) {
@@ -500,9 +501,10 @@ const Dashboard = () => {
       }
     };
 
+    // Gọi hàm fetchData
     fetchData();
   }, []);
-  const formattedPrice12 = formatCurrency(dailyEarnings2);
+
   const [completionCount5, setCompletionCount5] = useState(0);
   const [completionPercentage5, setCompletionPercentage5] = useState(0);
 
@@ -512,22 +514,26 @@ const Dashboard = () => {
         const response = await fetch('http://localhost:3000/UserProgress');
         const data = await response.json();
 
-        // Lọc người dùng hoàn thành trong ngày hôm nay
         const today = new Date().toISOString().split('T')[0];
-        const completionsToday = data.filter(progress => progress.createdAt && progress.createdAt.includes(today));
+        const completionsToday = data.filter(progress => {
+          const progressDate = new Date(progress.createdAt).toISOString().split('T')[0];
+          return progressDate === today;
+        });
 
-        // Đếm số lượng người dùng hoàn thành
         const completionCountToday = completionsToday.length;
 
-        // Lấy số lượng người dùng hoàn thành ngày hôm qua (bằng cách giả sử ngày hôm qua là ngày trước ngày hôm nay)
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayFormatted = yesterday.toISOString().split('T')[0];
-        const completionsYesterday = data.filter(progress => progress.createdAt && progress.createdAt.includes(yesterdayFormatted));
+        const completionsYesterday = data.filter(progress => {
+          const progressDate = new Date(progress.createdAt).toISOString().split('T')[0];
+          return progressDate === yesterdayFormatted;
+        });
         const completionCountYesterday = completionsYesterday.length;
 
-        // Tính toán % lớn hơn so với ngày hôm qua
-        const percentageIncrease = ((completionCountToday - completionCountYesterday) / completionCountYesterday) * 100;
+        const percentageIncrease = completionCountYesterday !== 0
+          ? ((completionCountToday - completionCountYesterday) / completionCountYesterday) * 100
+          : 0;
 
         setCompletionCount5(completionCountToday);
         setCompletionPercentage5(percentageIncrease);
@@ -538,6 +544,53 @@ const Dashboard = () => {
 
     fetchUserProgress();
   }, []);
+
+  const formattedPrice12 = formatCurrency(dailyEarnings2);
+
+  const [mostPurchasedUserId, setMostPurchasedUserId] = useState(null);
+  const [mostPurchasedUser, setMostPurchasedUser] = useState(null);
+  const [mostPurchasedCount, setMostPurchasedCount] = useState(0);
+  useEffect(() => {
+    const fetchMostPurchasedUser = async () => {
+      try {
+        // Gọi API để lấy danh sách thanh toán
+        const paymentResponse = await fetch('http://localhost:3000/Payment');
+        const paymentData = await paymentResponse.json();
+
+        // Tính số lần xuất hiện của mỗi userId trong thanh toán
+        const userIdCounts = paymentData.reduce((counts, payment) => {
+          const userId = payment.userId;
+          counts[userId] = (counts[userId] || 0) + 1;
+          return counts;
+        }, {});
+
+        // Tìm userId có số lần xuất hiện nhiều nhất
+        const mostPurchasedUserId = Object.keys(userIdCounts).reduce((maxUserId, userId) => {
+          return userIdCounts[userId] > userIdCounts[maxUserId] ? userId : maxUserId;
+        }, Object.keys(userIdCounts)[0]);
+
+        setMostPurchasedUserId(mostPurchasedUserId);
+        // Lấy số lượt mua của người dùng mua nhiều nhất
+        const mostPurchasedCount = userIdCounts[mostPurchasedUserId] || 0;
+        setMostPurchasedCount(mostPurchasedCount);
+
+        // Gọi API để lấy thông tin người dùng từ googleAccount
+        const googleAccountResponse = await fetch('http://localhost:3000/googleAccount');
+        const googleAccountData = await googleAccountResponse.json();
+
+        // Tìm thông tin người dùng có mostPurchasedUserId
+        const mostPurchasedUser = googleAccountData.find(user => user.id === mostPurchasedUserId);
+
+        setMostPurchasedUser(mostPurchasedUser);
+        console.log(mostPurchasedUser, 'Người dùng mua nhiều nhất');
+      } catch (error) {
+        console.error('Lỗi khi gọi API:', error);
+      }
+    };
+
+    fetchMostPurchasedUser();
+  }, []);
+
   return (
     <div>
       <div className="grid grid-flow-col gap-4">
@@ -550,30 +603,28 @@ const Dashboard = () => {
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Today's Money</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{formattedPrice12}</h4>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Doanh thu hôm nay</p>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dailyEarnings2}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              {/* <strong className="text-green-500">{percentageChange2.toFixed(2)}% than yesterday</strong> */}
-              <strong className="text-green-500">20,3% than yesterday</strong>
+              <strong className="text-green-500">{percentageChange2}%</strong> so với hôm qua
             </p>
           </div>
         </div>
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-600 to-pink-400 text-white shadow-pink-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-6 h-6 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="w-6 h-6 text-white">
               <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"></path>
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Today's Users</p>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Người học hôm nay</p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{completionCount5}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              {/* <strong className="text-green-500">{completionPercentage5}%</strong>&nbsp;than yesterday */}
-              <strong className="text-green-500">10,3% than yesterday</strong>
+              <strong className="text-green-500">{completionPercentage5}%</strong> so với hôm qua
             </p>
           </div>
         </div>
@@ -585,29 +636,29 @@ const Dashboard = () => {
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total Clients</p>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Tổng số thành viên</p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{userCount}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-red-500">+{userCount2} </strong>&nbsp;than yesterday
+              <strong className="text-red-500">+{userCount2} </strong>&nbsp;so với hôm qua
             </p>
           </div>
         </div>
 
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-600 to-orange-400 text-white shadow-orange-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-6 h-6 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="w-6 h-6 text-white">
               <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Sales</p>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Số khóa học đã bán</p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{paymentCount}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">{percentageChange2}% than yesterday</strong>&nbsp;
+              Tính năng phát triển!
             </p>
           </div>
         </div>
@@ -619,22 +670,10 @@ const Dashboard = () => {
           <div className="stats shadow">
             <div className="stat">
               <div className="stat-figure mt-7">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="inline-block w-8 h-8 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  ></path>
-                </svg>
+
               </div>
-              <div className="stat-title">Month's Money</div>
-              <div className="stat-value text-primary-focus">{formattedPrice2}</div>
+              <div className="stat-title">Doanh thu tháng này</div>
+              <div className="stat-value ">{formattedPrice2}</div>
             </div>
 
             <div className="stat">
@@ -647,14 +686,15 @@ const Dashboard = () => {
                 >
                   <path
                     strokeLinecap="round"
+                    className="text-red-600"
                     strokeLinejoin="round"
                     strokeWidth="2"
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                   ></path>
                 </svg>
               </div>
-              <div className="stat-title">Year's Money</div>
-              <div className="stat-value text-error-content">{formattedPrice4}</div>
+              <div className="stat-title">Doanh thu năm nay</div>
+              <div className="stat-value ">{formattedPrice4}</div>
             </div>
             {/* <div className="stat">
               <div className="stat-figure text-secondary">
@@ -668,37 +708,37 @@ const Dashboard = () => {
           <br /><br />
           <div className="stats shadow" style={{ width: 580 }}>
             <div className="stat pr-20">
-              <div className="stat-title">Total Course's</div>
+              <div className="stat-title">Tổng khóa học</div>
               <div className="stat-value">{courseCount}</div>
             </div>
 
             <div className="stat pr-20">
-              <div className="stat-title">Total Categorie's</div>
+              <div className="stat-title">Tổng danh mục</div>
               <div className="stat-value">{cateCount}</div>
             </div>
 
             <div className="stat pr-20">
-              <div className="stat-title">Total Review's</div>
+              <div className="stat-title">Tổng đánh giá</div>
               <div className="stat-value">{feedCount}</div>
             </div>
             <div style={{ height: 100 }} className="stat pr-20">
-              <div className="stat-title">Total Video's</div>
+              <div className="stat-title">Tổng videos</div>
               <div className="stat-value">{videoCount}</div>
             </div>
             <div style={{ height: 100 }} className="stat pr-20">
-              <div className="stat-title">Total Post's</div>
+              <div className="stat-title">Tổng bài đăng</div>
               <div className="stat-value">{dataCount}</div>
             </div>
           </div>
           <br /><br />
-          <div style={{ height: 100 }} className="stats shadow">
 
-            <div
+          <div style={{ height: 200, width: 470 }} className="stats shadow gap-3">
+            <div style={{ width: 200, height: 100 }}
               className='bestsellpro flex flex-col justify-center items-center  p-5'>
               <div className=" justify-between">
                 <div>
                   <div
-                    className=" text-xs px-3 p-1 bg-blue-200 text-blue-800 rounded-full w-44 ml-7">Bestselling Course | sold {salesCount}</div>
+                    className=" text-xs px-3 p-1 bg-blue-200 text-blue-800 rounded-full w-44 ml-7">Khóa học bán chạy nhất</div>
                 </div>
               </div>
               <div >
@@ -707,6 +747,7 @@ const Dashboard = () => {
                     <div style={{ width: 150, height: 80 }}>
                       <p className="text-sm mt-1 mb-1 w-44">{bestSellingCourse.courseName}</p>
                       <img src={bestSellingCourse.courseIMG} alt="Course Thumbnail" />
+                      <p className="text-sm">Số lượt bán: {salesCount}</p>
                     </div>
                   ) : (
                     <p></p>
@@ -714,20 +755,22 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div
-              className='bestsellpro2 flex flex-col justify-center items-center  p-5 rounded-md'>
+            <div style={{ width: 230, height: 165 }}
+              className='bestsellpro flex flex-col justify-center items-center  p-5'>
               <div className=" justify-between">
                 <div>
                   <div
-                    className=" text-xs px-3 p-1 bg-red-300 text-red-800 rounded-full w-44 ml-7">Top User | bought 4</div>
+                    className=" text-xs px-3 p-1 bg-blue-200 text-blue-800 rounded-full w-56 ml-7">Người dùng đóng góp nhiều nhất</div>
                 </div>
               </div>
               <div >
                 <div className="font-bold text-5xl">
-                  {buyerInfo ? (
-                    <div style={{ width: 150, height: 80 }}>
-                      <p className="text-sm mb-1 mt-1 ">{buyerInfo.displayName}</p>
-                      <img src={buyerInfo.photoURL} alt="Course Thumbnail" />
+                  {mostPurchasedUser ? (
+                    <div style={{ width: 200 }} className="text-sm">
+                      <p className="mt-2">{mostPurchasedUser.displayName}</p>
+                      <p>{mostPurchasedUser.email}</p>
+                      <img className="mt-2" width={70} src={mostPurchasedUser.photoURL} alt="" />
+                      <p>Số lượt mua: {mostPurchasedCount}</p>
                     </div>
                   ) : (
                     <p></p>
@@ -736,11 +779,11 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
+
         <div style={{ width: "720px", paddingLeft: "20px" }}
           className="m-[24px]">
-          <p className="text-xl">Revenue statistics chart</p>
+          <p className="text-xl">Biểu đồ thống kê doanh thu</p>
           <Line {...configChart2} />
         </div>
       </div>

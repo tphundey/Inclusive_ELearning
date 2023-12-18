@@ -41,36 +41,20 @@ const LayoutAdmin = () => {
     const content = (
         <li>
             <Button style={{ width: 170 }} onClick={() => {
-                auth.signOut();
-                localStorage.clear();
                 setTimeout(() => {
-                    // messageApi.open({
-                    //     type: "success",
-                    //     content: "Bạn đã thêm user thành công. Chờ 3s để quay về quản trị",
-                    // });
                     Navigate("/");
-                }, 1500);
-
-            }}>Đăng xuất</Button><br /><br />
-            <Button style={{ width: 170 }} onClick={() => {
-                setTimeout(() => {
-                    // messageApi.open({
-                    //     type: "success",
-                    //     content: "Bạn đã thêm user thành công. Chờ 3s để quay về quản trị",
-                    // });
-                    Navigate("/");
-                }, 1500);
+                });
 
             }}>Thoát</Button>
         </li>
     )
     const text = <>
-        <span>Xin chào</span> <br />
+        <span>Xin chào !</span> <br />
         <span>{user?.displayName}</span>
     </>
     return (
 
-        <Layout style={{height:880}}>
+        <Layout style={{ height: 880 }}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
