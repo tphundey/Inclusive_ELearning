@@ -13,7 +13,7 @@ const AdminUser = () => {
     const [isUserLoading, setIsUserLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [userEmail, setUserEmail] = useState([]);
-    const [pageSize] = useState(3);
+    const [pageSize] = useState(5);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
             setUserEmail(currentUser?.email)
@@ -56,7 +56,7 @@ const AdminUser = () => {
             width: 170
         },
         {
-            title: 'Ảnh',
+            title: 'Hình ảnh',
             dataIndex: 'photoURL',
             key: 'photoURL',
             render: (photoURL: string) => (
@@ -92,7 +92,7 @@ const AdminUser = () => {
                 return (
                     <>
                         {isCurrentUser ? (
-                            <span>Cannot hide yourself</span>
+                            <span>Không thể chỉnh sửa chính bạn !</span>
                         ) : (
                             <>
                                 <Popconfirm

@@ -4,7 +4,7 @@ import { useGetReviewsQuery, useRemoveReviewMutation } from "@/api/review";
 import { useGetRolesQuery, useRemoveRoleMutation } from "@/api/role";
 import { useGetUsersQuery } from "@/api/user";
 
-import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination, Rate } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,13 +20,13 @@ const AdminReview = (props: any) => {
         rating: item.rating,
         comment: item.comment,
         userID: item.userID,
-        courseID : item.courseID,
-        date : item.date
+        courseID: item.courseID,
+        date: item.date
     }));
-    
+
     const userMap = new Map(usersData?.map((item: any) => [item.id, item.displayName]));
-    const categoryMap = new Map(courseData?.map((item: any) => [item.id, item.courseName])); 
-    
+    const categoryMap = new Map(courseData?.map((item: any) => [item.id, item.courseName]));
+
     // console.log(dataSource);
 
     const confirm = (id: string) => {
@@ -47,17 +47,20 @@ const AdminReview = (props: any) => {
             key: "stt",
         },
         {
-            title: "số sao",
-            dataIndex: "rating",
-            key: "rating",
+            title: 'Rate',
+            dataIndex: 'rating',
+            key: 'rating',
+            render: (rating: any) => (
+                <Rate disabled allowHalf defaultValue={rating} />
+            ),
         },
         {
-            title: "comment",
+            title: "Nội dung",
             dataIndex: "comment",
             key: "comment",
         },
         {
-            title: "tên người dùng",
+            title: "Tên người dùng",
             dataIndex: "userID",
             key: "userID",
             render: (userID: string) => {
@@ -76,7 +79,7 @@ const AdminReview = (props: any) => {
         },
         {
             title: "Hành động",
-            render: ({ key: id }: { key:string }) => (
+            render: ({ key: id }: { key: string }) => (
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"
@@ -105,22 +108,23 @@ const AdminReview = (props: any) => {
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl">Quản lý Comment</h2>
+                <h2 className="text-2xl">Quản lý Đánh giá</h2>
             </header>
             {contextHolder}
             {isProductLoading ? <Skeleton /> : <>
-                    <Table
-                        pagination={false}
-                        dataSource={currentData}
-                        columns={columns}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={dataSource?.length}
-                        pageSize={pageSize}
-                        onChange={handlePageChange}
-                    />
-                </>}
+                <Table
+                    pagination={false}
+                    dataSource={currentData}
+                    columns={columns}
+                />
+                <Pagination
+                    className="mt-4"
+                    current={currentPage}
+                    total={dataSource?.length}
+                    pageSize={pageSize}
+                    onChange={handlePageChange}
+                />
+            </>}
         </div>
     );
 };

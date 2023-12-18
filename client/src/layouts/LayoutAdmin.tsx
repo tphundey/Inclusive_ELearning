@@ -15,6 +15,7 @@ import {
     AiOutlineFileText
 } from "react-icons/ai";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { BankOutlined, CommentOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content } = Layout;
 const app = initializeApp(firebaseConfig);
@@ -109,13 +110,13 @@ const LayoutAdmin = () => {
                             label: <Link to="/admin/postpage">Quản lý bài viết</Link>,
                         },
                         {
-                            key: "8",
-                            icon: <AiOutlineFileText />,
-                            label: <Link to="/admin/reviews">Quản lý comment</Link>,
+                            key: "7",
+                            icon: <CommentOutlined />,
+                            label: <Link to="/admin/reviews">Quản lý đánh giá</Link>,
                         },
                         {
-                            key: "7",
-                            icon: <AiOutlineFileText />,
+                            key: "8",
+                            icon: <BankOutlined />,
                             label: <Link to="/admin/payment">Lịch sử thanh toán</Link>,
                         },
                         {

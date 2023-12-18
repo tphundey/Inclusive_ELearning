@@ -6,17 +6,19 @@ import { useGetUsersQuery } from "@/api/user";
 import { Icategory } from "@/interfaces/category";
 import { Irole } from "@/interfaces/role";
 import { Iuser } from "@/interfaces/user";
-import { Button, Table, Skeleton, Popconfirm, message, Pagination } from "antd";
+import { Button, Table, Skeleton, Popconfirm, message, Pagination, DatePicker } from "antd";
 import moment from "moment-timezone";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { formatCurrency } from "@/components/FormatCurency/formatCurency";
 
 const AdminPayment = (props: any) => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: usersData } = useGetUsersQuery();
     const { data: paymentsData, isLoading: isProductLoading } = useGetPaymentsQuery();
     const { data: courseData } = useGetProductsQuery();
-    const dataSource = paymentsData?.map((item: any,index: number) => ({
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const dataSource = paymentsData?.map((item: any, index: number) => ({
         key: item.id,
         stt: (index + 1).toString(),
         courseId: item.courseId,
@@ -26,11 +28,22 @@ const AdminPayment = (props: any) => {
         paymentStatus: item.paymentStatus === true ? ('đã thanh toán') : ('chưa thanh toán')
     }));
     const userMap = new Map(usersData?.map((item: any) => [item.id, item.displayName]));
-    const categoryMap = new Map(courseData?.map((item: any) => [item.id, item.courseName])); 
+    const categoryMap = new Map(courseData?.map((item: any) => [item.id, item.courseName]));
     console.log(dataSource);
+    const handleDatePickerChange = (date: moment.Moment | null, dateString: string) => {
+        setSelectedDate(dateString);
+    };
+    const filteredData = dataSource?.filter((item) => {
+        if (!selectedDate) {
+            return true; // Không có ngày lọc, hiển thị tất cả
+        }
 
+        const itemDate = moment(item.createdAt, 'DD/MM/YYYY');
+        const selectedMoment = moment(selectedDate, 'YYYY-MM-DD');
 
-    const pageSize = 4;
+        return itemDate.isSame(selectedMoment, 'day');
+    });
+    const pageSize = 7;
     const [currentPage, setCurrentPage] = useState(1);
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -45,22 +58,25 @@ const AdminPayment = (props: any) => {
             key: "stt",
         },
         {
-            title: "giá tiền",
+            title: "Giá tiền",
             dataIndex: "amount",
             key: "amount",
+            render: (amount: number) => (
+                <span>{formatCurrency(amount)}</span>
+            ),
         },
         {
             title: "Trạng thái",
             dataIndex: "paymentStatus",
             key: "paymentStatus",
-            render: (paymentStatus:any) => (
-                <span style={{ color: paymentStatus ? "green" : "red" }}>
+            render: (paymentStatus: any) => (
+                <span className="font-bold" style={{ color: paymentStatus ? "green" : "red" }}>
                     {paymentStatus ? "Thành công" : "Thất bại"}
                 </span>
             ),
         },
         {
-            title: "tên người dùng",
+            title: "Tên người dùng",
             dataIndex: "userId",
             key: "userId",
             render: (userId: string) => {
@@ -69,7 +85,7 @@ const AdminPayment = (props: any) => {
             },
         },
         {
-            title: "khóa học",
+            title: "Khóa học",
             dataIndex: "courseId",
             key: "courseId",
             render: (courseId: string) => {
@@ -109,23 +125,24 @@ const AdminPayment = (props: any) => {
     return (
         <div>
             <header className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl">Quản lý Payment</h2>
-                
+                <h2 className="text-2xl">Lịch sử thanh toán</h2>
+                <DatePicker onChange={handleDatePickerChange} />
             </header>
             {contextHolder}
             {isProductLoading ? <Skeleton /> : <>
-                    <Table
-                        pagination={false}
-                        dataSource={currentData}
-                        columns={columns}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={dataSource?.length}
-                        pageSize={pageSize}
-                        onChange={handlePageChange}
-                    />
-                </>}
+                <Table
+                    pagination={false}
+                    dataSource={filteredData}
+                    columns={columns}
+                />
+                <Pagination
+                    className="mt-4"
+                    current={currentPage}
+                    total={filteredData?.length}
+                    pageSize={pageSize}
+                    onChange={handlePageChange}
+                />
+            </>}
         </div>
     );
 };

@@ -15,7 +15,7 @@ const AdminVideo = (props: Props) => {
     const [coursesData, setCoursesData] = useState([]);
     const [coursesData2, setCoursesData2] = useState([]);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
-    const handleCourseIdChange = (event) => {
+    const handleCourseIdChange = (event:any) => {
         setSelectedCourseId(event.target.value);
     };
 

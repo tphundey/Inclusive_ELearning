@@ -1,4 +1,5 @@
 import { useGetPostpagesQuery, useRemovePostpageMutation } from "@/api/postpage";
+import { LikeOutlined } from "@ant-design/icons";
 import { Button, Table, Skeleton, Popconfirm, message, Select, Pagination } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,6 +24,8 @@ const AdminPostpage = (props: any) => {
                 });
             });
     };
+
+    
     const dataSource = PostpageData?.map((item: any) => {
         return {
             key: item.id,
@@ -42,7 +45,7 @@ const AdminPostpage = (props: any) => {
             image : item.image ? (
                 <img src={item.image} className="w-[120px] h-[120px] object-cover" />
             ): (
-                <p className="text-red-500 ">chưa có ảnh</p>
+                <p className="text-red-500 ">Bài viết chưa có ảnh</p>
             )
 
         };
@@ -76,7 +79,7 @@ const AdminPostpage = (props: any) => {
         //     with: "120px"
         // },
         {
-            title: "ngày đăng",
+            title: "Ngày đăng",
             dataIndex: "date",
             key: "date",
         },
@@ -84,9 +87,14 @@ const AdminPostpage = (props: any) => {
             title: "Lượt thích",
             dataIndex: "likes",
             key: "likes",
+            render: (likes:any) => (
+                <span>
+                    {likes} <LikeOutlined style={{ marginLeft: 5, color: '#1890ff' }} />
+                </span>
+            ),
         },
         {
-            title: "ảnh bài đăng",
+            title: "Ảnh bài đăng",
             dataIndex: "image",
             key: "image",
         },
@@ -97,7 +105,7 @@ const AdminPostpage = (props: any) => {
                     <Popconfirm
                         placement="top"
                         title={"Remove course"}
-                        description={"Are you sure you want to remove this???"}
+                        description={"Bạn có chắc muốn xóa bài viết???"}
                         onConfirm={() => confirm(id)}
                         okText="Yes"
                         cancelText="No"
@@ -115,9 +123,7 @@ const AdminPostpage = (props: any) => {
         <div>
             <header className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl">Quản lý bài viết</h2>
-                <Button type="primary" danger >
-                    <a href={`/admin/post/add`}>Thêm bài viết</a>
-                </Button>
+             
                 {/* <Button type="primary" danger>
                     <Link to="/admin/user/add">Thêm User</Link>
                 </Button> */}

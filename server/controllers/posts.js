@@ -18,14 +18,24 @@ routerPosts.post("/", async (req, res) => {
 // Read all
 routerPosts.get("/", async (req, res) => {
   try {
-    const courses = await posts.find();
-    return res.status(200).json(courses);
+    const allPosts = await posts.find();
+
+    if (!allPosts || allPosts.length === 0) {
+      return res.status(404).json({ error: "No posts found" });
+    }
+
+    const reversedPosts = allPosts.reverse();
+
+    return res.status(200).json(reversedPosts);
   } catch (error) {
-    return res.status(500).json({ error: "Could not retrieve courses" });
+    if (error.name === "MongoError" && error.code === 18) {
+      return res.status(500).json({ error: "Invalid parameter format" });
+    }
+    return res.status(500).json({ error: "Could not retrieve posts" });
   }
 });
 
-// Read by ID
+
 routerPosts.get("/:id", async (req, res) => {
   try {
     const course = await posts.findById(req.params.id);

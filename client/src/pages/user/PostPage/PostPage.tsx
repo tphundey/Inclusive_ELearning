@@ -276,7 +276,7 @@ const Post = () => {
 
                 </div>
 
-                {allPosts.slice().map((post: any) => (
+                {allPosts.slice().reverse().map((post: any) => (
                     <div key={post.id}>
                         <main className="pt-8 lg:pt-16 bg-white dark:bg-gray-900 antialiased mb-10">
                             <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
