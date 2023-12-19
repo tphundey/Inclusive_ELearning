@@ -805,7 +805,7 @@ const IntroductionPage = () => {
                             <Link to={`/content/${id}`}>
                                 <button className='intro-bt1'>Start your progress</button>
                             </Link>
-                            {!paymentStatu2s ? (
+                            {!paymentStatu2s && formattedPrice !== '0 ₫' ? (
                                 <>
                                     <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
                                 </>
@@ -934,7 +934,31 @@ const IntroductionPage = () => {
                         ) : (
                             <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
                         )}
+                        {formattedPrice == '0 ₫' ? (
+                            <>
+                                <Form className='mt-7 formReview' action="" method="post" >
+                                    <div className="gap-2">
+                                        <div className='flex items-center gap-2'>
+                                            <Rating className='flex text-yellow-400'
+                                                value={review.rating}
+                                                onChange={handleRatingChange}
+                                            />
+                                            <Typography className="font-medium mb-4 text-yellow-400">
+                                                {rated}.0
+                                            </Typography>
+                                        </div>
+                                        <Input
+                                            value={review.comment}
+                                            onChange={(e) => setReview({ ...review, comment: e.target.value })}
+                                        />
+                                        <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
+                                    </div>
+                                </Form>
 
+                            </>
+                        ) : (
+                            <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
+                        )}
                         <div className="listReviewIntro">
                             {reviews.map((review) => (
                                 <div key={review.id} className="reviewIntroChildren">
