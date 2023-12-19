@@ -82,7 +82,6 @@ const TestPage = () => {
       })
         .then(response => {
           message.success(`Thêm thành công `);
-          // Cập nhật danh sách câu hỏi sau khi thêm thành công
           // setQuestions([...questions, response.data]);
         })
         .catch(error => {
@@ -101,25 +100,21 @@ const TestPage = () => {
     });
   };
 
-  const handleSubmitAnswers = () => {
-    // Calculate the percentage of correct answers
-    const totalQuestions = questions.length;
-    const correctAnswers = questions.reduce((totalCorrect, question) => {
-      const userAnswer = userAnswers[question.id];
-      const correctAnswerIndex = question.correctAnswerIndex;
-
-      return userAnswer === correctAnswerIndex ? totalCorrect + 1 : totalCorrect;
-    }, 0);
-
-    const percentage = (correctAnswers / totalQuestions) * 100;
-
-    message.success(`Điểm của bạn là: ${percentage.toFixed(2)}%`);
-    // Do something with the percentage (you can display it, send it to the server, etc.)
-    console.log('User Percentage:', percentage);
+  const handleDeleteQuestion = (questionId: any) => {
+    // Send a request to your API to delete the question by ID
+    axios.delete(`http://localhost:3000/questions/${questionId}`)
+      .then(response => {
+        message.success('Question deleted successfully');
+        // Update the list of questions after successful deletion
+        const updatedQuestions = questions.filter(q => q.id !== questionId);
+        setQuestions(updatedQuestions);
+      })
+      .catch(error => {
+        console.error('Error deleting question:', error);
+      });
   };
   return (
-    <div className='quiz-container'>
-      <h1>Trang Làm Bài Kiểm Tra</h1>
+    <div className=''>
       <div>
         <Upload
           customRequest={({ onSuccess }) => onSuccess('ok')}
@@ -129,6 +124,7 @@ const TestPage = () => {
           <Button icon={<UploadOutlined />}>Import Excel</Button>
         </Upload>
 
+        <br /><br />
 
         {excelData && excelData.map((item, index) => (
           <div key={index}>
@@ -196,7 +192,7 @@ const TestPage = () => {
             </Form.Item> */}
         </Form>
       </div>
-      {questions.map(question => (
+      {questions.map((question) => (
         <Card key={question.id} title={question.title}>
           <Radio.Group
             onChange={(e) => handleSelectAnswer(question.id, e.target.value)}
@@ -210,12 +206,25 @@ const TestPage = () => {
               <p>No options available for this question.</p>
             )}
           </Radio.Group>
+
+
+          <div className="flex gap-6 items-center mt-4">
+            <div className="correct-answer">
+              <p className='text-blue-700'>Correct Answer: {question.options[question.correctAnswerIndex]}</p>
+            </div>
+
+            <Button
+              className='bg-red-500 text-white'
+              type="danger"
+              onClick={() => handleDeleteQuestion(question.id)}
+            >
+              Xóa câu hỏi!
+            </Button>
+          </div>
         </Card>
       ))}
 
-      <Button className='bg-blue-500' type="primary" onClick={handleSubmitAnswers}>
-        Xác Nhận Đáp Án
-      </Button>
+
     </div>
   );
 };

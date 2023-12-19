@@ -176,7 +176,6 @@ export const routers = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="dashboard" /> },
             { path: "dashboard", element: <AdminDashboardWithAuthorization /> },
-            { path: "quiz/:id", element: <Quiz /> },
             { path: "product", element: <AdminProductWithAuthorization /> },
             { path: "product/:idProduct/edit", element: <AdminProductEditWithAuthorization /> },
             { path: "product/add", element: <AdminProductAddWithAuthorization /> },
@@ -198,6 +197,12 @@ export const routers = createBrowserRouter([
             { path: "payment", element: <AdminPayment /> },
             { path: "reviews", element: <AdminReview /> },
             { path: "reviews/:id", element: <AdminPostAdd /> },
+        ],
+    },
+    {
+        path: "/adminnonelayout",
+        children: [
+            { path: "quiz/:id", element: <Quiz /> },        
         ],
     },
 ]);

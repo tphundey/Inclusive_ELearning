@@ -41,5 +41,23 @@ routerQuestions.get('/', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+routerQuestions.delete('/:id', async (req, res) => {
+  try {
+    const questionId = req.params.id;
 
+    // Check if the question exists
+    const existingQuestion = await Question.findById(questionId);
+    if (!existingQuestion) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+
+    // Delete the question
+    await Question.findByIdAndDelete(questionId);
+
+    res.json({ message: 'Question deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 module.exports = routerQuestions;

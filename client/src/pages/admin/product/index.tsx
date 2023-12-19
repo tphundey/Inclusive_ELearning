@@ -108,6 +108,10 @@ const AdminProduct = () => {
     const handleResetSearch = () => {
         setSearchTerm("");
     };
+    const handleButtonClick = (recordId:any) => {
+        const quizURL = `/adminnonelayout/quiz/${recordId}`;
+        window.open(quizURL, '_blank');
+      };
 
     const columns = [
         {
@@ -173,7 +177,9 @@ const AdminProduct = () => {
             width: '200px',
             render: (text: any, record: any, id: any) => (
                 <div className="flex items-center gap-2">
-                    <Button type='default' className='bg-gray-100'> <Link to={`/admin/quiz/${record.id}`}>Quiz</Link></Button>
+                    <Button type='default' className='bg-gray-100' onClick={() => handleButtonClick(record.id)}>
+                        Quiz
+                    </Button>
                     <Button
                         type="default"
                         onClick={() => window.open(`/admin/video/add/${record.id}`, '_blank')}
