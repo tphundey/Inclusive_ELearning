@@ -10,6 +10,7 @@ import { firebaseConfig } from '@/components/GetAuth/firebaseConfig';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { EyeOutlined } from '@ant-design/icons';
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -599,6 +600,7 @@ const CourseContentPage = () => {
         e.preventDefault();
     };
     const formattedTime = `${minutes} phút ${seconds.toFixed(0)} giây`;
+    const formattedPrice = formatCurrency(product.price);
     return (
         <div onContextMenu={handleContextMenu} className='container-content-page '>
             <div className="contentpage-left">
@@ -609,7 +611,7 @@ const CourseContentPage = () => {
                     <Progress percent={progressPercentage} status="success" />
                 </div>
                 <div>
-                    {paymentStatu2s ? (
+                    {paymentStatu2s || formattedPrice == '0 ₫' ? (
                         <>
                             {videos.map((video: any) => {
                                 const isVideoCompleted = userVideoCompletionStatus[video.id] || false;
@@ -654,7 +656,7 @@ const CourseContentPage = () => {
                             </div>
                         </>
                     ) : (
-                        <p className='text-white'>Người dùng chưa thanh toán khóa học.</p>
+                        <p className='text-red-600'>Người dùng chưa thanh toán khóa học.</p>
                     )}
 
 
@@ -676,7 +678,7 @@ const CourseContentPage = () => {
                     </div>
                 </div>
                 <div className="content-container-video">
-                    {paymentStatu2s ? (
+                    {paymentStatu2s || formattedPrice == '0 ₫' ? (
                         <div className="video-container">
                             <video
                                 controls
