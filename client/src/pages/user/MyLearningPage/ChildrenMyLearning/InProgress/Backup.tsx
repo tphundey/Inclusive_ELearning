@@ -9,7 +9,6 @@ const auth = getAuth(app);
 
 const InProgress = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [email, setEmail] = useState<any | null>(null);
     const [userId, setUserId] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [savedCourses, setSavedCourses] = useState([]);
@@ -20,8 +19,7 @@ const InProgress = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setEmail(currentUser?.email);
-            setUserId(currentUser?.uid)
+            setUserId(currentUser?.uid);
             setLoading(false);
         });
         return () => {
@@ -30,14 +28,15 @@ const InProgress = () => {
     }, [auth]);
 
     useEffect(() => {
+        // Fetch saved courses for the user
         fetch(`http://localhost:3000/googleAccount/${userId}`)
             .then((response) => response.json())
             .then((userData) => {
                 if (userData) {
                     const user = userData;
-                    console.log(user);
-
                     const savedCourseIds = user.registeredCourseID;
+
+                    // Fetch details for each saved course
                     fetch(`http://localhost:3000/Courses`)
                         .then((response) => response.json())
                         .then((coursesData) => {
@@ -54,9 +53,7 @@ const InProgress = () => {
             .catch((error) => {
                 console.error('Error fetching user data: ', error);
             });
-    }, [userId]
-    );
-
+    }, [userId]);
 
     useEffect(() => {
         // Fetch progress for each saved course
@@ -219,7 +216,7 @@ const InProgress = () => {
         <div className="listProgress">
             {savedCourses.length > 0 ? (
                 coursesToDisplay.reverse().map((course: any) => (
-                    <div className='ty-contai'>
+                    <div className='ty-contai' onClick={() => setSelectedCourseId(course.id)}>
                         {/* Hiển thị thông tin khóa học */}
                         <div className="courseProgress">
                             <div className="imgCoureProgress">
@@ -228,15 +225,15 @@ const InProgress = () => {
                             <div className="infoCourseProgress">
                                 <h3>COURSE</h3>
                                 <a href={`/introduction/${course.id}`}> <h2>{course.courseName}</h2></a>
-                                <div>
-                                    <Progress style={{width:220}} percent={courseProgress[course.id] || 0} status="success" />
-                                </div>
                                 <div className="fl-info-progress">
                                     <div className="fl1-info-progress">
                                         <img className='mt-1' src="https://f63-zpg-r.zdn.vn/4940067705430501247/8f148f0e98874fd91696.jpg" alt="" />
                                     </div>
-                                    <div className="fl2-info-progress">
-                                        LinkedIn - By: Trần Phùng
+                                    <div>
+                                        <Progress percent={courseProgress[course.id] || 0} status="success" />
+                                        <div className="fl2-info-progress">
+                                            LinkedIn - By: Trần Phùng
+                                        </div>
                                     </div>
                                 </div>
                             </div>
