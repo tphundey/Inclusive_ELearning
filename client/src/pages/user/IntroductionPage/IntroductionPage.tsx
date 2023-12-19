@@ -6,7 +6,7 @@ import Input from 'antd/es/input/Input';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
-import { Timeline, Form, Button, notification, Skeleton, message } from 'antd';
+import { Timeline, Form, Button, notification, Skeleton, message, Modal } from 'antd';
 import { Rating, Typography } from "@material-tailwind/react";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
@@ -429,15 +429,61 @@ const IntroductionPage = () => {
 
     // };
 
+    const handleDiscountSubmit = () => {
+        updatePriceAfterDiscount();
+        setShowDiscountPopup(false);
+    };
+
+    const updatePriceAfterDiscount = () => {
+        let updatedAmount = amount;  // Sử dụng let thay vì const
+
+        if (discountCode === 'abc') {
+
+            updatedAmount -= 1000;
+            console.log('Discount applied: $1000');
+
+            axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
+                .then(response => {
+                    console.log(response.data);
+                    window.location.href = 'http://localhost:3000/order';
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            console.log('Invalid discount code');
+            // Xử lý thông báo hoặc hiển thị lỗi cho người dùng
+        }
+    };
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [showDiscountPopup, setShowDiscountPopup] = useState(false);
+    const [discountCode, setDiscountCode] = useState('');
+
+    const showModal = () => {
+        setIsModalVisible(true);
+        handleBuyButtonClick()
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+        handleDiscountSubmit();
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+
     const handleBuyButtonClick = () => {
-        // Kiểm tra xem userEmail và courseID có tồn tại không
+        if (discountCode) {
+            updatePriceAfterDiscount();
+        }
+        setShowDiscountPopup(true);
+
         if (!userEmail || !id) {
             console.error('Invalid userEmail or courseID.');
-            // Xử lý lỗi hoặc hiển thị thông báo lỗi cho người dùng
             return;
         }
-
-        // Bước 1: Lấy thông tin người dùng từ API
         fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
             .then((response) => {
                 if (response.ok) {
@@ -449,19 +495,12 @@ const IntroductionPage = () => {
             .then((userData) => {
                 const user = userData[0];
                 const userID = user.id;
-
-                // Bước 2: Lấy danh sách khóa học đã mua của người dùng
                 const registeredCourseIDs = user.registeredCourseID || [];
-
-                // Thêm courseID vào danh sách đã mua nếu chưa tồn tại
                 if (!registeredCourseIDs.includes(id)) {
                     registeredCourseIDs.push(id);
                 }
-
-                // Bước 3: Cập nhật danh sách khóa học đã mua của người dùng
                 user.registeredCourseID = registeredCourseIDs;
 
-                // Bước 4: Cập nhật dữ liệu người dùng sau khi thanh toán
                 return fetch(`http://localhost:3000/googleAccount/${userID}`, {
                     method: 'PUT',
                     headers: {
@@ -470,29 +509,14 @@ const IntroductionPage = () => {
                     body: JSON.stringify(user),
                 });
             })
-            .then((updateResponse) => {
-                if (updateResponse.ok) {
-                    console.log('User data updated successfully');
-
-                    // Bạn đã loại bỏ dữ liệu thanh toán ở đây
-
-                    // Tiếp tục với việc lưu order
-                    axios.post('http://localhost:3000/saveOrder', { amount, id, userID })
-                        .then(response => {
-                            console.log(response.data);
-                            window.location.href = 'http://localhost:3000/order';
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                } else {
-                    throw new Error('Failed to update user data.');
-                }
+            .then(() => {
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     };
+
+
 
     ////////////////////Thay đổi số rate////////////////////
     const handleRatingChange = (value: any) => {
@@ -807,7 +831,25 @@ const IntroductionPage = () => {
                             </Link>
                             {!paymentStatu2s && formattedPrice !== '0 ₫' ? (
                                 <>
-                                    <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
+                                    <button className='intro-bt2' onClick={showModal}>
+                                        Buy the course [{formattedPrice}]
+                                    </button>
+
+                                    {/* Popup nhập mã giảm giá */}
+                                    {showDiscountPopup && (
+                                        <Modal
+                                            title="Enter Discount Code"
+                                            visible={isModalVisible}
+                                            onOk={handleOk}
+                                            onCancel={handleCancel}
+                                        >
+                                            <Input
+                                                placeholder="Enter discount code"
+                                                value={discountCode}
+                                                onChange={(e) => setDiscountCode(e.target.value)}
+                                            />
+                                        </Modal>
+                                    )}
                                 </>
                             ) : (
                                 <>
