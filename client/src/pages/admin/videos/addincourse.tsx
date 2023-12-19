@@ -11,16 +11,17 @@ const AdminVideoAddINcourse = () => {
     const { id } = useParams();
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const [isUploading, setIsUploading] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
     const [addVideo, { isLoading: isAddProductLoading }] = useAddVideoMutation();
     const [courses, setCourses] = useState([]);
-   // const [selectedCourseId, setSelectedCourseId] = useState(null);
+    // const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [videoDuration, setVideoDuration] = useState(null);
     const onDrop = useCallback((acceptedFiles: any[]) => {
         form.setFieldsValue({ videoFile: acceptedFiles[0] });
     }, []);
-  
+
     const cloudName = 'dsk9jrxzf';
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -46,6 +47,7 @@ const AdminVideoAddINcourse = () => {
 
     const onFinish = async (values: any) => {
         try {
+            setIsUploading(true);
             console.log('courseId from URL:', courseId);
             const formData = new FormData();
             formData.append('file', values.videoFile);
@@ -56,6 +58,7 @@ const AdminVideoAddINcourse = () => {
                     body: formData,
                 }
             );
+            setIsUploading(false);
             const responseData = await response.json();
             const uploadedVideoUrl = responseData.secure_url;
             setVideoUrl(uploadedVideoUrl);
@@ -65,7 +68,7 @@ const AdminVideoAddINcourse = () => {
             setVideoDuration(durationInSeconds);
             const durationInMinutes = (durationInSeconds / 60).toFixed(2);
             setVideoDuration(durationInMinutes);
-            
+
             const videoData = {
                 videoTitle: values.videoTitle,
                 videoURL: uploadedVideoUrl,
@@ -171,6 +174,11 @@ const AdminVideoAddINcourse = () => {
                         ) : (
                             <p>Drag 'n' drop some files here, or click to select files</p>
                         )}
+                        {videoUrl && (
+                            <div>
+                                <Video publicId={videoUrl} width="300" controls />
+                            </div>
+                        )}
                     </div>
                 </Form.Item>
 
@@ -183,21 +191,24 @@ const AdminVideoAddINcourse = () => {
                     <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" danger htmlType="submit">
-                        {isAddProductLoading ? (
-                            <AiOutlineLoading className="animate-spin" />
-                        ) : (
-                            'Add'
-                        )}
-                    </Button>
-                    {videoDuration && <p>Video Duration: {videoDuration} seconds</p>}
+                    {isUploading ? (
+                        <p>Uploading video... <AiOutlineLoading className="animate-spin" /></p>
+                    ) : (
+                        <>
+                            <Button
+                                type="primary"
+                                danger
+                                htmlType="submit"
+                                disabled={isUploading} // Disable nút khi đang upload
+                            >
+                                Add
+                            </Button>
+                            {videoDuration && <p>Video Duration: {videoDuration} seconds</p>}
+                        </>
+                    )}
                 </Form.Item>
 
-                {videoUrl && (
-                    <div>
-                        <Video publicId={videoUrl} width="300" controls />
-                    </div>
-                )}
+
             </Form>
         </CloudinaryContext>
     );

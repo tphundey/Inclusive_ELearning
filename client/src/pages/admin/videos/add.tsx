@@ -16,6 +16,7 @@ const AdminVideoAdd = () => {
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [videoDuration, setVideoDuration] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
     const onDrop = useCallback((acceptedFiles: any[]) => {
         form.setFieldsValue({ videoFile: acceptedFiles[0] });
     }, []);
@@ -36,6 +37,8 @@ const AdminVideoAdd = () => {
 
     const onFinish = async (values: any) => {
         try {
+
+            setIsUploading(true);
             const formData = new FormData();
             formData.append('file', values.videoFile);
             const response = await fetch(
@@ -45,6 +48,7 @@ const AdminVideoAdd = () => {
                     body: formData,
                 }
             );
+            setIsUploading(false);
             const responseData = await response.json();
             const uploadedVideoUrl = responseData.secure_url;
             setVideoUrl(uploadedVideoUrl);
@@ -164,6 +168,11 @@ const AdminVideoAdd = () => {
                             <p>Drag 'n' drop some files here, or click to select files</p>
                         )}
                     </div>
+                    {videoUrl && (
+                        <div>
+                            <Video publicId={videoUrl} width="300" controls />
+                        </div>
+                    )}
                 </Form.Item>
 
                 <Form.Item
@@ -183,21 +192,24 @@ const AdminVideoAdd = () => {
                     </Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" danger htmlType="submit">
-                        {isAddProductLoading ? (
-                            <AiOutlineLoading className="animate-spin" />
-                        ) : (
-                            'Add'
-                        )}
-                    </Button>
-                    {videoDuration && <p>Video Duration: {videoDuration} seconds</p>}
+                    {isUploading ? (
+                        <p>Uploading video... <AiOutlineLoading className="animate-spin" /></p>
+                    ) : (
+                        <>
+                            <Button
+                                type="primary"
+                                danger
+                                htmlType="submit"
+                                disabled={isUploading} // Disable nút khi đang upload
+                            >
+                                Add
+                            </Button>
+                            {videoDuration && <p>Video Duration: {videoDuration} seconds</p>}
+                        </>
+                    )}
                 </Form.Item>
 
-                {videoUrl && (
-                    <div>
-                        <Video publicId={videoUrl} width="300" controls />
-                    </div>
-                )}
+
             </Form>
         </CloudinaryContext>
     );
