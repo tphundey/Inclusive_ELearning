@@ -8,6 +8,7 @@ import { useDropzone } from 'react-dropzone';
 const { Option } = Select;
 import { useParams } from 'react-router-dom';
 const AdminVideoAddINcourse = () => {
+    const { id } = useParams();
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -22,8 +23,6 @@ const AdminVideoAddINcourse = () => {
   
     const cloudName = 'dsk9jrxzf';
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-    const { id } = useParams();
 
     // Hàm xử lý chuỗi để trích xuất id từ phần pathname của URL
     const extractIdFromUrl = (url) => {
@@ -66,18 +65,17 @@ const AdminVideoAddINcourse = () => {
             setVideoDuration(durationInSeconds);
             const durationInMinutes = (durationInSeconds / 60).toFixed(2);
             setVideoDuration(durationInMinutes);
+            
             const videoData = {
                 videoTitle: values.videoTitle,
                 videoURL: uploadedVideoUrl,
                 duration: parseFloat(durationInMinutes),
                 courseId: courseId
             };
-
-          
             addVideo(videoData)
                 .unwrap()
                 .then(() => {
-                    const courseId = selectedCourseId;
+                    const courseId = id;
                     const updatedCourse = courses.find((course: any) => course.id === courseId);
                     if (updatedCourse) {
                         updatedCourse.duration += parseFloat(durationInMinutes);
