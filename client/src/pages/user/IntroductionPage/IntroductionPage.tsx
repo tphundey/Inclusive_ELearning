@@ -757,6 +757,16 @@ const IntroductionPage = () => {
 
 
     const postReview = () => {
+        const swearWords = ['badword1', 'badword2', 'badword3']; 
+        const containsSwearWord = swearWords.some(word =>
+          review.comment.toLowerCase().includes(word.toLowerCase())
+        );
+
+        if (containsSwearWord) {
+          // Hiển thị cảnh báo hoặc thực hiện xử lý khác tùy thuộc vào yêu cầu của bạn
+          alert('Vui lòng không sử dụng ngôn từ không phù hợp!');
+          return;
+        }
         if (userEmail) {
             // Lấy thông tin người dùng từ API bằng email
             fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
