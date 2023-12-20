@@ -76,11 +76,11 @@ const AdminCategory = (props: any) => {
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"
-                        title={"Remove course"}
-                        description={"Are you sure you want to remove this???"}
+                        title={"Xóa danh mục"}
+                        description={"Bạn có chắc chắn xóa danh mục này không ?"}
                         onConfirm={() => confirm(id)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Có"
+                        cancelText="Không"
                     >
                         <Button type="primary" danger>
                             <i className="fa-solid fa-trash"></i>
