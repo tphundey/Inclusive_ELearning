@@ -123,12 +123,12 @@ const Certificate = () => {
                     </div>
                     <div className="hr-cer"></div>
                     <div className='t22'>
-                        <p>Certificate of Completion</p>
+                        <p>Chứng chỉ hoàn thành</p>
                     </div>
-                    <p className='t33'> This is to acknowledge that</p>
+                    <p className='t33'>Điều này để thừa nhận rằng</p>
                     <p className="name"><u>{user.displayName}</u></p>
-                    <p className="t44">has completed</p>
-                    <p className="course">A Training Course on: <b><u>  {courseData.courseName}  </u></b></p>
+                    <p className="t44">Đã hoàn thành</p>
+                    <p className="course">Khóa học: <b><u>  {courseData.courseName}  </u></b></p>
                 </div>
             </div>
         </div>
