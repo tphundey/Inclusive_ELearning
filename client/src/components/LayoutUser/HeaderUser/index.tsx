@@ -246,6 +246,7 @@ const HeaderUser: React.FC = () => {
                             </ul>
                             <div className='freemonth'>
                                 <a href="/signup">Tham gia khóa học </a>
+                                <a href="/signup">Tham gia hệ thống</a>
                             </div>
                         </div>
                     </div>
@@ -259,6 +260,12 @@ const HeaderUser: React.FC = () => {
                         <li><a href="">Người đã đi làm</a></li>
                         <li><a href="">Sinh viên</a></li>
                         <li><a href="">| <span className='mr-3'></span> Mua khóa học ngay</a></li>
+                    <div> Danh mục nổi bật: </div>
+                    <ul>
+                        <li><a href="">Business</a></li>
+                        <li><a href="">Develop</a></li>
+                        <li><a href="">Higher Education</a></li>
+                        <li><a href="">| <span className='mr-3'></span> Thanh toán khóa học</a></li>
                     </ul>
                 </div>
             </nav>

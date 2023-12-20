@@ -59,6 +59,7 @@ import Uploadtest from "./pages/404/Uploadtest";
 import Quizfor from "./pages/user/QuizPage/quiz";
 import AdminVideoAddINcourse from "./pages/admin/videos/addincourse";
 import CouponManagement from "./pages/admin/coupons/Coupons";
+import EmailButton from "./pages/user/IntroductionPage/sendemailtest";
 
 let userRole = 0
 const roleCookie = getCookie('role');
@@ -105,6 +106,7 @@ export const routers = createBrowserRouter([
             { path: "homepage", element: <Homepage /> },
             { path: "default", element: <Defaultpage /> },
             { path: "contact", element: <ContactUs /> },
+            { path: "emailbutton", element: <EmailButton /> },
             { path: "listcourse/:id", element: <ListCourse /> },
             { path: "getcertificate/:id", element: <Certificate /> },
             { path: "learningpath", element: <LearningPathpage /> },
