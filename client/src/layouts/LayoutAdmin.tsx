@@ -15,7 +15,7 @@ import {
     AiOutlineFileText
 } from "react-icons/ai";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { BankOutlined, CommentOutlined } from "@ant-design/icons";
+import { BankOutlined, CommentOutlined, CreditCardOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content } = Layout;
 const app = initializeApp(firebaseConfig);
@@ -80,34 +80,39 @@ const LayoutAdmin = () => {
                         },
                         {
                             key: "4",
+                            icon: <CreditCardOutlined />,
+                            label: <Link to="/admin/coupon">Quản lý mã giảm giá</Link>,
+                        },
+                        {
+                            key: "5",
                             icon: <AiOutlineVideoCamera />,
                             label: <Link to="/admin/videos">Quản lý video</Link>,
                         },
                         {
-                            key: "5",
+                            key: "6",
                             icon: <AiOutlineUser />,
                             label: <Link to="/admin/users">Quản lý người dùng</Link>,
                         },
                         {
-                            key: "6",
+                            key: "7",
                             icon: <AiOutlineFileText />,
                             label: <Link to="/admin/postpage">Quản lý bài viết</Link>,
                         },
                         {
-                            key: "7",
+                            key: "8",
                             icon: <CommentOutlined />,
                             label: <Link to="/admin/reviews">Quản lý đánh giá</Link>,
                         },
                         {
-                            key: "8",
+                            key: "9",
                             icon: <BankOutlined />,
                             label: <Link to="/admin/payment">Lịch sử thanh toán</Link>,
                         },
                         {
-                            key: "9",
+                            key: "10",
                             icon: <AiFillCloseCircle />,
                             label: <Link to="http://localhost:5173/homepage">Thoát</Link>,
-                        },
+                        }
                     ]}
                 />
             </Sider>
