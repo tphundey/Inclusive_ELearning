@@ -19,10 +19,9 @@ const MylearningPageLayout = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const tabs: ITabs[] = [
-        { label: 'Tiến độ khóa học', path: 'progress' },
-        { label: 'khóa học đã lưu', path: 'saved' },
-        { label: 'Bộ sưu tập', path: 'collections' },
-        { label: 'Lịch sử học', path: 'history' }
+        { label: 'Khóa học đang học', path: 'progress' },
+        { label: 'Khóa học đã lưu', path: 'saved' },
+        { label: 'Lịch sử ', path: 'history' }
     ];
 
     useEffect(() => {
@@ -94,7 +93,7 @@ const MylearningPageLayout = () => {
                 </div>
                 <div className="updateinformation">
                     <h2>Chào mừng quay trở lại, {user.displayName}!</h2>
-                    <a href="">thêm các khóa học</a>
+                    <a href="">Thêm kinh nghiệm</a>
                 </div>
             </div>
 

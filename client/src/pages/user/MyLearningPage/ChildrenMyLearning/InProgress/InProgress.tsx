@@ -245,9 +245,9 @@ const InProgress = () => {
                             <div className="dropdown dropdown-right dropdown-end mt-5">
                                 <label tabIndex={0} className="btn m-1"><i className="fa-solid fa-ellipsis"></i></label>
                                 <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 right-0 mt-8">
-                                    <li><a onClick={() => handleAddToCollections(course.id)}>Add to collections</a></li>
-                                    <li><a onClick={() => handleMoveToHistory(course.id)}>Move to history</a></li>
-                                    <li><a onClick={() => handleRemoveCourse(course.id)}>Remove</a></li> {/* Thêm hàm xử lý xóa */}
+
+                                    <li><a onClick={() => handleMoveToHistory(course.id)}>Di chuyển vào lịch sử</a></li>
+                                    <li><a onClick={() => handleRemoveCourse(course.id)}>Xóa bỏ</a></li> {/* Thêm hàm xử lý xóa */}
                                 </ul>
                             </div>
                         </div>
