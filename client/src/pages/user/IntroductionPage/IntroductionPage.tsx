@@ -435,25 +435,60 @@ const IntroductionPage = () => {
     };
 
     const updatePriceAfterDiscount = () => {
-        let updatedAmount = amount;  // Sử dụng let thay vì const
+        let updatedAmount = amount;  // Use let instead of const
 
-        if (discountCode === 'abc') {
+        axios.get('http://localhost:3000/Coupons')
+            .then(response => {
+                const coupons = response.data;
 
-            updatedAmount -= 1000;
-            console.log('Discount applied: $1000');
+                const today = new Date();
+                const todayString = today.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
 
-            axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
-                .then(response => {
-                    console.log(response.data);
-                    window.location.href = 'http://localhost:3000/order';
-                })
-                .catch(error => {
-                    console.error(error);
+                const validCoupon = coupons.find(coupon => {
+                    const expirationDate = new Date(coupon.expirationDate);
+                    const expirationDateString = expirationDate.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
+
+                    return coupon.code === discountCode && expirationDateString > todayString;
                 });
-        } else {
-            console.log('Invalid discount code');
-            // Xử lý thông báo hoặc hiển thị lỗi cho người dùng
-        }
+
+                console.log(validCoupon, 1111111111111111111111);
+                if (validCoupon) {
+                    updatedAmount -= 1000;  // or use validCoupon.amount or any other property based on your API response
+                    console.log(`Discount applied: $1000. Coupon details: `, validCoupon);
+
+                    if (validCoupon.quantity > 0) {
+                        axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
+                            .then(response => {
+                                console.log(response.data);
+
+                                // Decrease the quantity in the API after the order is saved
+                                const updatedQuantity = validCoupon.quantity - 1;
+
+                                axios.put(`http://localhost:3000/Coupons/${validCoupon.id}`, { quantity: updatedQuantity })
+                                    .then(response => {
+                                        console.log('Coupon quantity updated:', response.data);
+                                        window.location.href = 'http://localhost:3000/order';
+                                    })
+                                    .catch(error => {
+                                        console.error('Error updating coupon quantity:', error);
+                                    });
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    } else {
+                        console.log('Coupon quantity is 0, cannot apply the discount.');
+                        message.error('Số lượng mã giảm giá đã hết, không thể áp dụng ưu đãi.'); // Display an error message in Vietnamese
+                    }
+                } else {
+                    console.log('Mã giảm giá không hợp lệ hoặc đã hết hạn');
+                    message.error('Mã giảm giá không hợp lệ hoặc đã hết hạn'); // Display an error message in Vietnamese
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                message.error('Lỗi khi lấy danh sách mã giảm giá'); // Display an error message in Vietnamese
+            });
     };
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [showDiscountPopup, setShowDiscountPopup] = useState(false);

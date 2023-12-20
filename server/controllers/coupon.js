@@ -48,43 +48,32 @@ routerCoupon.get("/:id", async (req, res) => {
   }
 });
 // Update Likes, LikedBy, and Comments
-routerCoupon.patch("/:id", async (req, res) => {
+routerCoupon.put('/:id', async (req, res) => {
   try {
-    const { likes, likedBy, comments } = req.body;
+    const { quantity } = req.body;
 
-    // Update likes, likedBy, and comments for the post
-    const updatedPost = await Coupons.findByIdAndUpdate(
+    // Ensure that the quantity is a positive integer
+    if (!Number.isInteger(quantity) || quantity < 0) {
+      return res.status(400).json({ error: 'Invalid quantity value' });
+    }
+
+    // Find the coupon by ID and update the quantity
+    const updatedCoupon = await Coupons.findByIdAndUpdate(
       req.params.id,
-      { likes, likedBy, comments },
+      { $set: { quantity } },
       { new: true }
     );
 
-    if (!updatedPost) {
-      return res.status(404).json({ error: "Post not found" });
+    if (!updatedCoupon) {
+      return res.status(404).json({ error: 'Coupon not found or not updated' });
     }
 
-    return res.status(200).json(updatedPost);
+    return res.status(200).json(updatedCoupon);
   } catch (error) {
-    return res.status(500).json({ error: "Could not update post" });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
-// Update
-routerCoupon.put("/:id", async (req, res) => {
-  try {
-    const updatedCourse = await Coupons.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedCourse) {
-      return res.status(404).json({ error: "Course not found" });
-    }
-    return res.status(200).json(updatedCourse);
-  } catch (error) {
-    return res.status(500).json({ error: "Could not update course" });
-  }
-});
-
 // Delete
 routerCoupon.delete("/:id", async (req, res) => {
   try {
