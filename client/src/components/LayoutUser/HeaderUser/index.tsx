@@ -112,7 +112,7 @@ const HeaderUser: React.FC = () => {
                             <div className="bolder-css">
                                 <form action="">
                                     <input
-                                        placeholder='What do you want to learn today?'
+                                        placeholder='Tìm kiếm cho khóa học hôm nay?'
                                         type="text"
                                         value={searchTerm}
                                         onInput={handleInputChange}
@@ -194,7 +194,7 @@ const HeaderUser: React.FC = () => {
                                                                 <li >
                                                                     <Link to={`/Profile/${user.uid}`}>
                                                                         <Button style={{ width: 170 }}>
-                                                                            Profile
+                                                                            Thông tin cá nhân
                                                                         </Button>
                                                                     </Link>
 
@@ -203,14 +203,14 @@ const HeaderUser: React.FC = () => {
                                                                     <li>
                                                                         <Link to={`/admin`}>
                                                                             <Button style={{ width: 170 }}>
-                                                                                Admin Profile
+                                                                               Trang quản trị
                                                                             </Button>
                                                                         </Link>
                                                                     </li>
                                                                 )}
                                                                 <li>
                                                                     <Link to={`/Postpage/`}>
-                                                                        <Button style={{ width: 170 }}>Thảo luận</Button>
+                                                                        <Button style={{ width: 170 }}>Trang Thảo luận</Button>
                                                                     </Link>
 
                                                                 </li>
@@ -245,6 +245,7 @@ const HeaderUser: React.FC = () => {
                                 </li>
                             </ul>
                             <div className='freemonth'>
+                                <a href="/signup">Tham gia khóa học </a>
                                 <a href="/signup">Tham gia hệ thống</a>
                             </div>
                         </div>
@@ -253,6 +254,12 @@ const HeaderUser: React.FC = () => {
             </header>
             <nav>
                 <div className="containerCss">
+                    <div> Giải pháp cho: </div>
+                    <ul>
+                        <li><a href="">Doanh nghiệp</a></li>
+                        <li><a href="">Người đã đi làm</a></li>
+                        <li><a href="">Sinh viên</a></li>
+                        <li><a href="">| <span className='mr-3'></span> Mua khóa học ngay</a></li>
                     <div> Danh mục nổi bật: </div>
                     <ul>
                         <li><a href="">Business</a></li>
