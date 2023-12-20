@@ -85,18 +85,18 @@ const OverViewPage = () => {
                     </div>
                 </div>
                 <div className="coursedetails">
-                    <div className="text-xl font-medium mt-6">Course details</div>
+                    <div className="text-xl font-medium mt-6">Chi tiết khóa học</div>
 
                     <div className="info-details">
                         <div className="info15">{truncateDuration(product.duration)} m</div>
                         <div><i className="fa-solid fa-circle"></i></div>
                         <div className="info15">Khóa học</div>
                         <div><i className="fa-solid fa-circle"></i></div>
-                        <div className="info15">Released: {product.date}</div>
+                        <div className="info15">Ngày phát hành: {product.date}</div>
                     </div>
 
                     <div className="course-detail-main">
-                        {product.description}
+                     <b>Mô tả:</b>   {product.description}
                     </div>
                     <div className='font-medium text-xl mt-6'>
                         Tài liệu của khóa học
@@ -109,7 +109,7 @@ const OverViewPage = () => {
                             <div className="instruc-right">
                                 {/* <h1>Trần Phùng</h1>
                                 <h2>Fpoly</h2> */}
-                                <div className='text-blue-700 font-bold'> <Link to={`/quizfor/${product.id}`}>Link to quiz of course</Link></div>
+                                <div className='text-blue-700 font-bold'> <Link to={`/quizfor/${product.id}`}>Nhấn vào đây để làm bài tập</Link></div>
                                 <h3> <a href={product.docs} target="_blank" rel="noopener noreferrer">Xem tài liệu khóa học</a></h3>
                             </div>
                         </div>

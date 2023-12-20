@@ -55,7 +55,7 @@ const AdminPostAdd = () => {
                 const newPost = await response.json();
                 setAllPosts((prevPosts: any) => [newPost, ...prevPosts]);
 
-                message.success("Post successful!");
+                message.success("Đăng bài thành công");
                 setTimeout(() => {
                     navigate("/admin/postpage");
                 }, 3000);
@@ -125,7 +125,7 @@ const AdminPostAdd = () => {
             >
                 <Form.Item<any>
                     label="Tiêu đề"
-                    name="title" rules={[{ required: true, message: 'Please input the title!' }]}
+                    name="title" rules={[{ required: true, message: 'Cần nhập vào tiêu đề' }]}
                 >
                     <Input value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
                 </Form.Item>
@@ -133,7 +133,7 @@ const AdminPostAdd = () => {
                 <Form.Item<any>
                     label="Nội dung" 
                     name="content" 
-                    rules={[{ required: true, message: 'Please input the content!' }]}
+                    rules={[{ required: true, message: 'Cần nhập vào nội dung' }]}
                 >
                 <Input.TextArea value={postData.content} onChange={(e) => setPostData({ ...postData, content: e.target.value })} />
                 </Form.Item>

@@ -53,11 +53,11 @@ export const ContactUs = () => {
 
     return (
         <form ref={form} onSubmit={sendEmail}>
-            <label>Name</label>
+            <label>Tên</label>
             <input readOnly type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
             <label>Email</label>
             <input readOnly type="email" name="user_email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
-            <label>Url img</label>
+            <label>Url hình ảnh</label>
             <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} />
             <input type="submit" value="Send" />
         </form>

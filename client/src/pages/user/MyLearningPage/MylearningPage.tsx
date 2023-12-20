@@ -19,10 +19,10 @@ const MylearningPageLayout = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const tabs: ITabs[] = [
-        { label: 'Progress', path: 'progress' },
-        { label: 'Saved', path: 'saved' },
-        { label: 'Collections', path: 'collections' },
-        { label: 'History', path: 'history' }
+        { label: 'Tiến độ khóa học', path: 'progress' },
+        { label: 'khóa học đã lưu', path: 'saved' },
+        { label: 'Bộ sưu tập', path: 'collections' },
+        { label: 'Lịch sử học', path: 'history' }
     ];
 
     useEffect(() => {
@@ -93,13 +93,13 @@ const MylearningPageLayout = () => {
                     {user.photoURL && <img width={80} style={{ borderRadius: 100 }} src={user.photoURL} alt="Ảnh đại diện" />}
                 </div>
                 <div className="updateinformation">
-                    <h2>Welcome back, {user.displayName}!</h2>
-                    <a href="">Add experience</a>
+                    <h2>Chào mừng quay trở lại, {user.displayName}!</h2>
+                    <a href="">thêm các khóa học</a>
                 </div>
             </div>
 
             <div className="mylearningnav">
-                <a href="">My Library</a>
+                <a href="">Khóa học của tôi</a>
             </div>
 
             <div className="browsepage">

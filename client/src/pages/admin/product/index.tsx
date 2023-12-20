@@ -454,11 +454,11 @@ const AdminProduct = () => {
             </header>
             {contextHolder}
             <Input.Search
-                placeholder="Search by product name"
+                placeholder="tìm kiếm theo tên khóa học"
                 onSearch={handleSearch}
                 style={{ width: 250, marginBottom: 20, marginRight: 10 }}
             />
-            <Button onClick={handleResetSearch}>Reset Search</Button>
+            <Button onClick={handleResetSearch}>tạo lại tìm kiếm</Button>
 
             {isProductLoading ? (
                 <Skeleton />

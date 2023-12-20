@@ -104,7 +104,7 @@ const TestPage = () => {
     // Send a request to your API to delete the question by ID
     axios.delete(`http://localhost:3000/questions/${questionId}`)
       .then(response => {
-        message.success('Question deleted successfully');
+        message.success('Xóa câu hỏi thành công');
         // Update the list of questions after successful deletion
         const updatedQuestions = questions.filter(q => q.id !== questionId);
         setQuestions(updatedQuestions);
@@ -203,14 +203,14 @@ const TestPage = () => {
                 <Radio key={index} value={index}>{option}</Radio>
               ))
             ) : (
-              <p>No options available for this question.</p>
+              <p>không có đáp án </p>
             )}
           </Radio.Group>
 
 
           <div className="flex gap-6 items-center mt-4">
             <div className="correct-answer">
-              <p className='text-blue-700'>Correct Answer: {question.options[question.correctAnswerIndex]}</p>
+              <p className='text-blue-700'>Đáp án chính xác: {question.options[question.correctAnswerIndex]}</p>
             </div>
 
             <Button

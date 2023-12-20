@@ -73,8 +73,8 @@ const SigninPage = () => {
                     <img src="https://f10-zpcloud.zdn.vn/1488129773092553661/6a7b44d847c0929ecbd1.jpg" alt="" />
                 </div>
                 <div className="login-content">
-                    <div className='lg-ct1'>Almost there! Sign in or create an account</div>
-                    <div className='lg-ct2'>You can use the same email address and password that you use on LinkedIn.com</div>
+                    <div className='lg-ct1'>Chào mừng bạn đến với LinkedIn Learning hãy tạo tài khoản hoặc đăng nhập vào dưới đây</div>
+                    <div className='lg-ct2'>bạn có thể tạo tài khoản bằng email để có thể sử dụng dịch vụ của chúng tôi</div>
                 </div>
                 <div className='login-input'>
 
@@ -100,16 +100,16 @@ const SigninPage = () => {
 
                     </Form>
                     <br />
-                    <a className='cursor-pointer' onClick={handleForgotPassword}>Forgot password?</a>
+                    <a className='cursor-pointer' onClick={handleForgotPassword}>Quên mật khẩu?</a>
 
                 </div>
                 <div className='login-footer'>
                     <ul>
                         <li><a href=""><img src="https://f10-zpcloud.zdn.vn/6571297987752003990/8120a900321be745be0a.jpg" alt="" /></a></li>
-                        <li><a href="">User Agreement</a></li>
-                        <li><a href="">Privacy Policy</a></li>
-                        <li><a href="">Community Guidelines</a></li>
-                        <li><a href="">Cookie Policy</a></li>
+                        <li><a href="">sự thỏa thuận của người dùng</a></li>
+                        <li><a href="">Chính sách bảo mật</a></li>
+                        <li><a href="">Hướng dẫn cộng đồng</a></li>
+                        <li><a href="">Chính sách cookie</a></li>
                     </ul>
                 </div>
             </div>
