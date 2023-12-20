@@ -58,6 +58,7 @@ import { getCookie } from "./components/Cookie/cookieUtils";
 import Uploadtest from "./pages/404/Uploadtest";
 import Quizfor from "./pages/user/QuizPage/quiz";
 import AdminVideoAddINcourse from "./pages/admin/videos/addincourse";
+import CouponManagement from "./pages/admin/coupons/Coupons";
 
 let userRole = 0
 const roleCookie = getCookie('role');
@@ -195,6 +196,7 @@ export const routers = createBrowserRouter([
             { path: "postpage", element: <AdminPostpage /> },
             { path: "post/add", element: <AdminPostAdd /> },
             { path: "payment", element: <AdminPayment /> },
+            { path: "coupon", element: <CouponManagement /> },
             { path: "reviews", element: <AdminReview /> },
             { path: "reviews/:id", element: <AdminPostAdd /> },
         ],

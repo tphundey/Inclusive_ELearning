@@ -59,6 +59,7 @@ const routerVideoProgress = require("./controllers/userVideoProgress");
 const routerVideo = require("./controllers/video");
 const routerNotes = require("./controllers/note");
 const routerQuestions = require("./controllers/questions");
+const routerCoupon = require("./controllers/coupon");
 
 app.use("/Courses", coursesController);
 app.use("/Categories", routerCate);
@@ -71,6 +72,7 @@ app.use("/userVideoProgress", routerVideoProgress);
 app.use("/Videos", routerVideo);
 app.use("/Notes", routerNotes);
 app.use("/Questions", routerQuestions);
+app.use("/Coupons", routerCoupon);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
