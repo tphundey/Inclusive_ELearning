@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://tse3.mm.bing.net/th?id=OIP.b5oDvUVU5UVN4cefTJGq3wHaHa&pid=Api&P=0&h=180" alt="Logo" width="80" height="80">
+  <img src="https://res-console.cloudinary.com/dsk9jrxzf/media_explorer_thumbnails/42ec7b1d493778d99b4a33746fd299da/detailed" alt="Logo" width="80" height="80">
   <h3 align="center">Hệ Thống Khóa Học Trực Tuyến</h3>
   <p align="center">
     Dự án Tốt Nghiệp về Hệ Thống Giáo Dục Trực Tuyến
