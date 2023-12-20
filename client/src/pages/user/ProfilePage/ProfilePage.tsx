@@ -111,19 +111,19 @@ const Profile = () => {
                             {user?.photoURL && <img src={user?.photoURL} className="object-cover w-full h-full block border-4 border-white rounded-full" />}
                         </div>
                         <div className="flex items-center space-x-2 mt-2">
-                            <p className="text-2xl">{user?.displayName}</p>
+                            <p className="text-2xl">Họ và Tên: {user?.displayName}</p>
                         </div>
-                        <p className="text-gray-700">{user?.email}
+                        <p className="text-gray-700">Email: {user?.email}
                             <span onClick={showModal} className="tran">
-                                <a href="#" className="underline text-blue-500">Contact info</a>
+                                <a href="#" className="underline text-blue-500">Thông tin liên hệ</a>
                             </span>
                             <Modal title={`${user?.displayName}`} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                                 <hr className="pb-5" />
-                                <p className="text-black text-xl pb-2">Contact Info</p>
+                                <p className="text-black text-xl pb-2">Thông tin liên hệ</p>
                                 <div className="text-l flex item-center">
                                     <div className="w-10"><UserOutlined /> </div>
                                     <div>
-                                        <h5>Your Profile</h5>
+                                        <h5>Trang cá nhân của bạn</h5>
                                         <a href="#" className="underline text-blue-500">{user?.email}</a>
                                     </div>
                                 </div>
@@ -139,14 +139,14 @@ const Profile = () => {
                     <div className="flex-1 flex flex-col px-8 mt-2">
                         <div className="flex items-center space-x-4 mt-2">
                             <Dropdown menu={{ items }} placement="bottomRight">
-                                <Button className=" hover:text-white rounded-lg text-sm space-x-2 transition duration-100 border-blue-700 border">bottomRight</Button>
+                                <Button className=" hover:text-white rounded-lg text-sm space-x-2 transition duration-100 border-blue-700 border">Thông tin khác</Button>
                             </Dropdown>
 
                             <button className="flex items-center hover:bg-blue-700 text-blue-500 px-4 py-2 rounded-lg text-sm space-x-2 transition duration-100 border-blue-700 border">
-                                <span>Message</span>
+                                <span>tin nhắn</span>
                             </button>
                             <button className="flex items-center hover:bg-blue-700 text-gray-500 px-4 py-2 rounded-lg text-sm space-x-2 transition duration-100 border-gray-700 border">
-                                <span>More</span>
+                                <span>Thêm</span>
                             </button>
                         </div>
                     </div>
@@ -154,25 +154,25 @@ const Profile = () => {
                 <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
                     <div className="flex flex-col 2xl:w-1/3">
                         <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
-                            <h4 className="text-xl text-gray-900 font-bold">Personal Info</h4>
+                            <h4 className="text-xl text-gray-900 font-bold">Thông tin của bạn</h4>
                             <ul className="mt-2 text-gray-700">
                                 <li className="flex border-y py-2">
-                                    <span className="font-bold w-24">Full name:</span>
+                                    <span className="font-bold w-24">Họ và tên: </span>
                                     <span className="text-gray-700">{userInfo?.displayName}</span>
                                 </li>
                                 <li className="flex border-b py-2">
-                                    <span className="font-bold w-24">Birthday:</span>
+                                    <span className="font-bold w-24">Ngày sinh :</span>
                                     <span className="text-gray-700">24 Jul, 1991</span>
                                 </li>
                                 <li className="flex border-b py-2">
-                                    <span className="font-bold w-24">Address:</span>
+                                    <span className="font-bold w-24">Địa chỉ: </span>
                                     <span className="text-gray-700">{
                                     userInfo?.address ? (userInfo?.address): ( <> 
                                     <p className="text-red-500">thiếu địa chỉ</p></>)
                                 }</span>
                                 </li>
                                 <li className="flex border-b py-2">
-                                    <span className="font-bold w-24">Phone</span>
+                                    <span className="font-bold w-24">Số điện thoại</span>
                                     <span className="text-gray-700">{userInfo?.phone ? (userInfo?.phone): (<> <p className="text-red-500">thiếu số điện thoại</p></>)}</span>
                                 </li>
                                 <li className="flex border-b py-2">

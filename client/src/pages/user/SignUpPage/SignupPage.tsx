@@ -129,8 +129,8 @@ const SignupPage = () => {
                     <img src="https://f10-zpcloud.zdn.vn/1488129773092553661/6a7b44d847c0929ecbd1.jpg" alt="" />
                 </div>
                 <div className="login-content">
-                    <div className='lg-ct1'>Make the most of your professional life</div>
-                    <div className='lg-ct2'>By clicking Agree & Join, you agree to the LinkedIn User Agreement</div>
+                    <div className='lg-ct1'>Nâng cao kĩ năng cũng như kiến thức của bạn</div>
+                    <div className='lg-ct2'>Bằng cách tham gia với và thỏa thuận của chúng tôi</div>
                 </div>
                 <div className='login-input'>
                     <Form
@@ -142,14 +142,14 @@ const SignupPage = () => {
 
                         <Form.Item<any>
                             name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
                         >
-                            <Input placeholder='Email or Phone' />
+                            <Input placeholder='Email' />
                         </Form.Item>
 
                         <Form.Item<any>
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
                         >
                             <Input
                                 placeholder='Password' type='password'
@@ -157,12 +157,12 @@ const SignupPage = () => {
 
                         </Form.Item>
 
-                        <button type='submit'>Agree & Join</button>
+                        <button type='submit'>Đồng ý & Tham gia</button>
 
                     </Form>
                     <div className="signup-or">
                         <div className="sin-hr"></div>
-                        <div className="">or</div>
+                        <div className="">Hoặc</div>
                         <div className="sin-hr"></div>
                     </div>
 
@@ -173,17 +173,17 @@ const SignupPage = () => {
 
                     <br />
                     <div className="login-new">
-                        <div>Already on LinkedIn? </div>
-                        <div><a href="http://localhost:5173/signin">Sign in</a></div>
+                        <div>Bạn chưa có tài khoản? </div>
+                        <div><a href="http://localhost:5173/signin">Đăng ký</a></div>
                     </div>
                 </div>
                 <div className='login-footer'>
                     <ul>
                         <li><a href=""><img src="https://f10-zpcloud.zdn.vn/6571297987752003990/8120a900321be745be0a.jpg" alt="" /></a></li>
-                        <li><a href="">User Agreement</a></li>
-                        <li><a href="">Privacy Policy</a></li>
-                        <li><a href="">Community Guidelines</a></li>
-                        <li><a href="">Cookie Policy</a></li>
+                        <li><a href="">sự thỏa thuận của người dùng</a></li>
+                        <li><a href="">Chính sách bảo mật</a></li>
+                        <li><a href="">Hướng dẫn cộng đồng</a></li>
+                        <li><a href="">Chính sách cookie</a></li>
                     </ul>
                 </div>
             </div>

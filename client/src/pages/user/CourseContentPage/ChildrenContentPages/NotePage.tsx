@@ -155,7 +155,7 @@ function NotesComponent() {
             <div className="notepage-left">
                 <div>
                     <textarea
-                        placeholder="Type your note here to save for later..."
+                        placeholder="Viết vào đây những gì bạn cần lưu lại"
                         name=""
                         id=""
                         aria-colspan={30}
@@ -166,8 +166,8 @@ function NotesComponent() {
                     />
                 </div>
                 <div className="note-fl-info">
-                    <p>{notes.length} Notes taken</p>
-                    <p>Press Enter to save</p>
+                    <p>Ghi chú đã được lưu: {notes.length}</p>
+                    <p>Vui lòng nhấn enter để lưu lại</p>
                 </div>
                 {notes.map((note) => (
                     <div className="note-user-content" key={note.id}>

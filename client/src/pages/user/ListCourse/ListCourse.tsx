@@ -212,7 +212,7 @@ const ListCourse = () => {
         <div className="containerCss-browepage2  business mt-3">
             <Button className='w-auto p-4 h-14 font-bold text-xl bg-blue-500 text-white mb-3'>{selectedCategoryName}</Button>
             <div>
-                <h3>Price Range: (vnd)</h3>
+                <h3>Giá tiền: (vnd)</h3>
                 <Slider
                     range
                     min={0}
@@ -222,7 +222,7 @@ const ListCourse = () => {
                 />
             </div>
             <div>
-                <h3>Duration Range: (m)</h3>
+                <h3>Thời lượng: (m)</h3>
                 <Slider
                     range
                     min={0}
@@ -232,8 +232,8 @@ const ListCourse = () => {
                 />
             </div>
             <br />
-            <h2 className='h2-bsn2'>Role Guides</h2>
-            <span className='sp1-bsn'>Explore foundational content and tools to help you understand, learn, and improve at the skills involved in trending industry roles.</span>
+            <h2 className='h2-bsn2'>Các khóa học khác</h2>
+            <span className='sp1-bsn'>Nhấn vào một danh mục và chọn thời lượng cũng như là giá tiền để chúng tôi có thể tìm kiếm giúp bạn khóa học phù hợp</span>
             <hr />
 
 
@@ -242,7 +242,7 @@ const ListCourse = () => {
 
             </div>
             <div className="bsn-flex-h2">
-                <div> <h2 className='h2-bsn2'>Learning Paths</h2></div>
+                <div> <h2 className='h2-bsn2'>Khóa học phù hợp</h2></div>
             </div>
             <hr />
 
@@ -256,7 +256,7 @@ const ListCourse = () => {
                                     <img src={course.courseIMG} alt="" />
                                 </div>
                                 <div className="infoCourseProgress">
-                                    <h3>COURSE</h3>
+                                    <h3>Khóa học</h3>
                                     <a href={`/introduction/${course.id}`}>
                                         <h2>{course.courseName}</h2>
                                     </a>
@@ -292,7 +292,7 @@ const ListCourse = () => {
                 ))}
                 {courses.length > visibleCourses && (
                     <button className="show-more-button font-bold" onClick={handleShowMore}>
-                        Show More
+                        Xem thêm
                     </button>
                 )}
             </div>

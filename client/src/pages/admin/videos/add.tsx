@@ -93,7 +93,7 @@ const AdminVideoAdd = () => {
 
                                 messageApi.open({
                                     type: 'success',
-                                    content: 'Video added to the course successfully. Redirecting in 3 seconds.',
+                                    content: 'Thêm video thành công. Vui lòng đợi 3 giây để quay trở lại',
                                 });
 
                                 form.resetFields();
@@ -136,8 +136,8 @@ const AdminVideoAdd = () => {
                     label="Title Video"
                     name="videoTitle"
                     rules={[
-                        { required: true, message: 'Title Video is required!' },
-                        { min: 3, message: 'Title Video must be at least 3 characters' },
+                        { required: true, message: 'Tiêu đề video không được bỏ trống' },
+                        { min: 3, message: 'Tiêu đề video phải có tối thiểu 3 kí tự' },
                     ]}
                 >
                     <Input />
@@ -157,15 +157,15 @@ const AdminVideoAdd = () => {
                     label="Video File"
                     name="videoFile"
                     rules={[
-                        { required: true, message: 'Please select a video file' },
+                        { required: true, message: 'Vui lòng chọn file' },
                     ]}
                 >
                     <div {...getRootProps()} style={{ border: '1px solid #d9d9d9', padding: '20px', borderRadius: '4px', cursor: 'pointer' }}>
                         <input {...getInputProps()} />
                         {isDragActive ? (
-                            <p>Drop the files here ...</p>
+                            <p>Kéo thả file vào đây</p>
                         ) : (
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <p>Kéo thả flie vào đây, hoặc chọn file</p>
                         )}
                     </div>
                     {videoUrl && (
@@ -178,11 +178,11 @@ const AdminVideoAdd = () => {
                 <Form.Item
                     label="Choose Course"
                     name="selectedCourse"
-                    rules={[{ required: true, message: 'Please select a course' }]}
+                    rules={[{ required: true, message: 'Vui lòng chọn khóa học' }]}
                 >
                     <Select
                         onChange={(value) => setSelectedCourseId(value)}
-                        placeholder="Select a course"
+                        placeholder="Chọn khóa học"
                     >
                         {courses.map((course: any) => (
                             <Option key={course.id} value={course.id}>

@@ -923,26 +923,26 @@ const IntroductionPage = () => {
                     <div className="courseLeft">
                         <a className='courseLeft-ah1' href="">{product.courseName}</a>
                         <div className="course-span-left mt-3">
-                            <span>{categoryName}</span>
+                            <span>Tên danh mục: <b>{categoryName}</b></span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>{truncatedDuration} m</span>
+                            <span>Thời gian: {truncatedDuration} m</span>
                             <span className='mb-1 font-bold'>.</span>
-                            <span>Released: {product.date}</span>
+                            <span>Ngày phát hành: {product.date}</span>
                         </div>
                         <div className="course-span-leftx">
                             <div className='mt-1'>{averageRating}</div>
                             <div className='starrev' id="starRating">{starRating}</div>
                             <div className='mt-1'>({reviews.length})</div>
-                            <div className='mt-1'><span>{numberOfMatchingPayments} learners</span></div>
+                            <div className='mt-1'><span>{numberOfMatchingPayments} Người học</span></div>
                         </div>
                         <div className='flex gap-4 intro-bt'>
                             <Link to={`/content/${id}`}>
-                                <button className='intro-bt1'>Start your progress</button>
+                                <button className='intro-bt1'>Bắt đầu học</button>
                             </Link>
                             {!paymentStatu2s && formattedPrice !== '0 ₫' ? (
                                 <>
                                     <button className='intro-bt2' onClick={showModal}>
-                                        Buy the course [{formattedPrice}]
+                                        Mua khóa học với giá: [{formattedPrice}]
                                     </button>
 
                                     {/* Popup nhập mã giảm giá */}
@@ -989,13 +989,13 @@ const IntroductionPage = () => {
             <hr />
             <div className="flex">
                 <div className="course-body-intro">
-                    <span className='course-intro-sp1'>WHAT’S INCLUDED</span>
+                    <span className='course-intro-sp1'>Bao gồm những: </span>
                     <div className="included-phone">
-                        <div><i className="fa-solid fa-mobile-screen ml-1"></i> Access on tablet and phone</div>
-                        <div><i className="fa-regular fa-newspaper"></i>Certificate of completion</div>
+                        <div><i className="fa-solid fa-mobile-screen ml-1"></i> Có thể truy cập bằng điện thoại hoặc tablet</div>
+                        <div><i className="fa-regular fa-newspaper"></i>Có chứng chỉ khi hoàn thành khóa học</div>
                     </div>
                     <div className="courseDescription">
-                        <div className="titleCourseDescription">Course description</div>
+                        <div className="titleCourseDescription">Miêu tả khóa học: </div>
                         <p>
                             {truncatedDescription}
                             {description.length > maxLength && (
@@ -1007,10 +1007,10 @@ const IntroductionPage = () => {
                         </p>
                     </div>
                     <div className="courseDescription">
-                        <div className="titleCourseDescription">Shareable certificate</div>
+                        <div className="titleCourseDescription">Xem trước chứng chỉ khi hoàn thành</div>
                         <img width={250} className='mt-3' src="https://f11-zpcloud.zdn.vn/8468826104549191620/bb5b8481eb753c2b6564.jpg" alt="" />
                         <div className='font-medium text-xl mt-6'>
-                            Instructors
+                            Người đăng
                         </div>
                         <div className="instructors">
                             <div className="instructors-children">
@@ -1019,13 +1019,12 @@ const IntroductionPage = () => {
                                 </div>
                                 <div className="instruc-right">
                                     <h1>Trần Thị Hương Trà</h1>
-                                    <h2>Microsoft</h2>
-                                    <h3><a href="">View more courses by Hương Trà</a></h3>
+                                    <h3><a href="https://github.com/tphundey/Inclusive_ELearning">Link to github</a></h3>
                                 </div>
                             </div>
                         </div>
                         <div className='font-medium text-xl mt-6'>
-                            Learner reviews
+                           Học viên đánh giá
                         </div>
                         <div className="flex">
                             <div className="overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200">
@@ -1043,7 +1042,7 @@ const IntroductionPage = () => {
                                                 </div>
 
                                                 <div className='mt-3'>
-                                                    <span className="text-xs leading-6 text-slate-400">{reviews.length} ratings</span>
+                                                    <span className="text-xs leading-6 text-slate-400">{reviews.length} Đánh giá</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1053,7 +1052,7 @@ const IntroductionPage = () => {
                                             {/* Hiển thị biểu đồ thống kê ở đây */}
                                             {Object.keys(ratingCounts).map((rating) => (
                                                 <span key={rating} className="flex items-center w-full gap-2">
-                                                    <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> {rating} star</label>
+                                                    <label id="p03e-label" className="mb-0 text-xs text-center w-9 shrink-0 text-slate-500"> {rating} sao</label>
                                                     <progress aria-labelledby="p03e-label" id="p03e" max="100" value="75" className="block h-3 w-full overflow-hidden rounded bg-slate-100 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400" max="100" value={(ratingCounts[parseInt(rating)] / reviews.length) * 100}> {(ratingCounts[parseInt(rating)] / reviews.length) * 100}%</progress>
                                                     <span className="text-xs font-bold w-9 text-slate-700">{ratingCounts[parseInt(rating)]}</span>
                                                 </span>
@@ -1082,7 +1081,7 @@ const IntroductionPage = () => {
                                             value={review.comment}
                                             onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                         />
-                                        <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
+                                        <Button className='mt-4' type='dashed' onClick={postReview}>Đăng</Button>
                                     </div>
                                 </Form>
 
@@ -1107,7 +1106,7 @@ const IntroductionPage = () => {
                                             value={review.comment}
                                             onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                         />
-                                        <Button className='mt-4' type='dashed' onClick={postReview}>Post</Button>
+                                        <Button className='mt-4' type='dashed' onClick={postReview}>Đăng </Button>
                                     </div>
                                 </Form>
 
@@ -1135,13 +1134,13 @@ const IntroductionPage = () => {
                     </div>
                 </div>
                 <div className='introducation-right'>
-                    <h2 className='text-xl font-medium p-3 mt-12 mb-5'>Introduction</h2>
+                    <h2 className='text-xl font-medium p-3 mt-12 mb-5'>Giới thiệu</h2>
                     <div>
                         <div className=' p-5'>
                             <Timeline items={timelineItems} />
                         </div>
                     </div>
-                    <h2 className='text-xl font-medium p-3'>Related courses</h2>
+                    <h2 className='text-xl font-medium p-3'>Khóa học cùng danh mục</h2>
                     <ul className="divide-y divide-slate-100">
                         {renderedSimilarProducts}
                         <hr />

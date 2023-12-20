@@ -20,7 +20,7 @@ const AdminPostpage = (props: any) => {
             .then(() => {
                 messageApi.open({
                     type: "success",
-                    content: "Deleted successfully!",
+                    content: "Xóa thành công",
                 });
             });
     };
@@ -104,7 +104,7 @@ const AdminPostpage = (props: any) => {
                 <div className="flex space-x-2">
                     <Popconfirm
                         placement="top"
-                        title={"Remove course"}
+                        title={"Xóa bài viết"}
                         description={"Bạn có chắc muốn xóa bài viết???"}
                         onConfirm={() => confirm(id)}
                         okText="Yes"

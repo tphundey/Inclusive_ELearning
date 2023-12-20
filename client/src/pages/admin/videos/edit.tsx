@@ -108,7 +108,7 @@ const AdminVideoEdit = () => {
 
                                 messageApi.open({
                                     type: 'success',
-                                    content: 'Video added to the course successfully. Redirecting in 3 seconds.',
+                                    content: 'Sửa video thành công. Vui lòng đợi 3 giây để quay trở lại',
                                 });
 
                                 form.resetFields();
@@ -124,7 +124,7 @@ const AdminVideoEdit = () => {
 
                     messageApi.open({
                         type: 'success',
-                        content: 'Video added to the course successfully. Redirecting in 3 seconds.',
+                        content: 'Sửa video thành công. Vui lòng đợi 3 giây để quay trở lại',
                     });
 
                     form.resetFields();
@@ -134,7 +134,7 @@ const AdminVideoEdit = () => {
                 });
         } catch (error) {
             console.error('Error uploading video to Cloudinary:', error);
-            message.error('Error uploading video. Please try again.');
+            message.error('Có lỗi xảy ra khi cập nhật video, vui lòng thử lại');
         }
         // updateVideo({ ...values, id: idVideo })
         //     .unwrap()
@@ -193,15 +193,15 @@ const AdminVideoEdit = () => {
                     label="Video File"
                     name="videoFile"
                     rules={[
-                        { required: true, message: 'Please select a video file' },
+                        { required: true, message: 'Vui lòng chọn file' },
                     ]}
                 >
                     <div {...getRootProps()} style={{ border: '1px solid #d9d9d9', padding: '20px', borderRadius: '4px', cursor: 'pointer' }}>
                         <input {...getInputProps()} />
                         {isDragActive ? (
-                            <p>Drop the files here ...</p>
+                            <p>Kéo thả file vào đây</p>
                         ) : (
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <p>Kéo thả flie vào đây, hoặc chọn file</p>
                         )}
                     </div>
                 </Form.Item>

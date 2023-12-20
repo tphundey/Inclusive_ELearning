@@ -94,7 +94,7 @@ const Post = () => {
                 const newPost = await response.json();
                 setAllPosts((prevPosts: any) => [newPost, ...prevPosts]);
 
-                message.success("Post successful!");
+                message.success("Đăng bài thành công");
             } else {
                 message.error("Error posting the data.");
             }
@@ -219,7 +219,7 @@ const Post = () => {
 
                 setAllPosts(updatedPosts);
                 setCommentData({ text: "" }); // Reset trường nhập comment
-                message.success("Comment added successfully!");
+                message.success("Bình luận thành công");
             } else {
                 message.error("Error updating comment.");
             }
@@ -246,10 +246,10 @@ const Post = () => {
                         footer={null}
                     >
                         <Form className="mt-6" ref={formRef} onFinish={handleFormSubmit}>
-                            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Please input the title!' }]}>
+                            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true, message: 'Cần nhập vào tiêu đề' }]}>
                                 <Input value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
                             </Form.Item>
-                            <Form.Item label="Nội dung" name="content" rules={[{ required: true, message: 'Please input the content!' }]}>
+                            <Form.Item label="Nội dung" name="content" rules={[{ required: true, message: 'Cần nhập vào nội dung' }]}>
                                 <Input.TextArea value={postData.content} onChange={(e) => setPostData({ ...postData, content: e.target.value })} />
                             </Form.Item>
 
@@ -267,7 +267,7 @@ const Post = () => {
                             </Form.Item>
                             <Form.Item>
                                 <Button className="w-96" type="dashed" htmlType="submit">
-                                    Post
+                                   Đăng 
                                 </Button>
                             </Form.Item>
                         </Form>

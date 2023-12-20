@@ -101,14 +101,14 @@ const Homepage: React.FC = () => {
         <div className='homepage containerCss'>
             <div className="height-banner">
                 <div className="banner">
-                    <h2 className='text-3xl'>Hi, grow your skills and advance your career with LinkedIn Learning</h2>
+                    <h2 className='text-3xl'>Xin chào, Trang web này có thể giúp các bạn học thêm nhiều kĩ năng cũng như kiến thức</h2>
                     <div className="fl-milion">
                         <span className='flex gap-1'><img src="https://f10-zpcloud.zdn.vn/8154582047521615141/d3ef92e85e708b2ed261.jpg" alt="" /><img src="https://static.licdn.com/aero-v1/sc/h/9kb0uzaajhypnqmj6ucmdlrfe" alt="" /></span>
-                        <span>Millions of members are on LinkedIn Learning</span>
+                        <span>Đã có rất nhiều người sử dụng trang web học trực tuyến LinkedIn Learning</span>
                     </div>
                     <div className="fl-button">
-                        <button className="btn btn-active btn-ghost">Start your progress</button>
-                        <button className="btn btn-outline btn-accent">grow your skills</button>
+                        <button className="btn btn-active btn-ghost">Bắt đầu học trực tuyến</button>
+                        <button className="btn btn-outline btn-accent">Những bài học nâng cao kĩ năng </button>
                     </div>
                 </div>
                 <div className="bannerBosu">
@@ -120,16 +120,16 @@ const Homepage: React.FC = () => {
 
             <div className='Recommended-hp'>
                 <div className="mockup-code w-full">
-                    <pre data-prefix="$"><code>npm i Recommended</code></pre>
-                    <pre data-prefix=">" className="text-warning"><code>Hi, advance your career with personalized learning...</code></pre>
-                    <pre data-prefix=">" className="text-success"><code>Get custom skill and course recommendations based on your goals. Your response is private to you!</code></pre>
+                    <pre data-prefix="$"><code>Nên dùng npm i </code></pre>
+                    <pre data-prefix=">" className="text-warning"><code>Xin chào, Bạn có thể học tập một cách cá nhân để nâng cao kiến thức</code></pre>
+                    <pre data-prefix=">" className="text-success"><code>Bạn có thể tự chọn các khóa học thêm kiến thức hoặc kỹ năng sống. Mục này sẽ chỉ riêng bạn biết!</code></pre>
                 </div>
             </div>
 
             <div>
                 <div>
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-0">
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Top picks for you</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Khóa học dành cho bạn</h2>
 
                         <div className="product-slider">
                             {loading ? (
@@ -148,7 +148,7 @@ const Homepage: React.FC = () => {
                                                     <div className="mt-2">
                                                         <div>
                                                             <h3 className="text-xs text-gray-700">
-                                                                <span className="absolute inset-2 popular">COURSE</span>
+                                                                <span className="absolute inset-2 popular">Khóa học</span>
                                                                 {product.categoryName}
                                                             </h3>
                                                             <a href={`/introduction/${product.id}`} key={index}>
@@ -171,7 +171,7 @@ const Homepage: React.FC = () => {
             <div>
                 <div>
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-0">
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-900">This week’s top courses</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Khóa học nhiều trong tuần</h2>
 
                         <div className="product-slider">
                             {loading ? (
@@ -190,7 +190,7 @@ const Homepage: React.FC = () => {
                                                     <div className="mt-2">
                                                         <div>
                                                             <h3 className="text-xs text-gray-700">
-                                                                <span className="absolute inset-2 popular">COURSE</span>
+                                                                <span className="absolute inset-2 popular">Khóa học</span>
                                                                 {product.categoryName}
                                                             </h3>
                                                             <a href={`/introduction/${product.id}`} key={index}>

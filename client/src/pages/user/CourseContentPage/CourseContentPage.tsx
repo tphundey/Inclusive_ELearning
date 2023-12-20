@@ -544,8 +544,8 @@ const CourseContentPage = () => {
         return <div>Loading...</div>;
     }
     const tabs = [
-        { label: 'Overview', icon: 'fa-solid fa-earth-americas', path: 'overview' },
-        { label: 'Notebook', icon: 'fa-solid fa-book', path: 'notepage' }
+        { label: 'Tổng quan', icon: 'fa-solid fa-earth-americas', path: 'overview' },
+        { label: 'Ghi chú', icon: 'fa-solid fa-book', path: 'notepage' }
     ];
 
 
@@ -606,7 +606,7 @@ const CourseContentPage = () => {
             <div className="contentpage-left">
                 <div className='content-intro'>
                     <div className="content-left-title">
-                        <i className="fa-solid fa-list"></i> <div>Contents</div>
+                        <i className="fa-solid fa-list"></i> <div>Mục lục</div>
                     </div>
                     <Progress percent={progressPercentage} status="success" />
                 </div>
@@ -667,8 +667,8 @@ const CourseContentPage = () => {
                 <div className="content-infocourse">
                     <div className="content-info-fl">
                         <div>
-                            <div className="content-info1">{product.courseName}</div>
-                            <div className="content-info2">Module introduction</div>
+                            <div className="content-info1">Tên khóa học: {product.courseName}</div>
+                            <div className="content-info2">Giới thiệu</div>
                         </div>
                         <div className='fl-content-option'>
                             {/* <i className="fa-regular fa-thumbs-up"></i> <span>23</span> */}
