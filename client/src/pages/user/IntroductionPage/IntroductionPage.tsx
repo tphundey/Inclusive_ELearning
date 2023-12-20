@@ -501,35 +501,43 @@ const IntroductionPage = () => {
 
     const updatePriceAfterDiscount = () => {
         let updatedAmount = amount;  // Use let instead of const
-    
+
         axios.get('http://localhost:3000/Coupons')
             .then(response => {
                 const coupons = response.data;
-    
+
                 const today = new Date();
                 const todayString = today.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-    
+
                 const validCoupon = coupons.find(coupon => {
+                    const startDate = new Date(coupon.startDate);
                     const expirationDate = new Date(coupon.expirationDate);
+                    const startDateString = startDate.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
                     const expirationDateString = expirationDate.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-    
-                    return coupon.code === discountCode && expirationDateString > todayString;
+
+                    return (
+                        coupon.code === discountCode &&
+                        startDateString <= todayString &&
+                        todayString <= expirationDateString
+                    );
                 });
-    
-                console.log(validCoupon, 1111111111111111111111);
+
                 if (validCoupon) {
-                    // Deduct the coupon amount from the total
-                    updatedAmount -= validCoupon.amount;  // or use any other property based on your API response
-                    console.log(`Discount applied: $${validCoupon.amount}. Coupon details: `, validCoupon);
-    
+                    // Deduct the percentage discount from the total
+                    const discountPercentage = validCoupon.amount; // Assuming `amount` field represents the discount percentage
+                    const discountAmount = (updatedAmount * discountPercentage) / 100;
+                    updatedAmount -= discountAmount;
+
+                    console.log(`Discount applied: ${discountPercentage}%. Coupon details: `, validCoupon);
+
                     if (validCoupon.quantity > 0) {
                         axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
                             .then(response => {
                                 console.log(response.data);
-    
+
                                 // Decrease the quantity in the API after the order is saved
                                 const updatedQuantity = validCoupon.quantity - 1;
-    
+
                                 axios.put(`http://localhost:3000/Coupons/${validCoupon.id}`, { quantity: updatedQuantity })
                                     .then(response => {
                                         console.log('Coupon quantity updated:', response.data);
@@ -556,6 +564,7 @@ const IntroductionPage = () => {
                 message.error('Lỗi khi lấy danh sách mã giảm giá'); // Display an error message in Vietnamese
             });
     };
+
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [showDiscountPopup, setShowDiscountPopup] = useState(false);
     const [discountCode, setDiscountCode] = useState('');
@@ -939,19 +948,19 @@ const IntroductionPage = () => {
                                     {/* Popup nhập mã giảm giá */}
                                     {showDiscountPopup && (
                                         <Modal
-                                            title="Enter Discount Code"
+                                            title="Thanh toán khóa học"
                                             visible={isModalVisible}
                                             onOk={handleOk}
                                             onCancel={handleCancel}
                                         >
                                             <Input
-                                                placeholder="Enter discount code"
+                                                placeholder="Mời nhập vào mã giảm giá"
                                                 value={discountCode}
                                                 onChange={(e) => setDiscountCode(e.target.value)}
                                             />
                                             <>
-                                    <button className='intro-bt2' onClick={handleBuyButtonClick2}>Buy the course [{formattedPrice}]</button>
-                                </>
+                                                <button className='intro-bt2 mt-3' onClick={handleBuyButtonClick2}>Thanh toán với giá gốc [{formattedPrice}]</button>
+                                            </>
                                         </Modal>
                                     )}
                                 </>

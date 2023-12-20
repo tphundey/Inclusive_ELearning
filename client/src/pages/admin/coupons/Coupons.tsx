@@ -19,12 +19,25 @@ const CouponManagement = () => {
       title: 'Số tiền',
       dataIndex: 'amount',
       key: 'amount',
-      render: (text, record) => formatCurrency(text),
+      render: (text, record) => `${record.amount}%`,
+    },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (text, record) => new Date(record.createdAt).toLocaleDateString('en-GB'),
+    },
+    {
+      title: 'Ngày bắt đầu',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (text, record) => new Date(record.startDate).toLocaleDateString('en-GB'),
     },
     {
       title: 'Ngày hết hạn',
       dataIndex: 'expirationDate',
       key: 'expirationDate',
+      render: (text, record) => new Date(record.expirationDate).toLocaleDateString('en-GB'),
     },
     {
       title: 'Số lượng',
@@ -70,8 +83,10 @@ const CouponManagement = () => {
     try {
       const values = await form.validateFields();
       const id = coupons.length + 1;
-      const amount = values.amount || 0;
+      const amount = values.amount || 0; // Assume amount represents the discount percentage
       const expirationDate = values.expirationDate.format('YYYY-MM-DD');
+      const startDate = values.startDate.format('YYYY-MM-DD');
+      const createdAt = new Date().toISOString();
 
       // Kiểm tra xem mã coupon mới có trùng với các mã coupon cũ không
       const isDuplicateCode = coupons.some((coupon) => coupon.code === values.code);
@@ -81,19 +96,29 @@ const CouponManagement = () => {
         return; // Không thêm mới nếu mã trùng
       }
 
+      // Check if the start date is before the end date
+      if (new Date(startDate) > new Date(expirationDate)) {
+        message.error('Ngày bắt đầu không được lớn hơn ngày hết hạn.');
+        return;
+      }
+
       const updatedCoupons = [
-        { ...values, id, amount, expirationDate },
+        { ...values, id, amount, expirationDate, startDate, createdAt },
         ...coupons,
       ];
       setCoupons(updatedCoupons);
       setModalVisible(false);
       form.resetFields();
-
-      await axios.post('http://localhost:3000/Coupons', { ...values, id, amount, expirationDate });
+      message.open({
+        type: "success",
+        content: "Bạn đã thêm mã giảm giá thành công",
+    });
+      await axios.post('http://localhost:3000/Coupons', { ...values, id, amount, expirationDate, startDate, createdAt });
     } catch (error) {
       console.error('Validation failed', error);
     }
   };
+
   const handleCancel = () => {
     setModalVisible(false);
     form.resetFields();
@@ -131,14 +156,25 @@ const CouponManagement = () => {
           <Form.Item name="code" label="Mã Coupon" rules={[{ required: true, message: 'Nhập mã coupon!' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="expirationDate" label="Ngày hết hạn">
+          <Form.Item
+            name="expirationDate"
+            label="Ngày hết hạn"
+            rules={[{ required: true, message: 'Chọn ngày hết hạn!' }]}
+          >
+            <DatePicker />
+          </Form.Item>
+          <Form.Item
+            name="startDate"
+            label="Ngày bắt đầu"
+            rules={[{ required: true, message: 'Chọn ngày bắt đầu!' }]}
+          >
             <DatePicker />
           </Form.Item>
           <Form.Item name="quantity" label="Số lượng" rules={[{ required: true, message: 'Nhập số lượng!' }]}>
             <InputNumber min={0} max={10} />
           </Form.Item>
           <Form.Item name="amount" label="Số tiền">
-            <InputNumber min={0} max={1000000} />
+            <InputNumber min={1} max={70} formatter={value => `${value}%`} parser={value => value.replace('%', '')} />
           </Form.Item>
         </Form>
       </Modal>
