@@ -1077,7 +1077,8 @@ const IntroductionPage = () => {
                                                 {rated}.0
                                             </Typography>
                                         </div>
-                                        <Input
+                                        <Input   
+                                        maxLength={40} 
                                             value={review.comment}
                                             onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                         />
