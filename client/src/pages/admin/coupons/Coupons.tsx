@@ -1,25 +1,28 @@
+// components/CouponManagement.js
 import React, { useState, useEffect } from 'react';
-import { Table, Form, Input, Button, Space, Modal, DatePicker, InputNumber } from 'antd';
+import { Table, Form, Input, Button, Space, Modal, DatePicker, InputNumber, message } from 'antd';
 import axios from 'axios';
+import { formatCurrency } from '@/components/FormatCurency/formatCurency';
 
 const CountdownTimer = ({ record, onUpdate }) => {
   const [seconds, setSeconds] = useState(record.countdown * 60);
 
   useEffect(() => {
+    setSeconds(record.countdown * 60); // Initialize the countdown when the record changes
+
     const interval = setInterval(() => {
       if (seconds > 0) {
         setSeconds((prevSeconds) => prevSeconds - 1);
         onUpdate(record.id, Math.floor((seconds - 1) / 60));
 
-        // Nếu countdown đạt đến 0, cập nhật API
         if (seconds === 1) {
           updateApi(record.id, 0);
         }
       }
-    }, 1000); // Update every 1 second
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [seconds, onUpdate, record.id]);
+  }, [seconds, onUpdate, record.id, record.countdown]);
 
   const updateApi = async (id, newCountdown) => {
     try {
@@ -50,6 +53,12 @@ const CouponManagement = () => {
       key: 'code',
     },
     {
+      title: 'Số tiền',
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (text, record) => formatCurrency(text),
+    },
+    {
       title: 'Countdown (phút)',
       dataIndex: 'countdown',
       key: 'countdown',
@@ -70,17 +79,15 @@ const CouponManagement = () => {
     {
       title: 'Hành động',
       key: 'action',
-      render: (_, record) => (
+      render: (_: any, record: any) => (
         <Space size="middle">
-          <a onClick={() => handleEdit(record)}>Sửa</a>
-          <a onClick={() => handleDelete(record.id)}>Xóa</a>
+          <a onClick={() => handleDelete(record.id)} style={{ color: 'red' }}>Xóa</a>
         </Space>
       ),
     },
   ];
 
   const handleCountdownUpdate = (id, newCountdown) => {
-    // Update countdown value in local state
     const updatedCoupons = coupons.map((item) =>
       item.id === id ? { ...item, countdown: newCountdown } : item
     );
@@ -88,17 +95,25 @@ const CouponManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    // Remove the item from the local state
-    const updatedCoupons = coupons.filter((item) => item.id !== id);
-    setCoupons(updatedCoupons);
-
-    try {
-      // Delete data from the API
-      await axios.delete(`http://localhost:3000/Coupons/${id}`);
-    } catch (error) {
-      console.error('Error deleting data', error);
-    }
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa mã Coupon này?',
+      okText: 'Xác nhận',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        const updatedCoupons = coupons.filter((item) => item.id !== id);
+        setCoupons(updatedCoupons);
+        message.success('Xóa thành công!');
+        try {
+          await axios.delete(`http://localhost:3000/Coupons/${id}`);
+        } catch (error) {
+          console.error('Error deleting data', error);
+        }
+      },
+    });
   };
+
 
   const handleAddCoupon = () => {
     setModalVisible(true);
@@ -107,14 +122,14 @@ const CouponManagement = () => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      const id = coupons.length + 1; // Assume id is a sequential number
-      const updatedCoupons = [...coupons, { ...values, id }];
+      const id = coupons.length + 1;
+      const amount = values.amount || 0;
+      const updatedCoupons = [{ ...values, id, amount, countdown: 0 }, ...coupons];
       setCoupons(updatedCoupons);
       setModalVisible(false);
       form.resetFields();
 
-      // Post data to API
-      await axios.post('http://localhost:3000/Coupons', { ...values, id });
+      await axios.post('http://localhost:3000/Coupons', { ...values, id, amount, countdown: 0 });
     } catch (error) {
       console.error('Validation failed', error);
     }
@@ -126,11 +141,11 @@ const CouponManagement = () => {
   };
 
   useEffect(() => {
-    // Fetch coupon data from API
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/Coupons');
-        setCoupons(response.data);
+        const sortedCoupons = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setCoupons(sortedCoupons);
       } catch (error) {
         console.error('Error fetching data', error);
       }
@@ -168,6 +183,9 @@ const CouponManagement = () => {
             <DatePicker />
           </Form.Item>
           <Form.Item name="quantity" label="Số lượng">
+            <InputNumber />
+          </Form.Item>
+          <Form.Item name="amount" label="Số tiền">
             <InputNumber />
           </Form.Item>
         </Form>

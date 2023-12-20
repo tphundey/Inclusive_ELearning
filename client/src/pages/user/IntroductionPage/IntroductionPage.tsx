@@ -436,34 +436,35 @@ const IntroductionPage = () => {
 
     const updatePriceAfterDiscount = () => {
         let updatedAmount = amount;  // Use let instead of const
-
+    
         axios.get('http://localhost:3000/Coupons')
             .then(response => {
                 const coupons = response.data;
-
+    
                 const today = new Date();
                 const todayString = today.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-
+    
                 const validCoupon = coupons.find(coupon => {
                     const expirationDate = new Date(coupon.expirationDate);
                     const expirationDateString = expirationDate.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-
+    
                     return coupon.code === discountCode && expirationDateString > todayString;
                 });
-
+    
                 console.log(validCoupon, 1111111111111111111111);
                 if (validCoupon) {
-                    updatedAmount -= 1000;  // or use validCoupon.amount or any other property based on your API response
-                    console.log(`Discount applied: $1000. Coupon details: `, validCoupon);
-
+                    // Deduct the coupon amount from the total
+                    updatedAmount -= validCoupon.amount;  // or use any other property based on your API response
+                    console.log(`Discount applied: $${validCoupon.amount}. Coupon details: `, validCoupon);
+    
                     if (validCoupon.quantity > 0) {
                         axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
                             .then(response => {
                                 console.log(response.data);
-
+    
                                 // Decrease the quantity in the API after the order is saved
                                 const updatedQuantity = validCoupon.quantity - 1;
-
+    
                                 axios.put(`http://localhost:3000/Coupons/${validCoupon.id}`, { quantity: updatedQuantity })
                                     .then(response => {
                                         console.log('Coupon quantity updated:', response.data);
