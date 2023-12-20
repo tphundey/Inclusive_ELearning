@@ -1,3 +1,5 @@
+//backup intro page
+
 import './introduction.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -6,7 +8,7 @@ import Input from 'antd/es/input/Input';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
-import { Timeline, Form, Button, notification, Skeleton, message, Modal } from 'antd';
+import { Timeline, Form, Button, notification, Skeleton, message } from 'antd';
 import { Rating, Typography } from "@material-tailwind/react";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { renderReviewRateIcon } from '../../../components/RatingIcon/ratingIcons';
@@ -429,12 +431,7 @@ const IntroductionPage = () => {
 
     // };
 
-    const handleDiscountSubmit = () => {
-        updatePriceAfterDiscount();
-        setShowDiscountPopup(false);
-    };
-
-    const handleBuyButtonClick2 = () => {
+    const handleBuyButtonClick = () => {
         // Kiểm tra xem userEmail và courseID có tồn tại không
         if (!userEmail || !id) {
             console.error('Invalid userEmail or courseID.');
@@ -498,126 +495,6 @@ const IntroductionPage = () => {
                 console.error('Error:', error);
             });
     };
-
-    const updatePriceAfterDiscount = () => {
-        let updatedAmount = amount;  // Use let instead of const
-    
-        axios.get('http://localhost:3000/Coupons')
-            .then(response => {
-                const coupons = response.data;
-    
-                const today = new Date();
-                const todayString = today.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-    
-                const validCoupon = coupons.find(coupon => {
-                    const expirationDate = new Date(coupon.expirationDate);
-                    const expirationDateString = expirationDate.toLocaleDateString('en-GB'); // Format: 'YYYY-MM-DD'
-    
-                    return coupon.code === discountCode && expirationDateString > todayString;
-                });
-    
-                console.log(validCoupon, 1111111111111111111111);
-                if (validCoupon) {
-                    // Deduct the coupon amount from the total
-                    updatedAmount -= validCoupon.amount;  // or use any other property based on your API response
-                    console.log(`Discount applied: $${validCoupon.amount}. Coupon details: `, validCoupon);
-    
-                    if (validCoupon.quantity > 0) {
-                        axios.post('http://localhost:3000/saveOrder', { amount: updatedAmount, id, userID })
-                            .then(response => {
-                                console.log(response.data);
-    
-                                // Decrease the quantity in the API after the order is saved
-                                const updatedQuantity = validCoupon.quantity - 1;
-    
-                                axios.put(`http://localhost:3000/Coupons/${validCoupon.id}`, { quantity: updatedQuantity })
-                                    .then(response => {
-                                        console.log('Coupon quantity updated:', response.data);
-                                        window.location.href = 'http://localhost:3000/order';
-                                    })
-                                    .catch(error => {
-                                        console.error('Error updating coupon quantity:', error);
-                                    });
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
-                    } else {
-                        console.log('Coupon quantity is 0, cannot apply the discount.');
-                        message.error('Số lượng mã giảm giá đã hết, không thể áp dụng ưu đãi.'); // Display an error message in Vietnamese
-                    }
-                } else {
-                    console.log('Mã giảm giá không hợp lệ hoặc đã hết hạn');
-                    message.error('Mã giảm giá không hợp lệ hoặc đã hết hạn'); // Display an error message in Vietnamese
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                message.error('Lỗi khi lấy danh sách mã giảm giá'); // Display an error message in Vietnamese
-            });
-    };
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [showDiscountPopup, setShowDiscountPopup] = useState(false);
-    const [discountCode, setDiscountCode] = useState('');
-
-    const showModal = () => {
-        setIsModalVisible(true);
-        handleBuyButtonClick()
-    };
-
-    const handleOk = () => {
-        setIsModalVisible(false);
-        handleDiscountSubmit();
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-
-    const handleBuyButtonClick = () => {
-        if (discountCode) {
-            updatePriceAfterDiscount();
-        }
-        setShowDiscountPopup(true);
-
-        if (!userEmail || !id) {
-            console.error('Invalid userEmail or courseID.');
-            return;
-        }
-        fetch(`http://localhost:3000/googleAccount?email=${userEmail}`)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to retrieve user data from the API.');
-                }
-            })
-            .then((userData) => {
-                const user = userData[0];
-                const userID = user.id;
-                const registeredCourseIDs = user.registeredCourseID || [];
-                if (!registeredCourseIDs.includes(id)) {
-                    registeredCourseIDs.push(id);
-                }
-                user.registeredCourseID = registeredCourseIDs;
-
-                return fetch(`http://localhost:3000/googleAccount/${userID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(user),
-                });
-            })
-            .then(() => {
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
-
-
 
     ////////////////////Thay đổi số rate////////////////////
     const handleRatingChange = (value: any) => {
@@ -932,28 +809,7 @@ const IntroductionPage = () => {
                             </Link>
                             {!paymentStatu2s && formattedPrice !== '0 ₫' ? (
                                 <>
-                                    <button className='intro-bt2' onClick={showModal}>
-                                        Buy the course [{formattedPrice}]
-                                    </button>
-
-                                    {/* Popup nhập mã giảm giá */}
-                                    {showDiscountPopup && (
-                                        <Modal
-                                            title="Enter Discount Code"
-                                            visible={isModalVisible}
-                                            onOk={handleOk}
-                                            onCancel={handleCancel}
-                                        >
-                                            <Input
-                                                placeholder="Enter discount code"
-                                                value={discountCode}
-                                                onChange={(e) => setDiscountCode(e.target.value)}
-                                            />
-                                            <>
-                                    <button className='intro-bt2' onClick={handleBuyButtonClick2}>Buy the course [{formattedPrice}]</button>
-                                </>
-                                        </Modal>
-                                    )}
+                                    <button className='intro-bt2' onClick={handleBuyButtonClick}>Buy the course [{formattedPrice}]</button>
                                 </>
                             ) : (
                                 <>

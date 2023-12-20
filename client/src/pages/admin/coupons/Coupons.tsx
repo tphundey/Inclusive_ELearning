@@ -115,7 +115,7 @@ const CouponManagement = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={handleAddCoupon}>
+      <Button className='mb-4' type="default" onClick={handleAddCoupon}>
         Thêm Coupon
       </Button>
 

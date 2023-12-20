@@ -36,7 +36,7 @@ const AdminProductAdd = () => {
             clientId: "1010783738532-3s27nq10o6belplvsp6omrcvcsqfigjt.apps.googleusercontent.com",
             developerKey: "AIzaSyABKJezgqFMe3mkchPJejZuK005AbP2Cgc",
             viewId: "DOCS",
-            token: "ya29.a0AfB_byAmBPr8B-6Pcs5_cWj-fgErqFA_zQwrENaZ3GAS58mpKDb5km15NJj-p2AD4wuZQfvB5vfJ1ZHJFAZDaJfpqeoy8iX9oDpvVEBlHsK_fhD9lbFraaZVNg-p8YZyfqT-y3uLKORoz8cOYWnXdkmE9QpP6af5MF-3aCgYKAf0SARMSFQHGX2Mim40aL6izlLmeLkP8g5Mbxw0171",
+            token: "ya29.a0AfB_byBsCzMLb9kJ30pPyJFwqP_AgHv5jvQX79azdhqcA8hHnRQY7Nm1Wz4BRRZe-v-gVfVOLZWHhMXDESATaNo1B-VnCT3HVy6V8xNk7i2kaxEPGf8PWaptjY6tbMeqv4yRc5qpbizTNZeeBGCBQiGWRElCVenZVkoTaCgYKAQASARMSFQHGX2MigQaRh36QcWnWQ2KKOYID4g0171",
             showUploadView: true,
             showUploadFolders: true,
             supportDrives: true,
