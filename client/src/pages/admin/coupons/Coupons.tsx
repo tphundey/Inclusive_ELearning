@@ -22,12 +22,6 @@ const CouponManagement = () => {
       render: (text, record) => `${record.amount}%`,
     },
     {
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (text, record) => new Date(record.createdAt).toLocaleDateString('en-GB'),
-    },
-    {
       title: 'Ngày bắt đầu',
       dataIndex: 'startDate',
       key: 'startDate',
@@ -47,14 +41,22 @@ const CouponManagement = () => {
     {
       title: 'Hành động',
       key: 'action',
-      render: (_: any, record: any) => (
+      render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleDelete(record.id)} style={{ color: 'red' }}>Xóa</a>
+          {isCouponExpiredOrZeroQuantity(record) && (
+            <Button className='bg-red-400 text-white' onClick={() => handleDelete(record.id)}>Xóa</Button>
+          )}
         </Space>
       ),
     },
   ];
 
+  const isCouponExpiredOrZeroQuantity = (coupon) => {
+    const currentDate = new Date();
+    const expirationDate = new Date(coupon.expirationDate);
+
+    return expirationDate < currentDate || coupon.quantity === 0;
+  };
   const handleDelete = async (id) => {
     Modal.confirm({
       title: 'Xác nhận xóa',
@@ -112,7 +114,7 @@ const CouponManagement = () => {
       message.open({
         type: "success",
         content: "Bạn đã thêm mã giảm giá thành công",
-    });
+      });
       await axios.post('http://localhost:3000/Coupons', { ...values, id, amount, expirationDate, startDate, createdAt });
     } catch (error) {
       console.error('Validation failed', error);

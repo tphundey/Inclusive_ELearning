@@ -9,6 +9,7 @@ const fetch = require('node-fetch');
 const app = express();
 const router = express.Router();
 const fileUpload = require('express-fileupload');
+const nodemailer = require('nodemailer');
 
 const mongoDBUrl = "mongodb+srv://Graduation:123@cluster0.nzrddg9.mongodb.net/LinkedIn_Learning";
 const cloudinary = require('cloudinary').v2;
@@ -61,6 +62,9 @@ const routerNotes = require("./controllers/note");
 const routerQuestions = require("./controllers/questions");
 const routerCoupon = require("./controllers/coupon");
 
+
+
+
 app.use("/Courses", coursesController);
 app.use("/Categories", routerCate);
 app.use("/googleAccount", routerGoogleAccounts);
@@ -79,6 +83,34 @@ app.set('view engine', 'jade');
 // Endpoint để hiển thị form upload
 
 
+app.post('/send-email', (req, res) => {
+    const { to, subject, text } = req.body;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'maitranthi651@gmail.com',
+            pass: 'dinhtai2003',
+        },
+    });
+
+    const mailOptions = {
+        from: 'maitranthi651@gmail.com',
+        to: 'taidvph20044@gmail.com',
+        subject: 'Test Email',
+        text: 'This is a test email from Nodemailer.',
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+          res.status(500).send('Internal Server Error');
+        } else {
+          console.log('Email sent:', info.response);
+          res.status(200).send('Email sent successfully');
+        }
+      });
+});
 // Route chính
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -242,15 +274,15 @@ async function vnpayReturnHandler(req, res, next) {
                 const courseIdFilePath = 'course.txt';
                 const userIdFilePath = 'user.txt';
                 const amountFilePath = 'amount.txt'
-            
+
                 // Đọc dữ liệu từ file và chuyển đổi thành số
                 const courseId = fs.readFileSync(courseIdFilePath, 'utf-8').trim();
                 const userId = fs.readFileSync(userIdFilePath, 'utf-8').trim();
                 const rawAmount = fs.readFileSync(amountFilePath, 'utf-8').trim();
-                
+
                 // Chuyển đổi giá trị amount thành số
                 const numericAmount = parseFloat(rawAmount.replace(/[^0-9.-]+/g, '')) || 0;
-            
+
                 try {
                     const updateResponse = await fetch(`http://localhost:3000/Payment`, {
                         method: 'POST',
@@ -264,7 +296,7 @@ async function vnpayReturnHandler(req, res, next) {
                             amount: numericAmount
                         }),
                     });
-            
+
                     if (updateResponse) {
                         res.render('success', { code: responseCode });
                     } else {
