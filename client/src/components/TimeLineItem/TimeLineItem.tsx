@@ -15,7 +15,7 @@ export const generateTimelineItems = (videos:any) => {
         {
             color: '#00CCFF',
             dot: <SmileOutlined />,
-            children: <p>Certificate</p>,
+            children: <p>Chứng chỉ</p>,
         }
     );
 
