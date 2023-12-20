@@ -245,7 +245,7 @@ const HeaderUser: React.FC = () => {
                                 </li>
                             </ul>
                             <div className='freemonth'>
-                                <a href="/signup">Tham gia khóa học</a>
+                                <a href="/signup">Tham gia hệ thống</a>
                             </div>
                         </div>
                     </div>
@@ -253,12 +253,12 @@ const HeaderUser: React.FC = () => {
             </header>
             <nav>
                 <div className="containerCss">
-                    <div> Solutions for: </div>
+                    <div> Danh mục nổi bật: </div>
                     <ul>
                         <li><a href="">Business</a></li>
                         <li><a href="">Develop</a></li>
                         <li><a href="">Higher Education</a></li>
-                        <li><a href="">| <span className='mr-3'></span> Buy the course</a></li>
+                        <li><a href="">| <span className='mr-3'></span> Thanh toán khóa học</a></li>
                     </ul>
                 </div>
             </nav>
