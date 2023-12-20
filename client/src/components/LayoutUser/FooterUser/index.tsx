@@ -5,14 +5,14 @@ const FooterUser = () => {
             <hr />
             <footer>
                 <ul>
-                    <li><a href=""><button>English (English)<i className="fa-solid fa-caret-down ml-2"></i></button></a></li>
-                    <li><a href="">About </a></li>
-                    <li><a href="">Become an Instructor </a></li>
-                    <li><a href="">Buy for my team </a></li>
-                    <li><a href="">Help</a></li>
-                    <li><a href="">Privacy & Terms</a></li>
-                    <li><a href="">Accessibility </a></li>
-                    <li><a href="">Apps</a></li>
+                    <li><a href=""><button>Ngôn ngữ (Tiếng Việt)<i className="fa-solid fa-caret-down ml-2"></i></button></a></li>
+                    <li><a href="">Xem thêm </a></li>
+                    <li><a href="">Về chúng tôi </a></li>
+                    <li><a href="">Điều khoản</a></li>
+                    <li><a href="">Hỗ trợ</a></li>
+                    <li><a href="">Liên hệ hợp tác</a></li>
+                    <li><a href="">Cộng đồng </a></li>
+                    <li><a href="">Ứng dụng</a></li>
                 </ul>
 
                 <div className='des-footer'>
