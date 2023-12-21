@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Input from 'antd/es/input/Input';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { Timeline, Form, Button, notification, Skeleton, message, Modal } from 'antd';
@@ -537,7 +537,7 @@ const IntroductionPage = () => {
 
                                 // Decrease the quantity in the API after the order is saved
                                 const updatedQuantity = validCoupon.quantity - 1;
-
+                                localStorage.setItem('courseID', id);
                                 axios.put(`http://localhost:3000/Coupons/${validCoupon.id}`, { quantity: updatedQuantity })
                                     .then(response => {
                                         console.log('Coupon quantity updated:', response.data);
@@ -609,6 +609,8 @@ const IntroductionPage = () => {
                 if (!registeredCourseIDs.includes(id)) {
                     registeredCourseIDs.push(id);
                 }
+
+
                 user.registeredCourseID = registeredCourseIDs;
 
                 return fetch(`http://localhost:3000/googleAccount/${userID}`, {
@@ -757,15 +759,14 @@ const IntroductionPage = () => {
 
 
     const postReview = () => {
-        const swearWords = ['badword1', 'badword2', 'badword3']; 
+        const swearWords = ['shit', 'fuck', 'cc'];
         const containsSwearWord = swearWords.some(word =>
-          review.comment.toLowerCase().includes(word.toLowerCase())
+            review.comment.toLowerCase().includes(word.toLowerCase())
         );
 
         if (containsSwearWord) {
-          // Hiển thị cảnh báo hoặc thực hiện xử lý khác tùy thuộc vào yêu cầu của bạn
-          alert('Vui lòng không sử dụng ngôn từ không phù hợp!');
-          return;
+            message.warning('Vui lòng không sử dụng ngôn từ không phù hợp!');
+            return;
         }
         if (userEmail) {
             // Lấy thông tin người dùng từ API bằng email
@@ -926,6 +927,7 @@ const IntroductionPage = () => {
     }
     const formattedPrice = formatCurrency(product.price);
     const truncatedDuration = product.duration.toFixed(1);
+
     return (
         <div className="containerCss">
             <div className="course-header-container">
@@ -963,14 +965,25 @@ const IntroductionPage = () => {
                                             onOk={handleOk}
                                             onCancel={handleCancel}
                                         >
-                                            <Input
-                                                placeholder="Mời nhập vào mã giảm giá"
-                                                value={discountCode}
-                                                onChange={(e) => setDiscountCode(e.target.value)}
-                                            />
-                                            <>
-                                                <button className='intro-bt2 mt-3' onClick={handleBuyButtonClick2}>Thanh toán với giá gốc [{formattedPrice}]</button>
-                                            </>
+                                            {localStorage.getItem('courseID') === id ? (
+                                                <>
+                                                    <p>Bạn không còn quyền áp mã giảm giá</p>
+                                                    <button className='intro-bt2 mt-3' onClick={handleBuyButtonClick2}>
+                                                        Thanh toán với giá gốc [{formattedPrice}]
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Input
+                                                        placeholder="Mời nhập vào mã giảm giá"
+                                                        value={discountCode}
+                                                        onChange={(e) => setDiscountCode(e.target.value)}
+                                                    />
+                                                    <button className='intro-bt2 mt-3' onClick={handleBuyButtonClick2}>
+                                                        Thanh toán với giá gốc [{formattedPrice}]
+                                                    </button>
+                                                </>
+                                            )}
                                         </Modal>
                                     )}
                                 </>
@@ -1034,7 +1047,7 @@ const IntroductionPage = () => {
                             </div>
                         </div>
                         <div className='font-medium text-xl mt-6'>
-                           Học viên đánh giá
+                            Học viên đánh giá
                         </div>
                         <div className="flex">
                             <div className="overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200">
@@ -1086,8 +1099,8 @@ const IntroductionPage = () => {
                                                 {rated}.0
                                             </Typography>
                                         </div>
-                                        <Input   
-                                        maxLength={40} 
+                                        <Input
+                                            maxLength={40}
                                             value={review.comment}
                                             onChange={(e) => setReview({ ...review, comment: e.target.value })}
                                         />
