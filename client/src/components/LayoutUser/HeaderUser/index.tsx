@@ -245,7 +245,7 @@ const HeaderUser: React.FC = () => {
                                 </li>
                             </ul>
                             <div className='freemonth'>
-                                <a href="/signup">Start your progress</a>
+                                <a href="/signup">Bắt đầu trải nghiệm</a>
                             </div>
                         </div>
                     </div>
